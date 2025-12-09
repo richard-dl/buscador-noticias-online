@@ -81,6 +81,9 @@ const Generator = () => {
   }
 
   const applyProfile = (profile, autoSearch = true) => {
+    console.log('=== APLICANDO PERFIL ===')
+    console.log('Perfil completo:', profile)
+
     const newFilters = {
       tematicas: profile.tematicas || [],
       provincia: profile.provincia || '',
@@ -90,6 +93,8 @@ const Generator = () => {
       excludeTerms: profile.excludeTerms || [],
       contentType: profile.contentType || 'all'
     }
+
+    console.log('Filtros construidos:', newFilters)
     setFilters(newFilters)
     setActiveTab('search')
 
@@ -97,6 +102,7 @@ const Generator = () => {
     if (autoSearch) {
       // Pequeño delay para que se actualice el estado
       setTimeout(() => {
+        console.log('Ejecutando búsqueda con filtros:', newFilters)
         handleSearchWithFilters(newFilters)
       }, 100)
     }

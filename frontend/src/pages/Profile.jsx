@@ -163,29 +163,43 @@ const Profile = () => {
           <section className="profile-card subscription-card">
             <div className="card-header">
               <h2>Suscripción</h2>
-              <span className={`badge ${statusBadge.class}`}>
-                {statusBadge.text}
-              </span>
+              {profile?.role === 'admin' ? (
+                <span className="badge badge-admin">
+                  👑 Administrador
+                </span>
+              ) : (
+                <span className={`badge ${statusBadge.class}`}>
+                  {statusBadge.text}
+                </span>
+              )}
             </div>
 
             <div className="subscription-info">
-              <div className="subscription-main">
-                <div className="days-circle">
-                  <span className="days-number">{daysRemaining}</span>
-                  <span className="days-label">días</span>
+              {profile?.role === 'admin' ? (
+                <div className="admin-subscription">
+                  <p className="admin-message">
+                    🎉 Tienes acceso <strong>ilimitado</strong> a todas las funciones de la plataforma.
+                  </p>
                 </div>
-                <div className="subscription-details">
-                  <p>Días restantes de tu suscripción</p>
-                  {profile.subscription?.expiresAt && (
-                    <p className="expiry-date">
-                      <FiClock size={16} />
-                      Vence: {formatDate(profile.subscription.expiresAt)}
-                    </p>
-                  )}
+              ) : (
+                <div className="subscription-main">
+                  <div className="days-circle">
+                    <span className="days-number">{daysRemaining}</span>
+                    <span className="days-label">días</span>
+                  </div>
+                  <div className="subscription-details">
+                    <p>Días restantes de tu suscripción</p>
+                    {profile.subscription?.expiresAt && (
+                      <p className="expiry-date">
+                        <FiClock size={16} />
+                        Vence: {formatDate(profile.subscription.expiresAt)}
+                      </p>
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
 
-              {daysRemaining <= 7 && (
+              {!profile?.role || profile?.role !== 'admin' && daysRemaining <= 7 && (
                 <div className="renewal-notice">
                   <p>Tu suscripción está por vencer. Contacta al administrador para renovar.</p>
                   <a
