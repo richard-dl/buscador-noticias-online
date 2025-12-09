@@ -7,12 +7,12 @@ import FilterPanel from '../components/FilterPanel'
 import NewsCard from '../components/NewsCard'
 import LoadingSpinner from '../components/LoadingSpinner'
 import {
-  FiSearch, FiCopy, FiCheck, FiRefreshCw, FiSave, FiTrash2, FiX, FiArrowUp
+  FiSearch, FiCopy, FiCheck, FiRefreshCw, FiSave, FiTrash2, FiX, FiArrowUp, FiZap
 } from 'react-icons/fi'
 
 const Generator = () => {
   const [searchParams] = useSearchParams()
-  const [activeTab, setActiveTab] = useState('search') // search, profiles
+  const [activeTab, setActiveTab] = useState('search') // search, profiles, breaking
   const [filters, setFilters] = useState({
     tematicas: [],
     provincia: '',
@@ -30,6 +30,8 @@ const Generator = () => {
   const [profileName, setProfileName] = useState('')
   const [searchCount, setSearchCount] = useState(10)
   const [showScrollTop, setShowScrollTop] = useState(false)
+  const [breakingNews, setBreakingNews] = useState([])
+  const [loadingBreaking, setLoadingBreaking] = useState(false)
 
   // Cargar perfiles al inicio
   useEffect(() => {
@@ -255,6 +257,37 @@ const Generator = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  const loadBreakingNews = async () => {
+    try {
+      setLoadingBreaking(true)
+      setBreakingNews([])
+
+      // Buscar noticias de las últimas 6 horas, todas las categorías
+      const response = await newsApi.search({
+        maxItems: 20,
+        translate: 'true',
+        shorten: 'true',
+        generateEmojis: 'true',
+        tematicas: 'politica,economia,deportes,policiales,internacionales,sociedad'
+      })
+
+      if (response.success) {
+        // Ordenar por fecha más reciente
+        const sortedNews = response.data.sort((a, b) => {
+          const dateA = new Date(a.pubDate || 0)
+          const dateB = new Date(b.pubDate || 0)
+          return dateB - dateA
+        })
+        setBreakingNews(sortedNews)
+      }
+    } catch (error) {
+      console.error('Error cargando último momento:', error)
+      toast.error('Error al cargar noticias de último momento')
+    } finally {
+      setLoadingBreaking(false)
+    }
+  }
+
   return (
     <div className="generator-page">
       <Header />
@@ -269,6 +302,16 @@ const Generator = () => {
             >
               <FiSearch size={18} />
               Buscar
+            </button>
+            <button
+              className={`tab tab-breaking ${activeTab === 'breaking' ? 'active' : ''}`}
+              onClick={() => {
+                setActiveTab('breaking')
+                loadBreakingNews()
+              }}
+            >
+              <FiZap size={18} />
+              ÚLTIMO MOMENTO
             </button>
             <button
               className={`tab ${activeTab === 'profiles' ? 'active' : ''}`}
@@ -378,6 +421,38 @@ const Generator = () => {
                 )}
               </div>
             </>
+          ) : activeTab === 'breaking' ? (
+            /* Tab de ÚLTIMO MOMENTO */
+            <div className="breaking-section">
+              <div className="breaking-header">
+                <h2><FiZap /> ÚLTIMO MOMENTO - Noticias Recientes</h2>
+                <p>Las noticias más importantes de las últimas horas</p>
+                <button
+                  className="btn btn-primary btn-sm"
+                  onClick={loadBreakingNews}
+                  disabled={loadingBreaking}
+                >
+                  <FiRefreshCw className={loadingBreaking ? 'spinning' : ''} />
+                  Actualizar
+                </button>
+              </div>
+
+              {loadingBreaking ? (
+                <LoadingSpinner size="large" text="Cargando últimas noticias..." />
+              ) : breakingNews.length === 0 ? (
+                <div className="empty-state">
+                  <FiZap size={48} />
+                  <h3>No hay noticias recientes</h3>
+                  <p>Intenta actualizar en unos minutos</p>
+                </div>
+              ) : (
+                <div className="news-grid">
+                  {breakingNews.map((item, index) => (
+                    <NewsCard key={index} news={item} />
+                  ))}
+                </div>
+              )}
+            </div>
           ) : (
             /* Tab de Perfiles */
             <div className="profiles-section">

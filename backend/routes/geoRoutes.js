@@ -134,7 +134,22 @@ const TEMATICAS = [
   { id: 'medioambiente', name: 'Medio Ambiente', icon: '🌍' },
   { id: 'internacionales', name: 'Internacionales', icon: '🌐' },
   { id: 'sociedad', name: 'Sociedad', icon: '👥' },
-  { id: 'turismo', name: 'Turismo', icon: '✈️' }
+  { id: 'turismo', name: 'Turismo', icon: '✈️' },
+  // Temáticas por edad
+  { id: 'infantil', name: 'Infantil', icon: '👶' },
+  { id: 'adolescentes', name: 'Adolescentes', icon: '🧑' },
+  { id: 'adultos', name: 'Adultos', icon: '👨' },
+  { id: 'adultos-mayores', name: 'Adultos Mayores', icon: '👴' },
+  // Temáticas por género
+  { id: 'masculino', name: 'Masculino', icon: '👨' },
+  { id: 'femenino', name: 'Femenino', icon: '👩' },
+  { id: 'genero-diversidad', name: 'Diversidad de Género', icon: '🏳️‍🌈' },
+  // Temáticas por religión
+  { id: 'religion', name: 'Religión', icon: '⛪' },
+  { id: 'catolicismo', name: 'Catolicismo', icon: '✝️' },
+  { id: 'judaismo', name: 'Judaísmo', icon: '✡️' },
+  { id: 'islam', name: 'Islam', icon: '☪️' },
+  { id: 'evangelico', name: 'Evangélico', icon: '📖' }
 ];
 
 /**
