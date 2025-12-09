@@ -26,19 +26,26 @@ const RSS_FEEDS = {
     { name: 'Noticias Argentinas', url: 'https://noticiasargentinas.com/rss', category: 'general' },
     { name: 'Ámbito', url: 'https://www.ambito.com/rss/pages/home.xml', category: 'economia' },
     { name: 'Perfil', url: 'https://www.perfil.com/feed', category: 'general' },
-    { name: 'El Diario AR', url: 'https://www.eldiarioar.com/rss', category: 'general' }
+    { name: 'El Diario AR', url: 'https://www.eldiarioar.com/rss', category: 'general' },
+    { name: 'Infobae', url: 'https://www.infobae.com/feeds/rss/', category: 'general' },
+    { name: 'Página/12', url: 'https://www.pagina12.com.ar/rss/portada', category: 'general' },
+    { name: 'Crónica', url: 'https://www.cronica.com.ar/rss/', category: 'general' }
   ],
 
   // Deportes
   deportes: [
     { name: 'Olé', url: 'https://www.ole.com.ar/rss/', category: 'deportes' },
-    { name: 'Clarín Deportes', url: 'https://www.clarin.com/rss/deportes/', category: 'deportes' }
+    { name: 'Clarín Deportes', url: 'https://www.clarin.com/rss/deportes/', category: 'deportes' },
+    { name: 'TyC Sports', url: 'https://www.tycsports.com/rss.xml', category: 'deportes' },
+    { name: 'La Nación Deportes', url: 'https://www.lanacion.com.ar/deportes/rss/', category: 'deportes' }
   ],
 
   // Política
   politica: [
     { name: 'Clarín Política', url: 'https://www.clarin.com/rss/politica/', category: 'politica' },
-    { name: 'Diagonales (La Plata)', url: 'https://www.diagonales.com/rss/', category: 'politica' }
+    { name: 'Diagonales (La Plata)', url: 'https://www.diagonales.com/rss/', category: 'politica' },
+    { name: 'La Nación Política', url: 'https://www.lanacion.com.ar/politica/rss/', category: 'politica' },
+    { name: 'Infobae Política', url: 'https://www.infobae.com/politica/feed/', category: 'politica' }
   ],
 
   // Economía
@@ -65,7 +72,9 @@ const RSS_FEEDS = {
 
   // Policiales
   policiales: [
-    { name: 'Clarín Policiales', url: 'https://www.clarin.com/rss/policiales/', category: 'policiales' }
+    { name: 'Clarín Policiales', url: 'https://www.clarin.com/rss/policiales/', category: 'policiales' },
+    { name: 'Crónica Policiales', url: 'https://www.cronica.com.ar/policiales/rss/', category: 'policiales' },
+    { name: 'Infobae Policiales', url: 'https://www.infobae.com/tag/policiales/feed/', category: 'policiales' }
   ],
 
   // =====================
@@ -75,7 +84,10 @@ const RSS_FEEDS = {
   // Buenos Aires
   buenosaires: [
     { name: '0223 (Mar del Plata)', url: 'https://www.0223.com.ar/rss/', category: 'provincial', provincia: 'Buenos Aires' },
-    { name: 'Diagonales (La Plata)', url: 'https://www.diagonales.com/rss/', category: 'provincial', provincia: 'Buenos Aires' }
+    { name: 'Diagonales (La Plata)', url: 'https://www.diagonales.com/rss/', category: 'provincial', provincia: 'Buenos Aires' },
+    { name: 'Clarín Zona Norte', url: 'https://www.clarin.com/rss/zona-norte/', category: 'provincial', provincia: 'Buenos Aires' },
+    { name: 'Clarín Zona Oeste', url: 'https://www.clarin.com/rss/zona-oeste/', category: 'provincial', provincia: 'Buenos Aires' },
+    { name: 'Clarín Zona Sur', url: 'https://www.clarin.com/rss/zona-sur/', category: 'provincial', provincia: 'Buenos Aires' }
   ],
 
   // Córdoba

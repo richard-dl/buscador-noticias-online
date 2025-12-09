@@ -197,8 +197,10 @@ router.get('/search', authenticateAndRequireSubscription, async (req, res) => {
     // Ordenar por fecha
     allNews.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
 
-    // Filtrar por distrito/localidad si están especificados
-    if (distrito || localidad) {
+    // Filtrar por distrito/localidad SOLO si también hay keywords específicos
+    // De lo contrario, mostrar todas las noticias de la provincia/temática
+    if ((distrito || localidad) && keywordsList.length > 0) {
+      const beforeFilter = allNews.length;
       allNews = allNews.filter(news => {
         const searchText = `${news.title} ${news.description}`.toLowerCase();
 
@@ -209,7 +211,7 @@ router.get('/search', authenticateAndRequireSubscription, async (req, res) => {
         return distritoMatch && localidadMatch;
       });
 
-      console.log(`Filtrado por ubicación: ${allNews.length} noticias después de filtrar por distrito/localidad`);
+      console.log(`Filtrado por ubicación: ${beforeFilter} → ${allNews.length} noticias (con keywords: ${keywordsList.join(', ')})`);
     }
 
     // Filtrar por tipo de contenido
