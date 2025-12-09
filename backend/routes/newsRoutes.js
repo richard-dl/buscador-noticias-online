@@ -197,6 +197,21 @@ router.get('/search', authenticateAndRequireSubscription, async (req, res) => {
     // Ordenar por fecha
     allNews.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
 
+    // Filtrar por distrito/localidad si están especificados
+    if (distrito || localidad) {
+      allNews = allNews.filter(news => {
+        const searchText = `${news.title} ${news.description}`.toLowerCase();
+
+        // Normalizar nombres para búsqueda
+        const distritoMatch = distrito ? searchText.includes(distrito.toLowerCase().replace(/-/g, ' ')) : true;
+        const localidadMatch = localidad ? searchText.includes(localidad.toLowerCase()) : true;
+
+        return distritoMatch && localidadMatch;
+      });
+
+      console.log(`Filtrado por ubicación: ${allNews.length} noticias después de filtrar por distrito/localidad`);
+    }
+
     // Filtrar por tipo de contenido
     if (contentType && contentType !== 'all') {
       allNews = allNews.filter(news => {

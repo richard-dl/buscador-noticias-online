@@ -81,9 +81,6 @@ const Generator = () => {
   }
 
   const applyProfile = (profile, autoSearch = true) => {
-    console.log('=== APLICANDO PERFIL ===')
-    console.log('Perfil completo:', profile)
-
     const newFilters = {
       tematicas: profile.tematicas || [],
       provincia: profile.provincia || '',
@@ -94,7 +91,6 @@ const Generator = () => {
       contentType: profile.contentType || 'all'
     }
 
-    console.log('Filtros construidos:', newFilters)
     setFilters(newFilters)
     setActiveTab('search')
 
@@ -102,7 +98,6 @@ const Generator = () => {
     if (autoSearch) {
       // Pequeño delay para que se actualice el estado
       setTimeout(() => {
-        console.log('Ejecutando búsqueda con filtros:', newFilters)
         handleSearchWithFilters(newFilters)
       }, 100)
     }
@@ -137,8 +132,6 @@ const Generator = () => {
       }
       // Siempre enviar contentType (por defecto 'all')
       params.contentType = searchFilters.contentType || 'all'
-
-      console.log('Buscando con filtros:', params)
 
       const response = await newsApi.search(params)
 
