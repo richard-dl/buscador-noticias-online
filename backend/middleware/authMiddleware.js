@@ -67,6 +67,17 @@ const requireActiveSubscription = async (req, res, next) => {
       });
     }
 
+    // Si el usuario es admin, bypass la verificación de suscripción
+    if (req.user.role === 'admin') {
+      req.subscription = {
+        valid: true,
+        isAdmin: true,
+        plan: 'admin',
+        daysRemaining: 999
+      };
+      return next();
+    }
+
     const subscription = await checkSubscriptionStatus(req.user.uid);
 
     if (!subscription.valid) {

@@ -57,7 +57,11 @@ const Header = () => {
         </nav>
 
         <div className={`header-user ${menuOpen ? 'open' : ''}`}>
-          {daysRemaining !== undefined && daysRemaining <= 7 && (
+          {profile?.role === 'admin' ? (
+            <span className="admin-badge">
+              👑 Administrador
+            </span>
+          ) : daysRemaining !== undefined && daysRemaining <= 7 && (
             <span className="days-warning">
               {daysRemaining} días restantes
             </span>

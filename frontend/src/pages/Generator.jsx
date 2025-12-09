@@ -87,7 +87,8 @@ const Generator = () => {
       distrito: profile.distrito || '',
       localidad: profile.localidad || '',
       keywords: profile.keywords || [],
-      excludeTerms: profile.excludeTerms || []
+      excludeTerms: profile.excludeTerms || [],
+      contentType: profile.contentType || 'all'
     }
     setFilters(newFilters)
     setActiveTab('search')
@@ -303,13 +304,15 @@ const Generator = () => {
         <div className="generator-header">
           <h1>Generador de Noticias</h1>
           <div className="tabs">
-            <button
-              className={`tab ${activeTab === 'search' ? 'active' : ''}`}
-              onClick={() => setActiveTab('search')}
-            >
-              <FiSearch size={18} />
-              Buscar
-            </button>
+            {activeTab !== 'search' && (
+              <button
+                className="tab"
+                onClick={() => setActiveTab('search')}
+              >
+                <FiSearch size={18} />
+                Ir al Panel Principal
+              </button>
+            )}
             <button
               className={`tab tab-breaking ${activeTab === 'breaking' ? 'active' : ''}`}
               onClick={() => {

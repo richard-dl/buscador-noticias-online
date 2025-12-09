@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir \"c:\\Proyectos\\buscador-noticias-online\" /B)",
+      "Bash(dir /s \"c:\\Proyectos\\buscador-noticias-online\\backend\")",
+      "Bash(npm install:*)",
+      "Bash(npm run dev:*)",
+      "Bash(node -e:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(taskkill /F /PID 17400)",
+      "Bash(taskkill //F //PID 17400)",
+      "Bash(curl:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nImplementación completa del Buscador de Noticias Online para periodistas argentinos\n\nCaracterísticas implementadas:\n- Sistema de autenticación con Firebase (Email + Google)\n- Suscripción de 30 días (trial) por usuario\n- Búsqueda de noticias desde feeds RSS de medios argentinos verificados\n- Filtrado por temáticas, provincias, keywords y términos a excluir\n- Perfiles de búsqueda guardados por usuario\n- Traducción de noticias (ES)\n- Acortamiento de URLs con fallback (v.gd, is.gd, TinyURL)\n- Generación de emojis contextuales\n- Resúmenes automáticos de noticias\n- Formato optimizado para copiar a redes sociales\n- Dashboard con noticias recientes\n- Historial de búsquedas en Firestore\n- Limpieza de entidades HTML en frontend y backend\n- Sistema RSS-only (Google News desactivado para mejor confiabilidad)\n\nBackend (Node.js + Express):\n- 6 feeds nacionales verificados (Clarín, La Nación, Noticias Argentinas, etc.)\n- 8 feeds provinciales (Buenos Aires, Córdoba, Salta, Misiones, Patagonia)\n- Categorías: nacionales, deportes, política, economía, espectáculos, tecnología, policiales, etc.\n- Middleware de autenticación y verificación de suscripción\n- Servicios de RSS, traducción, acortamiento de URLs, emojis y resúmenes\n\nFrontend (React + Vite):\n- AuthContext para gestión de sesión\n- Páginas: Login, Register, Dashboard, Generator, Profile\n- Componentes: NewsCard, FilterPanel, Header, LoadingSpinner\n- Aplicación automática de perfiles de búsqueda\n- UI responsive con toast notifications\n\nFirebase:\n- Firestore: usuarios, perfiles de búsqueda, historial\n- Authentication: Email/Password + Google OAuth\n- Reglas de seguridad configuradas\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git push:*)",
+      "Bash(git checkout:*)",
+      "Bash(npm run build:*)",
+      "Bash(dir \"c:\\Proyectos\\buscador-noticias-online\\frontend\\dist\" /B)",
+      "Bash(copy public.htaccess dist.htaccess)",
+      "Bash(scp:*)",
+      "Bash(sshpass -p 'szRkBKBw3GPwt&3' ssh -p 65002 u903977987@82.197.80.2 \"pwd && ls -la\")",
+      "Bash(git commit -m \"$(cat <<''EOF''\nConfiguración para deployment en Render.com y Hostinger\n\n- Agregado render.yaml con configuración para Render.com\n- Creado DEPLOY.md con guía completa de deployment\n- Agregado .env.production para build de producción\n- Script PowerShell para deploy frontend a Hostinger\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git commit -m \"$(cat <<''EOF''\nActualizar .env.production con URL de Render.com\n\n- Configurada URL del backend: https://buscador-noticias-online.onrender.com/api\n- Listo para deployment en producción\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git commit -m \"$(cat <<''EOF''\nImplementar mejoras 1-5: filtros, fechas, resúmenes y UX\n\nMejora 1: Filtro de noticias por fecha (máximo 3 días)\n- Cambiar filtro de 48 a 72 horas en rssService.js\n- Solo mostrar noticias de los últimos 3 días\n\nMejora 2: Formato de fecha completo\n- NewsCard muestra: HH:mm - DD/MM/YYYY\n- Información completa de hora, día, mes y año\n\nMejora 3: Resúmenes extendidos\n- Aumentar de 3 a 8 oraciones máximo\n- Aumentar longitud de 300 a 600 caracteres\n- Más contexto en los resúmenes de noticias\n\nMejora 10: Selector de perfil corregido\n- Agregar estado para mantener perfil seleccionado visible\n- Fix: ahora muestra cuál perfil está seleccionado\n\nMejora 9: Botón scroll to top\n- Agregar botón flotante para volver arriba\n- Aparece después de 300px de scroll\n- Animación suave y responsive\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git commit -m \"$(cat <<''EOF''\nImplementar mejoras 6 y 7: temáticas y ÚLTIMO MOMENTO\n\nMejora 6: Nuevas temáticas por edad, género y religión\n- Agregadas 13 nuevas temáticas en geoRoutes.js:\n  * Por edad: infantil, adolescentes, adultos, adultos mayores\n  * Por género: masculino, femenino, diversidad de género\n  * Por religión: religión general, catolicismo, judaísmo, islam, evangélico\n- Todas con íconos apropiados\n\nMejora 7: Sección ÚLTIMO MOMENTO\n- Nueva pestaña destacada con diseño rojo brillante\n- Muestra las 20 noticias más recientes ordenadas por fecha\n- Botón de actualizar para recargar noticias\n- Animación shimmer en la pestaña para llamar la atención\n- Diseño responsive y llamativo\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git commit:*)"
+    ]
+  }
+}
