@@ -3,7 +3,7 @@
  * Extrae las primeras oraciones más relevantes
  */
 const summarize = (text, options = {}) => {
-  const { maxSentences = 3, maxLength = 300 } = options;
+  const { maxSentences = 8, maxLength = 600 } = options;
 
   if (!text || text.length === 0) {
     return '';

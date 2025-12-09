@@ -174,9 +174,9 @@ const cleanHtml = (text) => {
 };
 
 /**
- * Filtrar noticias por fecha (últimas 48 horas)
+ * Filtrar noticias por fecha (últimas 72 horas / 3 días)
  */
-const filterByDate = (items, hoursAgo = 48) => {
+const filterByDate = (items, hoursAgo = 72) => {
   const cutoff = new Date(Date.now() - hoursAgo * 60 * 60 * 1000);
 
   return items.filter(item => {
@@ -213,7 +213,7 @@ const parseFeed = async (feedInfo) => {
  * Obtener noticias de múltiples feeds
  */
 const getNewsFromFeeds = async (feedKeys = ['nacionales'], options = {}) => {
-  const { maxItems = 20, hoursAgo = 48, keywords = [], excludeTerms = [] } = options;
+  const { maxItems = 20, hoursAgo = 72, keywords = [], excludeTerms = [] } = options;
 
   let allFeeds = [];
 

@@ -7,7 +7,7 @@ import FilterPanel from '../components/FilterPanel'
 import NewsCard from '../components/NewsCard'
 import LoadingSpinner from '../components/LoadingSpinner'
 import {
-  FiSearch, FiCopy, FiCheck, FiRefreshCw, FiSave, FiTrash2, FiX
+  FiSearch, FiCopy, FiCheck, FiRefreshCw, FiSave, FiTrash2, FiX, FiArrowUp
 } from 'react-icons/fi'
 
 const Generator = () => {
@@ -29,10 +29,21 @@ const Generator = () => {
   const [showSaveModal, setShowSaveModal] = useState(false)
   const [profileName, setProfileName] = useState('')
   const [searchCount, setSearchCount] = useState(10)
+  const [showScrollTop, setShowScrollTop] = useState(false)
 
   // Cargar perfiles al inicio
   useEffect(() => {
     loadProfiles()
+  }, [])
+
+  // Detectar scroll para mostrar botón "volver arriba"
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 300)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   // Cargar perfil desde URL si existe
@@ -238,6 +249,10 @@ const Generator = () => {
       filters.provincia ||
       filters.localidad ||
       filters.keywords.length > 0
+  }
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   return (
@@ -453,6 +468,17 @@ const Generator = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Botón Scroll to Top */}
+      {showScrollTop && (
+        <button
+          className="scroll-to-top"
+          onClick={scrollToTop}
+          aria-label="Volver arriba"
+        >
+          <FiArrowUp size={24} />
+        </button>
       )}
     </div>
   )

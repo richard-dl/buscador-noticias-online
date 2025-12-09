@@ -23,6 +23,7 @@ const FilterPanel = ({
   const [loading, setLoading] = useState(true)
   const [keywordInput, setKeywordInput] = useState('')
   const [excludeInput, setExcludeInput] = useState('')
+  const [selectedProfileId, setSelectedProfileId] = useState('')
 
   // Cargar datos geográficos
   useEffect(() => {
@@ -118,8 +119,11 @@ const FilterPanel = ({
         <div className="filter-profiles">
           <label>Perfiles guardados:</label>
           <select
-            onChange={(e) => onSelectProfile(e.target.value)}
-            value=""
+            onChange={(e) => {
+              setSelectedProfileId(e.target.value)
+              onSelectProfile(e.target.value)
+            }}
+            value={selectedProfileId}
           >
             <option value="">Seleccionar perfil...</option>
             {savedProfiles.map(profile => (
