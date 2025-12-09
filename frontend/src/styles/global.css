@@ -437,6 +437,10 @@ input, select, textarea {
   text-decoration: none;
 }
 
+.header-logo:hover {
+  color: white; /* Mantener el color blanco, NO heredar el hover global de 'a' */
+}
+
 .header-logo:hover .logo-text {
   opacity: 0.9;
   color: white; /* Mantener el texto blanco */
