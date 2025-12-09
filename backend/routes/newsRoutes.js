@@ -197,22 +197,9 @@ router.get('/search', authenticateAndRequireSubscription, async (req, res) => {
     // Ordenar por fecha
     allNews.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
 
-    // Filtrar por distrito/localidad SOLO si también hay keywords específicos
-    // De lo contrario, mostrar todas las noticias de la provincia/temática
-    if ((distrito || localidad) && keywordsList.length > 0) {
-      const beforeFilter = allNews.length;
-      allNews = allNews.filter(news => {
-        const searchText = `${news.title} ${news.description}`.toLowerCase();
-
-        // Normalizar nombres para búsqueda
-        const distritoMatch = distrito ? searchText.includes(distrito.toLowerCase().replace(/-/g, ' ')) : true;
-        const localidadMatch = localidad ? searchText.includes(localidad.toLowerCase()) : true;
-
-        return distritoMatch && localidadMatch;
-      });
-
-      console.log(`Filtrado por ubicación: ${beforeFilter} → ${allNews.length} noticias (con keywords: ${keywordsList.join(', ')})`);
-    }
+    // NOTA: El filtrado por distrito/localidad se hace mediante keywords
+    // Los feeds RSS raramente incluyen distrito específico en título/descripción
+    // Por lo tanto, el usuario debe agregar el distrito como keyword para filtrar
 
     // Filtrar por tipo de contenido
     if (contentType && contentType !== 'all') {
