@@ -158,9 +158,16 @@ router.get('/search', authenticateAndRequireSubscription, async (req, res) => {
       // Determinar categorías a buscar
       let rssCategories = matchingRssCategories;
 
-      // Si no hay categorías específicas, buscar en nacionales por defecto
+      // Si no hay categorías específicas pero hay keywords, buscar en TODAS las categorías
+      // Si no hay ni categorías ni keywords, buscar solo en nacionales
       if (rssCategories.length === 0) {
-        rssCategories = ['nacionales'];
+        if (keywordsList.length > 0) {
+          // Con keywords: buscar en todas las categorías para mayor cobertura
+          rssCategories = ['nacionales', 'deportes', 'politica', 'economia', 'policiales', 'espectaculos', 'tecnologia', 'internacionales'];
+        } else {
+          // Sin keywords: solo nacionales
+          rssCategories = ['nacionales'];
+        }
       }
 
       // Si hay provincia, agregar categoría provincial correspondiente
