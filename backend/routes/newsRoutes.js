@@ -132,7 +132,8 @@ router.get('/search', authenticateAndRequireSubscription, async (req, res) => {
       maxItems = 15,
       translate = 'false',
       shorten = 'true',
-      generateEmojis = 'true'
+      generateEmojis = 'true',
+      contentType = 'all' // with-image, with-video, text-only, all
     } = req.query;
 
     let allNews = [];
@@ -195,6 +196,30 @@ router.get('/search', authenticateAndRequireSubscription, async (req, res) => {
 
     // Ordenar por fecha
     allNews.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+
+    // Filtrar por tipo de contenido
+    if (contentType && contentType !== 'all') {
+      allNews = allNews.filter(news => {
+        const hasImage = news.image && news.image.length > 0;
+        const hasVideo = news.link && (
+          news.link.includes('youtube.com') ||
+          news.link.includes('youtu.be') ||
+          news.link.includes('vimeo.com') ||
+          news.description?.toLowerCase().includes('video')
+        );
+
+        switch (contentType) {
+          case 'with-image':
+            return hasImage;
+          case 'with-video':
+            return hasVideo;
+          case 'text-only':
+            return !hasImage && !hasVideo;
+          default:
+            return true;
+        }
+      });
+    }
 
     // Limitar resultados
     allNews = allNews.slice(0, parseInt(maxItems));

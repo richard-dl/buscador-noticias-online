@@ -24,6 +24,7 @@ const FilterPanel = ({
   const [keywordInput, setKeywordInput] = useState('')
   const [excludeInput, setExcludeInput] = useState('')
   const [selectedProfileId, setSelectedProfileId] = useState('')
+  const [expandedContent, setExpandedContent] = useState(false)
 
   // Cargar datos geográficos
   useEffect(() => {
@@ -213,6 +214,67 @@ const FilterPanel = ({
                 onChange={(e) => onChange({ ...filters, localidad: e.target.value })}
                 placeholder="Ej: Villa María, Tigre..."
               />
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Tipo de Contenido */}
+      <div className="filter-section">
+        <button
+          className="filter-section-header"
+          onClick={() => setExpandedContent(!expandedContent)}
+        >
+          <span>Tipo de Contenido</span>
+          {expandedContent ? <FiChevronUp /> : <FiChevronDown />}
+        </button>
+        {expandedContent && (
+          <div className="filter-section-content">
+            <div className="content-type-grid">
+              <label className={`content-type-chip ${filters.contentType === 'with-image' ? 'active' : ''}`}>
+                <input
+                  type="radio"
+                  name="contentType"
+                  value="with-image"
+                  checked={filters.contentType === 'with-image'}
+                  onChange={(e) => onChange({ ...filters, contentType: e.target.value })}
+                />
+                <span className="icon">📷</span>
+                <span>Solo con Imágenes</span>
+              </label>
+              <label className={`content-type-chip ${filters.contentType === 'with-video' ? 'active' : ''}`}>
+                <input
+                  type="radio"
+                  name="contentType"
+                  value="with-video"
+                  checked={filters.contentType === 'with-video'}
+                  onChange={(e) => onChange({ ...filters, contentType: e.target.value })}
+                />
+                <span className="icon">🎥</span>
+                <span>Solo con Videos</span>
+              </label>
+              <label className={`content-type-chip ${filters.contentType === 'text-only' ? 'active' : ''}`}>
+                <input
+                  type="radio"
+                  name="contentType"
+                  value="text-only"
+                  checked={filters.contentType === 'text-only'}
+                  onChange={(e) => onChange({ ...filters, contentType: e.target.value })}
+                />
+                <span className="icon">📝</span>
+                <span>Solo Texto</span>
+              </label>
+              <label className={`content-type-chip ${!filters.contentType || filters.contentType === 'all' ? 'active' : ''}`}>
+                <input
+                  type="radio"
+                  name="contentType"
+                  value="all"
+                  checked={!filters.contentType || filters.contentType === 'all'}
+                  onChange={(e) => onChange({ ...filters, contentType: e.target.value })}
+                />
+                <span className="icon">🔄</span>
+                <span>Todos</span>
+              </label>
             </div>
           </div>
         )}

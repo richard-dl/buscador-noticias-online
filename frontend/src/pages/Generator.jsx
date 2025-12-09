@@ -19,7 +19,8 @@ const Generator = () => {
     distrito: '',
     localidad: '',
     keywords: [],
-    excludeTerms: []
+    excludeTerms: [],
+    contentType: 'all'
   })
   const [news, setNews] = useState([])
   const [searchProfiles, setSearchProfiles] = useState([])
@@ -127,6 +128,9 @@ const Generator = () => {
       if (searchFilters.excludeTerms.length > 0) {
         params.excludeTerms = searchFilters.excludeTerms.join(',')
       }
+      if (searchFilters.contentType && searchFilters.contentType !== 'all') {
+        params.contentType = searchFilters.contentType
+      }
 
       const response = await newsApi.search(params)
 
@@ -167,6 +171,9 @@ const Generator = () => {
       }
       if (filters.excludeTerms.length > 0) {
         params.excludeTerms = filters.excludeTerms.join(',')
+      }
+      if (filters.contentType && filters.contentType !== 'all') {
+        params.contentType = filters.contentType
       }
 
       const response = await newsApi.search(params)

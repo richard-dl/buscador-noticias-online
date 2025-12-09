@@ -1196,6 +1196,50 @@ input, select, textarea {
   font-size: var(--font-size-sm);
 }
 
+/* Content Type Grid */
+.content-type-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-3);
+}
+
+.content-type-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-1);
+  padding: var(--spacing-4) var(--spacing-3);
+  background-color: var(--color-gray-100);
+  border: 2px solid var(--color-gray-200);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: center;
+}
+
+.content-type-chip input {
+  display: none;
+}
+
+.content-type-chip:hover {
+  background-color: var(--color-gray-200);
+  border-color: var(--color-gray-300);
+  transform: translateY(-2px);
+}
+
+.content-type-chip.active {
+  background-color: var(--color-primary-light);
+  border-color: var(--color-primary);
+  color: var(--color-primary-dark);
+  font-weight: 600;
+}
+
+.content-type-chip .icon {
+  font-size: 32px;
+}
+
 .filter-row {
   margin-bottom: var(--spacing-3);
 }
