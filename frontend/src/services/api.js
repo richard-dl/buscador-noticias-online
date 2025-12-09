@@ -1,0 +1,96 @@
+import axios from 'axios'
+import { getIdToken } from './firebase'
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api'
+
+// Crear instancia de axios
+const api = axios.create({
+  baseURL: API_URL,
+  timeout: 30000,
+  headers: {
+    'Content-Type': 'application/json'
+  }
+})
+
+// Interceptor para agregar token de autenticación
+api.interceptors.request.use(
+  async (config) => {
+    try {
+      const token = await getIdToken()
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`
+      }
+    } catch (error) {
+      console.error('Error obteniendo token:', error)
+    }
+    return config
+  },
+  (error) => {
+    return Promise.reject(error)
+  }
+)
+
+// Interceptor para manejar respuestas y errores
+api.interceptors.response.use(
+  (response) => response.data,
+  (error) => {
+    const message = error.response?.data?.error || error.message || 'Error de conexión'
+
+    // Si es error de suscripción expirada, redirigir
+    if (error.response?.data?.code === 'SUBSCRIPTION_EXPIRED') {
+      window.location.href = '/expired'
+    }
+
+    return Promise.reject({ message, status: error.response?.status })
+  }
+)
+
+// ============ AUTH ============
+
+export const authApi = {
+  register: (userData) => api.post('/auth/register', userData),
+  login: () => api.post('/auth/login'),
+  verify: () => api.post('/auth/verify')
+}
+
+// ============ USER ============
+
+export const userApi = {
+  getProfile: () => api.get('/user/profile'),
+  updateProfile: (data) => api.put('/user/profile', data),
+
+  // Search Profiles
+  getSearchProfiles: () => api.get('/user/search-profiles'),
+  createSearchProfile: (data) => api.post('/user/search-profiles', data),
+  updateSearchProfile: (id, data) => api.put(`/user/search-profiles/${id}`, data),
+  deleteSearchProfile: (id) => api.delete(`/user/search-profiles/${id}`)
+}
+
+// ============ NEWS ============
+
+export const newsApi = {
+  getFeeds: () => api.get('/news/feeds'),
+
+  getRssNews: (params = {}) => {
+    const queryString = new URLSearchParams(params).toString()
+    return api.get(`/news/rss?${queryString}`)
+  },
+
+  search: (params = {}) => {
+    const queryString = new URLSearchParams(params).toString()
+    return api.get(`/news/search?${queryString}`)
+  },
+
+  generate: (data) => api.post('/news/generate', data)
+}
+
+// ============ GEO ============
+
+export const geoApi = {
+  getProvincias: () => api.get('/geo/provincias'),
+  getDistritosByProvincia: (provinciaId) => api.get(`/geo/distritos/${provinciaId}`),
+  getTematicas: () => api.get('/geo/tematicas'),
+  getAll: () => api.get('/geo/all')
+}
+
+export default api
