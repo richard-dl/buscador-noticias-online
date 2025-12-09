@@ -440,6 +440,10 @@ input, select, textarea {
   color: white; /* Mantener el texto blanco */
 }
 
+.header-logo:hover .logo-icon {
+  opacity: 1; /* Mantener el icono visible */
+}
+
 .logo-icon svg {
   width: 36px;
   height: 36px;

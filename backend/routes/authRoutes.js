@@ -107,6 +107,7 @@ router.post('/login', async (req, res) => {
         email: user.email,
         displayName: user.displayName,
         status: user.status,
+        role: user.role || 'user', // Agregar role
         expiresAt: expiresAt?.toISOString(),
         daysRemaining: daysRemaining,
         isExpired: user.status === 'expired'

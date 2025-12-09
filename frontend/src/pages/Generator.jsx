@@ -129,9 +129,10 @@ const Generator = () => {
       if (searchFilters.excludeTerms.length > 0) {
         params.excludeTerms = searchFilters.excludeTerms.join(',')
       }
-      if (searchFilters.contentType && searchFilters.contentType !== 'all') {
-        params.contentType = searchFilters.contentType
-      }
+      // Siempre enviar contentType (por defecto 'all')
+      params.contentType = searchFilters.contentType || 'all'
+
+      console.log('Buscando con filtros:', params)
 
       const response = await newsApi.search(params)
 
