@@ -119,6 +119,13 @@ const Generator = () => {
       // Colapsar filtros SOLO en móvil para mostrar resultados
       if (isMobile()) {
         setFiltersCollapsed(true)
+        // Scroll a la zona de resultados en móvil
+        setTimeout(() => {
+          const resultsArea = document.querySelector('.results-area')
+          if (resultsArea) {
+            resultsArea.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          }
+        }, 150)
       }
 
       const params = {
@@ -264,8 +271,11 @@ const Generator = () => {
       distrito: '',
       localidad: '',
       keywords: [],
-      excludeTerms: []
+      excludeTerms: [],
+      contentType: 'all'
     })
+    // También limpiar el selector de perfil
+    setSelectedProfileId('')
   }
 
   const hasActiveFilters = () => {
@@ -284,14 +294,17 @@ const Generator = () => {
       setLoadingBreaking(true)
       setBreakingNews([])
 
-      // Buscar noticias de las últimas 3 horas, todas las categorías
-      const response = await newsApi.search({
+      // Usar getRssNews que es el mismo endpoint que funciona en la portada
+      // Buscar en múltiples categorías para mayor cobertura
+      const categories = ['nacionales', 'politica', 'economia', 'deportes', 'policiales', 'internacionales']
+
+      const response = await newsApi.getRssNews({
+        categories: categories.join(','),
         maxItems: 20,
-        hoursAgo: 3,
+        hoursAgo: 48,
         translate: 'true',
         shorten: 'true',
-        generateEmojis: 'true',
-        tematicas: 'politica,economia,deportes,policiales,internacionales,sociedad'
+        generateEmojis: 'true'
       })
 
       if (response.success) {

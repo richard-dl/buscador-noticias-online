@@ -102,16 +102,68 @@ const validateUrl = async (url) => {
 };
 
 /**
+ * Resolver URL de Google News a la URL final del artículo
+ */
+const resolveGoogleNewsUrl = async (url) => {
+  try {
+    // Hacer HEAD request para seguir las redirecciones
+    const response = await axios.head(url, {
+      timeout: 5000,
+      maxRedirects: 5,
+      validateStatus: status => status < 400
+    });
+
+    // La URL final está en response.request.res.responseUrl
+    const finalUrl = response.request?.res?.responseUrl || response.request?.responseURL || url;
+
+    // Solo devolver si es diferente y no es de Google News
+    if (finalUrl && !finalUrl.includes('news.google.com') && finalUrl !== url) {
+      return finalUrl;
+    }
+
+    return url;
+  } catch (error) {
+    // Si falla, intentar con GET
+    try {
+      const response = await axios.get(url, {
+        timeout: 5000,
+        maxRedirects: 5,
+        validateStatus: status => status < 400
+      });
+      const finalUrl = response.request?.res?.responseUrl || response.request?.responseURL || url;
+      if (finalUrl && !finalUrl.includes('news.google.com') && finalUrl !== url) {
+        return finalUrl;
+      }
+    } catch (e) {
+      // Ignorar error
+    }
+    return url;
+  }
+};
+
+/**
  * Acortar URL con fallback entre servicios
  */
 const shortenUrl = async (url, options = {}) => {
   // is.gd redirige directamente (301), v.gd muestra página intermedia
   const { validate = false, preferredService = 'isgd' } = options;
 
-  // NO acortar URLs de Google News - son redirecciones que no funcionan bien acortadas
+  // Para URLs de Google News, primero resolver a la URL final del artículo
   if (url && url.includes('news.google.com')) {
-    console.warn('Saltando acortamiento de URL de Google News:', url.substring(0, 60) + '...');
-    return url;
+    try {
+      const resolvedUrl = await resolveGoogleNewsUrl(url);
+      if (resolvedUrl !== url && !resolvedUrl.includes('news.google.com')) {
+        url = resolvedUrl;
+        console.log('Google News URL resuelta:', url.substring(0, 60) + '...');
+      } else {
+        // Si no se pudo resolver, devolver la URL original
+        console.warn('No se pudo resolver URL de Google News, devolviendo original');
+        return url;
+      }
+    } catch (err) {
+      console.warn('Error resolviendo Google News URL:', err.message);
+      return url;
+    }
   }
 
   // Verificar cache
