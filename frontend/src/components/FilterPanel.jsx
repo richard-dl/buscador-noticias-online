@@ -116,24 +116,25 @@ const FilterPanel = ({
   return (
     <div className="filter-panel">
       {/* Perfiles guardados */}
-      {savedProfiles.length > 0 && (
-        <div className="filter-profiles">
-          <label>Perfiles guardados:</label>
-          <select
-            onChange={(e) => {
-              onSelectProfile(e.target.value)
-            }}
-            value={selectedProfileId}
-          >
-            <option value="">Seleccionar perfil...</option>
-            {savedProfiles.map(profile => (
-              <option key={profile.id} value={profile.id}>
-                {profile.name}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
+      <div className="filter-profiles">
+        <label>Perfiles guardados:</label>
+        <select
+          onChange={(e) => {
+            onSelectProfile(e.target.value)
+          }}
+          value={selectedProfileId}
+          disabled={savedProfiles.length === 0}
+        >
+          <option value="">
+            {savedProfiles.length === 0 ? 'No hay perfiles guardados' : 'Seleccionar perfil...'}
+          </option>
+          {savedProfiles.map(profile => (
+            <option key={profile.id} value={profile.id}>
+              {profile.name}
+            </option>
+          ))}
+        </select>
+      </div>
 
       {/* Temáticas */}
       <div className="filter-section">
