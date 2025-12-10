@@ -241,6 +241,39 @@ const parseGoogleNewsRss = async (url) => {
 };
 
 /**
+ * Extraer imagen siguiendo redirects de Google News
+ * Hace un request que sigue las redirecciones y extrae la imagen del HTML final
+ */
+const extractImageFromGoogleNewsUrl = async (googleUrl) => {
+  try {
+    // Hacer request siguiendo todas las redirecciones
+    const response = await axios.get(googleUrl, {
+      timeout: 5000,
+      maxRedirects: 10,
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Language': 'es-AR,es;q=0.9'
+      }
+    });
+
+    const $ = cheerio.load(response.data);
+
+    // Extraer imagen OG
+    let image = $('meta[property="og:image"]').attr('content');
+    if (image && image.startsWith('http')) return image;
+
+    // Twitter image
+    image = $('meta[name="twitter:image"]').attr('content');
+    if (image && image.startsWith('http')) return image;
+
+    return null;
+  } catch (error) {
+    return null;
+  }
+};
+
+/**
  * Buscar noticias en Google News
  * Ahora extrae imágenes por defecto usando Open Graph tags
  */
@@ -253,20 +286,15 @@ const searchGoogleNews = async (query, options = {}) => {
   // Limitar cantidad
   items = items.slice(0, maxItems);
 
-  // Extraer imágenes en paralelo (optimizado con timeout corto)
+  // Extraer imágenes en paralelo (optimizado)
   if (extractImages && items.length > 0) {
     // Procesar en paralelo con Promise.allSettled para no fallar si alguno falla
-    const imagePromises = items.map(async (item, index) => {
+    const imagePromises = items.map(async (item) => {
       try {
-        // Primero intentar extraer la URL real del artículo
-        const realUrl = await extractRealUrl(item.link);
-        if (realUrl && realUrl !== item.link) {
-          item.realUrl = realUrl;
-          // Extraer imagen de la URL real
-          const image = await extractImageFromPage(realUrl);
-          if (image) {
-            item.image = image;
-          }
+        // Método directo: seguir redirects de Google News y extraer imagen
+        const image = await extractImageFromGoogleNewsUrl(item.link);
+        if (image) {
+          item.image = image;
         }
       } catch (error) {
         // Silenciar errores individuales
@@ -274,10 +302,10 @@ const searchGoogleNews = async (query, options = {}) => {
       return item;
     });
 
-    // Esperar todas las promesas (máximo 5 segundos total)
+    // Esperar todas las promesas (máximo 8 segundos total)
     const results = await Promise.race([
       Promise.allSettled(imagePromises),
-      new Promise(resolve => setTimeout(() => resolve(items.map(i => ({ status: 'fulfilled', value: i }))), 5000))
+      new Promise(resolve => setTimeout(() => resolve(items.map(i => ({ status: 'fulfilled', value: i }))), 8000))
     ]);
 
     // Actualizar items con los resultados
