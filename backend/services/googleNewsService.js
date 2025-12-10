@@ -27,12 +27,16 @@ const TEMATICAS = {
 
 /**
  * Construir URL de Google News para Argentina
+ * Formato correcto: https://news.google.com/rss/search?q=QUERY&hl=es-419&gl=AR&ceid=AR:es-419
  * @param {string} query - Búsqueda
  * @param {object} options - Opciones
  * @param {number} options.hoursAgo - Filtrar por últimas X horas (ej: 3 = últimas 3 horas)
  */
 const buildGoogleNewsUrl = (query, options = {}) => {
-  const { region = 'AR', language = 'es', hoursAgo = null } = options;
+  const { region = 'AR', hoursAgo = null } = options;
+
+  // Usar es-419 para español latinoamericano (mejor cobertura Argentina)
+  const language = 'es-419';
 
   // Agregar filtro de tiempo si se especifica
   // NOTA: No usamos when: muy corto porque puede no haber resultados
@@ -52,7 +56,7 @@ const buildGoogleNewsUrl = (query, options = {}) => {
   // Codificar la query
   const encodedQuery = encodeURIComponent(searchQuery);
 
-  // URL de Google News RSS
+  // URL de Google News RSS para Argentina (es-419 = español latinoamericano)
   return `https://news.google.com/rss/search?q=${encodedQuery}&hl=${language}&gl=${region}&ceid=${region}:${language}`;
 };
 
