@@ -1,4 +1,5 @@
 const axios = require('axios');
+const { extractRealUrl } = require('./googleNewsService');
 
 // Cache para URLs acortadas
 const urlCache = new Map();
@@ -103,31 +104,27 @@ const validateUrl = async (url) => {
 
 /**
  * Resolver URL de Google News a la URL final del artículo
+ * Usa la función extractRealUrl de googleNewsService que decodifica base64
  */
 const resolveGoogleNewsUrl = async (url) => {
   try {
-    // Hacer HEAD request para seguir las redirecciones
-    const response = await axios.head(url, {
-      timeout: 5000,
-      maxRedirects: 5,
-      validateStatus: status => status < 400
-    });
+    // Usar la función especializada de googleNewsService
+    // que maneja la decodificación base64 de las URLs de Google News
+    const realUrl = await extractRealUrl(url);
 
-    // La URL final está en response.request.res.responseUrl
-    const finalUrl = response.request?.res?.responseUrl || response.request?.responseURL || url;
-
-    // Solo devolver si es diferente y no es de Google News
-    if (finalUrl && !finalUrl.includes('news.google.com') && finalUrl !== url) {
-      return finalUrl;
+    // Si se obtuvo una URL diferente y no es de Google News, devolverla
+    if (realUrl && realUrl !== url && !realUrl.includes('news.google.com')) {
+      return realUrl;
     }
 
-    return url;
-  } catch (error) {
-    // Si falla, intentar con GET
+    // Fallback: intentar con redirecciones HTTP simples
     try {
       const response = await axios.get(url, {
-        timeout: 5000,
-        maxRedirects: 5,
+        timeout: 8000,
+        maxRedirects: 10,
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+        },
         validateStatus: status => status < 400
       });
       const finalUrl = response.request?.res?.responseUrl || response.request?.responseURL || url;
@@ -135,8 +132,12 @@ const resolveGoogleNewsUrl = async (url) => {
         return finalUrl;
       }
     } catch (e) {
-      // Ignorar error
+      // Ignorar error de request
     }
+
+    return url;
+  } catch (error) {
+    console.warn('Error resolviendo Google News URL:', error.message);
     return url;
   }
 };
