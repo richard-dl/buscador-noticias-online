@@ -140,42 +140,78 @@ router.get('/search', authenticateAndRequireSubscription, async (req, res) => {
 
     // Parsear parámetros
     const tematicasList = tematicas ? tematicas.split(',').map(t => t.trim()) : [];
-    const keywordsList = keywords ? keywords.split(',').map(k => k.trim()) : [];
+    let keywordsList = keywords ? keywords.split(',').map(k => k.trim()) : [];
     const excludeList = excludeTerms ? excludeTerms.split(',').map(e => e.trim()) : [];
 
-    // Categorías RSS válidas
+    // Categorías RSS válidas (las que tienen feeds configurados)
     const validRssCategories = ['nacionales', 'deportes', 'politica', 'economia', 'espectaculos', 'tecnologia', 'ciencia', 'salud', 'internacionales', 'policiales', 'buenosaires', 'cordoba', 'santafe', 'mendoza', 'tucuman', 'salta', 'misiones', 'rionegro', 'neuquen', 'chubut'];
 
-    // Verificar si las temáticas coinciden con categorías RSS
-    const matchingRssCategories = tematicasList.filter(t => validRssCategories.includes(t.toLowerCase()));
+    // Mapeo de temáticas que NO son categorías RSS a keywords de búsqueda
+    const tematicaToKeywords = {
+      'educacion': ['educación', 'escuela', 'universidad', 'docentes', 'alumnos'],
+      'cultura': ['cultura', 'arte', 'música', 'teatro', 'literatura'],
+      'medioambiente': ['medio ambiente', 'ecología', 'clima', 'contaminación'],
+      'sociedad': ['sociedad', 'comunidad', 'vecinos', 'barrio'],
+      'turismo': ['turismo', 'viajes', 'vacaciones', 'hotel'],
+      'infantil': ['niños', 'infantil', 'chicos', 'menores'],
+      'adolescentes': ['adolescentes', 'jóvenes', 'juventud', 'secundaria'],
+      'adultos': ['adultos', 'trabajo', 'empleo'],
+      'adultos-mayores': ['jubilados', 'adultos mayores', 'tercera edad', 'pensiones'],
+      'masculino': ['hombres', 'masculino', 'varones'],
+      'femenino': ['mujeres', 'femenino', 'género'],
+      'genero-diversidad': ['diversidad', 'LGBTQ', 'género', 'inclusión'],
+      'religion': ['religión', 'fe', 'iglesia'],
+      'catolicismo': ['católico', 'papa', 'iglesia católica', 'vaticano'],
+      'judaismo': ['judío', 'judaísmo', 'sinagoga', 'rabino'],
+      'islam': ['islam', 'musulmán', 'mezquita'],
+      'evangelico': ['evangélico', 'pastor', 'iglesia evangélica']
+    };
 
-    console.log('Búsqueda RSS + Google News - Keywords:', keywordsList, 'Temáticas:', tematicasList, 'Provincia:', provincia);
+    // Separar temáticas válidas RSS de las que deben convertirse a keywords
+    const matchingRssCategories = [];
+    const additionalKeywords = [];
+
+    for (const tematica of tematicasList) {
+      const tematicaLower = tematica.toLowerCase();
+      if (validRssCategories.includes(tematicaLower)) {
+        matchingRssCategories.push(tematicaLower);
+      } else if (tematicaToKeywords[tematicaLower]) {
+        // Agregar keywords de búsqueda para esta temática
+        additionalKeywords.push(...tematicaToKeywords[tematicaLower]);
+      }
+    }
+
+    // Combinar keywords del usuario con keywords de temáticas
+    keywordsList = [...keywordsList, ...additionalKeywords];
+
+    // Normalizar provincia (quitar guiones para coincidir con RSS)
+    const provinciaKey = provincia ? provincia.toLowerCase().replace(/[\s-]+/g, '') : null;
+
+    console.log('Búsqueda RSS + Google News - Keywords:', keywordsList, 'Temáticas RSS:', matchingRssCategories, 'Provincia:', provincia, '(key:', provinciaKey, ')');
 
     // Búsqueda combinada: RSS + Google News para mejor cobertura
     // RSS: categorías específicas + feeds locales
     // Google News: búsqueda por ubicación y keywords
 
     try {
-      // Determinar categorías a buscar
-      let rssCategories = matchingRssCategories;
+      // Determinar categorías RSS a buscar
+      let rssCategories = [...matchingRssCategories];
 
-      // Si no hay categorías específicas pero hay keywords, buscar en TODAS las categorías
-      // Si no hay ni categorías ni keywords, buscar solo en nacionales
-      if (rssCategories.length === 0) {
-        if (keywordsList.length > 0) {
-          // Con keywords: buscar en todas las categorías para mayor cobertura
-          rssCategories = ['nacionales', 'deportes', 'politica', 'economia', 'policiales', 'espectaculos', 'tecnologia', 'ciencia', 'salud', 'internacionales'];
-        } else {
-          // Sin keywords: solo nacionales
-          rssCategories = ['nacionales'];
+      // Si hay provincia, agregar categoría provincial
+      if (provinciaKey && validRssCategories.includes(provinciaKey)) {
+        if (!rssCategories.includes(provinciaKey)) {
+          rssCategories.push(provinciaKey);
         }
       }
 
-      // Si hay provincia, agregar categoría provincial correspondiente
-      if (provincia) {
-        const provinciaKey = provincia.toLowerCase().replace(/[\s-]+/g, '');
-        if (validRssCategories.includes(provinciaKey)) {
-          rssCategories.push(provinciaKey);
+      // Si no hay categorías específicas, determinar qué buscar
+      if (rssCategories.length === 0) {
+        if (keywordsList.length > 0 || provinciaKey) {
+          // Con keywords o provincia: buscar en categorías generales para mayor cobertura
+          rssCategories = ['nacionales', 'deportes', 'politica', 'economia', 'policiales'];
+        } else {
+          // Sin nada: solo nacionales
+          rssCategories = ['nacionales'];
         }
       }
 
