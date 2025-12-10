@@ -5,7 +5,7 @@ import { newsApi, userApi } from '../services/api'
 import Header from '../components/Header'
 import NewsCard from '../components/NewsCard'
 import LoadingSpinner from '../components/LoadingSpinner'
-import { FiSearch, FiFileText, FiTrendingUp, FiClock } from 'react-icons/fi'
+import { FiSearch, FiFileText, FiTrendingUp, FiClock, FiGrid } from 'react-icons/fi'
 
 const Dashboard = () => {
   const { profile, daysRemaining } = useAuth()
@@ -13,6 +13,15 @@ const Dashboard = () => {
   const [searchProfiles, setSearchProfiles] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [gridColumns, setGridColumns] = useState(() => {
+    const saved = localStorage.getItem('newsGridColumns')
+    return saved ? parseInt(saved, 10) : 3
+  })
+
+  const handleColumnChange = (cols) => {
+    setGridColumns(cols)
+    localStorage.setItem('newsGridColumns', cols.toString())
+  }
 
   useEffect(() => {
     loadDashboardData()
@@ -152,11 +161,29 @@ const Dashboard = () => {
             <p>No hay noticias disponibles</p>
           </div>
         ) : (
-          <div className="news-grid">
-            {recentNews.map((news, index) => (
-              <NewsCard key={index} news={news} />
-            ))}
-          </div>
+          <>
+            <div className="results-header dashboard-results-header">
+              <span>{recentNews.length} noticias recientes</span>
+              <div className="column-selector">
+                {[2, 3, 4, 5].map(cols => (
+                  <button
+                    key={cols}
+                    className={`col-btn ${gridColumns === cols ? 'active' : ''}`}
+                    onClick={() => handleColumnChange(cols)}
+                    title={`${cols} columnas`}
+                  >
+                    <FiGrid size={14} />
+                    <span>{cols}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className={`news-grid grid-cols-${gridColumns}`}>
+              {recentNews.map((news, index) => (
+                <NewsCard key={index} news={news} />
+              ))}
+            </div>
+          </>
         )}
       </section>
 
@@ -193,6 +220,7 @@ const Dashboard = () => {
       {/* Footer */}
       <footer className="dashboard-footer">
         <p>Buscador de Noticias Online &copy; {new Date().getFullYear()}</p>
+        <span className="version-tag">V01.12.25</span>
       </footer>
     </div>
   )

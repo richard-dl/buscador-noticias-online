@@ -902,6 +902,60 @@ input, select, textarea {
   gap: var(--spacing-6);
 }
 
+/* Grid columns variants */
+.news-grid.grid-cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.news-grid.grid-cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.news-grid.grid-cols-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.news-grid.grid-cols-5 {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+/* Column selector */
+.column-selector {
+  display: flex;
+  gap: var(--spacing-1);
+  background: var(--color-gray-100);
+  padding: var(--spacing-1);
+  border-radius: var(--radius-md);
+}
+
+.column-selector .col-btn {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: var(--spacing-1) var(--spacing-2);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  color: var(--color-gray-500);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.column-selector .col-btn:hover {
+  background: var(--color-gray-200);
+  color: var(--color-gray-700);
+}
+
+.column-selector .col-btn.active {
+  background: var(--color-primary);
+  color: white;
+}
+
+.column-selector .col-btn span {
+  font-weight: 600;
+}
+
 .loading-section,
 .error-section,
 .empty-section {
@@ -945,6 +999,18 @@ input, select, textarea {
   padding: var(--spacing-6);
   color: var(--color-text-muted);
   font-size: var(--font-size-sm);
+}
+
+.dashboard-footer .version-tag {
+  display: block;
+  margin-top: var(--spacing-2);
+  font-size: var(--font-size-xs);
+  color: var(--color-gray-400);
+  opacity: 0.7;
+}
+
+.dashboard-results-header {
+  margin-bottom: var(--spacing-4);
 }
 
 /* ============================================
@@ -1140,6 +1206,12 @@ input, select, textarea {
 @media (max-width: 992px) {
   .generator-content {
     grid-template-columns: 1fr;
+  }
+
+  /* En tablet, limitar columnas máximas */
+  .news-grid.grid-cols-4,
+  .news-grid.grid-cols-5 {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
@@ -2056,10 +2128,19 @@ input, select, textarea {
     padding: var(--spacing-3);
   }
 
-  /* News Grid en móvil */
-  .news-grid {
+  /* News Grid en móvil - siempre 1 columna */
+  .news-grid,
+  .news-grid.grid-cols-2,
+  .news-grid.grid-cols-3,
+  .news-grid.grid-cols-4,
+  .news-grid.grid-cols-5 {
     grid-template-columns: 1fr;
     gap: var(--spacing-4);
+  }
+
+  /* Ocultar selector de columnas en móvil pequeño */
+  .column-selector {
+    display: none;
   }
 
   /* News Card en móvil - CORRECCIÓN CRÍTICA */

@@ -7,7 +7,8 @@ import FilterPanel from '../components/FilterPanel'
 import NewsCard from '../components/NewsCard'
 import LoadingSpinner from '../components/LoadingSpinner'
 import {
-  FiSearch, FiCopy, FiCheck, FiRefreshCw, FiSave, FiTrash2, FiX, FiArrowUp, FiZap
+  FiSearch, FiCopy, FiCheck, FiRefreshCw, FiSave, FiTrash2, FiX, FiArrowUp, FiZap,
+  FiGrid
 } from 'react-icons/fi'
 
 const Generator = () => {
@@ -35,6 +36,10 @@ const Generator = () => {
   const [loadingBreaking, setLoadingBreaking] = useState(false)
   const [selectedProfileId, setSelectedProfileId] = useState('')
   const [filtersCollapsed, setFiltersCollapsed] = useState(false)  // Para colapsar filtros en móvil
+  const [gridColumns, setGridColumns] = useState(() => {
+    const saved = localStorage.getItem('newsGridColumns')
+    return saved ? parseInt(saved, 10) : 3
+  })
 
   // Cargar perfiles al inicio
   useEffect(() => {
@@ -289,6 +294,11 @@ const Generator = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  const handleColumnChange = (cols) => {
+    setGridColumns(cols)
+    localStorage.setItem('newsGridColumns', cols.toString())
+  }
+
   const loadBreakingNews = async () => {
     try {
       setLoadingBreaking(true)
@@ -450,6 +460,20 @@ const Generator = () => {
                     <div className="results-header">
                       <span>{news.length} noticias encontradas</span>
                       <div className="results-actions">
+                        {/* Selector de columnas */}
+                        <div className="column-selector">
+                          {[2, 3, 4, 5].map(cols => (
+                            <button
+                              key={cols}
+                              className={`col-btn ${gridColumns === cols ? 'active' : ''}`}
+                              onClick={() => handleColumnChange(cols)}
+                              title={`${cols} columnas`}
+                            >
+                              <FiGrid size={14} />
+                              <span>{cols}</span>
+                            </button>
+                          ))}
+                        </div>
                         <button
                           className={`btn btn-secondary ${copiedAll ? 'copied' : ''}`}
                           onClick={copyAllNews}
@@ -467,7 +491,7 @@ const Generator = () => {
                       </div>
                     </div>
 
-                    <div className="news-grid">
+                    <div className={`news-grid grid-cols-${gridColumns}`}>
                       {news.map((item, index) => (
                         <NewsCard key={index} news={item} />
                       ))}
@@ -507,11 +531,29 @@ const Generator = () => {
                   <p>Intenta actualizar en unos minutos</p>
                 </div>
               ) : (
-                <div className="news-grid">
-                  {breakingNews.map((item, index) => (
-                    <NewsCard key={index} news={item} />
-                  ))}
-                </div>
+                <>
+                  <div className="results-header">
+                    <span>{breakingNews.length} noticias recientes</span>
+                    <div className="column-selector">
+                      {[2, 3, 4, 5].map(cols => (
+                        <button
+                          key={cols}
+                          className={`col-btn ${gridColumns === cols ? 'active' : ''}`}
+                          onClick={() => handleColumnChange(cols)}
+                          title={`${cols} columnas`}
+                        >
+                          <FiGrid size={14} />
+                          <span>{cols}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div className={`news-grid grid-cols-${gridColumns}`}>
+                    {breakingNews.map((item, index) => (
+                      <NewsCard key={index} news={item} />
+                    ))}
+                  </div>
+                </>
               )}
             </div>
           ) : (
