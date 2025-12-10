@@ -105,8 +105,8 @@ const validateUrl = async (url) => {
  * Acortar URL con fallback entre servicios
  */
 const shortenUrl = async (url, options = {}) => {
-  // v.gd es más confiable actualmente
-  const { validate = false, preferredService = 'vgd' } = options;
+  // is.gd redirige directamente (301), v.gd muestra página intermedia
+  const { validate = false, preferredService = 'isgd' } = options;
 
   // NO acortar URLs de Google News - son redirecciones que no funcionan bien acortadas
   if (url && url.includes('news.google.com')) {
@@ -136,10 +136,11 @@ const shortenUrl = async (url, options = {}) => {
   // Intentar acortar con los servicios disponibles
   let shortUrl = null;
 
+  // Orden de preferencia: is.gd (redirect 301 directo), v.gd (fallback), tinyurl (último)
   const services = {
-    tinyurl: shortenWithTinyUrl,
     isgd: shortenWithIsGd,
-    vgd: shortenWithVgd
+    vgd: shortenWithVgd,
+    tinyurl: shortenWithTinyUrl
   };
 
   // Ordenar servicios poniendo el preferido primero

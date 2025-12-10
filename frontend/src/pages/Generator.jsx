@@ -272,9 +272,10 @@ const Generator = () => {
       setLoadingBreaking(true)
       setBreakingNews([])
 
-      // Buscar noticias de las últimas 6 horas, todas las categorías
+      // Buscar noticias de las últimas 3 horas, todas las categorías
       const response = await newsApi.search({
         maxItems: 20,
+        hoursAgo: 3,
         translate: 'true',
         shorten: 'true',
         generateEmojis: 'true',
@@ -312,7 +313,7 @@ const Generator = () => {
                 onClick={() => setActiveTab('search')}
               >
                 <FiSearch size={18} />
-                Ir al Panel Principal
+                <span className="tab-text">Ir al Panel Principal</span>
               </button>
             )}
             <button
@@ -323,17 +324,37 @@ const Generator = () => {
               }}
             >
               <FiZap size={18} />
-              ÚLTIMO MOMENTO
+              <span className="tab-text">ÚLTIMO MOMENTO</span>
             </button>
             <button
               className={`tab ${activeTab === 'profiles' ? 'active' : ''}`}
               onClick={() => setActiveTab('profiles')}
             >
               <FiSave size={18} />
-              Perfiles ({searchProfiles.length})
+              <span className="tab-text">Perfiles ({searchProfiles.length})</span>
             </button>
           </div>
         </div>
+
+        {/* Botón principal de búsqueda - destacado en PC */}
+        {activeTab === 'search' && (
+          <div className="main-search-action">
+            <button
+              className="btn btn-primary btn-large btn-search-main"
+              onClick={handleSearch}
+              disabled={loading}
+            >
+              {loading ? (
+                <LoadingSpinner size="small" />
+              ) : (
+                <>
+                  <FiSearch size={22} />
+                  Buscar Noticias
+                </>
+              )}
+            </button>
+          </div>
+        )}
 
         <div className="generator-content">
           {activeTab === 'search' ? (
@@ -376,8 +397,9 @@ const Generator = () => {
                     </select>
                   </div>
 
+                  {/* Botón secundario de búsqueda solo visible en móvil */}
                   <button
-                    className="btn btn-primary"
+                    className="btn btn-primary btn-search-mobile"
                     onClick={handleSearch}
                     disabled={loading}
                   >
@@ -386,7 +408,7 @@ const Generator = () => {
                     ) : (
                       <>
                         <FiSearch size={18} />
-                        Buscar Noticias
+                        Buscar
                       </>
                     )}
                   </button>
