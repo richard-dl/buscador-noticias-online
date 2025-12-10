@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { authenticateToken } = require('../middleware/authMiddleware');
+const { authenticate } = require('../middleware/authMiddleware');
 const {
   createUserInFirestore,
   getUserFromFirestore,
@@ -162,7 +162,7 @@ router.post('/verify', async (req, res) => {
  * GET /api/auth/users
  * Obtener lista de todos los usuarios (solo admin)
  */
-router.get('/users', authenticateToken, async (req, res) => {
+router.get('/users', authenticate, async (req, res) => {
   try {
     // Verificar que el usuario es admin
     if (req.user.role !== 'admin') {
