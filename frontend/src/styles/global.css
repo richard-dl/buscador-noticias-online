@@ -2195,6 +2195,23 @@ input, select, textarea {
   }
 }
 
+/* Dashboard en móvil - padding para noticias */
+@media (max-width: 768px) {
+  .dashboard-page .recent-news {
+    padding-left: var(--spacing-4);
+    padding-right: var(--spacing-4);
+  }
+
+  .dashboard-page .quick-actions {
+    padding-left: var(--spacing-4);
+    padding-right: var(--spacing-4);
+  }
+
+  .dashboard-page .news-grid {
+    gap: var(--spacing-4);
+  }
+}
+
 /* Muy pequeño (menos de 375px) */
 @media (max-width: 375px) {
   .tab {
@@ -2211,5 +2228,11 @@ input, select, textarea {
 
   .news-card-content {
     padding: var(--spacing-2);
+  }
+
+  .dashboard-page .recent-news,
+  .dashboard-page .quick-actions {
+    padding-left: var(--spacing-3);
+    padding-right: var(--spacing-3);
   }
 }

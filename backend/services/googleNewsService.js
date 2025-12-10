@@ -27,12 +27,26 @@ const TEMATICAS = {
 
 /**
  * Construir URL de Google News para Argentina
+ * @param {string} query - Búsqueda
+ * @param {object} options - Opciones
+ * @param {number} options.hoursAgo - Filtrar por últimas X horas (ej: 3 = últimas 3 horas)
  */
 const buildGoogleNewsUrl = (query, options = {}) => {
-  const { region = 'AR', language = 'es' } = options;
+  const { region = 'AR', language = 'es', hoursAgo = null } = options;
+
+  // Agregar filtro de tiempo si se especifica
+  let searchQuery = query;
+  if (hoursAgo && hoursAgo <= 24) {
+    // Para menos de 24 horas, usar when:Xh
+    searchQuery = `${query} when:${hoursAgo}h`;
+  } else if (hoursAgo && hoursAgo <= 168) {
+    // Para hasta 7 días, usar when:Xd
+    const days = Math.ceil(hoursAgo / 24);
+    searchQuery = `${query} when:${days}d`;
+  }
 
   // Codificar la query
-  const encodedQuery = encodeURIComponent(query);
+  const encodedQuery = encodeURIComponent(searchQuery);
 
   // URL de Google News RSS
   return `https://news.google.com/rss/search?q=${encodedQuery}&hl=${language}&gl=${region}&ceid=${region}:${language}`;
@@ -381,7 +395,8 @@ const searchWithFilters = async (filters = {}) => {
     distrito = null,
     localidad = null,
     keywords = [],
-    maxItems = 15
+    maxItems = 15,
+    hoursAgo = 72  // Filtro de tiempo por defecto: 3 días
   } = filters;
 
   // Construir query - KEYWORDS SON PRIORITARIAS
@@ -423,9 +438,9 @@ const searchWithFilters = async (filters = {}) => {
   }
 
   const query = queryParts.join(' ');
-  console.log('Google News query:', query); // Debug
+  console.log('Google News query:', query, '- hoursAgo:', hoursAgo); // Debug
 
-  return searchGoogleNews(query, { maxItems });
+  return searchGoogleNews(query, { maxItems, hoursAgo });
 };
 
 /**

@@ -34,6 +34,7 @@ const Generator = () => {
   const [breakingNews, setBreakingNews] = useState([])
   const [loadingBreaking, setLoadingBreaking] = useState(false)
   const [selectedProfileId, setSelectedProfileId] = useState('')
+  const [filtersCollapsed, setFiltersCollapsed] = useState(false)  // Para colapsar filtros en móvil
 
   // Cargar perfiles al inicio
   useEffect(() => {
@@ -155,6 +156,8 @@ const Generator = () => {
     try {
       setLoading(true)
       setNews([])
+      // Colapsar filtros en móvil para mostrar resultados
+      setFiltersCollapsed(true)
 
       const params = {
         maxItems: searchCount,
@@ -360,7 +363,10 @@ const Generator = () => {
               <aside className="filters-sidebar">
                 <FilterPanel
                   filters={filters}
-                  onChange={setFilters}
+                  onChange={(newFilters) => {
+                    setFilters(newFilters)
+                    setFiltersCollapsed(false)  // Expandir filtros cuando el usuario interactúa
+                  }}
                   onSaveProfile={() => setShowSaveModal(true)}
                   savedProfiles={searchProfiles}
                   selectedProfileId={selectedProfileId}
@@ -368,6 +374,7 @@ const Generator = () => {
                     const profile = searchProfiles.find(p => p.id === id)
                     if (profile) applyProfile(profile)
                   }}
+                  collapsed={filtersCollapsed}
                 />
 
                 {hasActiveFilters() && (

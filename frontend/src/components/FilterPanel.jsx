@@ -9,10 +9,11 @@ const FilterPanel = ({
   savedProfiles = [],
   selectedProfileId = '',
   onSelectProfile,
-  showSaveButton = true
+  showSaveButton = true,
+  collapsed = false  // Permite colapsar todos los filtros desde afuera
 }) => {
   const [expanded, setExpanded] = useState({
-    tematicas: true,
+    tematicas: !collapsed,
     geografia: false,
     keywords: false
   })
@@ -25,6 +26,18 @@ const FilterPanel = ({
   const [keywordInput, setKeywordInput] = useState('')
   const [excludeInput, setExcludeInput] = useState('')
   const [expandedContent, setExpandedContent] = useState(false)
+
+  // Colapsar secciones cuando collapsed=true desde el padre
+  useEffect(() => {
+    if (collapsed) {
+      setExpanded({
+        tematicas: false,
+        geografia: false,
+        keywords: false
+      })
+      setExpandedContent(false)
+    }
+  }, [collapsed])
 
   // Cargar datos geográficos
   useEffect(() => {

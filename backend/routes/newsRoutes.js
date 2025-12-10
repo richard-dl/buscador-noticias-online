@@ -248,7 +248,8 @@ router.get('/search', authenticateAndRequireSubscription, async (req, res) => {
         localidad: localidad,
         keywords: keywordsList,
         excludeTerms: excludeList,
-        maxItems: Math.ceil(parseInt(maxItems) / 2)
+        maxItems: Math.ceil(parseInt(maxItems) / 2),
+        hoursAgo: parseInt(hoursAgo)  // Pasar filtro de tiempo a Google News
       });
 
       allNews = allNews.concat(googleNews.map(n => ({ ...n, sourceType: 'google' })));
@@ -270,6 +271,16 @@ router.get('/search', authenticateAndRequireSubscription, async (req, res) => {
 
     // Ordenar por fecha
     allNews.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+
+    // FILTRAR POR FECHA - aplicar hoursAgo a TODOS los resultados (RSS + Google)
+    const hoursAgoInt = parseInt(hoursAgo);
+    const cutoffDate = new Date(Date.now() - hoursAgoInt * 60 * 60 * 1000);
+    const beforeFilter = allNews.length;
+    allNews = allNews.filter(news => {
+      const pubDate = news.pubDate ? new Date(news.pubDate) : null;
+      return pubDate && pubDate > cutoffDate;
+    });
+    console.log(`Filtro de fecha (${hoursAgoInt}h): ${beforeFilter} -> ${allNews.length} noticias`);
 
     // NOTA: El filtrado por distrito/localidad se hace mediante keywords
     // Los feeds RSS raramente incluyen distrito específico en título/descripción
