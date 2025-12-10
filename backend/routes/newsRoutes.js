@@ -149,10 +149,11 @@ router.get('/search', authenticateAndRequireSubscription, async (req, res) => {
     // Verificar si las temáticas coinciden con categorías RSS
     const matchingRssCategories = tematicasList.filter(t => validRssCategories.includes(t.toLowerCase()));
 
-    console.log('Búsqueda RSS - Keywords:', keywordsList, 'Temáticas:', tematicasList, 'Provincia:', provincia);
+    console.log('Búsqueda RSS + Google News - Keywords:', keywordsList, 'Temáticas:', tematicasList, 'Provincia:', provincia);
 
-    // SOLO RSS - Google News desactivado para mejor rendimiento y fiabilidad
-    // Las búsquedas se hacen filtrando por categorías RSS + keywords en títulos/descripciones
+    // Búsqueda combinada: RSS + Google News para mejor cobertura
+    // RSS: categorías específicas + feeds locales
+    // Google News: búsqueda por ubicación y keywords
 
     try {
       // Determinar categorías a buscar
@@ -188,6 +189,25 @@ router.get('/search', authenticateAndRequireSubscription, async (req, res) => {
       console.log(`RSS devolvió ${rssNews.length} resultados de categorías: ${rssCategories.join(', ')}`);
     } catch (err) {
       console.warn('Error en búsqueda RSS:', err.message);
+    }
+
+    // Búsqueda en Google News para complementar (especialmente útil para geografía)
+    try {
+      const googleNews = await searchWithFilters({
+        q: q,
+        tematicas: tematicasList,
+        provincia: provincia,
+        distrito: distrito,
+        localidad: localidad,
+        keywords: keywordsList,
+        excludeTerms: excludeList,
+        maxItems: Math.ceil(parseInt(maxItems) / 2)
+      });
+
+      allNews = allNews.concat(googleNews.map(n => ({ ...n, sourceType: 'google' })));
+      console.log(`Google News devolvió ${googleNews.length} resultados`);
+    } catch (err) {
+      console.warn('Error en búsqueda Google News:', err.message);
     }
 
     // Eliminar duplicados por título similar
