@@ -1,0 +1,490 @@
+{
+  "Buenos Aires": [
+    {
+      "ciudad": "Capital/AMBA",
+      "medio": "Clar�n - �ltimas Noticias",
+      "url": "https://www.clarin.com/rss/lo-ultimo/",
+      "itemCount": 10
+    },
+    {
+      "ciudad": "Dolores",
+      "medio": "Compromiso",
+      "url": "https://compromisodiario.com.ar/feed/",
+      "itemCount": 10
+    },
+    {
+      "ciudad": "General Pueyrred�n",
+      "medio": "Qu� Digital",
+      "url": "https://www.quedigital.com.ar/feed/",
+      "itemCount": 20
+    },
+    {
+      "ciudad": "Lincoln",
+      "medio": "La Posta del Noroeste",
+      "url": "https://www.lapostadelnoroeste.com.ar/feed/",
+      "itemCount": 12
+    },
+    {
+      "ciudad": "Mar del Plata",
+      "medio": "La Capital de Mar del Plata",
+      "url": "https://www.lacapitalmdp.com/feed/",
+      "itemCount": 10
+    },
+    {
+      "ciudad": "Pinamar",
+      "medio": "Pinamar Diario",
+      "url": "https://pinamardiario.com.ar/feed/",
+      "itemCount": 10
+    },
+    {
+      "ciudad": "San Nicol�s",
+      "medio": "Diario El Norte",
+      "url": "https://www.diarioelnorte.com.ar/feed/",
+      "itemCount": 1
+    }
+  ],
+  "Catamarca": [
+    {
+      "ciudad": "Bel�n",
+      "medio": "Bel�n Info",
+      "url": "https://beleninfo.com.ar/feed/",
+      "itemCount": 10
+    },
+    {
+      "ciudad": "Catamarca Capital",
+      "medio": "Catamarca Radio",
+      "url": "https://catamarcadigital.com/feed/",
+      "itemCount": 10
+    }
+  ],
+  "Chaco": [
+    {
+      "ciudad": "Resistencia",
+      "medio": "Chaco D�a por D�a",
+      "url": "https://www.chacodiapordia.com/feed/",
+      "itemCount": 12
+    },
+    {
+      "ciudad": "Resistencia",
+      "medio": "El Diario de la Regi�n",
+      "url": "https://eldiariodelaregion.com.ar/feed/",
+      "itemCount": 10
+    }
+  ],
+  "Chubut": [
+    {
+      "ciudad": "Comodoro Rivadavia",
+      "medio": "Comodoro 24",
+      "url": "https://comodoro24.com.ar/feed/",
+      "itemCount": 10
+    }
+  ],
+  "Corrientes": [
+    {
+      "ciudad": "Bella Vista",
+      "medio": "Bella Vista Noticias",
+      "url": "https://bellavistanoticias.com.ar/feed/",
+      "itemCount": 10
+    },
+    {
+      "ciudad": "Corrientes Capital",
+      "medio": "Diario El Libertador",
+      "url": "https://www.diarioellibertador.com.ar/feed/",
+      "itemCount": 10
+    },
+    {
+      "ciudad": "Corrientes Capital",
+      "medio": "El Litoral - Policiales",
+      "url": "https://www.ellitoral.com.ar/rss/policiales.xml",
+      "itemCount": 25
+    },
+    {
+      "ciudad": "Curuz� Cuati�",
+      "medio": "Radio Curuz�",
+      "url": "https://radiocuruzu.com.ar/feed/",
+      "itemCount": 10
+    },
+    {
+      "ciudad": "Ituzaing�",
+      "medio": "Ituzaing� Noticias",
+      "url": "https://ituzaingonoticias.com.ar/feed/",
+      "itemCount": 10
+    }
+  ],
+  "C�rdoba": [
+    {
+      "ciudad": "Carlos Paz",
+      "medio": "Carlos Paz Hoy",
+      "url": "https://carlospazhoy.com.ar/feed/",
+      "itemCount": 10
+    },
+    {
+      "ciudad": "Carlos Paz",
+      "medio": "Carlos Paz Vivo",
+      "url": "https://carlospazvivo.com/feed/",
+      "itemCount": 10
+    },
+    {
+      "ciudad": "C�rdoba Capital",
+      "medio": "La Voz - Deportes",
+      "url": "https://www.lavoz.com.ar/rss/deportes.xml",
+      "itemCount": 100
+    },
+    {
+      "ciudad": "C�rdoba Capital",
+      "medio": "Perfil C�rdoba",
+      "url": "https://www.perfil.com/feed/cordoba",
+      "itemCount": 70
+    },
+    {
+      "ciudad": "Villa Mar�a",
+      "medio": "Villa Mar�a Ya",
+      "url": "https://villamariaya.com/feed/",
+      "itemCount": 10
+    }
+  ],
+  "Entre R�os": [
+    {
+      "ciudad": "Concepci�n del Uruguay",
+      "medio": "La Calle",
+      "url": "https://www.lacalle.com.ar/feed/",
+      "itemCount": 10
+    },
+    {
+      "ciudad": "Concordia",
+      "medio": "Concordia Hoy",
+      "url": "https://concordiahoy.com.ar/feed/",
+      "itemCount": 6
+    },
+    {
+      "ciudad": "Federal",
+      "medio": "Federal al D�a",
+      "url": "https://federalaldia.com.ar/feed/",
+      "itemCount": 10
+    },
+    {
+      "ciudad": "Paran�",
+      "medio": "El Once",
+      "url": "https://www.elonce.com/rss/feed.xml",
+      "itemCount": 100
+    },
+    {
+      "ciudad": "Paran�",
+      "medio": "Paran� Deportes",
+      "url": "https://paranadeportes.com.ar/feed/",
+      "itemCount": 10
+    }
+  ],
+  "Formosa": [
+    {
+      "ciudad": "Formosa Capital",
+      "medio": "Formosa Hoy",
+      "url": "https://formosahoy.com.ar/feed/",
+      "itemCount": 10
+    },
+    {
+      "ciudad": "Formosa Capital",
+      "medio": "Noticias Formosa",
+      "url": "https://noticiasformosa.com/feed/",
+      "itemCount": 10
+    }
+  ],
+  "Jujuy": [
+    {
+      "ciudad": "Perico",
+      "medio": "Perico Noticias",
+      "url": "https://periconoticias.com.ar/feed/",
+      "itemCount": 10
+    },
+    {
+      "ciudad": "San Salvador de Jujuy",
+      "medio": "Jujuy al D�a",
+      "url": "https://jujuyaldia.com.ar/feed/",
+      "itemCount": 10
+    },
+    {
+      "ciudad": "San Salvador de Jujuy",
+      "medio": "Jujuy Noticias",
+      "url": "https://jujuynoticias.com.ar/feed/",
+      "itemCount": 10
+    }
+  ],
+  "La Pampa": [
+    {
+      "ciudad": "Santa Rosa",
+      "medio": "La Pampa 24",
+      "url": "https://lapampa24.com.ar/feed/",
+      "itemCount": 10
+    },
+    {
+      "ciudad": "Santa Rosa",
+      "medio": "La Pampa Noticias",
+      "url": "https://lapampanoticias.com.ar/feed/",
+      "itemCount": 10
+    }
+  ],
+  "La Rioja": [
+    {
+      "ciudad": "La Rioja Capital",
+      "medio": "Rioja 24",
+      "url": "https://rioja24.com.ar/feed/",
+      "itemCount": 10
+    },
+    {
+      "ciudad": "La Rioja Capital",
+      "medio": "Rioja Pol�tica",
+      "url": "https://riojapolitica.com.ar/feed/",
+      "itemCount": 30
+    },
+    {
+      "ciudad": "La Rioja Capital",
+      "medio": "Rioja Virtual",
+      "url": "https://riojavirtual.com.ar/feed/",
+      "itemCount": 10
+    },
+    {
+      "ciudad": "Villa Uni�n",
+      "medio": "Noticias del Valle",
+      "url": "https://noticiasdelvalle.com.ar/feed/",
+      "itemCount": 10
+    }
+  ],
+  "Mendoza": [
+    {
+      "ciudad": "Malarg�e",
+      "medio": "Malarg�e a Diario",
+      "url": "https://malargueadiario.com/feed/",
+      "itemCount": 10
+    },
+    {
+      "ciudad": "Mendoza Capital",
+      "medio": "El Sol",
+      "url": "https://www.elsol.com.ar/feed/",
+      "itemCount": 10
+    },
+    {
+      "ciudad": "Mendoza Capital",
+      "medio": "Noticias Mendoza",
+      "url": "https://noticiasmendoza.com.ar/feed/",
+      "itemCount": 10
+    },
+    {
+      "ciudad": "San Mart�n",
+      "medio": "Diario Mendoza",
+      "url": "https://diariomendoza.com.ar/feed/",
+      "itemCount": 75
+    },
+    {
+      "ciudad": "San Rafael",
+      "medio": "Diario San Rafael",
+      "url": "https://www.diariosanrafael.com.ar/feed/",
+      "itemCount": 10
+    }
+  ],
+  "Misiones": [
+    {
+      "ciudad": "Eldorado",
+      "medio": "Eldorado Noticias",
+      "url": "https://eldoradonoticias.com.ar/feed/",
+      "itemCount": 10
+    },
+    {
+      "ciudad": "Ober�",
+      "medio": "Ober� Noticias",
+      "url": "https://oberanoticias.com.ar/feed/",
+      "itemCount": 10
+    },
+    {
+      "ciudad": "Ober�",
+      "medio": "Ober� Online",
+      "url": "https://oberaonline.com.ar/feed/",
+      "itemCount": 16
+    },
+    {
+      "ciudad": "Posadas",
+      "medio": "Agro Misiones",
+      "url": "https://agromisiones.com.ar/feed/",
+      "itemCount": 10
+    },
+    {
+      "ciudad": "Posadas",
+      "medio": "Misiones Online",
+      "url": "https://misionesonline.net/feed/",
+      "itemCount": 10
+    },
+    {
+      "ciudad": "Posadas",
+      "medio": "Primera Edici�n",
+      "url": "https://www.primeraedicion.com.ar/feed/",
+      "itemCount": 20
+    }
+  ],
+  "Neuqu�n": [
+    {
+      "ciudad": "Centenario",
+      "medio": "Centenario Digital",
+      "url": "https://centenariodigital.com.ar/feed/",
+      "itemCount": 10
+    },
+    {
+      "ciudad": "Cutral Co/Plaza Huincul",
+      "medio": "Cutral Co al Instante",
+      "url": "https://cutralcoalinstante.com/feed/",
+      "itemCount": 10
+    }
+  ],
+  "R�o Negro": [
+    {
+      "ciudad": "General Roca",
+      "medio": "Diario R�o Negro",
+      "url": "https://www.rionegro.com.ar/feed/",
+      "itemCount": 20
+    }
+  ],
+  "Salta": [
+    {
+      "ciudad": "Salta Capital",
+      "medio": "El Tribuno de Salta - Deportes",
+      "url": "https://www.eltribuno.com/rss-new/salta/deportes.rss",
+      "itemCount": 25
+    },
+    {
+      "ciudad": "Salta Capital",
+      "medio": "El Tribuno de Salta - Policiales",
+      "url": "https://www.eltribuno.com/rss-new/salta/policiales.rss",
+      "itemCount": 25
+    },
+    {
+      "ciudad": "Salta Capital",
+      "medio": "El Tribuno de Salta - Pol�tica",
+      "url": "https://www.eltribuno.com/rss-new/salta/politica.rss",
+      "itemCount": 25
+    },
+    {
+      "ciudad": "Salta Capital",
+      "medio": "El Tribuno de Salta - Portada",
+      "url": "https://www.eltribuno.com/rss-new/salta/portada.rss",
+      "itemCount": 25
+    }
+  ],
+  "San Juan": [
+    {
+      "ciudad": "J�chal",
+      "medio": "J�chal Magazine",
+      "url": "https://jachalmagazine.com.ar/feed/",
+      "itemCount": 10
+    },
+    {
+      "ciudad": "San Juan Capital",
+      "medio": "San Juan Minero",
+      "url": "https://sanjuanminero.com.ar/feed/",
+      "itemCount": 9
+    }
+  ],
+  "San Luis": [
+    {
+      "ciudad": "San Luis Capital",
+      "medio": "Agencia de Noticias San Luis",
+      "url": "https://agenciasanluis.com/feed/",
+      "itemCount": 50
+    },
+    {
+      "ciudad": "San Luis Capital",
+      "medio": "San Luis 24",
+      "url": "https://sanluis24.com.ar/feed/",
+      "itemCount": 6
+    },
+    {
+      "ciudad": "San Luis Capital",
+      "medio": "San Luis Informa",
+      "url": "https://sanluisinforma.com.ar/feed/",
+      "itemCount": 20
+    },
+    {
+      "ciudad": "Villa Mercedes",
+      "medio": "Villa Mercedes Hoy",
+      "url": "https://villamercedes.info/feed/",
+      "itemCount": 10
+    }
+  ],
+  "Santa Cruz": [
+    {
+      "ciudad": "Caleta Olivia",
+      "medio": "Voces y Apuntes",
+      "url": "https://vocesyapuntes.com/feed/",
+      "itemCount": 10
+    },
+    {
+      "ciudad": "R�o Gallegos",
+      "medio": "Tiempo Sur",
+      "url": "https://tiemposur.com.ar/feed/",
+      "itemCount": 100
+    }
+  ],
+  "Santa Fe": [
+    {
+      "ciudad": "G�lvez",
+      "medio": "G�lvez Hoy",
+      "url": "https://galvezhoy.com.ar/feed/",
+      "itemCount": 10
+    },
+    {
+      "ciudad": "Reconquista",
+      "medio": "Radio Amanecer",
+      "url": "https://radioamanecer.com.ar/feed/",
+      "itemCount": 10
+    },
+    {
+      "ciudad": "Rosario",
+      "medio": "Conclusi�n",
+      "url": "https://www.conclusion.com.ar/feed/",
+      "itemCount": 20
+    },
+    {
+      "ciudad": "Rosario",
+      "medio": "Diario El Ciudadano",
+      "url": "https://www.elciudadanoweb.com/feed/",
+      "itemCount": 10
+    },
+    {
+      "ciudad": "Rosario",
+      "medio": "Rosario3",
+      "url": "https://www.rosario3.com/rss/feed.xml",
+      "itemCount": 50
+    },
+    {
+      "ciudad": "San Lorenzo",
+      "medio": "SL24",
+      "url": "https://sl24.com.ar/feed/",
+      "itemCount": 10
+    },
+    {
+      "ciudad": "Venado Tuerto",
+      "medio": "Venado 24",
+      "url": "https://venado24.com.ar/feed/",
+      "itemCount": 10
+    }
+  ],
+  "Santiago del Estero": [
+    {
+      "ciudad": "Termas de R�o Hondo",
+      "medio": "Termas Digital",
+      "url": "https://termasdigital.com.ar/feed/",
+      "itemCount": 10
+    }
+  ],
+  "Tierra del Fuego": [
+    {
+      "ciudad": "R�o Grande",
+      "medio": "Tiempo Fueguino",
+      "url": "https://tiempofueguino.com/feed/",
+      "itemCount": 10
+    },
+    {
+      "ciudad": "Ushuaia",
+      "medio": "El Fueguino",
+      "url": "https://elfueguino.com.ar/feed/",
+      "itemCount": 12
+    }
+  ]
+}

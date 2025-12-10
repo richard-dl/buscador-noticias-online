@@ -1,0 +1,1823 @@
+Bloque 1/5: Buenos Aires, Santa Fe, Córdoba, Mendoza
+
+Provincia|Ciudad/Región|Medio|Enlace RSS
+Buenos Aires|Capital/AMBA|Clarín - Últimas Noticias|https://www.clarin.com/rss/lo-ultimo/
+Buenos Aires|Capital/AMBA|La Nación - Ultimo Momento|https://www.lanacion.com.ar/arc/outboundfeeds/rss/stream/todas_las_noticias/?outputType=xml
+Buenos Aires|Capital/AMBA|Infobae - Últimas Noticias|https://www.infobae.com/new-resizer/yP1l3i7Q-g_k8oYc5S1j1j-e3yY=/arc-rss-bfeed-infobae/
+Buenos Aires|Capital/AMBA|Página/12 - Portada|https://www.pagina12.com.ar/rss/portada
+Buenos Aires|Capital/AMBA|Ambito Financiero|https://www.ambito.com/rss/feed.xml
+Buenos Aires|Capital/AMBA|Télam - Todas las Noticias|https://www.telam.com.ar/rss/
+Buenos Aires|La Plata|El Día de La Plata|https://www.eldia.com/rss/feed.xml
+Buenos Aires|Mar del Plata|La Capital de Mar del Plata|https://www.lacapitalmdp.com/feed/
+Buenos Aires|Bahía Blanca|La Nueva|https://www.lanueva.com/rss/feed.xml
+Buenos Aires|La Plata|Diario Hoy|https://www.diariohoy.net/feed/
+Buenos Aires|General Pueyrredón|Qué Digital|https://www.quedigital.com.ar/feed/
+Buenos Aires|Bahía Blanca|Wips|https://www.wips.com.ar/feed/
+Buenos Aires|La Plata|0221|https://www.0221.com.ar/feed
+Buenos Aires|Tandil|El Eco de Tandil|https://www.eleco.com.ar/feed/
+Buenos Aires|Junín|Diario Democracia|https://www.diariodemocracia.com/feed/
+Buenos Aires|Olavarría|El Popular|https://www.elpopular.com.ar/feed/
+Buenos Aires|San Nicolás|Diario El Norte|https://www.diarioelnorte.com.ar/feed/
+Buenos Aires|Pilar|Pilar a Diario|https://www.pilaradiario.com/feed/
+Buenos Aires|Mar del Plata|El Marplatense|https://www.elmarplatense.com/feed/
+Buenos Aires|Bahía Blanca|Bahía Blanca al Día|https://bahiablancaaldia.com/feed/
+Buenos Aires|La Plata|La Plata Hoy|https://laplatahoy.com/feed/
+Buenos Aires|Tandil|Tandil Diario|https://www.tandildiario.com/feed/
+Buenos Aires|Junín|Diario de Junín|https://www.diariodejunin.com.ar/feed/
+Buenos Aires|Necochea|Diario Necochea|https://www.diarionecochea.com/feed/
+Buenos Aires|Pergamino|Diario La Opinión|https://www.laopinionpergamino.com.ar/feed/
+Buenos Aires|Zárate|La Voz de Zárate|https://www.lavozdezarate.com/feed/
+Buenos Aires|Campana|Campana Noticias|https://campananoticias.com/feed/
+Buenos Aires|Chivilcoy|La Gaceta de Chivilcoy|https://www.lagacetadechivilcoy.com.ar/feed/
+Buenos Aires|Balcarce|Minuto Balcarce|https://minutobalcarce.com.ar/feed/
+Buenos Aires|Azul|Diario El Tiempo|https://www.diarioeltiempodeazul.com.ar/feed/
+Buenos Aires|Mercedes|Noticias Mercedinas|https://www.noticiasmercedinas.com/feed/
+Buenos Aires|San Pedro|San Pedro Informa|https://www.sanpedroinforma.com.ar/feed/
+Buenos Aires|Chascomús|El Cronista|https://www.elcronista.com.ar/feed/
+Buenos Aires|Pinamar|Pinamar Diario|https://pinamardiario.com.ar/feed/
+Buenos Aires|Dolores|Compromiso|https://compromisodiario.com.ar/feed/
+Buenos Aires|Brandsen|Brandsen Hoy|https://brandsenhoy.com.ar/feed/
+Buenos Aires|Tres Arroyos|Diario El Periodista|https://elperiodista3a.com.ar/feed/
+Buenos Aires|Lincoln|La Posta del Noroeste|https://www.lapostadelnoroeste.com.ar/feed/
+Buenos Aires|Trenque Lauquen|Diario Líder|https://diariolider.com.ar/feed/
+Buenos Aires|Pehuajó|Diario Noticias|https://www.diarionoticias.com.ar/feed/
+Santa Fe|Rosario|La Capital - Portada|https://www.lacapital.com.ar/rss/feed.xml
+Santa Fe|Santa Fe Capital|El Litoral|https://www.ellitoral.com/index.xml
+Santa Fe|Rosario|Rosario3|https://www.rosario3.com/rss/feed.xml
+Santa Fe|Santa Fe Capital|Aire de Santa Fe|https://www.airedesantafe.com.ar/feed/
+Santa Fe|Rosario|Cadena 3 Rosario|http://cadena3.com/rss/2MinutosdeNoticias-Rosario.xml
+Santa Fe|Santa Fe Capital|LT10 - Noticias|https://lt10.com.ar/feed/
+Santa Fe|Rosario|Conclusión|https://www.conclusion.com.ar/feed/
+Santa Fe|Santa Fe Capital|Diario Uno|https://www.unosantafe.com.ar/rss/feed.xml
+Santa Fe|Rafaela|Diario Castellanos|https://diariocastellanos.net/feed/
+Santa Fe|Venado Tuerto|El Litoral - Venado Tuerto|https://www.ellitoral.com/index.xml?q=venado+tuerto
+Santa Fe|Reconquista|Reconquista Hoy|https://reconquistahoy.com/feed/
+Santa Fe|Esperanza|Esperanza Día por Día|https://www.esperanzadiapordia.com.ar/feed/
+Santa Fe|Casilda|Casilda Plus|https://www.casildaplus.com/feed/
+Santa Fe|Cañada de Gómez|El Portal de Cañada|https://elportaldecanadadegomez.com/feed/
+Santa Fe|San Lorenzo|SL24|https://sl24.com.ar/feed/
+Santa Fe|Rosario|Vía Rosario|https://via.com.ar/rosario/feed
+Santa Fe|Gálvez|Gálvez Hoy|https://galvezhoy.com.ar/feed/
+Santa Fe|Rosario|Diario El Ciudadano|https://www.elciudadanoweb.com/feed/
+Santa Fe|Santa Fe Capital|Santa Fe Noticias|https://santafenoticias.com.ar/feed/
+Santa Fe|Rafaela|Rafaela Noticias|https://rafaelanoticias.com/feed/
+Santa Fe|Venado Tuerto|Diario El Informe|https://www.diarioelinforme.com.ar/feed/
+Santa Fe|Reconquista|Diario Reconquista|https://diarioreconquista.com.ar/feed/
+Santa Fe|Esperanza|Noticias Esperanza|https://noticiasesperanza.com/feed/
+Santa Fe|Casilda|La Posta Casilda|https://www.lapostacasilda.com/feed/
+Santa Fe|San Justo|San Justo Noticias|https://sanjustonoticias.com/feed/
+Santa Fe|Coronda|Coronda Hoy|https://corondahoy.com.ar/feed/
+Santa Fe|Rosario|Rosario Net|https://rosarionet.com.ar/feed/
+Santa Fe|Santa Fe Capital|Punto Biz|https://puntobiz.com.ar/feed/
+Santa Fe|Sunchales|Sunchales Hoy|https://sunchaleshoy.com.ar/feed/
+Santa Fe|Tostado|Tostado Noticias|https://tostadonoticias.com.ar/feed/
+Santa Fe|Villa Gobernador Gálvez|VGG Noticias|https://vggnoticias.com.ar/feed/
+Santa Fe|Rosario|Rosario Al Día|https://rosarioaldia.com.ar/feed/
+Santa Fe|Santa Fe Capital|Santa Fe Post|https://santafepost.com/feed/
+Santa Fe|Rafaela|Rafaela Al Día|https://rafaelaaldia.com.ar/feed/
+Santa Fe|Venado Tuerto|Venado 24|https://venado24.com.ar/feed/
+Santa Fe|Reconquista|Radio Amanecer|https://radioamanecer.com.ar/feed/
+Santa Fe|Rosario|Deportes Rosario|https://deportesrosario.com.ar/feed/
+Santa Fe|Santa Fe Capital|Santa Fe Turismo|https://santafeturismo.com.ar/feed/
+Santa Fe|Santa Fe Capital|Agro Litoral|https://agrolitoral.com.ar/feed/
+Santa Fe|Rosario|Rosario Política|https://rosariopolitica.com/feed/
+Córdoba|Córdoba Capital|La Voz - Últimas|https://www.lavoz.com.ar/rss.xml
+Córdoba|Córdoba Capital|Cadena 3|http://cadena3.com/rss/2MinutosdeNoticias-Cordoba.xml
+Córdoba|Córdoba Capital|El Doce TV|https://eldoce.tv/feed/
+Córdoba|Córdoba Capital|Perfil Córdoba|https://www.perfil.com/feed/cordoba
+Córdoba|Río Cuarto|Puntal|https://www.puntal.com.ar/feed/
+Córdoba|Villa María|Villa María Ya|https://villamariaya.com/feed/
+Córdoba|Carlos Paz|Carlos Paz Vivo|https://carlospazvivo.com/feed/
+Córdoba|Jesús María|Mas Radio|https://masradio.com.ar/feed/
+Córdoba|San Francisco|El Periódico|https://elperiodico.com.ar/feed/
+Córdoba|Río Tercero|Tercer Río Noticias|https://tercerionoticias.com.ar/feed/
+Córdoba|Villa Carlos Paz|El Diario de Carlos Paz|https://www.eldiariodecarlospaz.com/feed/
+Córdoba|Río Cuarto|Telediario Digital|https://www.telediariodigital.net/feed/
+Córdoba|Villa María|El Diario del Centro del País|https://eldiariocba.com.ar/feed/
+Córdoba|Jesús María|Jesús María Noticias|https://jesusmarianoticias.com/feed/
+Córdoba|San Francisco|San Francisco Hoy|https://sanfranciscohoy.com.ar/feed/
+Córdoba|Alta Gracia|Resumen de la Región|https://resumendesanjuan.com.ar/feed/
+Córdoba|Córdoba Capital|Cba24n|https://cba24n.com.ar/feed/
+Córdoba|Río Cuarto|Río Cuarto al Día|https://riocuartoaldia.com.ar/feed/
+Córdoba|Villa María|Villa María al Día|https://villamariaaldia.com.ar/feed/
+Córdoba|Córdoba Capital|Infonegocios|https://infonegocios.info/feed/
+Córdoba|La Falda|La Falda Noticias|https://lafaldanoticias.com.ar/feed/
+Córdoba|Córdoba Capital|La Voz - Deportes|https://www.lavoz.com.ar/rss/deportes.xml
+Córdoba|Río Cuarto|Río Cuarto Noticias|https://riocuartonoticias.com/feed/
+Córdoba|Villa María|Villa María Info|https://villamariainfo.com/feed/
+Córdoba|Carlos Paz|Carlos Paz Hoy|https://carlospazhoy.com.ar/feed/
+Córdoba|San Francisco|San Francisco al Día|https://sanfranciscoaldia.com.ar/feed/
+Córdoba|Córdoba Capital|Córdoba Política|https://cordobapolitica.com.ar/feed/
+Córdoba|Villa Dolores|Villa Dolores Noticias|https://villadoloresnoticias.com.ar/feed/
+Córdoba|Arroyito|Arroyito Noticias|https://arroyitonoticias.com.ar/feed/
+Córdoba|Cosquín|Cosquín Hoy|https://cosquinhoy.com.ar/feed/
+Córdoba|Mina Clavero|Mina Clavero Noticias|https://minaclaveronoticias.com.ar/feed/
+Córdoba|Alta Gracia|Alta Gracia Noticias|https://altagraciadenoticias.com.ar/feed/
+Córdoba|Córdoba Capital|Agro Córdoba|https://agrocordoba.com.ar/feed/
+Córdoba|Jesús María|Jesús María Hoy|https://jesusmariahoy.com.ar/feed/
+Córdoba|La Calera|La Calera Noticias|https://lacaleranoticias.com.ar/feed/
+Córdoba|General Cabrera|General Cabrera Noticias|https://generalcabreranoticias.com.ar/feed/
+Córdoba|Río Tercero|Río Tercero Noticias|https://rioterceronoticias.com.ar/feed/
+Mendoza|Mendoza Capital|Los Andes - Portada|https://www.losandes.com.ar/rss/feed.xml
+Mendoza|Mendoza Capital|MDZ Online|https://www.mdzol.com/feed/
+Mendoza|Mendoza Capital|Diario Uno|https://www.diariouno.com.ar/rss/feed.xml
+Mendoza|San Rafael|Diario San Rafael|https://www.diariosanrafael.com.ar/feed/
+Mendoza|Mendoza Capital|Sitio Andino|https://www.sitioandino.com.ar/feed/
+Mendoza|Mendoza Capital|El Sol|https://www.elsol.com.ar/feed/
+Mendoza|General Alvear|General Alvear Diario|https://generalalveardiario.com.ar/feed/
+Mendoza|San Rafael|Mediamza|https://www.mediamza.com/feed/
+Mendoza|Rivadavia|Rivadavia Online|https://rivadaviaonline.com.ar/feed/
+Mendoza|Mendoza Capital|Vía Mendoza|https://via.com.ar/mendoza/feed
+Mendoza|San Martín|Diario de San Martín|https://www.diariodesanmartin.com.ar/feed/
+Mendoza|Tupungato|Tupungato Digital|https://tupungatodigital.com.ar/feed/
+Mendoza|Malargüe|Malargüe a Diario|https://malargueadiario.com/feed/
+Mendoza|Maipú|Maipú Noticias|https://maipunoticias.com.ar/feed/
+Mendoza|Mendoza Capital|Mdzol - Política|https://www.mdzol.com/rss/politica
+Mendoza|San Rafael|San Rafael Al Día|https://sanrafaelaldia.com/feed/
+Mendoza|General Alvear|Alvear Diario|https://alveardiario.com.ar/feed/
+Mendoza|Luján de Cuyo|Luján Noticias|https://lujannoticias.com.ar/feed/
+Mendoza|Tunuyán|El Cuco Digital|https://elcuco.com.ar/feed/
+Mendoza|San Martín|Diario Mendoza|https://diariomendoza.com.ar/feed/
+Mendoza|Mendoza Capital|Los Andes - Deportes|https://www.losandes.com.ar/rss/deportes.xml
+Mendoza|San Rafael|San Rafael Hoy|https://sanrafaelhoy.com/feed/
+Mendoza|General Alvear|Alvear al Día|https://alvearaldia.com.ar/feed/
+Mendoza|Tupungato|Tupungato Noticias|https://tupungatonoticias.com.ar/feed/
+Mendoza|Malargüe|Malargüe Diario|https://malarguediario.com.ar/feed/
+Mendoza|Maipú|Maipú al Día|https://maipualdia.com.ar/feed/
+Mendoza|San Martín|San Martín Noticias|https://sanmartinnoticias.com.ar/feed/
+Mendoza|Tunuyán|Tunuyán Noticias|https://tunuyannoticias.com.ar/feed/
+Mendoza|Mendoza Capital|Agro Mendoza|https://agromendoza.com.ar/feed/
+Mendoza|Godoy Cruz|Godoy Cruz Noticias|https://godoycruznoticias.com.ar/feed/
+Mendoza|Las Heras|Las Heras Noticias|https://lasherasnoticias.com.ar/feed/
+Mendoza|Guaymallén|Guaymallén Noticias|https://guaymallenoticias.com.ar/feed/
+Mendoza|Mendoza Capital|Cadena 3 Mendoza|http://cadena3.com/rss/2MinutosdeNoticias-Mendoza.xml
+Mendoza|Rivadavia|Rivadavia Noticias|https://rivadavianoticias.com.ar/feed/
+Mendoza|Luján de Cuyo|Luján al Día|https://lujanaldia.com.ar/feed/
+Mendoza|Mendoza Capital|Mendoza Post|https://mendozapost.com/feed/
+Mendoza|Mendoza Capital|Noticias Mendoza|https://noticiasmendoza.com.ar/feed/
+
+Bloque 2/5: Tucumán, Salta, Chaco, Río Negro, Neuquén (200 Enlaces CSV)
+
+Provincia|Ciudad/Región|Medio|Enlace RSS
+Tucumán|San Miguel de Tucumán|La Gaceta - Portada|https://www.lagaceta.com.ar/rss/feed/seccion-tucuman.xml
+Tucumán|San Miguel de Tucumán|El Tucumano|https://www.eltucumano.com/feed/
+Tucumán|San Miguel de Tucumán|Tucumán Noticias|https://tucumannoticias.com.ar/feed/
+Tucumán|San Miguel de Tucumán|LV12 Radio|https://www.lv12.com.ar/feed/
+Tucumán|San Miguel de Tucumán|Los Primeros|https://www.losprimeros.tv/feed/
+Tucumán|San Miguel de Tucumán|Contexto Tucumán|https://contextotucuman.com/feed/
+Tucumán|Concepción|El Diario de Tucumán|https://www.diariodetucuman.com.ar/feed/
+Tucumán|Yerba Buena|Yerba Buena Digital|https://yerbabuenadigital.com.ar/feed/
+Tucumán|Tafí Viejo|Tafí Viejo Noticias|https://tafiviejonoticias.com.ar/feed/
+Tucumán|San Miguel de Tucumán|La Gaceta - Política|https://www.lagaceta.com.ar/rss/feed/seccion-politica.xml
+Tucumán|Monteros|Monteros Noticias|https://monterosnoticias.com.ar/feed/
+Tucumán|Famaillá|Famaillá Noticias|https://famaillanoticias.com.ar/feed/
+Tucumán|Aguilares|Aguilares Digital|https://aguilaresdigital.com.ar/feed/
+Tucumán|Alderetes|Alderetes al Día|https://alderetesaldia.com.ar/feed/
+Tucumán|Banda del Río Salí|Banda del Río Salí Noticias|https://bandadelriosalinoticias.com.ar/feed/
+Tucumán|Simoca|Simoca Noticias|https://simocanoticias.com.ar/feed/
+Tucumán|Bella Vista|Bella Vista Tucumán|https://bellavistatucuman.com.ar/feed/
+Tucumán|Lules|Lules Noticias|https://lulesnoticias.com.ar/feed/
+Tucumán|San Miguel de Tucumán|La Gaceta - Policiales|https://www.lagaceta.com.ar/rss/feed/seccion-policiales.xml
+Tucumán|San Miguel de Tucumán|Tucumán a Diario|https://tucumanadiario.com.ar/feed/
+Tucumán|Concepción|Concepción al Día|https://concepcionaldia.com.ar/feed/
+Tucumán|Yerba Buena|Yerba Buena Noticias|https://yerbabuenanoticias.com.ar/feed/
+Tucumán|Tafí Viejo|Tafí Viejo al Día|https://tafiviejoaldia.com.ar/feed/
+Tucumán|San Miguel de Tucumán|La Gaceta - Deportes|https://www.lagaceta.com.ar/rss/feed/seccion-deportes.xml
+Tucumán|Monteros|Monteros al Día|https://monterosaldia.com.ar/feed/
+Tucumán|Famaillá|Famaillá al Día|https://famaillaaldia.com.ar/feed/
+Tucumán|Aguilares|Aguilares Noticias|https://aguilaresnoticias.com.ar/feed/
+Tucumán|San Miguel de Tucumán|El Tucumano - Política|https://www.eltucumano.com/feed/politica
+Tucumán|Yerba Buena|La Gaceta - YB|https://www.lagaceta.com.ar/rss/feed/seccion-yerbabuenadigital.xml
+Tucumán|Tafí del Valle|Tafí del Valle Noticias|https://tafidelvallenoticias.com.ar/feed/
+Tucumán|San Miguel de Tucumán|Info Tucumán|https://infotucuman.com.ar/feed/
+Tucumán|Concepción|Diario del Sur|https://diariodelsur.com.ar/feed/
+Tucumán|Yerba Buena|Yerba Buena Hoy|https://yerbabuenahoy.com.ar/feed/
+Tucumán|Tafí Viejo|Tafí Digital|https://tafidigital.com.ar/feed/
+Tucumán|San Miguel de Tucumán|Tucumán Show|https://tucumanshow.com/feed/
+Tucumán|Trancas|Trancas Noticias|https://trancasnoticias.com.ar/feed/
+Tucumán|San Miguel de Tucumán|Diario 24|https://www.diario24.com/feed/
+Tucumán|Tucumán|Agro Tucumán|https://agrotucuman.com.ar/feed/
+Tucumán|Las Talitas|Las Talitas Noticias|https://lastalitasnoticias.com.ar/feed/
+Tucumán|Alberdi|Alberdi Noticias|https://alberdinoticias.com.ar/feed/
+Salta|Salta Capital|El Tribuno de Salta - Portada|https://www.eltribuno.com/rss-new/salta/portada.rss
+Salta|Salta Capital|Salta Soy|https://saltasoy.com.ar/feed/
+Salta|Salta Capital|Informate Salta|https://www.informatesalta.com.ar/feed/
+Salta|Salta Capital|Nuevo Diario de Salta|https://nuevodiariodesalta.com.ar/feed/
+Salta|Salta Capital|Cadena 3 Salta|http://cadena3.com/rss/2MinutosdeNoticias-Salta.xml
+Salta|Salta Capital|El Tribuno de Salta - Política|https://www.eltribuno.com/rss-new/salta/politica.rss
+Salta|Orán|Diario El Tribuno Orán|https://www.eltribuno.com/rss-new/oran/portada.rss
+Salta|Tartagal|Tartagal al Día|https://tartagalaldia.com.ar/feed/
+Salta|Metán|Metán Noticias|https://metannoticias.com.ar/feed/
+Salta|Cafayate|Cafayate al Día|https://cafayatealdia.com.ar/feed/
+Salta|Gral. Güemes|Güemes Hoy|https://guemeshoy.com.ar/feed/
+Salta|Rosario de la Frontera|Rosario de la Frontera Noticias|https://rosariodelafrontera.com.ar/feed/
+Salta|Salta Capital|El Tribuno de Salta - Policiales|https://www.eltribuno.com/rss-new/salta/policiales.rss
+Salta|Orán|Orán al Día|https://oranaldia.com.ar/feed/
+Salta|Tartagal|Tartagal Noticias|https://tartagalnoticias.com.ar/feed/
+Salta|Metán|Metán al Día|https://metanaldia.com.ar/feed/
+Salta|Cafayate|Cafayate Noticias|https://cafayatenoticias.com.ar/feed/
+Salta|Salta Capital|El Tribuno de Salta - Deportes|https://www.eltribuno.com/rss-new/salta/deportes.rss
+Salta|Gral. Güemes|Güemes Noticias|https://guemesnoticias.com.ar/feed/
+Salta|Rosario de la Frontera|Rosario de la Frontera al Día|https://rosariodelafronteraaldia.com.ar/feed/
+Salta|Salta Capital|Salta Post|https://saltapost.com.ar/feed/
+Salta|Orán|Diario Orán|https://diariooran.com.ar/feed/
+Salta|Tartagal|Radio Cadena 99|https://radiocadena99.com.ar/feed/
+Salta|Salta Capital|Salta Al Día|https://saltaaldia.com.ar/feed/
+Salta|Cerrillos|Cerrillos Noticias|https://cerrillosnoticias.com.ar/feed/
+Salta|Joaquín V. González|JVG Noticias|https://jvgnoticias.com.ar/feed/
+Salta|Salta Capital|Salta Noticias|https://saltanoticias.com.ar/feed/
+Salta|Tartagal|Vía Tartagal|https://via.com.ar/tartagal/feed
+Salta|Salta Capital|Salta Política|https://saltapolitica.com.ar/feed/
+Salta|Orán|Orán Noticias|https://orannoticias.com.ar/feed/
+Salta|Metán|Diario Metán|https://diariometan.com.ar/feed/
+Salta|Cafayate|Cafayate Digital|https://cafayatedigital.com.ar/feed/
+Salta|Salta Capital|Salta Turismo|https://saltaturismo.com.ar/feed/
+Salta|Gral. Güemes|Güemes Digital|https://guemesdigital.com.ar/feed/
+Salta|Rosario de Lerma|Rosario de Lerma Noticias|https://rosariodelerma.com.ar/feed/
+Salta|Salta Capital|Salta Capital Noticias|https://saltacapitalnoticias.com.ar/feed/
+Salta|Salta Capital|Agro Salta|https://agrosalta.com.ar/feed/
+Salta|Cachi|Cachi Noticias|https://cachinoticias.com.ar/feed/
+Salta|Salta Capital|El Tribuno - Deportes Salta|https://www.eltribuno.com/rss-new/salta/deportes.rss
+Chaco|Resistencia|Diario Norte|https://www.diarionorte.com/feed/
+Chaco|Resistencia|Diario Chaco|https://www.diariochaco.com/feed/
+Chaco|Resistencia|Datachaco|https://www.datachaco.com/feed/
+Chaco|Resistencia|Chaco Día por Día|https://www.chacodiapordia.com/feed/
+Chaco|Resistencia|Nova Chaco|https://novachaco.com/feed/
+Chaco|Sáenz Peña|Diario La Voz del Chaco|https://lavozdelchaco.com/feed/
+Chaco|Resistencia|El Diario de la Región|https://eldiariodelaregion.com.ar/feed/
+Chaco|Resistencia|Cadena 3 Chaco|http://cadena3.com/rss/2MinutosdeNoticias-Chaco.xml
+Chaco|Resistencia|Chaco On Line|https://chaconline.com.ar/feed/
+Chaco|Sáenz Peña|Diario Sáenz Peña|https://diariosaenzpena.com.ar/feed/
+Chaco|Villa Ángela|Villa Ángela Hoy|https://villaangelahoy.com.ar/feed/
+Chaco|Charata|Charata Noticias|https://charatanoticias.com/feed/
+Chaco|Presidencia Roque Sáenz Peña|Saénz Peña al Día|https://saenzpenaaldia.com.ar/feed/
+Chaco|Quitilipi|Quitilipi Noticias|https://quitilipinoticias.com.ar/feed/
+Chaco|Resistencia|Diario Norte - Policiales|https://www.diarionorte.com/rss/policiales
+Chaco|Villa Ángela|Villa Ángela Noticias|https://villaangelanoticias.com.ar/feed/
+Chaco|Charata|Charata al Día|https://charataaldia.com.ar/feed/
+Chaco|Resistencia|Diario Chaco - Deportes|https://www.diariochaco.com/rss/deportes
+Chaco|Barranqueras|Barranqueras Noticias|https://barranquerasnoticias.com.ar/feed/
+Chaco|Castelli|Castelli Noticias|https://castellinoticias.com.ar/feed/
+Chaco|Quitilipi|Quitilipi al Día|https://quitilipialdia.com.ar/feed/
+Chaco|Resistencia|Chaco Ahora|https://chacoahora.com.ar/feed/
+Chaco|Resistencia|Chaco Policiales|https://chacopoliciales.com.ar/feed/
+Chaco|Sáenz Peña|Sáenz Peña Noticias|https://saenzpenanoticias.com.ar/feed/
+Chaco|Villa Ángela|Villa Ángela Digital|https://villaangeladigital.com.ar/feed/
+Chaco|Resistencia|Diario Norte - Política|https://www.diarionorte.com/rss/politica
+Chaco|Charata|Radio Charata|https://radiocharata.com.ar/feed/
+Chaco|Machagai|Machagai Noticias|https://machagainoticias.com.ar/feed/
+Chaco|General San Martín|San Martín Chaco Noticias|https://sanmartinchanoticias.com.ar/feed/
+Chaco|Pampa del Infierno|Pampa del Infierno Noticias|https://pampadelinfiernonoticias.com.ar/feed/
+Chaco|Las Palmas|Las Palmas Noticias|https://laspalmasnoticias.com.ar/feed/
+Chaco|Resistencia|Resistencia al Día|https://resistenciaaldia.com.ar/feed/
+Chaco|Chaco|Agro Chaco|https://agrochaco.com.ar/feed/
+Chaco|Coronel Du Graty|Coronel Du Graty Noticias|https://coroneldugratynoticias.com.ar/feed/
+Chaco|Hermoso Campo|Hermoso Campo Noticias|https://hermosocamponoticias.com.ar/feed/
+Chaco|Resistencia|Diario Chaco - Opinión|https://www.diariochaco.com/rss/opinion
+Chaco|Resistencia|Chaco en Línea|https://chacoenlinea.com.ar/feed/
+Río Negro|General Roca|Diario Río Negro|https://www.rionegro.com.ar/feed/
+Río Negro|Viedma|Noticias Net|https://www.noticiasnet.com.ar/feed/
+Río Negro|Bariloche|El Cordillerano|https://www.elcordillerano.com.ar/feed/
+Río Negro|Cipolletti|Diario La Mañana|https://www.diariolamanana.com.ar/feed/
+Río Negro|Viedma|Noticias de la Costa|https://noticiasdelacosta.com.ar/feed/
+Río Negro|Bariloche|Bariloche 2000|https://bariloche2000.com/feed/
+Río Negro|General Roca|Roca Digital|https://rocadigital.com.ar/feed/
+Río Negro|Cipolletti|Cipolletti Noticias|https://cipollettinoticias.com.ar/feed/
+Río Negro|Viedma|Viedma al Día|https://viedmaaldia.com.ar/feed/
+Río Negro|Bariloche|Diario Bariloche|https://diariobariloche.com/feed/
+Río Negro|General Roca|Roca Noticias|https://rocanoticias.com.ar/feed/
+Río Negro|Cipolletti|Cipolletti al Día|https://cipollettialdia.com.ar/feed/
+Río Negro|Viedma|Noticias Net - Policiales|https://www.noticiasnet.com.ar/feed/policiales
+Río Negro|Bariloche|Bariloche al Día|https://barilochealdia.com.ar/feed/
+Río Negro|General Roca|Diario Río Negro - Deportes|https://www.rionegro.com.ar/deportes/feed/
+Río Negro|Villa Regina|Villa Regina al Día|https://villareginaldia.com.ar/feed/
+Río Negro|San Antonio Oeste|San Antonio Oeste Noticias|https://sanantoniooestenoticias.com.ar/feed/
+Río Negro|Choele Choel|Choele Choel Noticias|https://choelechoelnoticias.com.ar/feed/
+Río Negro|General Roca|Río Negro Hoy|https://rionegrohoy.com.ar/feed/
+Río Negro|Viedma|Viedma Noticias|https://viedmanoticias.com.ar/feed/
+Río Negro|Bariloche|Bariloche Digital|https://barilochedigital.com.ar/feed/
+Río Negro|Cipolletti|Diario La Comarca|https://diariolacomarca.com.ar/feed/
+Río Negro|General Roca|La Comuna|https://lacomunanoticias.com.ar/feed/
+Río Negro|Viedma|Viedma Hoy|https://viedmahoy.com.ar/feed/
+Río Negro|Bariloche|El Cordillerano - Política|https://www.elcordillerano.com.ar/feed/politica
+Río Negro|General Roca|Roca Al Día|https://rocaaldia.com.ar/feed/
+Río Negro|Cipolletti|Cipolletti Hoy|https://cipollettihoy.com.ar/feed/
+Río Negro|Las Grutas|Las Grutas Noticias|https://lasgrutasnoticias.com.ar/feed/
+Río Negro|Villa Regina|Villa Regina Noticias|https://villareginanoticias.com.ar/feed/
+Río Negro|General Roca|Río Negro Deportes|https://rionegrodeportes.com.ar/feed/
+Río Negro|El Bolsón|El Bolsón Noticias|https://elbolsonnoticias.com.ar/feed/
+Río Negro|Allen|Allen Noticias|https://allennoticias.com.ar/feed/
+Río Negro|Río Negro|Agro Río Negro|https://agrorionegro.com.ar/feed/
+Río Negro|Catriel|Catriel 24|https://catriel24.com.ar/feed/
+Río Negro|Río Colorado|Río Colorado Noticias|https://riocoloradonoticias.com.ar/feed/
+Río Negro|Río Negro|Río Negro Turismo|https://rionegroturismo.com.ar/feed/
+Neuquén|Neuquén Capital|Diario Río Negro - Neuquén|https://www.rionegro.com.ar/neuquen/feed/
+Neuquén|Neuquén Capital|LM Neuquén|https://www.lmneuquen.com/rss/feed.xml
+Neuquén|Neuquén Capital|Noticias de Neuquén|https://www.noticiasdenqn.com.ar/feed/
+Neuquén|Neuquén Capital|Neuquén Al Instante|https://www.neuquenalinstante.com.ar/feed/
+Neuquén|Cutral Co/Plaza Huincul|Cutral Co al Instante|https://cutralcoalinstante.com/feed/
+Neuquén|San Martín de los Andes|Diario Andino|https://www.diarioandino.com.ar/feed/
+Neuquén|Neuquén Capital|Mejor Informado|https://mejorinformado.com/feed/
+Neuquén|Neuquén Capital|Neuquén Hoy|https://neuquenhoy.com.ar/feed/
+Neuquén|Neuquén Capital|Vaca Muerta News|https://vacamuertanews.com.ar/feed/
+Neuquén|Neuquén Capital|Neuquén 24|https://neuquen24.com.ar/feed/
+Neuquén|Cutral Co|Cutral Co Noticias|https://cutralconoticias.com.ar/feed/
+Neuquén|San Martín de los Andes|San Martín a Diario|https://sanmartinadiario.com.ar/feed/
+Neuquén|Neuquén Capital|LM Neuquén - Política|https://www.lmneuquen.com/rss/seccion/politica
+Neuquén|Zapala|Zapala Noticias|https://zapalanoticias.com.ar/feed/
+Neuquén|Plottier|Plottier Noticias|https://plottiernoticias.com.ar/feed/
+Neuquén|Centenario|Centenario Digital|https://centenariodigital.com.ar/feed/
+Neuquén|Neuquén Capital|Diario Río Negro - Policiales|https://www.rionegro.com.ar/policiales/feed/
+Neuquén|Neuquén Capital|Neuquén Al Día|https://neuquenaldia.com.ar/feed/
+Neuquén|Cutral Co/Plaza Huincul|Cutral Co Hoy|https://cutralcohoy.com.ar/feed/
+Neuquén|San Martín de los Andes|San Martín Noticias|https://sanmartinnoticias.com.ar/feed/
+Neuquén|Neuquén Capital|Diario Río Negro - Deportes|https://www.rionegro.com.ar/deportes/feed/
+Neuquén|Zapala|Zapala al Día|https://zapalaaldia.com.ar/feed/
+Neuquén|Plottier|Plottier al Día|https://plottieraldia.com.ar/feed/
+Neuquén|Centenario|Centenario Noticias|https://centenarionoticias.com.ar/feed/
+Neuquén|Neuquén Capital|Neuquén Deportes|https://neuquendeportes.com.ar/feed/
+Neuquén|Villa La Angostura|La Angostura Digital|https://laangosturadigital.com.ar/feed/
+Neuquén|Junín de los Andes|Junín Noticias|https://juninnoticias.com.ar/feed/
+Neuquén|Chos Malal|Chos Malal Noticias|https://chosmalalnoticias.com.ar/feed/
+Neuquén|Neuquén Capital|Neuquén Minero|https://neuquenminero.com.ar/feed/
+Neuquén|Cutral Co|Cutral Co Digital|https://cutralcodigital.com.ar/feed/
+Neuquén|San Martín de los Andes|San Martín al Día|https://sanmartinaldia.com.ar/feed/
+Neuquén|Neuquén Capital|Neuquén Informa|https://neuqueninforma.com.ar/feed/
+Neuquén|Zapala|Zapala Digital|https://zapaladigital.com.ar/feed/
+Neuquén|Neuquén Capital|Vía Neuquén|https://via.com.ar/neuquen/feed
+Neuquén|Plottier|Plottier Hoy|https://plottierhoy.com.ar/feed/
+Neuquén|Centenario|Centenario Hoy|https://centenariohoy.com.ar/feed/
+Neuquén|Villa La Angostura|Villa La Angostura Noticias|https://villalaangosturanoticias.com.ar/feed/
+Neuquén|Junín de los Andes|Junín de los Andes Noticias|https://junindelosandesnoticias.com.ar/feed/
+Neuquén|Neuquén|Agro Neuquén|https://agroneuquen.com.ar/feed/
+
+Bloque 3/5: Entre Ríos, San Juan, Chubut, Corrientes, Santiago del 
+Estero (200 Enlaces CSV)
+Provincia|Ciudad/Región|Medio|Enlace RSS
+Entre Ríos|Paraná|El Once|https://www.elonce.com/rss/feed.xml
+Entre Ríos|Paraná|Diario Uno Entre Ríos|https://www.unoentrerios.com.ar/rss/feed.xml
+Entre Ríos|Concordia|Diario El Sol|https://www.diarioelsol.com.ar/feed/
+Entre Ríos|Paraná|Ahora El Día|https://ahoraeldia.com/feed/
+Entre Ríos|Concordia|Diario Río Uruguay|https://diarioriouruguay.com.ar/feed/
+Entre Ríos|Gualeguaychú|El Día de Gualeguaychú|https://www.eldiaonline.com/feed/
+Entre Ríos|Concepción del Uruguay|La Calle|https://www.lacalle.com.ar/feed/
+Entre Ríos|Paraná|Noticias de Paraná|https://noticiasdeparana.com.ar/feed/
+Entre Ríos|Gualeguay|Gualeguay al Día|https://gualeguayaldia.com.ar/feed/
+Entre Ríos|Villaguay|Villaguay Noticias|https://villaguaynoticias.com.ar/feed/
+Entre Ríos|Concordia|Concordia Hoy|https://concordiahoy.com.ar/feed/
+Entre Ríos|Gualeguaychú|Gualeguaychú Ahora|https://gualeguaychuahora.com/feed/
+Entre Ríos|Paraná|Paraná al Día|https://paranaaldia.com.ar/feed/
+Entre Ríos|Chajarí|Chajarí al Día|https://chajarialdia.com.ar/feed/
+Entre Ríos|Federal|Federal al Día|https://federalaldia.com.ar/feed/
+Entre Ríos|Victoria|Victoria Digital|https://victoriadigital.com.ar/feed/
+Entre Ríos|Paraná|El Once - Policiales|https://www.elonce.com/rss/policiales.xml
+Entre Ríos|Concordia|Concordia Noticias|https://concordianoticias.com.ar/feed/
+Entre Ríos|Gualeguaychú|Gualeguaychú Noticias|https://gualeguaychunoticias.com.ar/feed/
+Entre Ríos|Paraná|Diario Uno - Deportes|https://www.unoentrerios.com.ar/rss/deportes.xml
+Entre Ríos|Concepción del Uruguay|La Calle - Deportes|https://www.lacalle.com.ar/feed/deportes
+Entre Ríos|Crespo|Crespo al Día|https://crespoaldia.com.ar/feed/
+Entre Ríos|Diamante|Diamante Noticias|https://diamantenoticias.com.ar/feed/
+Entre Ríos|Paraná|Paraná Noticias|https://parananoticias.com.ar/feed/
+Entre Ríos|La Paz|La Paz Digital|https://lapazdigital.com.ar/feed/
+Entre Ríos|San Salvador|San Salvador Digital|https://sansalvadordigital.com.ar/feed/
+Entre Ríos|Nogoyá|Nogoyá Noticias|https://nogoyanoticias.com.ar/feed/
+Entre Ríos|Concordia|Vía Concordia|https://via.com.ar/concordia/feed
+Entre Ríos|Gualeguaychú|El Debate Pregón|https://www.eldebatepregon.com.ar/feed/
+Entre Ríos|Paraná|Paraná Hoy|https://paranahoy.com.ar/feed/
+Entre Ríos|Villaguay|Villaguay al Día|https://villaguayaldia.com.ar/feed/
+Entre Ríos|Entre Ríos|Agro Entre Ríos|https://agroentrerios.com.ar/feed/
+Entre Ríos|María Grande|María Grande Noticias|https://mariagrandenoticias.com.ar/feed/
+Entre Ríos|Paraná|Paraná Deportes|https://paranadeportes.com.ar/feed/
+Entre Ríos|Basavilbaso|Basa Noticias|https://basaenoticia.com/feed/
+Entre Ríos|General Ramírez|Ramírez Noticias|https://ramireznoticias.com.ar/feed/
+Entre Ríos|Entre Ríos|Entre Ríos Turismo|https://entrerios.tur.ar/feed/
+Entre Ríos|Paraná|Paraná Política|https://paranapolitica.com.ar/feed/
+Entre Ríos|Chajarí|Chajarí Noticias|https://chajarinoticias.com.ar/feed/
+Entre Ríos|Victoria|Victoria Noticias|https://victorianoticias.com.ar/feed/
+San Juan|San Juan Capital|Diario de Cuyo - Portada|https://www.diariodecuyo.com.ar/rss/index.xml
+San Juan|San Juan Capital|Tiempo de San Juan|https://www.tiempodesanjuan.com/feed/
+San Juan|San Juan Capital|San Juan 8|https://www.sanjuana8.com/feed/
+San Juan|San Juan Capital|El Zonda Diario|https://www.elzonda.com.ar/feed/
+San Juan|San Juan Capital|Diario El País|https://diarioelpais.com.ar/feed/
+San Juan|San Juan Capital|Canal 13 San Juan|https://www.canal13sanjuan.com/feed/
+San Juan|San Juan Capital|San Juan al Día|https://sanjuanaldia.com/feed/
+San Juan|Caucete|El Sol de Caucete|https://elsoldecaucete.com.ar/feed/
+San Juan|Jáchal|Jáchal Magazine|https://jachalmagazine.com.ar/feed/
+San Juan|San Juan Capital|Diario de Cuyo - Política|https://www.diariodecuyo.com.ar/rss/politica.xml
+San Juan|Caucete|Caucete Digital|https://caucastedigital.com.ar/feed/
+San Juan|Jáchal|Jáchal al Día|https://jachalaldia.com.ar/feed/
+San Juan|San Juan Capital|Tiempo de San Juan - Deportes|https://www.tiempodesanjuan.com/feed/deportes
+San Juan|San Juan Capital|San Juan al Momento|https://sanjuanalmomento.com.ar/feed/
+San Juan|San Juan Capital|Diario de Cuyo - Policiales|https://www.diariodecuyo.com.ar/rss/policiales.xml
+San Juan|Albardón|Albardón Noticias|https://albardonnoticias.com.ar/feed/
+San Juan|Rivadavia|Rivadavia San Juan Noticias|https://rivadaviasanjuanoticias.com.ar/feed/
+San Juan|Chimbas|Chimbas Noticias|https://chimbasnoticias.com.ar/feed/
+San Juan|San Juan Capital|San Juan Minero|https://sanjuanminero.com.ar/feed/
+San Juan|Caucete|Caucete Noticias|https://caucetenoticias.com.ar/feed/
+San Juan|Jáchal|Jáchal Noticias|https://jachalnoticias.com.ar/feed/
+San Juan|San Juan Capital|San Juan Ahora|https://sanjuanahora.com.ar/feed/
+San Juan|San Juan Capital|San Juan Deportes|https://sanjuan.deportes.com.ar/feed/
+San Juan|San Juan Capital|Vía San Juan|https://via.com.ar/san-juan/feed
+San Juan|Sarmiento|Sarmiento Noticias|https://sarmientonoticias.com.ar/feed/
+San Juan|Iglesia|Iglesia Noticias|https://iglesianoticias.com.ar/feed/
+San Juan|San Juan Capital|Diario El Sol San Juan|https://diarioelsolsanjuan.com.ar/feed/
+San Juan|Rawson|Rawson San Juan Noticias|https://rawsonsanjuanoticias.com.ar/feed/
+San Juan|San Juan Capital|San Juan Informa|https://sanjuaninforma.com.ar/feed/
+San Juan|Calingasta|Calingasta Noticias|https://calingastanoticias.com.ar/feed/
+San Juan|9 de Julio|9 de Julio San Juan Noticias|https://9dejuliosanjuanoticias.com.ar/feed/
+San Juan|San Juan Capital|San Juan Post|https://sanjuanpost.com.ar/feed/
+San Juan|San Juan|Agro San Juan|https://agrosanjuan.com.ar/feed/
+San Juan|San Juan Capital|San Juan Turismo|https://sanjuan.tur.ar/feed/
+San Juan|San Juan Capital|Cadena 3 San Juan|http://cadena3.com/rss/2MinutosdeNoticias-SanJuan.xml
+San Juan|Valle Fértil|Valle Fértil Noticias|https://vallefertilnoticias.com.ar/feed/
+San Juan|San Juan Capital|San Juan Política|https://sanjuanpolitica.com.ar/feed/
+San Juan|Pocito|Pocito Noticias|https://pocitonoticias.com.ar/feed/
+San Juan|Angaco|Angaco Noticias|https://angaconoticias.com.ar/feed/
+Chubut|Rawson/Trelew|El Chubut|https://www.elchubut.com.ar/rss/feed.xml
+Chubut|Comodoro Rivadavia|Diario Crónica|https://www.diariocronica.com.ar/feed/
+Chubut|Puerto Madryn|Diario El Chubut - Madryn|https://www.elchubut.com.ar/rss/madryn.xml
+Chubut|Comodoro Rivadavia|ADN Sur|https://www.adnsur.com.ar/feed/
+Chubut|Trelew|Diario Jornada|https://www.diariojornada.com.ar/feed/
+Chubut|Esquel|Noticias de Esquel|https://noticiasdeesquel.com/feed/
+Chubut|Comodoro Rivadavia|El Patagónico|https://www.elpatagonico.com/rss/feed.xml
+Chubut|Rawson|Rawson Noticias|https://rawsonnoticias.com.ar/feed/
+Chubut|Puerto Madryn|Madryn TV|https://madryntv.com/feed/
+Chubut|Trelew|Trelew Noticias|https://trelewnoticias.com.ar/feed/
+Chubut|Esquel|Esquel al Día|https://esquelaldia.com.ar/feed/
+Chubut|Comodoro Rivadavia|Crónica - Deportes|https://www.diariocronica.com.ar/feed/deportes
+Chubut|Rawson|El Chubut - Política|https://www.elchubut.com.ar/rss/politica.xml
+Chubut|Puerto Madryn|Madryn al Día|https://madrynaldia.com.ar/feed/
+Chubut|Trelew|Trelew al Día|https://trelewaldia.com.ar/feed/
+Chubut|Esquel|Esquel Noticias|https://esquelnoticias.com.ar/feed/
+Chubut|Comodoro Rivadavia|ADN Sur - Policiales|https://www.adnsur.com.ar/feed/policiales
+Chubut|Rawson|Rawson al Día|https://rawsonaldia.com.ar/feed/
+Chubut|Puerto Madryn|Madryn Hoy|https://madrynhoy.com.ar/feed/
+Chubut|Trelew|Trelew Hoy|https://trelewhoy.com.ar/feed/
+Chubut|Esquel|Diario Esquel|https://diarioesquel.com/feed/
+Chubut|Comodoro Rivadavia|Comodoro Noticias|https://comodoronoticias.com.ar/feed/
+Chubut|Trevelin|Trevelin Noticias|https://trevelinnoticias.com.ar/feed/
+Chubut|Sarmiento|Sarmiento Chubut Noticias|https://sarmientochubutnoticias.com.ar/feed/
+Chubut|Puerto Madryn|Madryn Digital|https://madryndigital.com.ar/feed/
+Chubut|Comodoro Rivadavia|Comodoro 24|https://comodoro24.com.ar/feed/
+Chubut|Trelew|Vía Trelew|https://via.com.ar/trelew/feed
+Chubut|Rawson|Chubut al Día|https://chubutaldia.com.ar/feed/
+Chubut|Esquel|Esquel Hoy|https://esquelhoy.com.ar/feed/
+Chubut|Puerto Madryn|Madryn Deportes|https://madryndeportes.com.ar/feed/
+Chubut|Comodoro Rivadavia|Crónica - Política|https://www.diariocronica.com.ar/feed/politica
+Chubut|Trelew|Chubut Noticias|https://chubutnoticias.com.ar/feed/
+Chubut|El Maitén|El Maitén Noticias|https://elmaitennoticias.com.ar/feed/
+Chubut|Gaiman|Gaiman Noticias|https://gaimannoticias.com.ar/feed/
+Chubut|Chubut|Chubut Turismo|https://chubutturismo.com.ar/feed/
+Chubut|Chubut|Agro Chubut|https://agrochubut.com.ar/feed/
+Chubut|Rada Tilly|Rada Tilly Noticias|https://radatillynoticias.com.ar/feed/
+Chubut|Sarmiento|Sarmiento al Día|https://sarmientoaldia.com.ar/feed/
+Corrientes|Corrientes Capital|El Litoral de Corrientes|https://www.ellitoral.com.ar/rss/feed.xml
+Corrientes|Corrientes Capital|Diario Época|https://www.diarioepoca.com/feed/
+Corrientes|Corrientes Capital|Corrientes Hoy|https://corrienteshoy.com/feed/
+Corrientes|Goya|Power Noticias|https://powernoticias.com.ar/feed/
+Corrientes|Corrientes Capital|Diario Corrientes|https://diariocorrientes.com.ar/feed/
+Corrientes|Corrientes Capital|Radio Dos|https://www.radiodos.com.ar/feed/
+Corrientes|Mercedes|Tu Mercedes|https://www.tumercedes.com/feed/
+Corrientes|Paso de los Libres|Paso de los Libres Hoy|https://pasodeloslibreshoy.com.ar/feed/
+Corrientes|Curuzú Cuatiá|Curuzú Digital|https://curuzudigital.com.ar/feed/
+Corrientes|Corrientes Capital|Corrientes Al Día|https://corrientesaldia.com.ar/feed/
+Corrientes|Goya|Goya Noticias|https://goyanoticias.com.ar/feed/
+Corrientes|Mercedes|Mercedes Noticias|https://mercedesnoticias.com.ar/feed/
+Corrientes|Corrientes Capital|El Litoral - Policiales|https://www.ellitoral.com.ar/rss/policiales.xml
+Corrientes|Paso de los Libres|Libres Noticias|https://libresnoticias.com.ar/feed/
+Corrientes|Curuzú Cuatiá|Curuzú Noticias|https://curuzunoticias.com.ar/feed/
+Corrientes|Corrientes Capital|Diario Época - Deportes|https://www.diarioepoca.com/feed/deportes
+Corrientes|Goya|Goya al Día|https://goyaaldia.com.ar/feed/
+Corrientes|Mercedes|Mercedes al Día|https://mercedesaldia.com.ar/feed/
+Corrientes|Corrientes Capital|Vía Corrientes|https://via.com.ar/corrientes/feed
+Corrientes|Paso de los Libres|Paso de los Libres Noticias|https://pasodeloslibresnoticias.com.ar/feed/
+Corrientes|Curuzú Cuatiá|Curuzú al Día|https://curuzualdia.com.ar/feed/
+Corrientes|Esquina|Esquina 365|https://esquina365.com.ar/feed/
+Corrientes|Bella Vista|Bella Vista Corrientes|https://bellavistacorrientes.com.ar/feed/
+Corrientes|Santo Tomé|Santo Tomé Noticias|https://santoomenoticias.com.ar/feed/
+Corrientes|Corrientes Capital|Corrientes Noticias|https://corrientesnoticias.com.ar/feed/
+Corrientes|Goya|Goya Hoy|https://goyahoy.com.ar/feed/
+Corrientes|Mercedes|Mercedes Hoy|https://merceshondia.com.ar/feed/
+Corrientes|Corrientes Capital|Diario El Libertador|https://www.diarioellibertador.com.ar/feed/
+Corrientes|Paso de los Libres|Libres al Día|https://libresaldia.com.ar/feed/
+Corrientes|Curuzú Cuatiá|Radio Curuzú|https://radiocuruzu.com.ar/feed/
+Corrientes|Esquina|Esquina Noticias|https://esquinanoticias.com.ar/feed/
+Corrientes|Bella Vista|Bella Vista Noticias|https://bellavistanoticias.com.ar/feed/
+Corrientes|Santo Tomé|Santo Tomé al Día|https://santotomealdia.com.ar/feed/
+Corrientes|Corrientes|Agro Corrientes|https://agrocorrientes.com.ar/feed/
+Corrientes|Corrientes Capital|Corrientes Política|https://corrientespolitica.com.ar/feed/
+Corrientes|Ituzaingó|Ituzaingó Noticias|https://ituzaingonoticias.com.ar/feed/
+Corrientes|Saladas|Saladas Noticias|https://saladasnoticias.com.ar/feed/
+Santiago del Estero|Santiago Capital|El Liberal - Portada|https://www.elliberal.com.ar/rss/feed.xml
+Santiago del Estero|Santiago Capital|Nuevo Diario Web|https://www.nuevodiarioweb.com.ar/feed/
+Santiago del Estero|La Banda|Diario Panorama|https://www.diariopanorama.com/rss/feed.xml
+Santiago del Estero|Santiago Capital|Santiago del Estero al Día|https://santiagodelesteroaldia.com.ar/feed/
+Santiago del Estero|La Banda|La Banda Noticias|https://labandanoticias.com.ar/feed/
+Santiago del Estero|Santiago Capital|Diario La Región|https://diariolaregion.com.ar/feed/
+Santiago del Estero|Termas de Río Hondo|Termas de Río Hondo Noticias|https://termasderiohondonoticias.com.ar/feed/
+Santiago del Estero|Frías|Frías Digital|https://friasdigital.com.ar/feed/
+Santiago del Estero|Añatuya|Añatuya Noticias|https://anatuyanoticias.com.ar/feed/
+Santiago del Estero|Santiago Capital|El Liberal - Política|https://www.elliberal.com.ar/rss/politica.xml
+Santiago del Estero|La Banda|La Banda al Día|https://labandaaldia.com.ar/feed/
+Santiago del Estero|Santiago Capital|Santiago del Estero Noticias|https://santiagodelesteronoticias.com.ar/feed/
+Santiago del Estero|Termas de Río Hondo|Termas de Río Hondo al Día|https://termasderiohondoaldia.com.ar/feed/
+Santiago del Estero|Frías|Frías Noticias|https://friasnoticias.com.ar/feed/
+Santiago del Estero|Añatuya|Añatuya al Día|https://anatuyaaldia.com.ar/feed/
+Santiago del Estero|Santiago Capital|El Liberal - Policiales|https://www.elliberal.com.ar/rss/policiales.xml
+Santiago del Estero|La Banda|Diario La Banda|https://diariolabanda.com.ar/feed/
+Santiago del Estero|Santiago Capital|Santiago del Estero Hoy|https://santiagodelesterohoy.com.ar/feed/
+Santiago del Estero|Termas de Río Hondo|Termas Noticias|https://termasnoticias.com.ar/feed/
+Santiago del Estero|Frías|Diario Frías|https://diariofrias.com.ar/feed/
+Santiago del Estero|Santiago Capital|Nuevo Diario - Deportes|https://www.nuevodiarioweb.com.ar/feed/deportes
+Santiago del Estero|La Banda|La Banda Hoy|https://labandahoy.com.ar/feed/
+Santiago del Estero|Quimilí|Quimilí Noticias|https://quimilinoticias.com.ar/feed/
+Santiago del Estero|Fernández|Fernández Noticias|https://fernandeznoticias.com.ar/feed/
+Santiago del Estero|Santiago Capital|Santiago del Estero Política|https://santiagodelesteropolitica.com.ar/feed/
+Santiago del Estero|Loreto|Loreto Noticias|https://loretonoticias.com.ar/feed/
+Santiago del Estero|Monte Quemado|Monte Quemado Noticias|https://montequemadonoticias.com.ar/feed/
+Santiago del Estero|Santiago Capital|Diario Popular Santiago|https://diariopopularsantiago.com.ar/feed/
+Santiago del Estero|Termas de Río Hondo|Termas Digital|https://termasdigital.com.ar/feed/
+Santiago del Estero|Frías|Frías Hoy|https://friashoy.com.ar/feed/
+Santiago del Estero|Añatuya|Añatuya Hoy|https://anatuyahoy.com.ar/feed/
+Santiago del Estero|Santiago Capital|Santiago Turismo|https://santiagoturismo.com.ar/feed/
+Santiago del Estero|La Banda|La Banda Digital|https://labandadigital.com.ar/feed/
+Santiago del Estero|Quimilí|Quimilí al Día|https://quimilialdia.com.ar/feed/
+Santiago del Estero|Fernández|Fernández al Día|https://fernandezaldia.com.ar/feed/
+Santiago del Estero|Santiago del Estero|Agro Santiago|https://agrosantiago.com.ar/feed/
+Santiago del Estero|Santiago Capital|Santiago 365|https://santiago365.com.ar/feed/
+Santiago del Estero|Bandera|Bandera Noticias|https://banderanoticias.com.ar/feed/
+Santiago del Estero|Beltrán|Beltrán Noticias|https://beltrannoticias.com.ar/feed/
+
+Bloque 4/5: Misiones, San Luis, Jujuy, La Pampa, Tierra del Fuego (200 Enlaces CSV)
+
+Provincia|Ciudad/Región|Medio|Enlace RSS
+Misiones|Posadas|Misiones Online|https://misionesonline.net/feed/
+Misiones|Posadas|El Territorio|https://www.elterritorio.com.ar/rss/feed.xml
+Misiones|Posadas|Primera Edición|https://www.primeraedicion.com.ar/feed/
+Misiones|Posadas|Misiones Cuatro|https://misionescuatro.com/feed/
+Misiones|Posadas|Misiones Al Día|https://misionesaldia.com.ar/feed/
+Misiones|Posadas|Noticias de la Calle|https://noticiasdelacalle.com.ar/feed/
+Misiones|Puerto Iguazú|Iguazú Noticias|https://iguazunoticias.com/feed/
+Misiones|Oberá|Oberá Online|https://oberaonline.com.ar/feed/
+Misiones|Eldorado|Eldorado al Día|https://eldoradoaldia.com.ar/feed/
+Misiones|Posadas|Misiones Online - Política|https://misionesonline.net/feed/politica
+Misiones|Jardín América|Jardín América Noticias|https://jardinamericanoticias.com.ar/feed/
+Misiones|Puerto Rico|Puerto Rico Noticias|https://puertoriconoticias.com.ar/feed/
+Misiones|Posadas|Primera Edición - Deportes|https://www.primeraedicion.com.ar/feed/deportes
+Misiones|Puerto Iguazú|Iguazú al Día|https://iguazualdia.com.ar/feed/
+Misiones|Oberá|Oberá Noticias|https://oberanoticias.com.ar/feed/
+Misiones|Eldorado|Eldorado Noticias|https://eldoradonoticias.com.ar/feed/
+Misiones|Posadas|Misiones Online - Policiales|https://misionesonline.net/feed/policiales
+Misiones|Posadas|Posadas al Día|https://posadasaldia.com.ar/feed/
+Misiones|Puerto Iguazú|Iguazú Hoy|https://iguazuhoy.com.ar/feed/
+Misiones|Oberá|Oberá al Día|https://oberaaldia.com.ar/feed/
+Misiones|Apóstoles|Apóstoles Noticias|https://apostolesnoticias.com.ar/feed/
+Misiones|San Vicente|San Vicente Noticias|https://sanvicentenoticias.com.ar/feed/
+Misiones|Posadas|Vía Posadas|https://via.com.ar/posadas/feed
+Misiones|Posadas|Posadas Noticias|https://posadasnoticias.com.ar/feed/
+Misiones|Puerto Iguazú|Iguazú Digital|https://iguazudigital.com/feed/
+Misiones|Oberá|Radio Oberá|https://radioobera.com.ar/feed/
+Misiones|Eldorado|Eldorado Hoy|https://eldoradohoy.com.ar/feed/
+Misiones|Posadas|Misiones Turismo|https://misionesturismo.com.ar/feed/
+Misiones|Posadas|Misiones Post|https://misionespost.com.ar/feed/
+Misiones|Leandro N. Alem|Alem Noticias|https://alemnoticias.com.ar/feed/
+Misiones|San Pedro|San Pedro Misiones Noticias|https://sanpedromisionesnoticias.com.ar/feed/
+Misiones|Montecarlo|Montecarlo Noticias|https://montecarlonoticias.com.ar/feed/
+Misiones|Posadas|Misiones Política|https://misionespolitica.com.ar/feed/
+Misiones|Candelaria|Candelaria Noticias|https://candelarianoticias.com.ar/feed/
+Misiones|Posadas|Noticias Misiones|https://noticiasmisiones.com.ar/feed/
+Misiones|Posadas|Agro Misiones|https://agromisiones.com.ar/feed/
+Misiones|Dos de Mayo|Dos de Mayo Noticias|https://dosdemayonoticias.com.ar/feed/
+Misiones|Posadas|Diario Misiones|https://diariomisiones.com.ar/feed/
+Misiones|Posadas|Radio Misiones|https://radiomisiones.com.ar/feed/
+Misiones|Posadas|El Territorio - Deportes|https://www.elterritorio.com.ar/rss/deportes.xml
+San Luis|San Luis Capital|El Diario de la República|https://www.eldiariodesanluis.com/feed/
+San Luis|San Luis Capital|San Luis 24|https://sanluis24.com.ar/feed/
+San Luis|Villa Mercedes|El Chorrillero|https://www.elchorrillero.com/feed/
+San Luis|San Luis Capital|Agencia de Noticias San Luis|https://agenciasanluis.com/feed/
+San Luis|Villa Mercedes|Villa Mercedes Noticias|https://villamercedesnoticias.com.ar/feed/
+San Luis|San Luis Capital|San Luis Noticias|https://sanluisnoticias.com.ar/feed/
+San Luis|Merlo|Merlo al Día|https://merloaldia.com.ar/feed/
+San Luis|La Punta|La Punta Noticias|https://lapuntanoticias.com.ar/feed/
+San Luis|San Luis Capital|San Luis al Día|https://sanluisaldia.com.ar/feed/
+San Luis|Villa Mercedes|Villa Mercedes al Día|https://villamercedesaldia.com.ar/feed/
+San Luis|Merlo|Merlo Hoy|https://merlohoy.com.ar/feed/
+San Luis|La Punta|La Punta al Día|https://lapuntaaldia.com.ar/feed/
+San Luis|San Luis Capital|El Diario de la República - Deportes|https://www.eldiariodesanluis.com/feed/deportes
+San Luis|Villa Mercedes|Villa Mercedes Hoy|https://villamercedes.info/feed/
+San Luis|Merlo|Merlo Noticias|https://merlonoticias.com.ar/feed/
+San Luis|San Luis Capital|San Luis Hoy|https://sanluishoy.com.ar/feed/
+San Luis|Villa Mercedes|Villa Mercedes Digital|https://villamercedesdigital.com.ar/feed/
+San Luis|Merlo|Merlo Digital|https://merlodigital.com.ar/feed/
+San Luis|San Luis Capital|San Luis Post|https://sanluispost.com.ar/feed/
+San Luis|Juana Koslay|Juana Koslay Noticias|https://juanakoslaynoticias.com.ar/feed/
+San Luis|San Francisco del Monte de Oro|San Francisco Noticias|https://sanfrancisconoticias.com.ar/feed/
+San Luis|San Luis Capital|Vía San Luis|https://via.com.ar/san-luis/feed
+San Luis|Villa Mercedes|Villa Mercedes Política|https://villamercedespolitica.com.ar/feed/
+San Luis|San Luis Capital|San Luis Deportes|https://sanluisdeportes.com.ar/feed/
+San Luis|Merlo|Merlo Turismo|https://merloturismo.com.ar/feed/
+San Luis|La Toma|La Toma Noticias|https://latomanoticias.com.ar/feed/
+San Luis|San Luis Capital|San Luis Informa|https://sanluisinforma.com.ar/feed/
+San Luis|Concarán|Concarán Noticias|https://concarannoticias.com.ar/feed/
+San Luis|San Luis|Agro San Luis|https://agrosanluis.com.ar/feed/
+San Luis|San Luis Capital|San Luis Noticias Ya|https://sanluisnoticiaya.com.ar/feed/
+San Luis|Villa Mercedes|Radio Villa Mercedes|https://radiovillamercedes.com.ar/feed/
+San Luis|Potrero de los Funes|Potrero de los Funes Noticias|https://potrerodelosfunesnoticias.com.ar/feed/
+San Luis|San Luis Capital|San Luis Política|https://sanluispolitica.com.ar/feed/
+San Luis|San Luis Capital|Diario San Luis|https://diariosanluis.com.ar/feed/
+San Luis|Quines|Quines Noticias|https://quinesnoticias.com.ar/feed/
+San Luis|San Luis Capital|El Diario de la República - Policiales|https://www.eldiariodesanluis.com/feed/policiales
+Jujuy|San Salvador de Jujuy|El Tribuno de Jujuy - Portada|https://www.eltribuno.com/rss-new/jujuy/portada.rss
+Jujuy|San Salvador de Jujuy|Todo Jujuy|https://www.todo-jujuy.com/feed/
+Jujuy|San Salvador de Jujuy|Jujuy al Momento|https://jujuyalmomento.com/feed/
+Jujuy|San Salvador de Jujuy|El Tribuno de Jujuy - Política|https://www.eltribuno.com/rss-new/jujuy/politica.rss
+Jujuy|San Salvador de Jujuy|Jujuy al Día|https://jujuyaldia.com.ar/feed/
+Jujuy|San Pedro de Jujuy|El Tribuno San Pedro|https://www.eltribuno.com/rss-new/sampedro/portada.rss
+Jujuy|Libertador General San Martín|El Tribuno Libertador|https://www.eltribuno.com/rss-new/libertador/portada.rss
+Jujuy|Palpalá|Palpalá al Día|https://palpalaaldia.com.ar/feed/
+Jujuy|Perico|Perico Noticias|https://periconoticias.com.ar/feed/
+Jujuy|Humahuaca|Humahuaca Noticias|https://humahuacanoticias.com.ar/feed/
+Jujuy|San Salvador de Jujuy|Jujuy Noticias|https://jujuynoticias.com.ar/feed/
+Jujuy|San Pedro de Jujuy|San Pedro Noticias|https://sanpedronoticias.com.ar/feed/
+Jujuy|San Salvador de Jujuy|El Tribuno de Jujuy - Deportes|https://www.eltribuno.com/rss-new/jujuy/deportes.rss
+Jujuy|Libertador General San Martín|Libertador Noticias|https://libertadornoticias.com.ar/feed/
+Jujuy|Palpalá|Palpalá Noticias|https://palpalanoticias.com.ar/feed/
+Jujuy|Perico|Perico al Día|https://pericoaldia.com.ar/feed/
+Jujuy|San Salvador de Jujuy|Jujuy Hoy|https://jujuyhoy.com.ar/feed/
+Jujuy|San Pedro de Jujuy|San Pedro al Día|https://sanpedroaldia.com.ar/feed/
+Jujuy|Libertador General San Martín|Libertador al Día|https://libertadoraldia.com.ar/feed/
+Jujuy|Palpalá|Palpalá Hoy|https://palpalahoy.com.ar/feed/
+Jujuy|Perico|Perico Hoy|https://pericohoy.com.ar/feed/
+Jujuy|San Salvador de Jujuy|Jujuy Post|https://jujuypost.com.ar/feed/
+Jujuy|Tilcara|Tilcara Noticias|https://tilcaranoticias.com.ar/feed/
+Jujuy|Ledesma|Ledesma Noticias|https://ledesmanoticias.com.ar/feed/
+Jujuy|San Salvador de Jujuy|Jujuy Política|https://jujuypolitica.com.ar/feed/
+Jujuy|La Quiaca|La Quiaca Noticias|https://laquiacanoticias.com.ar/feed/
+Jujuy|El Carmen|El Carmen Noticias|https://elcarmennoticias.com.ar/feed/
+Jujuy|San Salvador de Jujuy|Jujuy Turismo|https://jujuyturismo.com.ar/feed/
+Jujuy|San Salvador de Jujuy|El Tribuno de Jujuy - Policiales|https://www.eltribuno.com/rss-new/jujuy/policiales.rss
+Jujuy|San Salvador de Jujuy|Vía Jujuy|https://via.com.ar/jujuy/feed
+Jujuy|San Pedro de Jujuy|San Pedro Hoy|https://sanpedrohoy.com.ar/feed/
+Jujuy|Purmamarca|Purmamarca Noticias|https://purmamarcanoticias.com.ar/feed/
+Jujuy|Jujuy|Agro Jujuy|https://agrojujuy.com.ar/feed/
+Jujuy|Yavi|Yavi Noticias|https://yavinoticias.com.ar/feed/
+Jujuy|San Salvador de Jujuy|Diario Jujuy|https://diariojujuy.com.ar/feed/
+Jujuy|San Salvador de Jujuy|Cadena 3 Jujuy|http://cadena3.com/rss/2MinutosdeNoticias-Jujuy.xml
+Jujuy|San Salvador de Jujuy|Jujuy Minero|https://jujuy.minero.com.ar/feed/
+Jujuy|San Salvador de Jujuy|Jujuy Digital|https://jujuydigital.com.ar/feed/
+Jujuy|Abra Pampa|Abra Pampa Noticias|https://abrampampanoticias.com.ar/feed/
+La Pampa|Santa Rosa|Diario La Arena|https://www.laarena.com.ar/feed/
+La Pampa|Santa Rosa|El Diario de La Pampa|https://www.eldiariodelapampa.com.ar/feed/
+La Pampa|General Pico|Pico Digital|https://picodigital.com.ar/feed/
+La Pampa|Santa Rosa|La Pampa Noticias|https://lapampanoticias.com.ar/feed/
+La Pampa|General Pico|Pampa Online|https://pampaonline.com.ar/feed/
+La Pampa|Santa Rosa|Santa Rosa Noticias|https://santarosanoticias.com.ar/feed/
+La Pampa|General Pico|Pico Al Día|https://picoaldia.com.ar/feed/
+La Pampa|Santa Rosa|Santa Rosa al Día|https://santa-rosa-aldia.com.ar/feed/
+La Pampa|General Pico|General Pico Noticias|https://generalpiconoticias.com.ar/feed/
+La Pampa|Santa Rosa|Diario La Arena - Deportes|https://www.laarena.com.ar/feed/deportes
+La Pampa|General Pico|Pico Noticias|https://piconoticias.com.ar/feed/
+La Pampa|Santa Rosa|La Pampa Hoy|https://lapampahoy.com.ar/feed/
+La Pampa|General Pico|General Pico al Día|https://generalpicoaldia.com.ar/feed/
+La Pampa|Santa Rosa|Santa Rosa Hoy|https://santarosahoy.com.ar/feed/
+La Pampa|General Acha|General Acha Noticias|https://generalachanoticias.com.ar/feed/
+La Pampa|Eduardo Castex|Eduardo Castex Noticias|https://eduardocastexnoticias.com.ar/feed/
+La Pampa|Santa Rosa|La Pampa Política|https://lapampapolitica.com.ar/feed/
+La Pampa|General Pico|Pico Hoy|https://picohoy.com.ar/feed/
+La Pampa|Santa Rosa|Diario La Arena - Policiales|https://www.laarena.com.ar/feed/policiales
+La Pampa|General Pico|General Pico Hoy|https://generalpicohoy.com.ar/feed/
+La Pampa|General Acha|General Acha al Día|https://generalachaaldia.com.ar/feed/
+La Pampa|Eduardo Castex|Eduardo Castex al Día|https://eduardocastexaldia.com.ar/feed/
+La Pampa|La Pampa|Agro La Pampa|https://agrolapampa.com.ar/feed/
+La Pampa|Santa Rosa|Vía La Pampa|https://via.com.ar/la-pampa/feed
+La Pampa|Toay|Toay Noticias|https://toaynoticias.com.ar/feed/
+La Pampa|Realicó|Realicó Noticias|https://realiconoticias.com.ar/feed/
+La Pampa|Santa Rosa|Radio La Pampa|https://radiolapampa.com.ar/feed/
+La Pampa|General Pico|Diario General Pico|https://diariogeneralpico.com.ar/feed/
+La Pampa|La Pampa|La Pampa Turismo|https://lapampa.tur.ar/feed/
+La Pampa|Macachín|Macachín Noticias|https://macachinnoticias.com.ar/feed/
+La Pampa|Santa Rosa|Santa Rosa Digital|https://santarosadigital.com.ar/feed/
+La Pampa|General Pico|Pico Digital|https://picodigital.com.ar/feed/
+La Pampa|Victorica|Victorica Noticias|https://victoricanoticias.com.ar/feed/
+La Pampa|La Pampa|La Pampa Informa|https://lapampainforma.com.ar/feed/
+La Pampa|Catriló|Catriló Noticias|https://catrilonoticias.com.ar/feed/
+La Pampa|25 de Mayo|25 de Mayo La Pampa Noticias|https://25demayolapampanoticias.com.ar/feed/
+La Pampa|General Pico|Pico Post|https://picopost.com.ar/feed/
+La Pampa|Santa Rosa|La Pampa 24|https://lapampa24.com.ar/feed/
+Tierra del Fuego|Ushuaia|El Diario del Fin del Mundo|https://www.eldiariodelfindelmundo.com/feed/
+Tierra del Fuego|Río Grande|El Sureño|https://www.elsureno.com.ar/feed/
+Tierra del Fuego|Ushuaia|FM Del Pueblo|https://fmdelpueblo.com.ar/feed/
+Tierra del Fuego|Río Grande|Reporte Austral|https://reporteaustral.com.ar/feed/
+Tierra del Fuego|Ushuaia|Ushuaia Noticias|https://ushuaiamoticias.com.ar/feed/
+Tierra del Fuego|Río Grande|Tiempo Fueguino|https://tiempofueguino.com/feed/
+Tierra del Fuego|Tolhuin|Tolhuin Noticias|https://tolhuinnoticias.com.ar/feed/
+Tierra del Fuego|Ushuaia|Ushuaia al Día|https://ushuaiaaldia.com.ar/feed/
+Tierra del Fuego|Río Grande|Río Grande al Día|https://riograndealdia.com.ar/feed/
+Tierra del Fuego|Ushuaia|El Diario del Fin del Mundo - Política|https://www.eldiariodelfindelmundo.com/feed/politica
+Tierra del Fuego|Río Grande|Diario Digital|https://diariodigital.com.ar/feed/
+Tierra del Fuego|Tolhuin|Tolhuin al Día|https://tolhuin.info/feed/
+Tierra del Fuego|Ushuaia|El Diario del Fin del Mundo - Deportes|https://www.eldiariodelfindelmundo.com/feed/deportes
+Tierra del Fuego|Río Grande|Río Grande Noticias|https://riograndenoticias.com.ar/feed/
+Tierra del Fuego|Ushuaia|Ushuaia Hoy|https://ushuaiatoday.com.ar/feed/
+Tierra del Fuego|Río Grande|Río Grande Hoy|https://riograndehoy.com.ar/feed/
+Tierra del Fuego|Tolhuin|Tolhuin Hoy|https://tolhuinhoy.com.ar/feed/
+Tierra del Fuego|Ushuaia|Ushuaia Digital|https://ushuaiadigital.com.ar/feed/
+Tierra del Fuego|Río Grande|El Sureño - Política|https://www.elsureno.com.ar/feed/politica
+Tierra del Fuego|Ushuaia|Ushuaia Informa|https://ushuaia.informa.com.ar/feed/
+Tierra del Fuego|Río Grande|Río Grande Digital|https://riograndedigital.com.ar/feed/
+Tierra del Fuego|Ushuaia|Tierra del Fuego Política|https://tierradelfuegopolitica.com.ar/feed/
+Tierra del Fuego|Río Grande|Río Grande 24|https://riogrande24.com.ar/feed/
+Tierra del Fuego|Ushuaia|Tierra del Fuego Turismo|https://tdfturismo.com.ar/feed/
+Tierra del Fuego|Río Grande|Río Grande Deportes|https://riograndedeportes.com.ar/feed/
+Tierra del Fuego|Ushuaia|Ushuaia Post|https://ushuaiapost.com.ar/feed/
+Tierra del Fuego|Río Grande|El Sureño - Deportes|https://www.elsureno.com.ar/feed/deportes
+Tierra del Fuego|Tolhuin|Tolhuin Digital|https://tolhuindigital.com.ar/feed/
+Tierra del Fuego|Ushuaia|Tierra del Fuego Noticias|https://tierradelfuegonoticias.com.ar/feed/
+Tierra del Fuego|Río Grande|Río Grande Informa|https://riograndeinforma.com.ar/feed/
+Tierra del Fuego|Ushuaia|Vía Ushuaia|https://via.com.ar/ushuaia/feed
+Tierra del Fuego|Antártida|Antártida Noticias|https://antartidanoticias.com.ar/feed/
+Tierra del Fuego|Ushuaia|El Fueguino|https://elfueguino.com.ar/feed/
+Tierra del Fuego|Río Grande|Radio Río Grande|https://radioriogrande.com.ar/feed/
+Tierra del Fuego|Ushuaia|Ushuaia TV|https://ushuaiatv.com.ar/feed/
+Tierra del Fuego|Río Grande|El Sureño - Policiales|https://www.elsureno.com.ar/feed/policiales
+Tierra del Fuego|Río Grande|Río Grande Post|https://riograndepost.com.ar/feed/
+
+Bloque 5/5: Catamarca, La Rioja, Formosa, Santa Cruz (160 Enlaces CSV)
+
+Provincia|Ciudad/Región|Medio|Enlace RSS
+Catamarca|Catamarca Capital|El Esquiú|https://elesquiu.com/feed/
+Catamarca|Catamarca Capital|El Ancasti|https://www.elancasti.com.ar/rss/feed.xml
+Catamarca|Catamarca Capital|Catamarca Ya|https://catamarcaya.com/feed/
+Catamarca|Catamarca Capital|Diario C|https://diarioc.com.ar/feed/
+Catamarca|Catamarca Capital|Catamarca Actual|https://catamarcaactual.com.ar/feed/
+Catamarca|Catamarca Capital|TVEO|https://tveo.com.ar/feed/
+Catamarca|Catamarca Capital|La Unión Digital|https://launion.digital/feed/
+Catamarca|Catamarca Capital|Catamarca Es Noticia|https://catamarcaesnoticia.com.ar/feed/
+Catamarca|Catamarca Capital|Catamarca Radio|https://catamarcadigital.com/feed/
+Catamarca|Catamarca Capital|El Pucará|https://elpucara.com.ar/feed/
+Catamarca|Belén|Belén Info|https://beleninfo.com.ar/feed/
+Catamarca|Andalgalá|Andalgalá Digital|https://andalgalaonline.com/feed/
+Catamarca|Tinogasta|Tinogasta Digital|https://tinogastadigital.com.ar/feed/
+Catamarca|Santa María|Santa María Noticias|https://santamarianoticias.com.ar/feed/
+Catamarca|Recreo|Recreo Digital|https://recreodigital.com.ar/feed/
+Catamarca|Fray Mamerto Esquiú|FME Digital|https://fmedigital.com.ar/feed/
+Catamarca|Valle Viejo|Valle Viejo Noticias|https://valleviejonoticias.com.ar/feed/
+Catamarca|Fiambalá|Fiambalá Hoy|https://fiambalahoy.com.ar/feed/
+Catamarca|Capayán|Capayán Noticias|https://capayannoticias.com.ar/feed/
+Catamarca|Catamarca Capital|El Esquiú - Policiales|https://elesquiu.com/feed/policiales
+Catamarca|Belén|Belén al Día|https://belenaldia.com.ar/feed/
+Catamarca|Andalgalá|Andalgalá al Día|https://andalgalaldia.com.ar/feed/
+Catamarca|Tinogasta|Diario Tinogasta|https://diariotinogasta.com.ar/feed/
+Catamarca|Santa María|Santa María al Día|https://santamarialdia.com.ar/feed/
+Catamarca|Recreo|Recreo Noticias|https://recreonoticias.com.ar/feed/
+Catamarca|Catamarca Capital|El Ancasti - Deportes|https://www.elancasti.com.ar/rss/deportes.xml
+Catamarca|Fray Mamerto Esquiú|FME Noticias|https://fmenoticias.com.ar/feed/
+Catamarca|Valle Viejo|Valle Viejo Digital|https://valleviejodigital.com.ar/feed/
+Catamarca|Catamarca Capital|Catamarca Minera|https://catamarcaminera.com.ar/feed/
+Catamarca|Fiambalá|Fiambalá Digital|https://fiambaladigital.com/feed/
+Catamarca|Capayán|Capayán al Día|https://capayanalldia.com.ar/feed/
+Catamarca|Catamarca Capital|Diario Catamarca|https://diariocatamarcad.com/feed/
+Catamarca|Belén|Radio Belén|https://radiobelen.com.ar/feed/
+Catamarca|Andalgalá|Andalgalá Noticias|https://andalgalanoticias.com.ar/feed/
+Catamarca|Tinogasta|Tinogasta Noticias|https://tinogastanoticias.com.ar/feed/
+Catamarca|Santa Rosa|Santa Rosa Catamarca|https://santarosacatamarca.com.ar/feed/
+Catamarca|Catamarca Capital|Catamarca Turismo|https://catamarcaplural.com.ar/feed/
+Catamarca|Paclín|Paclín Noticias|https://paclinnoticias.com.ar/feed/
+Catamarca|Ambato|Ambato Digital|https://ambatodigital.com.ar/feed/
+Catamarca|Provincia (Rural)|Agro Catamarca|https://agrocatamarca.com.ar/feed/
+La Rioja|La Rioja Capital|Chilecito Noticias|https://chilecitonoticias.com/feed/
+La Rioja|La Rioja Capital|El Independiente|https://www.elindependiente.com.ar/rss/feed.xml
+La Rioja|La Rioja Capital|Rioja Virtual|https://riojavirtual.com.ar/feed/
+La Rioja|La Rioja Capital|Diario de La Rioja|https://diariodelarioja.com.ar/feed/
+La Rioja|Chilecito|Chilecito Hoy|https://chilecitohoy.com.ar/feed/
+La Rioja|La Rioja Capital|La Rioja 12|https://www.larioja12.com.ar/feed/
+La Rioja|La Rioja Capital|Nueva Rioja|https://nuevarioja.com.ar/feed/
+La Rioja|La Rioja Capital|Medios Provincia|https://mediosprovincia.com/feed/
+La Rioja|Chilecito|Diario Chilecito|https://diariochilecito.com.ar/feed/
+La Rioja|La Rioja Capital|La Rioja Noticias|https://lariojanoticias.com.ar/feed/
+La Rioja|Aimogasta|Aimogasta Noticias|https://aimogastanoticias.com.ar/feed/
+La Rioja|Famatina|Famatina Digital|https://famatinaonline.com/feed/
+La Rioja|Chepes|Chepes Noticias|https://chepesnoticias.com.ar/feed/
+La Rioja|Patquía|Patquía al Día|https://patquiaaldia.com.ar/feed/
+La Rioja|Villa Unión|Villa Unión Digital|https://villauniondigital.com.ar/feed/
+La Rioja|Chamical|Chamical Online|https://chamicalonline.com/feed/
+La Rioja|Olta|Olta Noticias|https://oltanoticias.com.ar/feed/
+La Rioja|La Rioja Capital|El Independiente - Policiales|https://www.elindependiente.com.ar/rss/policiales.xml
+La Rioja|Aimogasta|Aimogasta al Día|https://aimogastaaldia.com.ar/feed/
+La Rioja|Famatina|Famatina Noticias|https://famatanoticias.com.ar/feed/
+La Rioja|Chilecito|Chilecito Digital|https://chilecitodigital.com.ar/feed/
+La Rioja|Chepes|Chepes al Día|https://chepesaldia.com.ar/feed/
+La Rioja|Patquía|Patquía Noticias|https://patquianoticias.com.ar/feed/
+La Rioja|Villa Unión|Villa Unión Noticias|https://villaunionnoticias.com.ar/feed/
+La Rioja|Chamical|Chamical Digital|https://chamicaldigital.com.ar/feed/
+La Rioja|Olta|Olta al Día|https://oltaaldia.com.ar/feed/
+La Rioja|La Rioja Capital|El Independiente - Deportes|https://www.elindependiente.com.ar/rss/deportes.xml
+La Rioja|La Rioja Capital|Rioja 24|https://rioja24.com.ar/feed/
+La Rioja|Chilecito|La Rioja Deportes|https://lariojadeportes.com.ar/feed/
+La Rioja|La Rioja Capital|Cadena 3 - La Rioja|http://cadena3.com/rss/2MinutosdeNoticias-LaRioja.xml
+La Rioja|Malanzán|Malanzán Noticias|https://malanzanoticias.com.ar/feed/
+La Rioja|La Rioja Capital|La Rioja Ahora|https://lariojaahora.com.ar/feed/
+La Rioja|Villa Sanagasta|Sanagasta Noticias|https://sanagastanoticias.com.ar/feed/
+La Rioja|La Rioja Capital|Rioja Política|https://riojapolitica.com.ar/feed/
+La Rioja|Chilecito|Diario El Oeste|https://diarioeloeste.com.ar/feed/
+La Rioja|La Rioja Capital|Rioja Turismo|https://riojaturismo.com.ar/feed/
+La Rioja|La Rioja Capital|Diario El Sol|https://diarioelsol.com.ar/feed/
+La Rioja|Villa Unión|Noticias del Valle|https://noticiasdelvalle.com.ar/feed/
+La Rioja|La Rioja Capital|El Riojano|https://elriojano.com.ar/feed/
+La Rioja|Provincia (Rural)|Agro La Rioja|https://agrolarioja.com.ar/feed/
+Formosa|Formosa Capital|Diario Formosa|https://diarioformosa.com/feed/
+Formosa|Formosa Capital|La Mañana de Formosa|https://www.lamananaonline.com.ar/feed/
+Formosa|Formosa Capital|Diario Expres|https://diarioexpres.com.ar/feed/
+Formosa|Formosa Capital|Noticias Formosa|https://noticiasformosa.com/feed/
+Formosa|Formosa Capital|Formosa al Día|https://formosaaldia.com.ar/feed/
+Formosa|Formosa Capital|Radio La Voz|https://www.radiolavozfm.com.ar/feed/
+Formosa|Formosa Capital|Diario Uno Formosa|https://diariounoformosa.com.ar/feed/
+Formosa|Formosa Capital|Formosa Total|https://formosatotal.com.ar/feed/
+Formosa|Formosa Capital|Formosa Online|https://formosaonline.com.ar/feed/
+Formosa|Clorinda|Clorinda Noticias|https://clorindanoticias.com.ar/feed/
+Formosa|Pirané|Pirané Noticias|https://piranenoticias.com.ar/feed/
+Formosa|El Colorado|El Colorado Digital|https://elcoloradodigital.com.ar/feed/
+Formosa|Las Lomitas|Las Lomitas Noticias|https://laslomitasnoticias.com.ar/feed/
+Formosa|Laguna Blanca|Laguna Blanca Noticias|https://lagunablancanoticias.com.ar/feed/
+Formosa|Ingeniero Juárez|Juárez al Día|https://juarezaldia.com.ar/feed/
+Formosa|Clorinda|Clorinda al Día|https://clorindaaldia.com.ar/feed/
+Formosa|Formosa Capital|Diario Formosa - Policiales|https://diarioformosa.com/feed/policiales
+Formosa|Pirané|Pirané al Día|https://piranealdia.com.ar/feed/
+Formosa|El Colorado|El Colorado Noticias|https://elcoloradonoticias.com.ar/feed/
+Formosa|Las Lomitas|Las Lomitas al Día|https://laslomitasaldia.com.ar/feed/
+Formosa|Laguna Blanca|Laguna Blanca al Día|https://lagunablancaaldia.com.ar/feed/
+Formosa|Ingeniero Juárez|Juárez Noticias|https://juareznoticias.com.ar/feed/
+Formosa|Clorinda|Diario Clorinda|https://diarioclorinda.com.ar/feed/
+Formosa|Formosa Capital|La Mañana - Deportes|https://www.lamananaonline.com.ar/feed/deportes
+Formosa|Formosa Capital|Formosa Hoy|https://formosahoy.com.ar/feed/
+Formosa|Pirané|Pirané Hoy|https://piranehoy.com.ar/feed/
+Formosa|El Colorado|El Colorado Hoy|https://elcoloradohoy.com.ar/feed/
+Formosa|Las Lomitas|Lomitas Hoy|https://lomitashoy.com.ar/feed/
+Formosa|Formosa Capital|Formosa Informa|https://formosainforma.com.ar/feed/
+Formosa|Formosa Capital|Diario El Comercial|https://diarioelcomercial.com.ar/feed/
+Formosa|Clorinda|Clorinda Hoy|https://clorindahoy.com.ar/feed/
+Formosa|Herradura|Herradura Noticias|https://herraduranoticias.com.ar/feed/
+Formosa|San Martín Dos|San Martín Dos Noticias|https://sanmartindosnoticias.com.ar/feed/
+Formosa|Formosa Capital|Formosa Turismo|https://formosaturismo.com.ar/feed/
+Formosa|Formosa Capital|Radio Formosa|https://radioformosa.com.ar/feed/
+Formosa|Clorinda|Radio Clorinda|https://radioclorinda.com.ar/feed/
+Formosa|Formosa Capital|Formosa Política|https://formosapolitica.com.ar/feed/
+Formosa|Formosa Capital|Formosa 360|https://formosa360.com.ar/feed/
+Formosa|Formosa Capital|Diario La Ciudad|https://diariolaciudad.com.ar/feed/
+Formosa|Provincia (Rural)|Agro Formosa|https://agroformosa.com.ar/feed/
+Santa Cruz|Río Gallegos|La Opinión Austral|https://www.laopinionaustral.com.ar/feed/
+Santa Cruz|Río Gallegos|Tiempo Sur|https://tiemposur.com.ar/feed/
+Santa Cruz|Caleta Olivia|La Vanguardia del Sur|https://lavanguardianoticias.com.ar/feed/
+Santa Cruz|Río Gallegos|El Diario Nuevo Día|https://eldiarionuevodia.com.ar/feed/
+Santa Cruz|Caleta Olivia|Voces y Apuntes|https://vocesyapuntes.com/feed/
+Santa Cruz|Río Gallegos|Santa Cruz al Día|https://santacruzaldia.com.ar/feed/
+Santa Cruz|Río Gallegos|Prensa Libre|https://prensalibrescz.com.ar/feed/
+Santa Cruz|Río Gallegos|Noticias Austral|https://noticiasaustral.com/feed/
+Santa Cruz|Río Gallegos|Radio LU12|https://lu12.com.ar/feed/
+Santa Cruz|Caleta Olivia|Caleta Olivia Noticias|https://caletaoliviaonline.com/feed/
+Santa Cruz|Puerto Deseado|Deseado Noticias Online|https://deseadonoticiasonline.com.ar/feed/
+Santa Cruz|El Calafate|Ahora Calafate|https://ahoracalafate.com.ar/feed/
+Santa Cruz|Puerto San Julián|San Julián Noticias|https://sanjuliannoticias.com.ar/feed/
+Santa Cruz|Pico Truncado|Truncado Digital|https://truncadodigital.com.ar/feed/
+Santa Cruz|Las Heras|Las Heras 24|https://lasheras24.com.ar/feed/
+Santa Cruz|28 de Noviembre|28 de Noviembre Noticias|https://28denoviembre.com.ar/feed/
+Santa Cruz|Río Gallegos|La Opinión Austral - Policiales|https://www.laopinionaustral.com.ar/feed/policiales
+Santa Cruz|Caleta Olivia|Caleta Olivia al Día|https://caletaoliviaaldia.com.ar/feed/
+Santa Cruz|El Calafate|El Calafate al Día|https://elcalafatealdia.com.ar/feed/
+Santa Cruz|Puerto San Julián|San Julián al Día|https://sanjulianaldia.com.ar/feed/
+Santa Cruz|Pico Truncado|Truncado Noticias|https://truncadonoticias.com.ar/feed/
+Santa Cruz|Las Heras|Las Heras al Día|https://lasherasaldia.com.ar/feed/
+Santa Cruz|Río Gallegos|Tiempo Sur - Deportes|https://tiemposur.com.ar/feed/deportes
+Santa Cruz|Comandante Luis Piedrabuena|Piedrabuena Noticias|https://piedrabuenanoticias.com.ar/feed/
+Santa Cruz|Gobernador Gregores|Gregores Noticias|https://gregoresnoticias.com.ar/feed/
+Santa Cruz|Río Turbio|Río Turbio al Día|https://rioturbioaldia.com.ar/feed/
+Santa Cruz|El Calafate|Calafate Noticias|https://calafatenoticias.com.ar/feed/
+Santa Cruz|Puerto Deseado|Noticias Deseado|https://noticiasdeseado.com.ar/feed/
+Santa Cruz|Caleta Olivia|Caleta Olivia Hoy|https://caletaolivia.info/feed/
+Santa Cruz|Río Gallegos|Río Gallegos Ahora|https://riogallegosahora.com.ar/feed/
+Santa Cruz|Puerto San Julián|Noticias San Julián|https://noticiassanjulian.com.ar/feed/
+Santa Cruz|Pico Truncado|Truncado Hoy|https://truncadohoy.com.ar/feed/
+Santa Cruz|Río Gallegos|Santa Cruz Política|https://santacruzpolitica.com.ar/feed/
+Santa Cruz|Las Heras|Las Heras Noticias|https://lasherasnoticias.com.ar/feed/
+Santa Cruz|Puerto Santa Cruz|Puerto Santa Cruz Noticias|https://puertosantacruznoticias.com.ar/feed/
+Santa Cruz|Río Gallegos|Radio Santa Cruz|https://radiosantacruz.com.ar/feed/
+Santa Cruz|El Calafate|El Calafate Turismo|https://elcalafate.tur.ar/feed/
+Santa Cruz|Río Gallegos|Diario Provincia|https://diarioprovincia.com.ar/feed/
+Santa Cruz|Río Gallegos|Santa Cruz Hoy|https://santacruzhoy.com.ar/feed/
+Santa Cruz|Provincia (Energía)|Energía Santa Cruz|https://energiasantacruz.com.ar/feed/
+
+##############
+ENLACES PUROS:
+
+Bloque 1/5: Enlaces RSS (160 URLs)
+(Buenos Aires, Santa Fe, Córdoba, Mendoza)
+
+https://www.clarin.com/rss/lo-ultimo/
+https://www.lanacion.com.ar/arc/outboundfeeds/rss/stream/todas_las_noticias/?outputType=xml
+https://www.infobae.com/new-resizer/yP1l3i7Q-g_k8oYc5S1j1j-e3yY=/arc-rss-bfeed-infobae/
+https://www.pagina12.com.ar/rss/portada
+https://www.ambito.com/rss/feed.xml
+https://www.telam.com.ar/rss/
+https://www.eldia.com/rss/feed.xml
+https://www.lacapitalmdp.com/feed/
+https://www.lanueva.com/rss/feed.xml
+https://www.diariohoy.net/feed/
+https://www.quedigital.com.ar/feed/
+https://www.wips.com.ar/feed/
+https://www.0221.com.ar/feed
+https://www.eleco.com.ar/feed/
+https://www.diariodemocracia.com/feed/
+https://www.elpopular.com.ar/feed/
+https://www.diarioelnorte.com.ar/feed/
+https://www.pilaradiario.com/feed/
+https://www.elmarplatense.com/feed/
+https://bahiablancaaldia.com/feed/
+https://laplatahoy.com/feed/
+https://www.tandildiario.com/feed/
+https://www.diariodejunin.com.ar/feed/
+https://www.diarionecochea.com/feed/
+https://www.laopinionpergamino.com.ar/feed/
+https://www.lavozdezarate.com/feed/
+https://campananoticias.com/feed/
+https://www.lagacetadechivilcoy.com.ar/feed/
+https://minutobalcarce.com.ar/feed/
+https://www.diarioeltiempodeazul.com.ar/feed/
+https://www.noticiasmercedinas.com/feed/
+https://www.sanpedroinforma.com.ar/feed/
+https://www.elcronista.com.ar/feed/
+https://pinamardiario.com.ar/feed/
+https://compromisodiario.com.ar/feed/
+https://brandsenhoy.com.ar/feed/
+https://elperiodista3a.com.ar/feed/
+https://www.lapostadelnoroeste.com.ar/feed/
+https://diariolider.com.ar/feed/
+https://www.diarionoticias.com.ar/feed/
+https://www.lacapital.com.ar/rss/feed.xml
+https://www.ellitoral.com/index.xml
+https://www.rosario3.com/rss/feed.xml
+https://www.airedesantafe.com.ar/feed/
+http://cadena3.com/rss/2MinutosdeNoticias-Rosario.xml
+https://lt10.com.ar/feed/
+https://www.conclusion.com.ar/feed/
+https://www.unosantafe.com.ar/rss/feed.xml
+https://diariocastellanos.net/feed/
+https://www.ellitoral.com/index.xml?q=venado+tuerto
+https://reconquistahoy.com/feed/
+https://www.esperanzadiapordia.com.ar/feed/
+https://www.casildaplus.com/feed/
+https://elportaldecanadadegomez.com/feed/
+https://sl24.com.ar/feed/
+https://via.com.ar/rosario/feed
+https://galvezhoy.com.ar/feed/
+https://www.elciudadanoweb.com/feed/
+https://santafenoticias.com.ar/feed/
+https://rafaelanoticias.com/feed/
+https://www.diarioelinforme.com.ar/feed/
+https://diarioreconquista.com.ar/feed/
+https://noticiasesperanza.com/feed/
+https://www.lapostacasilda.com/feed/
+https://sanjustonoticias.com.ar/feed/
+https://corondahoy.com.ar/feed/
+https://rosarionet.com.ar/feed/
+https://puntobiz.com.ar/feed/
+https://sunchaleshoy.com.ar/feed/
+https://tostadonoticias.com.ar/feed/
+https://vggnoticias.com.ar/feed/
+https://rosarioaldia.com.ar/feed/
+https://santafepost.com/feed/
+https://rafaelaaldia.com.ar/feed/
+https://venado24.com.ar/feed/
+https://radioamanecer.com.ar/feed/
+https://deportesrosario.com.ar/feed/
+https://santafeturismo.com.ar/feed/
+https://agrolitoral.com.ar/feed/
+https://rosariopolitica.com/feed/
+https://www.lavoz.com.ar/rss.xml
+http://cadena3.com/rss/2MinutosdeNoticias-Cordoba.xml
+https://eldoce.tv/feed/
+https://www.perfil.com/feed/cordoba
+https://www.puntal.com.ar/feed/
+https://villamariaya.com/feed/
+https://carlospazvivo.com/feed/
+https://masradio.com.ar/feed/
+https://elperiodico.com.ar/feed/
+https://tercerionoticias.com.ar/feed/
+https://www.eldiariodecarlospaz.com/feed/
+https://www.telediariodigital.net/feed/
+https://eldiariocba.com.ar/feed/
+https://jesusmarianoticias.com/feed/
+https://sanfranciscohoy.com.ar/feed/
+https://resumendesanjuan.com.ar/feed/
+https://cba24n.com.ar/feed/
+https://riocuartoaldia.com.ar/feed/
+https://villamariaaldia.com.ar/feed/
+https://infonegocios.info/feed/
+https://lafaldanoticias.com.ar/feed/
+https://www.lavoz.com.ar/rss/deportes.xml
+https://riocuartonoticias.com/feed/
+https://villamariainfo.com/feed/
+https://carlospazhoy.com.ar/feed/
+https://sanfranciscoaldia.com.ar/feed/
+https://cordobapolitica.com.ar/feed/
+https://villadoloresnoticias.com.ar/feed/
+https://arroyitonoticias.com.ar/feed/
+https://cosquinhoy.com.ar/feed/
+https://minaclaveronoticias.com.ar/feed/
+https://altagraciadenoticias.com.ar/feed/
+https://agrocordoba.com.ar/feed/
+https://jesusmariahoy.com.ar/feed/
+https://lacaleranoticias.com.ar/feed/
+https://generalcabreranoticias.com.ar/feed/
+https://rioterceronoticias.com.ar/feed/
+https://www.losandes.com.ar/rss/feed.xml
+https://www.mdzol.com/feed/
+https://www.diariouno.com.ar/rss/feed.xml
+https://www.diariosanrafael.com.ar/feed/
+https://www.sitioandino.com.ar/feed/
+https://www.elsol.com.ar/feed/
+https://generalalveardiario.com.ar/feed/
+https://www.mediamza.com/feed/
+https://rivadaviaonline.com.ar/feed/
+https://via.com.ar/mendoza/feed
+https://www.diariodesanmartin.com.ar/feed/
+https://tupungatodigital.com.ar/feed/
+https://malargueadiario.com/feed/
+https://maipunoticias.com.ar/feed/
+https://www.mdzol.com/rss/politica
+https://sanrafaelaldia.com/feed/
+https://alveardiario.com.ar/feed/
+https://lujannoticias.com.ar/feed/
+https://elcuco.com.ar/feed/
+https://diariomendoza.com.ar/feed/
+https://www.losandes.com.ar/rss/deportes.xml
+https://sanrafaelhoy.com/feed/
+https://alvearaldia.com.ar/feed/
+https://tupungatonoticias.com.ar/feed/
+https://malarguediario.com.ar/feed/
+https://maipualdia.com.ar/feed/
+https://sanmartinnoticias.com.ar/feed/
+https://tunuyannoticias.com.ar/feed/
+https://agromendoza.com.ar/feed/
+https://godoycruznoticias.com.ar/feed/
+https://lasherasnoticias.com.ar/feed/
+https://guaymallenoticias.com.ar/feed/
+http://cadena3.com/rss/2MinutosdeNoticias-Mendoza.xml
+https://rivadavianoticias.com.ar/feed/
+https://lujanaldia.com.ar/feed/
+https://mendozapost.com/feed/
+https://noticiasmendoza.com.ar/feed/
+ 
+
+Bloque 2/5: Enlaces RSS (200 URLs)
+(Tucumán, Salta, Chaco, Río Negro, 
+Neuquén)
+
+https://www.lagaceta.com.ar/rss/feed/seccion-tucuman.xml
+https://www.eltucumano.com/feed/
+https://tucumannoticias.com.ar/feed/
+https://www.lv12.com.ar/feed/
+https://www.losprimeros.tv/feed/
+https://contextotucuman.com/feed/
+https://www.diariodetucuman.com.ar/feed/
+https://yerbabuenadigital.com.ar/feed/
+https://tafiviejonoticias.com.ar/feed/
+https://www.lagaceta.com.ar/rss/feed/seccion-politica.xml
+https://monterosnoticias.com.ar/feed/
+https://famaillanoticias.com.ar/feed/
+https://aguilaresdigital.com.ar/feed/
+https://alderetesaldia.com.ar/feed/
+https://bandadelriosalinoticias.com.ar/feed/
+https://simocanoticias.com.ar/feed/
+https://bellavistatucuman.com.ar/feed/
+https://lulesnoticias.com.ar/feed/
+https://www.lagaceta.com.ar/rss/feed/seccion-policiales.xml
+https://tucumanadiario.com.ar/feed/
+https://concepcionaldia.com.ar/feed/
+https://yerbabuenanoticias.com.ar/feed/
+https://tafiviejoaldia.com.ar/feed/
+https://www.lagaceta.com.ar/rss/feed/seccion-deportes.xml
+https://monterosaldia.com.ar/feed/
+https://famaillaaldia.com.ar/feed/
+https://aguilaresnoticias.com.ar/feed/
+https://www.eltucumano.com/feed/politica
+https://www.lagaceta.com.ar/rss/feed/seccion-yerbabuenadigital.xml
+https://tafidelvallenoticias.com.ar/feed/
+https://infotucuman.com.ar/feed/
+https://diariodelsur.com.ar/feed/
+https://yerbabuenahoy.com.ar/feed/
+https://tafidigital.com.ar/feed/
+https://tucumanshow.com/feed/
+https://trancasnoticias.com.ar/feed/
+https://www.diario24.com/feed/
+https://agrotucuman.com.ar/feed/
+https://lastalitasnoticias.com.ar/feed/
+https://alberdinoticias.com.ar/feed/
+https://www.eltribuno.com/rss-new/salta/portada.rss
+https://saltasoy.com.ar/feed/
+https://www.informatesalta.com.ar/feed/
+https://nuevodiariodesalta.com.ar/feed/
+http://cadena3.com/rss/2MinutosdeNoticias-Salta.xml
+https://www.eltribuno.com/rss-new/salta/politica.rss
+https://www.eltribuno.com/rss-new/oran/portada.rss
+https://tartagalaldia.com.ar/feed/
+https://metannoticias.com.ar/feed/
+https://cafayatealdia.com.ar/feed/
+https://guemeshoy.com.ar/feed/
+https://rosariodelafrontera.com.ar/feed/
+https://www.eltribuno.com/rss-new/salta/policiales.rss
+https://oranaldia.com.ar/feed/
+https://tartagalnoticias.com.ar/feed/
+https://metanaldia.com.ar/feed/
+https://cafayatenoticias.com.ar/feed/
+https://www.eltribuno.com/rss-new/salta/deportes.rss
+https://guemesnoticias.com.ar/feed/
+https://rosariodelafronteraaldia.com.ar/feed/
+https://saltapost.com.ar/feed/
+https://diariooran.com.ar/feed/
+https://radiocadena99.com.ar/feed/
+https://saltaaldia.com.ar/feed/
+https://cerrillosnoticias.com.ar/feed/
+https://jvgnoticias.com.ar/feed/
+https://saltanoticias.com.ar/feed/
+https://via.com.ar/tartagal/feed
+https://saltapolitica.com.ar/feed/
+https://orannoticias.com.ar/feed/
+https://diariometan.com.ar/feed/
+https://cafayatedigital.com.ar/feed/
+https://saltaturismo.com.ar/feed/
+https://guemesdigital.com.ar/feed/
+https://rosariodelerma.com.ar/feed/
+https://saltacapitalnoticias.com.ar/feed/
+https://agrosalta.com.ar/feed/
+https://cachinoticias.com.ar/feed/
+https://www.eltribuno.com/rss-new/salta/deportes.rss
+https://www.diarionorte.com/feed/
+https://www.diariochaco.com/feed/
+https://www.datachaco.com/feed/
+https://www.chacodiapordia.com/feed/
+https://novachaco.com/feed/
+https://lavozdelchaco.com/feed/
+https://eldiariodelaregion.com.ar/feed/
+http://cadena3.com/rss/2MinutosdeNoticias-Chaco.xml
+https://chaconline.com.ar/feed/
+https://diariosaenzpena.com.ar/feed/
+https://villaangelahoy.com.ar/feed/
+https://charatanoticias.com/feed/
+https://saenzpenaaldia.com.ar/feed/
+https://quitilipinoticias.com.ar/feed/
+https://www.diarionorte.com/rss/policiales
+https://villaangelanoticias.com.ar/feed/
+https://charataaldia.com.ar/feed/
+https://www.diariochaco.com/rss/deportes
+https://barranquerasnoticias.com.ar/feed/
+https://castellinoticias.com.ar/feed/
+https://quitilipialdia.com.ar/feed/
+https://chacoahora.com.ar/feed/
+https://chacopoliciales.com.ar/feed/
+https://saenzpenanoticias.com.ar/feed/
+https://villaangeladigital.com.ar/feed/
+https://www.diarionorte.com/rss/politica
+https://radiocharata.com.ar/feed/
+https://machagainoticias.com.ar/feed/
+https://sanmartinchanoticias.com.ar/feed/
+https://pampadelinfiernonoticias.com.ar/feed/
+https://laspalmasnoticias.com.ar/feed/
+https://resistenciaaldia.com.ar/feed/
+https://agrochaco.com.ar/feed/
+https://coroneldugratynoticias.com.ar/feed/
+https://hermosocamponoticias.com.ar/feed/
+https://www.diariochaco.com/rss/opinion
+https://chacoenlinea.com.ar/feed/
+https://www.rionegro.com.ar/feed/
+https://www.noticiasnet.com.ar/feed/
+https://www.elcordillerano.com.ar/feed/
+https://www.diariolamanana.com.ar/feed/
+https://noticiasdelacosta.com.ar/feed/
+https://bariloche2000.com/feed/
+https://rocadigital.com.ar/feed/
+https://cipollettinoticias.com.ar/feed/
+https://viedmaaldia.com.ar/feed/
+https://diariobariloche.com/feed/
+https://rocanoticias.com.ar/feed/
+https://cipollettialdia.com.ar/feed/
+https://www.noticiasnet.com.ar/feed/policiales
+https://barilochealdia.com.ar/feed/
+https://www.rionegro.com.ar/deportes/feed/
+https://villareginaldia.com.ar/feed/
+https://sanantoniooestenoticias.com.ar/feed/
+https://choelechoelnoticias.com.ar/feed/
+https://rionegrohoy.com.ar/feed/
+https://viedmanoticias.com.ar/feed/
+https://barilochedigital.com.ar/feed/
+https://diariolacomarca.com.ar/feed/
+https://lacomunanoticias.com.ar/feed/
+https://viedmahoy.com.ar/feed/
+https://www.elcordillerano.com.ar/feed/politica
+https://rocaaldia.com.ar/feed/
+https://cipollettihoy.com.ar/feed/
+https://lasgrutasnoticias.com.ar/feed/
+https://villareginanoticias.com.ar/feed/
+https://rionegrodeportes.com.ar/feed/
+https://elbolsonnoticias.com.ar/feed/
+https://allennoticias.com.ar/feed/
+https://agrorionegro.com.ar/feed/
+https://catriel24.com.ar/feed/
+https://riocoloradonoticias.com.ar/feed/
+https://rionegroturismo.com.ar/feed/
+https://www.rionegro.com.ar/neuquen/feed/
+https://www.lmneuquen.com/rss/feed.xml
+https://www.noticiasdenqn.com.ar/feed/
+https://www.neuquenalinstante.com.ar/feed/
+https://cutralcoalinstante.com/feed/
+https://www.diarioandino.com.ar/feed/
+https://mejorinformado.com/feed/
+https://neuquenhoy.com.ar/feed/
+https://vacamuertanews.com.ar/feed/
+https://neuquen24.com.ar/feed/
+https://cutralconoticias.com.ar/feed/
+https://sanmartinadiario.com.ar/feed/
+https://www.lmneuquen.com/rss/seccion/politica
+https://zapalanoticias.com.ar/feed/
+https://plottiernoticias.com.ar/feed/
+https://centenariodigital.com.ar/feed/
+https://www.rionegro.com.ar/policiales/feed/
+https://neuquenaldia.com.ar/feed/
+https://cutralcohoy.com.ar/feed/
+https://sanmartinnoticias.com.ar/feed/
+https://www.rionegro.com.ar/deportes/feed/
+https://zapalaaldia.com.ar/feed/
+https://plottieraldia.com.ar/feed/
+https://centenarionoticias.com.ar/feed/
+https://neuquendeportes.com.ar/feed/
+https://laangosturadigital.com.ar/feed/
+https://juninnoticias.com.ar/feed/
+https://chosmalalnoticias.com.ar/feed/
+https://neuquenminero.com.ar/feed/
+https://cutralcodigital.com.ar/feed/
+https://sanmartinaldia.com.ar/feed/
+https://neuqueninforma.com.ar/feed/
+https://zapaladigital.com.ar/feed/
+https://via.com.ar/neuquen/feed
+https://plottierhoy.com.ar/feed/
+https://centenariohoy.com.ar/feed/
+https://villalaangosturanoticias.com.ar/feed/
+https://junindelosandesnoticias.com.ar/feed/
+https://agroneuquen.com.ar/feed/
+
+
+Bloque 3/5: Enlaces RSS (200 URLs)
+(Entre Ríos, San Juan, Chubut, Corrientes, Santiago del Estero)
+
+https://www.elonce.com/rss/feed.xml
+https://www.unoentrerios.com.ar/rss/feed.xml
+https://www.diarioelsol.com.ar/feed/
+https://ahoraeldia.com/feed/
+https://diarioriouruguay.com.ar/feed/
+https://www.eldiaonline.com/feed/
+https://www.lacalle.com.ar/feed/
+https://noticiasdeparana.com.ar/feed/
+https://gualeguayaldia.com.ar/feed/
+https://villaguaynoticias.com.ar/feed/
+https://concordiahoy.com.ar/feed/
+https://gualeguaychuahora.com/feed/
+https://paranaaldia.com.ar/feed/
+https://chajarialdia.com.ar/feed/
+https://federalaldia.com.ar/feed/
+https://victoriadigital.com.ar/feed/
+https://www.elonce.com/rss/policiales.xml
+https://concordianoticias.com.ar/feed/
+https://gualeguaychunoticias.com.ar/feed/
+https://www.unoentrerios.com.ar/rss/deportes.xml
+https://www.lacalle.com.ar/feed/deportes
+https://crespoaldia.com.ar/feed/
+https://diamantenoticias.com.ar/feed/
+https://parananoticias.com.ar/feed/
+https://lapazdigital.com.ar/feed/
+https://sansalvadordigital.com.ar/feed/
+https://nogoyanoticias.com.ar/feed/
+https://via.com.ar/concordia/feed
+https://www.eldebatepregon.com.ar/feed/
+https://paranahoy.com.ar/feed/
+https://villaguayaldia.com.ar/feed/
+https://agroentrerios.com.ar/feed/
+https://mariagrandenoticias.com.ar/feed/
+https://paranadeportes.com.ar/feed/
+https://basaenoticia.com/feed/
+https://ramireznoticias.com.ar/feed/
+https://entrerios.tur.ar/feed/
+https://paranapolitica.com.ar/feed/
+https://chajarinoticias.com.ar/feed/
+https://victorianoticias.com.ar/feed/
+https://www.diariodecuyo.com.ar/rss/index.xml
+https://www.tiempodesanjuan.com/feed/
+https://www.sanjuana8.com/feed/
+https://www.elzonda.com.ar/feed/
+https://diarioelpais.com.ar/feed/
+https://www.canal13sanjuan.com/feed/
+https://sanjuanaldia.com/feed/
+https://elsoldecaucete.com.ar/feed/
+https://jachalmagazine.com.ar/feed/
+https://www.diariodecuyo.com.ar/rss/politica.xml
+https://caucastedigital.com.ar/feed/
+https://jachalaldia.com.ar/feed/
+https://www.tiempodesanjuan.com/feed/deportes
+https://sanjuanalmomento.com.ar/feed/
+https://www.diariodecuyo.com.ar/rss/policiales.xml
+https://albardonnoticias.com.ar/feed/
+https://rivadaviasanjuanoticias.com.ar/feed/
+https://chimbasnoticias.com.ar/feed/
+https://sanjuanminero.com.ar/feed/
+https://caucetenoticias.com.ar/feed/
+https://jachalnoticias.com.ar/feed/
+https://sanjuanahora.com.ar/feed/
+https://sanjuan.deportes.com.ar/feed/
+https://via.com.ar/san-juan/feed
+https://sarmientonoticias.com.ar/feed/
+https://iglesianoticias.com.ar/feed/
+https://diarioelsolsanjuan.com.ar/feed/
+https://rawsonsanjuanoticias.com.ar/feed/
+https://sanjuaninforma.com.ar/feed/
+https://calingastanoticias.com.ar/feed/
+https://9dejuliosanjuanoticias.com.ar/feed/
+https://sanjuanpost.com.ar/feed/
+https://agrosanjuan.com.ar/feed/
+https://sanjuan.tur.ar/feed/
+http://cadena3.com/rss/2MinutosdeNoticias-SanJuan.xml
+https://vallefertilnoticias.com.ar/feed/
+https://sanjuanpolitica.com.ar/feed/
+https://pocitonoticias.com.ar/feed/
+https://angaconoticias.com.ar/feed/
+https://www.elchubut.com.ar/rss/feed.xml
+https://www.diariocronica.com.ar/feed/
+https://www.elchubut.com.ar/rss/madryn.xml
+https://www.adnsur.com.ar/feed/
+https://www.diariojornada.com.ar/feed/
+https://noticiasdeesquel.com/feed/
+https://www.elpatagonico.com/rss/feed.xml
+https://rawsonnoticias.com.ar/feed/
+https://madryntv.com/feed/
+https://trelewnoticias.com.ar/feed/
+https://esquelaldia.com.ar/feed/
+https://www.diariocronica.com.ar/feed/deportes
+https://www.elchubut.com.ar/rss/politica.xml
+https://madrynaldia.com.ar/feed/
+https://trelewaldia.com.ar/feed/
+https://esquelnoticias.com.ar/feed/
+https://www.adnsur.com.ar/feed/policiales
+https://rawsonaldia.com.ar/feed/
+https://madrynhoy.com.ar/feed/
+https://trelewhoy.com.ar/feed/
+https://diarioesquel.com/feed/
+https://comodoronoticias.com.ar/feed/
+https://trevelinnoticias.com.ar/feed/
+https://sarmientochubutnoticias.com.ar/feed/
+https://madryndigital.com.ar/feed/
+https://comodoro24.com.ar/feed/
+https://via.com.ar/trelew/feed
+https://chubutaldia.com.ar/feed/
+https://esquelhoy.com.ar/feed/
+https://madryndeportes.com.ar/feed/
+https://www.diariocronica.com.ar/feed/politica
+https://chubutnoticias.com.ar/feed/
+https://elmaitennoticias.com.ar/feed/
+https://gaimannoticias.com.ar/feed/
+https://chubutturismo.com.ar/feed/
+https://agrochubut.com.ar/feed/
+https://radatillynoticias.com.ar/feed/
+https://sarmientoaldia.com.ar/feed/
+https://www.ellitoral.com.ar/rss/feed.xml
+https://www.diarioepoca.com/feed/
+https://corrienteshoy.com/feed/
+https://powernoticias.com.ar/feed/
+https://diariocorrientes.com.ar/feed/
+https://www.radiodos.com.ar/feed/
+https://www.tumercedes.com/feed/
+https://pasodeloslibreshoy.com.ar/feed/
+https://curuzudigital.com.ar/feed/
+https://corrientesaldia.com.ar/feed/
+https://goyanoticias.com.ar/feed/
+https://mercedesnoticias.com.ar/feed/
+https://www.ellitoral.com.ar/rss/policiales.xml
+https://libresnoticias.com.ar/feed/
+https://curuzunoticias.com.ar/feed/
+https://www.diarioepoca.com/feed/deportes
+https://goyaaldia.com.ar/feed/
+https://mercedesaldia.com.ar/feed/
+https://via.com.ar/corrientes/feed
+https://pasodeloslibresnoticias.com.ar/feed/
+https://curuzualdia.com.ar/feed/
+https://esquina365.com.ar/feed/
+https://bellavistacorrientes.com.ar/feed/
+https://santoomenoticias.com.ar/feed/
+https://corrientesnoticias.com.ar/feed/
+https://goyahoy.com.ar/feed/
+https://merceshondia.com.ar/feed/
+https://www.diarioellibertador.com.ar/feed/
+https://libresaldia.com.ar/feed/
+https://radiocuruzu.com.ar/feed/
+https://esquinanoticias.com.ar/feed/
+https://bellavistanoticias.com.ar/feed/
+https://santotomealdia.com.ar/feed/
+https://agrocorrientes.com.ar/feed/
+https://corrientespolitica.com.ar/feed/
+https://ituzaingonoticias.com.ar/feed/
+https://saladasnoticias.com.ar/feed/
+https://www.elliberal.com.ar/rss/feed.xml
+https://www.nuevodiarioweb.com.ar/feed/
+https://www.diariopanorama.com/rss/feed.xml
+https://santiagodelesteroaldia.com.ar/feed/
+https://labandanoticias.com.ar/feed/
+https://diariolaregion.com.ar/feed/
+https://termasderiohondonoticias.com.ar/feed/
+https://friasdigital.com.ar/feed/
+https://anatuyanoticias.com.ar/feed/
+https://www.elliberal.com.ar/rss/politica.xml
+https://labandaaldia.com.ar/feed/
+https://santiagodelesteronoticias.com.ar/feed/
+https://termasderiohondoaldia.com.ar/feed/
+https://friasnoticias.com.ar/feed/
+https://anatuyaaldia.com.ar/feed/
+https://www.elliberal.com.ar/rss/policiales.xml
+https://diariolabanda.com.ar/feed/
+https://santiagodelesterohoy.com.ar/feed/
+https://termasnoticias.com.ar/feed/
+https://diariofrias.com.ar/feed/
+https://www.nuevodiarioweb.com.ar/feed/deportes
+https://labandahoy.com.ar/feed/
+https://quimilinoticias.com.ar/feed/
+https://fernandeznoticias.com.ar/feed/
+https://santiagodelesteropolitica.com.ar/feed/
+https://loretonoticias.com.ar/feed/
+https://montequemadonoticias.com.ar/feed/
+https://diariopopularsantiago.com.ar/feed/
+https://termasdigital.com.ar/feed/
+https://friashoy.com.ar/feed/
+https://anatuyahoy.com.ar/feed/
+https://santiagoturismo.com.ar/feed/
+https://labandadigital.com.ar/feed/
+https://quimilialdia.com.ar/feed/
+https://fernandezaldia.com.ar/feed/
+https://agrosantiago.com.ar/feed/
+https://santiago365.com.ar/feed/
+https://banderanoticias.com.ar/feed/
+https://beltrannoticias.com.ar/feed/
+
+
+Bloque 4/5: Enlaces RSS (200 URLs)
+(Misiones, San Luis, Jujuy, La Pampa, Tierra del Fuego)
+
+https://misionesonline.net/feed/
+https://www.elterritorio.com.ar/rss/feed.xml
+https://www.primeraedicion.com.ar/feed/
+https://misionescuatro.com/feed/
+https://misionesaldia.com.ar/feed/
+https://noticiasdelacalle.com.ar/feed/
+https://iguazunoticias.com/feed/
+https://oberaonline.com.ar/feed/
+https://eldoradoaldia.com.ar/feed/
+https://misionesonline.net/feed/politica
+https://jardinamericanoticias.com.ar/feed/
+https://puertoriconoticias.com.ar/feed/
+https://www.primeraedicion.com.ar/feed/deportes
+https://iguazualdia.com.ar/feed/
+https://oberanoticias.com.ar/feed/
+https://eldoradonoticias.com.ar/feed/
+https://misionesonline.net/feed/policiales
+https://posadasaldia.com.ar/feed/
+https://iguazuhoy.com.ar/feed/
+https://oberaaldia.com.ar/feed/
+https://apostolesnoticias.com.ar/feed/
+https://sanvicentenoticias.com.ar/feed/
+https://via.com.ar/posadas/feed
+https://posadasnoticias.com.ar/feed/
+https://iguazudigital.com/feed/
+https://radioobera.com.ar/feed/
+https://eldoradohoy.com.ar/feed/
+https://misionesturismo.com.ar/feed/
+https://misionespost.com.ar/feed/
+https://alemnoticias.com.ar/feed/
+https://sanpedromisionesnoticias.com.ar/feed/
+https://montecarlonoticias.com.ar/feed/
+https://misionespolitica.com.ar/feed/
+https://candelarianoticias.com.ar/feed/
+https://noticiasmisiones.com.ar/feed/
+https://agromisiones.com.ar/feed/
+https://dosdemayonoticias.com.ar/feed/
+https://diariomisiones.com.ar/feed/
+https://radiomisiones.com.ar/feed/
+https://www.elterritorio.com.ar/rss/deportes.xml
+https://www.eldiariodesanluis.com/feed/
+https://sanluis24.com.ar/feed/
+https://www.elchorrillero.com/feed/
+https://agenciasanluis.com/feed/
+https://villamercedesnoticias.com.ar/feed/
+https://sanluisnoticias.com.ar/feed/
+https://merloaldia.com.ar/feed/
+https://lapuntanoticias.com.ar/feed/
+https://sanluisaldia.com.ar/feed/
+https://villamercedesaldia.com.ar/feed/
+https://merlohoy.com.ar/feed/
+https://lapuntaaldia.com.ar/feed/
+https://www.eldiariodesanluis.com/feed/deportes
+https://villamercedes.info/feed/
+https://merlonoticias.com.ar/feed/
+https://sanluishoy.com.ar/feed/
+https://villamercedesdigital.com.ar/feed/
+https://merlodigital.com.ar/feed/
+https://sanluispost.com.ar/feed/
+https://juanakoslaynoticias.com.ar/feed/
+https://sanfrancisconoticias.com.ar/feed/
+https://via.com.ar/san-luis/feed
+https://villamercedespolitica.com.ar/feed/
+https://sanluisdeportes.com.ar/feed/
+https://merloturismo.com.ar/feed/
+https://latomanoticias.com.ar/feed/
+https://sanluisinforma.com.ar/feed/
+https://concarannoticias.com.ar/feed/
+https://agrosanluis.com.ar/feed/
+https://sanluisnoticiaya.com.ar/feed/
+https://radiovillamercedes.com.ar/feed/
+https://potrerodelosfunesnoticias.com.ar/feed/
+https://sanluispolitica.com.ar/feed/
+https://diariosanluis.com.ar/feed/
+https://quinesnoticias.com.ar/feed/
+https://www.eldiariodesanluis.com/feed/policiales
+https://www.eltribuno.com/rss-new/jujuy/portada.rss
+https://www.todo-jujuy.com/feed/
+https://jujuyalmomento.com/feed/
+https://www.eltribuno.com/rss-new/jujuy/politica.rss
+https://jujuyaldia.com.ar/feed/
+https://www.eltribuno.com/rss-new/sampedro/portada.rss
+https://www.eltribuno.com/rss-new/libertador/portada.rss
+https://palpalaaldia.com.ar/feed/
+https://periconoticias.com.ar/feed/
+https://humahuacanoticias.com.ar/feed/
+https://jujuynoticias.com.ar/feed/
+https://sanpedronoticias.com.ar/feed/
+https://www.eltribuno.com/rss-new/jujuy/deportes.rss
+https://libertadornoticias.com.ar/feed/
+https://palpalanoticias.com.ar/feed/
+https://pericoaldia.com.ar/feed/
+https://jujuyhoy.com.ar/feed/
+https://sanpedroaldia.com.ar/feed/
+https://libertadoraldia.com.ar/feed/
+https://palpalahoy.com.ar/feed/
+https://pericohoy.com.ar/feed/
+https://jujuypost.com.ar/feed/
+https://tilcaranoticias.com.ar/feed/
+https://ledesmanoticias.com.ar/feed/
+https://jujuypolitica.com.ar/feed/
+https://laquiacanoticias.com.ar/feed/
+https://elcarmennoticias.com.ar/feed/
+https://jujuyturismo.com.ar/feed/
+https://www.eltribuno.com/rss-new/jujuy/policiales.rss
+https://via.com.ar/jujuy/feed
+https://sanpedrohoy.com.ar/feed/
+https://purmamarcanoticias.com.ar/feed/
+https://agrojujuy.com.ar/feed/
+https://yavinoticias.com.ar/feed/
+https://diariojujuy.com.ar/feed/
+http://cadena3.com/rss/2MinutosdeNoticias-Jujuy.xml
+https://jujuy.minero.com.ar/feed/
+https://jujuydigital.com.ar/feed/
+https://abrampampanoticias.com.ar/feed/
+https://www.laarena.com.ar/feed/
+https://www.eldiariodelapampa.com.ar/feed/
+https://picodigital.com.ar/feed/
+https://lapampanoticias.com.ar/feed/
+https://pampaonline.com.ar/feed/
+https://santarosanoticias.com.ar/feed/
+https://picoaldia.com.ar/feed/
+https://santa-rosa-aldia.com.ar/feed/
+https://generalpiconoticias.com.ar/feed/
+https://www.laarena.com.ar/feed/deportes
+https://piconoticias.com.ar/feed/
+https://lapampahoy.com.ar/feed/
+https://generalpicoaldia.com.ar/feed/
+https://santarosahoy.com.ar/feed/
+https://generalachanoticias.com.ar/feed/
+https://eduardocastexnoticias.com.ar/feed/
+https://lapampapolitica.com.ar/feed/
+https://picohoy.com.ar/feed/
+https://www.laarena.com.ar/feed/policiales
+https://generalpicohoy.com.ar/feed/
+https://generalachaaldia.com.ar/feed/
+https://eduardocastexaldia.com.ar/feed/
+https://agrolapampa.com.ar/feed/
+https://via.com.ar/la-pampa/feed
+https://toaynoticias.com.ar/feed/
+https://realiconoticias.com.ar/feed/
+https://radiolapampa.com.ar/feed/
+https://diariogeneralpico.com.ar/feed/
+https://lapampa.tur.ar/feed/
+https://macachinnoticias.com.ar/feed/
+https://santarosadigital.com.ar/feed/
+https://picodigital.com.ar/feed/
+https://victoricanoticias.com.ar/feed/
+https://lapampainforma.com.ar/feed/
+https://catrilonoticias.com.ar/feed/
+https://25demayolapampanoticias.com.ar/feed/
+https://picopost.com.ar/feed/
+https://lapampa24.com.ar/feed/
+https://www.eldiariodelfindelmundo.com/feed/
+https://www.elsureno.com.ar/feed/
+https://fmdelpueblo.com.ar/feed/
+https://reporteaustral.com.ar/feed/
+https://ushuaiamoticias.com.ar/feed/
+https://tiempofueguino.com/feed/
+https://tolhuinnoticias.com.ar/feed/
+https://ushuaiamoticias.com.ar/feed/
+https://riograndealdia.com.ar/feed/
+https://www.eldiariodelfindelmundo.com/feed/politica
+https://diariodigital.com.ar/feed/
+https://tolhuin.info/feed/
+https://www.eldiariodelfindelmundo.com/feed/deportes
+https://riograndenoticias.com.ar/feed/
+https://ushuaiatoday.com.ar/feed/
+https://riograndehoy.com.ar/feed/
+https://tolhuinhoy.com.ar/feed/
+https://ushuaiadigital.com.ar/feed/
+https://www.elsureno.com.ar/feed/politica
+https://ushuaiapost.com.ar/feed/
+https://riograndedigital.com.ar/feed/
+https://tierradelfuegopolitica.com.ar/feed/
+https://riogrande24.com.ar/feed/
+https://tdfturismo.com.ar/feed/
+https://riograndedeportes.com.ar/feed/
+https://ushuaiapost.com.ar/feed/
+https://www.elsureno.com.ar/feed/deportes
+https://tolhuindigital.com.ar/feed/
+https://tierradelfuegonoticias.com.ar/feed/
+https://riograndeinforma.com.ar/feed/
+https://via.com.ar/ushuaia/feed
+https://antartidanoticias.com.ar/feed/
+https://elfueguino.com.ar/feed/
+https://radioriogrande.com.ar/feed/
+https://ushuaiatv.com.ar/feed/
+https://www.elsureno.com.ar/feed/policiales
+https://riograndepost.com.ar/feed/
+
+
+Bloque 5/5: Enlaces RSS (160 URLs)
+(Catamarca, La Rioja, Formosa, Santa Cruz)
+
+https://elesquiu.com/feed/
+https://www.elancasti.com.ar/rss/feed.xml
+https://catamarcaya.com/feed/
+https://diarioc.com.ar/feed/
+https://catamarcaactual.com.ar/feed/
+https://tveo.com.ar/feed/
+https://launion.digital/feed/
+https://catamarcaesnoticia.com.ar/feed/
+https://catamarcadigital.com/feed/
+https://elpucara.com.ar/feed/
+https://beleninfo.com.ar/feed/
+https://andalgalaonline.com/feed/
+https://tinogastadigital.com.ar/feed/
+https://santamarianoticias.com.ar/feed/
+https://recreodigital.com.ar/feed/
+https://fmedigital.com.ar/feed/
+https://valleviejonoticias.com.ar/feed/
+https://fiambalahoy.com.ar/feed/
+https://capayannoticias.com.ar/feed/
+https://elesquiu.com/feed/policiales
+https://belenaldia.com.ar/feed/
+https://andalgalaldia.com.ar/feed/
+https://diariotinogasta.com.ar/feed/
+https://santamarialdia.com.ar/feed/
+https://recreonoticias.com.ar/feed/
+https://www.elancasti.com.ar/rss/deportes.xml
+https://fmenoticias.com.ar/feed/
+https://valleviejodigital.com.ar/feed/
+https://catamarcaminera.com.ar/feed/
+https://fiambaladigital.com/feed/
+https://capayanalldia.com.ar/feed/
+https://diariocatamarcad.com/feed/
+https://radiobelen.com.ar/feed/
+https://andalgalanoticias.com.ar/feed/
+https://tinogastanoticias.com.ar/feed/
+https://santarosacatamarca.com.ar/feed/
+https://catamarcaplural.com.ar/feed/
+https://paclinnoticias.com.ar/feed/
+https://ambatodigital.com.ar/feed/
+https://agrocatamarca.com.ar/feed/
+https://chilecitonoticias.com/feed/
+https://www.elindependiente.com.ar/rss/feed.xml
+https://riojavirtual.com.ar/feed/
+https://diariodelarioja.com.ar/feed/
+https://chilecitohoy.com.ar/feed/
+https://www.larioja12.com.ar/feed/
+https://nuevarioja.com.ar/feed/
+https://mediosprovincia.com/feed/
+https://diariochilecito.com.ar/feed/
+https://lariojanoticias.com.ar/feed/
+https://aimogastanoticias.com.ar/feed/
+https://famatinaonline.com/feed/
+https://chepesnoticias.com.ar/feed/
+https://patquiaaldia.com.ar/feed/
+https://villauniondigital.com.ar/feed/
+https://chamicalonline.com/feed/
+https://oltanoticias.com.ar/feed/
+https://www.elindependiente.com.ar/rss/policiales.xml
+https://aimogastaaldia.com.ar/feed/
+https://famatanoticias.com.ar/feed/
+https://chilecitodigital.com.ar/feed/
+https://chepesaldia.com.ar/feed/
+https://patquianoticias.com.ar/feed/
+https://villaunionnoticias.com.ar/feed/
+https://chamicaldigital.com.ar/feed/
+https://oltaaldia.com.ar/feed/
+https://www.elindependiente.com.ar/rss/deportes.xml
+https://rioja24.com.ar/feed/
+https://lariojadeportes.com.ar/feed/
+http://cadena3.com/rss/2MinutosdeNoticias-LaRioja.xml
+https://malanzanoticias.com.ar/feed/
+https://lariojaahora.com.ar/feed/
+https://sanagastanoticias.com.ar/feed/
+https://riojapolitica.com.ar/feed/
+https://diarioeloeste.com.ar/feed/
+https://riojaturismo.com.ar/feed/
+https://diarioelsol.com.ar/feed/
+https://noticiasdelvalle.com.ar/feed/
+https://elriojano.com.ar/feed/
+https://agrolarioja.com.ar/feed/
+https://diarioformosa.com/feed/
+https://www.lamananaonline.com.ar/feed/
+https://diarioexpres.com.ar/feed/
+https://noticiasformosa.com/feed/
+https://formosaaldia.com.ar/feed/
+https://www.radiolavozfm.com.ar/feed/
+https://diariounoformosa.com.ar/feed/
+https://formosatotal.com.ar/feed/
+https://formosaonline.com.ar/feed/
+https://clorindanoticias.com.ar/feed/
+https://piranenoticias.com.ar/feed/
+https://elcoloradodigital.com.ar/feed/
+https://laslomitasnoticias.com.ar/feed/
+https://lagunablancanoticias.com.ar/feed/
+https://juarezaldia.com.ar/feed/
+https://clorindaaldia.com.ar/feed/
+https://diarioformosa.com/feed/policiales
+https://piranealdia.com.ar/feed/
+https://elcoloradonoticias.com.ar/feed/
+https://laslomitasaldia.com.ar/feed/
+https://lagunablancaaldia.com.ar/feed/
+https://juareznoticias.com.ar/feed/
+https://diarioclorinda.com.ar/feed/
+https://www.lamananaonline.com.ar/feed/deportes
+https://formosahoy.com.ar/feed/
+https://piranehoy.com.ar/feed/
+https://elcoloradohoy.com.ar/feed/
+https://lomitashoy.com.ar/feed/
+https://formosainforma.com.ar/feed/
+https://diarioelcomercial.com.ar/feed/
+https://clorindahoy.com.ar/feed/
+https://herraduranoticias.com.ar/feed/
+https://sanmartindosnoticias.com.ar/feed/
+https://formosaturismo.com.ar/feed/
+https://radioformosa.com.ar/feed/
+https://radioclorinda.com.ar/feed/
+https://formosapolitica.com.ar/feed/
+https://formosa360.com.ar/feed/
+https://diariolaciudad.com.ar/feed/
+https://agroformosa.com.ar/feed/
+https://www.laopinionaustral.com.ar/feed/
+https://tiemposur.com.ar/feed/
+https://lavanguardianoticias.com.ar/feed/
+https://eldiarionuevodia.com.ar/feed/
+https://vocesyapuntes.com/feed/
+https://santacruzaldia.com.ar/feed/
+https://prensalibrescz.com.ar/feed/
+https://noticiasaustral.com/feed/
+https://lu12.com.ar/feed/
+https://caletaoliviaonline.com/feed/
+https://deseadonoticiasonline.com.ar/feed/
+https://ahoracalafate.com.ar/feed/
+https://sanjuliannoticias.com.ar/feed/
+https://truncadodigital.com.ar/feed/
+https://lasheras24.com.ar/feed/
+https://28denoviembre.com.ar/feed/
+https://www.laopinionaustral.com.ar/feed/policiales
+https://caletaoliviaaldia.com.ar/feed/
+https://elcalafatealdia.com.ar/feed/
+https://sanjulianaldia.com.ar/feed/
+https://truncadonoticias.com.ar/feed/
+https://lasherasaldia.com.ar/feed/
+https://tiemposur.com.ar/feed/deportes
+https://piedrabuenanoticias.com.ar/feed/
+https://gregoresnoticias.com.ar/feed/
+https://rioturbioaldia.com.ar/feed/
+https://calafatenoticias.com.ar/feed/
+https://noticiasdeseado.com.ar/feed/
+https://caletaolivia.info/feed/
+https://riogallegosahora.com.ar/feed/
+https://noticiassanjulian.com.ar/feed/
+https://truncadohoy.com.ar/feed/
+https://santacruzpolitica.com.ar/feed/
+https://lasherasnoticias.com.ar/feed/
+https://puertosantacruznoticias.com.ar/feed/
+https://radiosantacruz.com.ar/feed/
+https://elcalafate.tur.ar/feed/
+https://diarioprovincia.com.ar/feed/
+https://santacruzhoy.com.ar/feed/
+https://energiasantacruz.com.ar/feed/

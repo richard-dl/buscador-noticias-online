@@ -1,0 +1,50 @@
+═══════════════════════════════════════════════════════════════
+           REPORTE DE VALIDACIÓN DE FEEDS RSS
+           Fecha: 10/12/2025, 03:33:52
+═══════════════════════════════════════════════════════════════
+
+ESTADÍSTICAS GENERALES:
+  Total de feeds analizados: 888
+  Duplicados eliminados:     5
+  Feeds únicos analizados:   883
+
+RESULTADOS:
+  ✅ Válidos y activos:      74 (8.4%)
+  ⚠️  Abandonados (>30d):   15 (1.7%)
+  ❌ Inválidos/Error:        770 (87.2%)
+     - Timeout:              17
+     - Sin contenido:        7
+     - Otros errores:        746
+
+FEEDS POR PROVINCIA (válidos):
+  Buenos Aires: 7 feeds
+  Santa Fe: 7 feeds
+  Misiones: 6 feeds
+  Corrientes: 5 feeds
+  C�rdoba: 5 feeds
+  Entre R�os: 5 feeds
+  Mendoza: 5 feeds
+  La Rioja: 4 feeds
+  Salta: 4 feeds
+  San Luis: 4 feeds
+  Jujuy: 3 feeds
+  Catamarca: 2 feeds
+  Chaco: 2 feeds
+  Formosa: 2 feeds
+  La Pampa: 2 feeds
+  Neuqu�n: 2 feeds
+  San Juan: 2 feeds
+  Santa Cruz: 2 feeds
+  Tierra del Fuego: 2 feeds
+  Chubut: 1 feeds
+  R�o Negro: 1 feeds
+  Santiago del Estero: 1 feeds
+
+ARCHIVOS GENERADOS:
+  - RSS_validos_2025-12-10.txt
+  - RSS_invalidos_2025-12-10.txt
+  - RSS_abandonados_2025-12-10.txt
+  - RSS_duplicados_2025-12-10.txt
+  - RSS_feeds_2025-12-10.json
+
+═══════════════════════════════════════════════════════════════

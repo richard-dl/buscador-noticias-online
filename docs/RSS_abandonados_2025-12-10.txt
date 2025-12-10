@@ -1,0 +1,16 @@
+Provincia|Ciudad/Región|Medio|Enlace RSS|Última actualización
+Santa Fe|Venado Tuerto|Diario El Informe|https://www.diarioelinforme.com.ar/feed/|2024-07-15T17:29:29.000Z
+C�rdoba|San Francisco|El Peri�dico|https://elperiodico.com.ar/feed/|2025-08-04T13:35:30.000Z
+C�rdoba|Arroyito|Arroyito Noticias|https://arroyitonoticias.com.ar/feed/|2025-05-04T21:21:59.000Z
+Salta|Or�n|Diario El Tribuno Or�n|https://www.eltribuno.com/rss-new/oran/portada.rss|2017-02-14T04:30:00.000Z
+Salta|Tartagal|Tartagal Noticias|https://tartagalnoticias.com.ar/feed/|2025-05-27T14:25:22.000Z
+Chubut|Puerto Madryn|Diario El Chubut - Madryn|https://www.elchubut.com.ar/rss/madryn.xml|2017-04-25T03:17:00.000Z
+Chubut|Rawson|El Chubut - Pol�tica|https://www.elchubut.com.ar/rss/politica.xml|2025-11-10T16:08:00.000Z
+Jujuy|San Salvador de Jujuy|El Tribuno de Jujuy - Portada|https://www.eltribuno.com/rss-new/jujuy/portada.rss|2017-02-10T22:15:00.000Z
+Jujuy|San Salvador de Jujuy|El Tribuno de Jujuy - Pol�tica|https://www.eltribuno.com/rss-new/jujuy/politica.rss|2017-02-10T22:15:00.000Z
+Jujuy|Libertador General San Mart�n|El Tribuno Libertador|https://www.eltribuno.com/rss-new/libertador/portada.rss|2019-06-27T14:43:00.000Z
+Jujuy|San Salvador de Jujuy|El Tribuno de Jujuy - Deportes|https://www.eltribuno.com/rss-new/jujuy/deportes.rss|2017-02-10T22:15:00.000Z
+Jujuy|San Salvador de Jujuy|El Tribuno de Jujuy - Policiales|https://www.eltribuno.com/rss-new/jujuy/policiales.rss|2017-02-10T22:15:00.000Z
+La Rioja|La Rioja Capital|La Rioja Noticias|https://lariojanoticias.com.ar/feed/|2025-10-24T13:12:53.000Z
+La Rioja|Chilecito|Diario El Oeste|https://diarioeloeste.com.ar/feed/|2024-12-19T12:43:06.000Z
+Formosa|Formosa Capital|Radio Formosa|https://radioformosa.com.ar/feed/|2025-10-30T22:58:30.000Z

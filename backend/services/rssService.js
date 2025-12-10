@@ -17,19 +17,18 @@ const parser = new Parser({
 });
 
 // Feeds RSS de medios argentinos organizados por categoría y región
-// NOTA: Solo feeds verificados que funcionan (actualizado Dic 2024)
+// NOTA: Feeds verificados y funcionando (actualizado Dic 2025)
 const RSS_FEEDS = {
-  // Medios Nacionales
+  // =====================
+  // MEDIOS NACIONALES
+  // =====================
   nacionales: [
     { name: 'Clarín', url: 'https://www.clarin.com/rss/lo-ultimo/', category: 'general' },
     { name: 'La Nación', url: 'https://www.lanacion.com.ar/arc/outboundfeeds/rss/', category: 'general' },
-    { name: 'Noticias Argentinas', url: 'https://noticiasargentinas.com/rss', category: 'general' },
-    { name: 'Ámbito', url: 'https://www.ambito.com/rss/pages/home.xml', category: 'economia' },
     { name: 'Perfil', url: 'https://www.perfil.com/feed', category: 'general' },
-    { name: 'El Diario AR', url: 'https://www.eldiarioar.com/rss', category: 'general' },
     { name: 'Infobae', url: 'https://www.infobae.com/feeds/rss/', category: 'general' },
     { name: 'Página/12', url: 'https://www.pagina12.com.ar/rss/portada', category: 'general' },
-    { name: 'Crónica', url: 'https://www.cronica.com.ar/rss/', category: 'general' }
+    { name: 'Ámbito', url: 'https://www.ambito.com/rss/pages/home.xml', category: 'economia' }
   ],
 
   // Deportes
@@ -37,118 +36,217 @@ const RSS_FEEDS = {
     { name: 'Olé', url: 'https://www.ole.com.ar/rss/', category: 'deportes' },
     { name: 'Clarín Deportes', url: 'https://www.clarin.com/rss/deportes/', category: 'deportes' },
     { name: 'TyC Sports', url: 'https://www.tycsports.com/rss.xml', category: 'deportes' },
-    { name: 'La Nación Deportes', url: 'https://www.lanacion.com.ar/deportes/rss/', category: 'deportes' }
+    { name: 'La Voz Deportes', url: 'https://www.lavoz.com.ar/rss/deportes.xml', category: 'deportes', provincia: 'Córdoba' },
+    { name: 'Paraná Deportes', url: 'https://paranadeportes.com.ar/feed/', category: 'deportes', provincia: 'Entre Ríos' }
   ],
 
   // Política
   politica: [
     { name: 'Clarín Política', url: 'https://www.clarin.com/rss/politica/', category: 'politica' },
-    { name: 'Diagonales (La Plata)', url: 'https://www.diagonales.com/rss/', category: 'politica' },
     { name: 'La Nación Política', url: 'https://www.lanacion.com.ar/politica/rss/', category: 'politica' },
     { name: 'Infobae Política', url: 'https://www.infobae.com/politica/feed/', category: 'politica' },
-    { name: 'Yahoo Politics', url: 'https://news.yahoo.com/rss/politics', category: 'politica' }
+    { name: 'Rioja Política', url: 'https://riojapolitica.com.ar/feed/', category: 'politica', provincia: 'La Rioja' },
+    { name: 'El Tribuno Salta Política', url: 'https://www.eltribuno.com/rss-new/salta/politica.rss', category: 'politica', provincia: 'Salta' }
   ],
 
   // Economía
   economia: [
     { name: 'Ámbito Finanzas', url: 'https://www.ambito.com/rss/pages/economia.xml', category: 'economia' },
     { name: 'Clarín Economía', url: 'https://www.clarin.com/rss/economia/', category: 'economia' },
-    { name: 'Punto a Punto (Córdoba)', url: 'https://www.puntoapunto.com.ar/feed/', category: 'economia' }
+    { name: 'San Juan Minero', url: 'https://sanjuanminero.com.ar/feed/', category: 'economia', provincia: 'San Juan' },
+    { name: 'Agro Misiones', url: 'https://agromisiones.com.ar/feed/', category: 'economia', provincia: 'Misiones' }
   ],
 
   // Espectáculos
   espectaculos: [
-    { name: 'Clarín Espectáculos', url: 'https://www.clarin.com/rss/espectaculos/', category: 'espectaculos' },
-    { name: 'Yahoo Entertainment', url: 'https://news.yahoo.com/rss/entertainment', category: 'espectaculos' }
+    { name: 'Clarín Espectáculos', url: 'https://www.clarin.com/rss/espectaculos/', category: 'espectaculos' }
   ],
 
   // Tecnología
   tecnologia: [
-    { name: 'Clarín Tecnología', url: 'https://www.clarin.com/rss/tecnologia/', category: 'tecnologia' },
-    { name: 'Yahoo Tech', url: 'https://news.yahoo.com/rss/tech', category: 'tecnologia' }
-  ],
-
-  // Ciencia
-  ciencia: [
-    { name: 'Yahoo Science', url: 'https://news.yahoo.com/rss/science', category: 'ciencia' }
-  ],
-
-  // Salud
-  salud: [
-    { name: 'Yahoo Health', url: 'https://news.yahoo.com/rss/health', category: 'salud' }
+    { name: 'Clarín Tecnología', url: 'https://www.clarin.com/rss/tecnologia/', category: 'tecnologia' }
   ],
 
   // Internacionales
   internacionales: [
-    { name: 'Clarín Mundo', url: 'https://www.clarin.com/rss/mundo/', category: 'internacionales' },
-    { name: 'Yahoo World News', url: 'https://news.yahoo.com/rss/world', category: 'internacionales' }
+    { name: 'Clarín Mundo', url: 'https://www.clarin.com/rss/mundo/', category: 'internacionales' }
   ],
 
   // Policiales
   policiales: [
     { name: 'Clarín Policiales', url: 'https://www.clarin.com/rss/policiales/', category: 'policiales' },
-    { name: 'Crónica Policiales', url: 'https://www.cronica.com.ar/policiales/rss/', category: 'policiales' },
-    { name: 'Infobae Policiales', url: 'https://www.infobae.com/tag/policiales/feed/', category: 'policiales' }
+    { name: 'El Litoral Policiales', url: 'https://www.ellitoral.com.ar/rss/policiales.xml', category: 'policiales', provincia: 'Corrientes' },
+    { name: 'El Tribuno Salta Policiales', url: 'https://www.eltribuno.com/rss-new/salta/policiales.rss', category: 'policiales', provincia: 'Salta' }
   ],
 
   // =====================
-  // MEDIOS PROVINCIALES
+  // MEDIOS PROVINCIALES (74 feeds verificados Dic 2025)
   // =====================
 
-  // Buenos Aires
+  // Buenos Aires (7 feeds)
   buenosaires: [
-    { name: '0223 (Mar del Plata)', url: 'https://www.0223.com.ar/rss/', category: 'provincial', provincia: 'Buenos Aires' },
-    { name: 'Diagonales (La Plata)', url: 'https://www.diagonales.com/rss/', category: 'provincial', provincia: 'Buenos Aires' },
-    { name: 'Clarín Zona Norte', url: 'https://www.clarin.com/rss/zona-norte/', category: 'provincial', provincia: 'Buenos Aires' },
-    { name: 'Clarín Zona Oeste', url: 'https://www.clarin.com/rss/zona-oeste/', category: 'provincial', provincia: 'Buenos Aires' },
-    { name: 'Clarín Zona Sur', url: 'https://www.clarin.com/rss/zona-sur/', category: 'provincial', provincia: 'Buenos Aires' }
+    { name: 'Clarín', url: 'https://www.clarin.com/rss/lo-ultimo/', category: 'provincial', provincia: 'Buenos Aires', ciudad: 'Capital/AMBA' },
+    { name: 'Compromiso (Dolores)', url: 'https://compromisodiario.com.ar/feed/', category: 'provincial', provincia: 'Buenos Aires', ciudad: 'Dolores' },
+    { name: 'Qué Digital (Mar del Plata)', url: 'https://www.quedigital.com.ar/feed/', category: 'provincial', provincia: 'Buenos Aires', ciudad: 'General Pueyrredón' },
+    { name: 'La Posta del Noroeste (Lincoln)', url: 'https://www.lapostadelnoroeste.com.ar/feed/', category: 'provincial', provincia: 'Buenos Aires', ciudad: 'Lincoln' },
+    { name: 'La Capital (Mar del Plata)', url: 'https://www.lacapitalmdp.com/feed/', category: 'provincial', provincia: 'Buenos Aires', ciudad: 'Mar del Plata' },
+    { name: 'Pinamar Diario', url: 'https://pinamardiario.com.ar/feed/', category: 'provincial', provincia: 'Buenos Aires', ciudad: 'Pinamar' },
+    { name: 'Diario El Norte (San Nicolás)', url: 'https://www.diarioelnorte.com.ar/feed/', category: 'provincial', provincia: 'Buenos Aires', ciudad: 'San Nicolás' }
   ],
 
-  // Córdoba
-  cordoba: [
-    { name: 'El Diario de Carlos Paz', url: 'https://www.eldiariodecarlospaz.com.ar/rss/feed.html?r=3', category: 'provincial', provincia: 'Córdoba' },
-    { name: 'Punto a Punto', url: 'https://www.puntoapunto.com.ar/feed/', category: 'provincial', provincia: 'Córdoba' }
+  // Catamarca (2 feeds)
+  catamarca: [
+    { name: 'Belén Info', url: 'https://beleninfo.com.ar/feed/', category: 'provincial', provincia: 'Catamarca', ciudad: 'Belén' },
+    { name: 'Catamarca Digital', url: 'https://catamarcadigital.com/feed/', category: 'provincial', provincia: 'Catamarca', ciudad: 'Catamarca Capital' }
   ],
 
-  // Santa Fe
-  santafe: [
-    // Sin feeds verificados actualmente
+  // Chaco (2 feeds)
+  chaco: [
+    { name: 'Chaco Día por Día', url: 'https://www.chacodiapordia.com/feed/', category: 'provincial', provincia: 'Chaco', ciudad: 'Resistencia' },
+    { name: 'El Diario de la Región', url: 'https://eldiariodelaregion.com.ar/feed/', category: 'provincial', provincia: 'Chaco', ciudad: 'Resistencia' }
   ],
 
-  // Mendoza
-  mendoza: [
-    // Sin feeds verificados actualmente (MDZ y Los Andes no responden)
-  ],
-
-  // Tucumán
-  tucuman: [
-    // Sin feeds verificados actualmente
-  ],
-
-  // Salta
-  salta: [
-    { name: 'El Tribuno Salta', url: 'https://www.eltribuno.com/salta/feed', category: 'provincial', provincia: 'Salta' }
-  ],
-
-  // Misiones
-  misiones: [
-    { name: 'Primera Edición', url: 'https://www.primeraedicion.com.ar/feed/', category: 'provincial', provincia: 'Misiones' }
-  ],
-
-  // Río Negro / Patagonia
-  rionegro: [
-    { name: 'Diario Río Negro', url: 'https://www.rionegro.com.ar/feed/', category: 'provincial', provincia: 'Río Negro' }
-  ],
-
-  // Neuquén
-  neuquen: [
-    { name: 'Diario Río Negro', url: 'https://www.rionegro.com.ar/feed/', category: 'provincial', provincia: 'Neuquén' }
-  ],
-
-  // Chubut
+  // Chubut (1 feed)
   chubut: [
-    { name: 'El Diario Web', url: 'https://www.eldiarioweb.com/feed/', category: 'provincial', provincia: 'Chubut' }
-  ]
+    { name: 'Comodoro 24', url: 'https://comodoro24.com.ar/feed/', category: 'provincial', provincia: 'Chubut', ciudad: 'Comodoro Rivadavia' }
+  ],
+
+  // Córdoba (5 feeds)
+  cordoba: [
+    { name: 'Carlos Paz Hoy', url: 'https://carlospazhoy.com.ar/feed/', category: 'provincial', provincia: 'Córdoba', ciudad: 'Carlos Paz' },
+    { name: 'Carlos Paz Vivo', url: 'https://carlospazvivo.com/feed/', category: 'provincial', provincia: 'Córdoba', ciudad: 'Carlos Paz' },
+    { name: 'La Voz Deportes', url: 'https://www.lavoz.com.ar/rss/deportes.xml', category: 'provincial', provincia: 'Córdoba', ciudad: 'Córdoba Capital' },
+    { name: 'Perfil Córdoba', url: 'https://www.perfil.com/feed/cordoba', category: 'provincial', provincia: 'Córdoba', ciudad: 'Córdoba Capital' },
+    { name: 'Villa María Ya', url: 'https://villamariaya.com/feed/', category: 'provincial', provincia: 'Córdoba', ciudad: 'Villa María' }
+  ],
+
+  // Corrientes (5 feeds)
+  corrientes: [
+    { name: 'Bella Vista Noticias', url: 'https://bellavistanoticias.com.ar/feed/', category: 'provincial', provincia: 'Corrientes', ciudad: 'Bella Vista' },
+    { name: 'Diario El Libertador', url: 'https://www.diarioellibertador.com.ar/feed/', category: 'provincial', provincia: 'Corrientes', ciudad: 'Corrientes Capital' },
+    { name: 'El Litoral Policiales', url: 'https://www.ellitoral.com.ar/rss/policiales.xml', category: 'provincial', provincia: 'Corrientes', ciudad: 'Corrientes Capital' },
+    { name: 'Radio Curuzú', url: 'https://radiocuruzu.com.ar/feed/', category: 'provincial', provincia: 'Corrientes', ciudad: 'Curuzú Cuatiá' },
+    { name: 'Ituzaingó Noticias', url: 'https://ituzaingonoticias.com.ar/feed/', category: 'provincial', provincia: 'Corrientes', ciudad: 'Ituzaingó' }
+  ],
+
+  // Entre Ríos (5 feeds)
+  entrerios: [
+    { name: 'La Calle (Concepción)', url: 'https://www.lacalle.com.ar/feed/', category: 'provincial', provincia: 'Entre Ríos', ciudad: 'Concepción del Uruguay' },
+    { name: 'Concordia Hoy', url: 'https://concordiahoy.com.ar/feed/', category: 'provincial', provincia: 'Entre Ríos', ciudad: 'Concordia' },
+    { name: 'Federal al Día', url: 'https://federalaldia.com.ar/feed/', category: 'provincial', provincia: 'Entre Ríos', ciudad: 'Federal' },
+    { name: 'El Once (Paraná)', url: 'https://www.elonce.com/rss/feed.xml', category: 'provincial', provincia: 'Entre Ríos', ciudad: 'Paraná' },
+    { name: 'Paraná Deportes', url: 'https://paranadeportes.com.ar/feed/', category: 'provincial', provincia: 'Entre Ríos', ciudad: 'Paraná' }
+  ],
+
+  // Formosa (2 feeds)
+  formosa: [
+    { name: 'Formosa Hoy', url: 'https://formosahoy.com.ar/feed/', category: 'provincial', provincia: 'Formosa', ciudad: 'Formosa Capital' },
+    { name: 'Noticias Formosa', url: 'https://noticiasformosa.com/feed/', category: 'provincial', provincia: 'Formosa', ciudad: 'Formosa Capital' }
+  ],
+
+  // Jujuy (3 feeds)
+  jujuy: [
+    { name: 'Perico Noticias', url: 'https://periconoticias.com.ar/feed/', category: 'provincial', provincia: 'Jujuy', ciudad: 'Perico' },
+    { name: 'Jujuy al Día', url: 'https://jujuyaldia.com.ar/feed/', category: 'provincial', provincia: 'Jujuy', ciudad: 'San Salvador de Jujuy' },
+    { name: 'Jujuy Noticias', url: 'https://jujuynoticias.com.ar/feed/', category: 'provincial', provincia: 'Jujuy', ciudad: 'San Salvador de Jujuy' }
+  ],
+
+  // La Pampa (2 feeds)
+  lapampa: [
+    { name: 'La Pampa 24', url: 'https://lapampa24.com.ar/feed/', category: 'provincial', provincia: 'La Pampa', ciudad: 'Santa Rosa' },
+    { name: 'La Pampa Noticias', url: 'https://lapampanoticias.com.ar/feed/', category: 'provincial', provincia: 'La Pampa', ciudad: 'Santa Rosa' }
+  ],
+
+  // La Rioja (4 feeds)
+  larioja: [
+    { name: 'Rioja 24', url: 'https://rioja24.com.ar/feed/', category: 'provincial', provincia: 'La Rioja', ciudad: 'La Rioja Capital' },
+    { name: 'Rioja Política', url: 'https://riojapolitica.com.ar/feed/', category: 'provincial', provincia: 'La Rioja', ciudad: 'La Rioja Capital' },
+    { name: 'Rioja Virtual', url: 'https://riojavirtual.com.ar/feed/', category: 'provincial', provincia: 'La Rioja', ciudad: 'La Rioja Capital' },
+    { name: 'Noticias del Valle', url: 'https://noticiasdelvalle.com.ar/feed/', category: 'provincial', provincia: 'La Rioja', ciudad: 'Villa Unión' }
+  ],
+
+  // Mendoza (5 feeds)
+  mendoza: [
+    { name: 'Malargüe a Diario', url: 'https://malargueadiario.com/feed/', category: 'provincial', provincia: 'Mendoza', ciudad: 'Malargüe' },
+    { name: 'El Sol', url: 'https://www.elsol.com.ar/feed/', category: 'provincial', provincia: 'Mendoza', ciudad: 'Mendoza Capital' },
+    { name: 'Noticias Mendoza', url: 'https://noticiasmendoza.com.ar/feed/', category: 'provincial', provincia: 'Mendoza', ciudad: 'Mendoza Capital' },
+    { name: 'Diario Mendoza', url: 'https://diariomendoza.com.ar/feed/', category: 'provincial', provincia: 'Mendoza', ciudad: 'San Martín' },
+    { name: 'Diario San Rafael', url: 'https://www.diariosanrafael.com.ar/feed/', category: 'provincial', provincia: 'Mendoza', ciudad: 'San Rafael' }
+  ],
+
+  // Misiones (6 feeds)
+  misiones: [
+    { name: 'Eldorado Noticias', url: 'https://eldoradonoticias.com.ar/feed/', category: 'provincial', provincia: 'Misiones', ciudad: 'Eldorado' },
+    { name: 'Oberá Noticias', url: 'https://oberanoticias.com.ar/feed/', category: 'provincial', provincia: 'Misiones', ciudad: 'Oberá' },
+    { name: 'Oberá Online', url: 'https://oberaonline.com.ar/feed/', category: 'provincial', provincia: 'Misiones', ciudad: 'Oberá' },
+    { name: 'Agro Misiones', url: 'https://agromisiones.com.ar/feed/', category: 'provincial', provincia: 'Misiones', ciudad: 'Posadas' },
+    { name: 'Misiones Online', url: 'https://misionesonline.net/feed/', category: 'provincial', provincia: 'Misiones', ciudad: 'Posadas' },
+    { name: 'Primera Edición', url: 'https://www.primeraedicion.com.ar/feed/', category: 'provincial', provincia: 'Misiones', ciudad: 'Posadas' }
+  ],
+
+  // Neuquén (2 feeds)
+  neuquen: [
+    { name: 'Centenario Digital', url: 'https://centenariodigital.com.ar/feed/', category: 'provincial', provincia: 'Neuquén', ciudad: 'Centenario' },
+    { name: 'Cutral Co al Instante', url: 'https://cutralcoalinstante.com/feed/', category: 'provincial', provincia: 'Neuquén', ciudad: 'Cutral Co' }
+  ],
+
+  // Río Negro (1 feed)
+  rionegro: [
+    { name: 'Diario Río Negro', url: 'https://www.rionegro.com.ar/feed/', category: 'provincial', provincia: 'Río Negro', ciudad: 'General Roca' }
+  ],
+
+  // Salta (4 feeds)
+  salta: [
+    { name: 'El Tribuno Salta Deportes', url: 'https://www.eltribuno.com/rss-new/salta/deportes.rss', category: 'provincial', provincia: 'Salta', ciudad: 'Salta Capital' },
+    { name: 'El Tribuno Salta Policiales', url: 'https://www.eltribuno.com/rss-new/salta/policiales.rss', category: 'provincial', provincia: 'Salta', ciudad: 'Salta Capital' },
+    { name: 'El Tribuno Salta Política', url: 'https://www.eltribuno.com/rss-new/salta/politica.rss', category: 'provincial', provincia: 'Salta', ciudad: 'Salta Capital' },
+    { name: 'El Tribuno Salta Portada', url: 'https://www.eltribuno.com/rss-new/salta/portada.rss', category: 'provincial', provincia: 'Salta', ciudad: 'Salta Capital' }
+  ],
+
+  // San Juan (2 feeds)
+  sanjuan: [
+    { name: 'Jáchal Magazine', url: 'https://jachalmagazine.com.ar/feed/', category: 'provincial', provincia: 'San Juan', ciudad: 'Jáchal' },
+    { name: 'San Juan Minero', url: 'https://sanjuanminero.com.ar/feed/', category: 'provincial', provincia: 'San Juan', ciudad: 'San Juan Capital' }
+  ],
+
+  // San Luis (4 feeds)
+  sanluis: [
+    { name: 'Agencia San Luis', url: 'https://agenciasanluis.com/feed/', category: 'provincial', provincia: 'San Luis', ciudad: 'San Luis Capital' },
+    { name: 'San Luis 24', url: 'https://sanluis24.com.ar/feed/', category: 'provincial', provincia: 'San Luis', ciudad: 'San Luis Capital' },
+    { name: 'San Luis Informa', url: 'https://sanluisinforma.com.ar/feed/', category: 'provincial', provincia: 'San Luis', ciudad: 'San Luis Capital' },
+    { name: 'Villa Mercedes Hoy', url: 'https://villamercedes.info/feed/', category: 'provincial', provincia: 'San Luis', ciudad: 'Villa Mercedes' }
+  ],
+
+  // Santa Cruz (2 feeds)
+  santacruz: [
+    { name: 'Voces y Apuntes', url: 'https://vocesyapuntes.com/feed/', category: 'provincial', provincia: 'Santa Cruz', ciudad: 'Caleta Olivia' },
+    { name: 'Tiempo Sur', url: 'https://tiemposur.com.ar/feed/', category: 'provincial', provincia: 'Santa Cruz', ciudad: 'Río Gallegos' }
+  ],
+
+  // Santa Fe (7 feeds)
+  santafe: [
+    { name: 'Gálvez Hoy', url: 'https://galvezhoy.com.ar/feed/', category: 'provincial', provincia: 'Santa Fe', ciudad: 'Gálvez' },
+    { name: 'Radio Amanecer (Reconquista)', url: 'https://radioamanecer.com.ar/feed/', category: 'provincial', provincia: 'Santa Fe', ciudad: 'Reconquista' },
+    { name: 'Conclusión (Rosario)', url: 'https://www.conclusion.com.ar/feed/', category: 'provincial', provincia: 'Santa Fe', ciudad: 'Rosario' },
+    { name: 'El Ciudadano (Rosario)', url: 'https://www.elciudadanoweb.com/feed/', category: 'provincial', provincia: 'Santa Fe', ciudad: 'Rosario' },
+    { name: 'Rosario3', url: 'https://www.rosario3.com/rss/feed.xml', category: 'provincial', provincia: 'Santa Fe', ciudad: 'Rosario' },
+    { name: 'SL24 (San Lorenzo)', url: 'https://sl24.com.ar/feed/', category: 'provincial', provincia: 'Santa Fe', ciudad: 'San Lorenzo' },
+    { name: 'Venado 24', url: 'https://venado24.com.ar/feed/', category: 'provincial', provincia: 'Santa Fe', ciudad: 'Venado Tuerto' }
+  ],
+
+  // Santiago del Estero (1 feed)
+  santiago: [
+    { name: 'Termas Digital', url: 'https://termasdigital.com.ar/feed/', category: 'provincial', provincia: 'Santiago del Estero', ciudad: 'Termas de Río Hondo' }
+  ],
+
+  // Tierra del Fuego (2 feeds)
+  tierradelfuego: [
+    { name: 'Tiempo Fueguino (Río Grande)', url: 'https://tiempofueguino.com/feed/', category: 'provincial', provincia: 'Tierra del Fuego', ciudad: 'Río Grande' },
+    { name: 'El Fueguino (Ushuaia)', url: 'https://elfueguino.com.ar/feed/', category: 'provincial', provincia: 'Tierra del Fuego', ciudad: 'Ushuaia' }
+  ],
+
+  // Tucumán (sin feeds verificados actualmente)
+  tucuman: []
 };
 
 /**

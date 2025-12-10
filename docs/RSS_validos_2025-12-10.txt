@@ -1,0 +1,75 @@
+Provincia|Ciudad/Región|Medio|Enlace RSS
+Buenos Aires|Capital/AMBA|Clar�n - �ltimas Noticias|https://www.clarin.com/rss/lo-ultimo/
+Buenos Aires|Dolores|Compromiso|https://compromisodiario.com.ar/feed/
+Buenos Aires|General Pueyrred�n|Qu� Digital|https://www.quedigital.com.ar/feed/
+Buenos Aires|Lincoln|La Posta del Noroeste|https://www.lapostadelnoroeste.com.ar/feed/
+Buenos Aires|Mar del Plata|La Capital de Mar del Plata|https://www.lacapitalmdp.com/feed/
+Buenos Aires|Pinamar|Pinamar Diario|https://pinamardiario.com.ar/feed/
+Buenos Aires|San Nicol�s|Diario El Norte|https://www.diarioelnorte.com.ar/feed/
+Catamarca|Bel�n|Bel�n Info|https://beleninfo.com.ar/feed/
+Catamarca|Catamarca Capital|Catamarca Radio|https://catamarcadigital.com/feed/
+Chaco|Resistencia|Chaco D�a por D�a|https://www.chacodiapordia.com/feed/
+Chaco|Resistencia|El Diario de la Regi�n|https://eldiariodelaregion.com.ar/feed/
+Chubut|Comodoro Rivadavia|Comodoro 24|https://comodoro24.com.ar/feed/
+Corrientes|Bella Vista|Bella Vista Noticias|https://bellavistanoticias.com.ar/feed/
+Corrientes|Corrientes Capital|Diario El Libertador|https://www.diarioellibertador.com.ar/feed/
+Corrientes|Corrientes Capital|El Litoral - Policiales|https://www.ellitoral.com.ar/rss/policiales.xml
+Corrientes|Curuz� Cuati�|Radio Curuz�|https://radiocuruzu.com.ar/feed/
+Corrientes|Ituzaing�|Ituzaing� Noticias|https://ituzaingonoticias.com.ar/feed/
+C�rdoba|Carlos Paz|Carlos Paz Hoy|https://carlospazhoy.com.ar/feed/
+C�rdoba|Carlos Paz|Carlos Paz Vivo|https://carlospazvivo.com/feed/
+C�rdoba|C�rdoba Capital|La Voz - Deportes|https://www.lavoz.com.ar/rss/deportes.xml
+C�rdoba|C�rdoba Capital|Perfil C�rdoba|https://www.perfil.com/feed/cordoba
+C�rdoba|Villa Mar�a|Villa Mar�a Ya|https://villamariaya.com/feed/
+Entre R�os|Concepci�n del Uruguay|La Calle|https://www.lacalle.com.ar/feed/
+Entre R�os|Concordia|Concordia Hoy|https://concordiahoy.com.ar/feed/
+Entre R�os|Federal|Federal al D�a|https://federalaldia.com.ar/feed/
+Entre R�os|Paran�|El Once|https://www.elonce.com/rss/feed.xml
+Entre R�os|Paran�|Paran� Deportes|https://paranadeportes.com.ar/feed/
+Formosa|Formosa Capital|Formosa Hoy|https://formosahoy.com.ar/feed/
+Formosa|Formosa Capital|Noticias Formosa|https://noticiasformosa.com/feed/
+Jujuy|Perico|Perico Noticias|https://periconoticias.com.ar/feed/
+Jujuy|San Salvador de Jujuy|Jujuy al D�a|https://jujuyaldia.com.ar/feed/
+Jujuy|San Salvador de Jujuy|Jujuy Noticias|https://jujuynoticias.com.ar/feed/
+La Pampa|Santa Rosa|La Pampa 24|https://lapampa24.com.ar/feed/
+La Pampa|Santa Rosa|La Pampa Noticias|https://lapampanoticias.com.ar/feed/
+La Rioja|La Rioja Capital|Rioja 24|https://rioja24.com.ar/feed/
+La Rioja|La Rioja Capital|Rioja Pol�tica|https://riojapolitica.com.ar/feed/
+La Rioja|La Rioja Capital|Rioja Virtual|https://riojavirtual.com.ar/feed/
+La Rioja|Villa Uni�n|Noticias del Valle|https://noticiasdelvalle.com.ar/feed/
+Mendoza|Malarg�e|Malarg�e a Diario|https://malargueadiario.com/feed/
+Mendoza|Mendoza Capital|El Sol|https://www.elsol.com.ar/feed/
+Mendoza|Mendoza Capital|Noticias Mendoza|https://noticiasmendoza.com.ar/feed/
+Mendoza|San Mart�n|Diario Mendoza|https://diariomendoza.com.ar/feed/
+Mendoza|San Rafael|Diario San Rafael|https://www.diariosanrafael.com.ar/feed/
+Misiones|Eldorado|Eldorado Noticias|https://eldoradonoticias.com.ar/feed/
+Misiones|Ober�|Ober� Noticias|https://oberanoticias.com.ar/feed/
+Misiones|Ober�|Ober� Online|https://oberaonline.com.ar/feed/
+Misiones|Posadas|Agro Misiones|https://agromisiones.com.ar/feed/
+Misiones|Posadas|Misiones Online|https://misionesonline.net/feed/
+Misiones|Posadas|Primera Edici�n|https://www.primeraedicion.com.ar/feed/
+Neuqu�n|Centenario|Centenario Digital|https://centenariodigital.com.ar/feed/
+Neuqu�n|Cutral Co/Plaza Huincul|Cutral Co al Instante|https://cutralcoalinstante.com/feed/
+R�o Negro|General Roca|Diario R�o Negro|https://www.rionegro.com.ar/feed/
+Salta|Salta Capital|El Tribuno de Salta - Deportes|https://www.eltribuno.com/rss-new/salta/deportes.rss
+Salta|Salta Capital|El Tribuno de Salta - Policiales|https://www.eltribuno.com/rss-new/salta/policiales.rss
+Salta|Salta Capital|El Tribuno de Salta - Pol�tica|https://www.eltribuno.com/rss-new/salta/politica.rss
+Salta|Salta Capital|El Tribuno de Salta - Portada|https://www.eltribuno.com/rss-new/salta/portada.rss
+San Juan|J�chal|J�chal Magazine|https://jachalmagazine.com.ar/feed/
+San Juan|San Juan Capital|San Juan Minero|https://sanjuanminero.com.ar/feed/
+San Luis|San Luis Capital|Agencia de Noticias San Luis|https://agenciasanluis.com/feed/
+San Luis|San Luis Capital|San Luis 24|https://sanluis24.com.ar/feed/
+San Luis|San Luis Capital|San Luis Informa|https://sanluisinforma.com.ar/feed/
+San Luis|Villa Mercedes|Villa Mercedes Hoy|https://villamercedes.info/feed/
+Santa Cruz|Caleta Olivia|Voces y Apuntes|https://vocesyapuntes.com/feed/
+Santa Cruz|R�o Gallegos|Tiempo Sur|https://tiemposur.com.ar/feed/
+Santa Fe|G�lvez|G�lvez Hoy|https://galvezhoy.com.ar/feed/
+Santa Fe|Reconquista|Radio Amanecer|https://radioamanecer.com.ar/feed/
+Santa Fe|Rosario|Conclusi�n|https://www.conclusion.com.ar/feed/
+Santa Fe|Rosario|Diario El Ciudadano|https://www.elciudadanoweb.com/feed/
+Santa Fe|Rosario|Rosario3|https://www.rosario3.com/rss/feed.xml
+Santa Fe|San Lorenzo|SL24|https://sl24.com.ar/feed/
+Santa Fe|Venado Tuerto|Venado 24|https://venado24.com.ar/feed/
+Santiago del Estero|Termas de R�o Hondo|Termas Digital|https://termasdigital.com.ar/feed/
+Tierra del Fuego|R�o Grande|Tiempo Fueguino|https://tiempofueguino.com/feed/
+Tierra del Fuego|Ushuaia|El Fueguino|https://elfueguino.com.ar/feed/

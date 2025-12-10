@@ -1,0 +1,6 @@
+Provincia|Ciudad/Región|Medio|Enlace RSS
+Salta|Salta Capital|El Tribuno - Deportes Salta|https://www.eltribuno.com/rss-new/salta/deportes.rss
+Neuqu�n|San Mart�n de los Andes|San Mart�n Noticias|https://sanmartinnoticias.com.ar/feed/
+Neuqu�n|Neuqu�n Capital|Diario R�o Negro - Deportes|https://www.rionegro.com.ar/deportes/feed/
+La Pampa|General Pico|Pico Digital|https://picodigital.com.ar/feed/
+Santa Cruz|Las Heras|Las Heras Noticias|https://lasherasnoticias.com.ar/feed/
