@@ -307,13 +307,30 @@ const Generator = () => {
         <div className="generator-header">
           <h1>Generador de Noticias</h1>
           <div className="tabs">
+            {/* Botón Buscar Noticias - en la misma línea que los tabs */}
+            {activeTab === 'search' && (
+              <button
+                className="btn btn-primary btn-search-main"
+                onClick={handleSearch}
+                disabled={loading}
+              >
+                {loading ? (
+                  <LoadingSpinner size="small" />
+                ) : (
+                  <>
+                    <FiSearch size={18} />
+                    <span className="tab-text">Buscar Noticias</span>
+                  </>
+                )}
+              </button>
+            )}
             {activeTab !== 'search' && (
               <button
                 className="tab"
                 onClick={() => setActiveTab('search')}
               >
                 <FiSearch size={18} />
-                <span className="tab-text">Ir al Panel Principal</span>
+                <span className="tab-text">Panel Principal</span>
               </button>
             )}
             <button
@@ -324,37 +341,17 @@ const Generator = () => {
               }}
             >
               <FiZap size={18} />
-              <span className="tab-text">ÚLTIMO MOMENTO</span>
+              <span className="tab-text">ÚLTIMO</span>
             </button>
             <button
               className={`tab ${activeTab === 'profiles' ? 'active' : ''}`}
               onClick={() => setActiveTab('profiles')}
             >
               <FiSave size={18} />
-              <span className="tab-text">Perfiles ({searchProfiles.length})</span>
+              <span className="tab-text">Perfiles</span>
             </button>
           </div>
         </div>
-
-        {/* Botón principal de búsqueda - destacado en PC */}
-        {activeTab === 'search' && (
-          <div className="main-search-action">
-            <button
-              className="btn btn-primary btn-large btn-search-main"
-              onClick={handleSearch}
-              disabled={loading}
-            >
-              {loading ? (
-                <LoadingSpinner size="small" />
-              ) : (
-                <>
-                  <FiSearch size={22} />
-                  Buscar Noticias
-                </>
-              )}
-            </button>
-          </div>
-        )}
 
         <div className="generator-content">
           {activeTab === 'search' ? (

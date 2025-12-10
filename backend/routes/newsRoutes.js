@@ -130,6 +130,7 @@ router.get('/search', authenticateAndRequireSubscription, async (req, res) => {
       excludeTerms,
       sources = 'both', // rss, google, both
       maxItems = 15,
+      hoursAgo = 72, // Filtro de antigüedad en horas (default 72h = 3 días)
       translate = 'false',
       shorten = 'true',
       generateEmojis = 'true',
@@ -184,10 +185,19 @@ router.get('/search', authenticateAndRequireSubscription, async (req, res) => {
     // Combinar keywords del usuario con keywords de temáticas
     keywordsList = [...keywordsList, ...additionalKeywords];
 
+    // IMPORTANTE: Agregar localidad y distrito como keywords para filtrar mejor
+    // Esto permite que RSS también filtre por ubicación específica
+    if (localidad) {
+      keywordsList.push(localidad);
+    }
+    if (distrito && distrito !== localidad) {
+      keywordsList.push(distrito);
+    }
+
     // Normalizar provincia (quitar guiones para coincidir con RSS)
     const provinciaKey = provincia ? provincia.toLowerCase().replace(/[\s-]+/g, '') : null;
 
-    console.log('Búsqueda RSS + Google News - Keywords:', keywordsList, 'Temáticas RSS:', matchingRssCategories, 'Provincia:', provincia, '(key:', provinciaKey, ')');
+    console.log('Búsqueda RSS + Google News - Keywords:', keywordsList, 'Temáticas RSS:', matchingRssCategories, 'Provincia:', provincia, '(key:', provinciaKey, '), Localidad:', localidad, 'Distrito:', distrito);
 
     // Búsqueda combinada: RSS + Google News para mejor cobertura
     // RSS: categorías específicas + feeds locales
@@ -217,6 +227,7 @@ router.get('/search', authenticateAndRequireSubscription, async (req, res) => {
 
       const rssNews = await getNewsFromFeeds(rssCategories, {
         maxItems: parseInt(maxItems),
+        hoursAgo: parseInt(hoursAgo),
         keywords: q ? [q, ...keywordsList] : keywordsList,
         excludeTerms: excludeList
       });

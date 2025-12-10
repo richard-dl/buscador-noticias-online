@@ -1939,30 +1939,25 @@ input, select, textarea {
 /* ============================================
    BOTÓN PRINCIPAL DE BÚSQUEDA - DESTACADO
    ============================================ */
-.main-search-action {
-  display: flex;
-  justify-content: center;
-  margin-bottom: var(--spacing-6);
-}
-
 .btn-search-main {
-  padding: var(--spacing-4) var(--spacing-8);
-  font-size: var(--font-size-lg);
+  padding: var(--spacing-2) var(--spacing-5);
+  font-size: var(--font-size-sm);
   font-weight: 600;
   background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
-  border-radius: var(--radius-xl);
+  box-shadow: 0 3px 10px rgba(37, 99, 235, 0.35);
+  border-radius: var(--radius-md);
   transition: all 0.3s ease;
+  white-space: nowrap;
 }
 
 .btn-search-main:hover:not(:disabled) {
   background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.5);
 }
 
 .btn-search-main:active:not(:disabled) {
-  transform: translateY(-1px);
+  transform: translateY(0);
 }
 
 /* Ocultar botón secundario de búsqueda en desktop */
@@ -1974,9 +1969,14 @@ input, select, textarea {
    CORRECCIONES MÓVILES CRÍTICAS
    ============================================ */
 @media (max-width: 992px) {
-  /* Mostrar botón de búsqueda móvil, ocultar principal */
-  .main-search-action {
+  /* En tablet/móvil: ocultar texto en tabs, mostrar solo iconos */
+  .tabs .tab-text {
     display: none;
+  }
+
+  /* El botón de búsqueda principal sí muestra texto */
+  .btn-search-main .tab-text {
+    display: inline;
   }
 
   .btn-search-mobile {
@@ -2000,7 +2000,7 @@ input, select, textarea {
   /* Header del generador en móvil */
   .generator-header {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
     gap: var(--spacing-3);
   }
 
@@ -2008,23 +2008,35 @@ input, select, textarea {
     font-size: var(--font-size-xl);
   }
 
-  /* Tabs en móvil - iconos + texto abreviado */
+  /* Tabs en móvil - solo iconos para ahorrar espacio */
   .tabs {
     width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: var(--spacing-2);
+    display: flex;
+    justify-content: space-between;
+    gap: var(--spacing-2);
   }
 
   .tab {
     padding: var(--spacing-2) var(--spacing-3);
     font-size: var(--font-size-xs);
-    white-space: nowrap;
-    min-width: auto;
+    flex: 1;
+    justify-content: center;
   }
 
-  .tab-text {
+  /* En móvil pequeño, solo iconos en tabs */
+  .tabs .tab-text {
+    display: none;
+  }
+
+  /* Pero el botón de búsqueda sí muestra texto corto */
+  .btn-search-main {
+    flex: 1.5;
+    padding: var(--spacing-2) var(--spacing-3);
+  }
+
+  .btn-search-main .tab-text {
     display: inline;
+    font-size: var(--font-size-xs);
   }
 
   /* Controles de búsqueda */

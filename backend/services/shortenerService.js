@@ -3,7 +3,7 @@ const axios = require('axios');
 // Cache para URLs acortadas
 const urlCache = new Map();
 const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 horas
-const SHORTENER_TIMEOUT = 5000; // 5 segundos timeout
+const SHORTENER_TIMEOUT = 3000; // 3 segundos timeout (reducido para mejor performance)
 
 /**
  * Acortar URL usando v.gd (más confiable actualmente)

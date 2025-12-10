@@ -288,10 +288,11 @@ const extractImageFromGoogleNewsUrl = async (googleUrl) => {
 
 /**
  * Buscar noticias en Google News
- * Ahora extrae imágenes por defecto usando Open Graph tags
+ * NOTA: extractImages desactivado por defecto porque Google News devuelve
+ * la misma imagen genérica para todas las noticias y agrega 5-8 segundos de demora
  */
 const searchGoogleNews = async (query, options = {}) => {
-  const { maxItems = 10, extractRealUrls = false, extractImages = true } = options;
+  const { maxItems = 10, extractRealUrls = false, extractImages = false } = options;
 
   const url = buildGoogleNewsUrl(query, options);
   let items = await parseGoogleNewsRss(url);
