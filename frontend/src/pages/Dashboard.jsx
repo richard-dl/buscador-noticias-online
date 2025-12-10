@@ -17,6 +17,7 @@ const Dashboard = () => {
     const saved = localStorage.getItem('newsGridColumns')
     return saved ? parseInt(saved, 10) : 3
   })
+  const [maxColumns, setMaxColumns] = useState(5)
 
   const handleColumnChange = (cols) => {
     setGridColumns(cols)
@@ -25,6 +26,33 @@ const Dashboard = () => {
 
   useEffect(() => {
     loadDashboardData()
+  }, [])
+
+  // Detectar viewport para ajustar máximo de columnas
+  useEffect(() => {
+    const updateMaxColumns = () => {
+      const isLandscape = window.matchMedia('(orientation: landscape)').matches
+      const width = window.innerWidth
+
+      if (width <= 768 && !isLandscape) {
+        setMaxColumns(1)
+      } else if (width <= 900 && isLandscape) {
+        setMaxColumns(3)
+      } else if (width <= 992) {
+        setMaxColumns(3)
+      } else {
+        setMaxColumns(5)
+      }
+    }
+
+    updateMaxColumns()
+    window.addEventListener('resize', updateMaxColumns)
+    window.addEventListener('orientationchange', updateMaxColumns)
+
+    return () => {
+      window.removeEventListener('resize', updateMaxColumns)
+      window.removeEventListener('orientationchange', updateMaxColumns)
+    }
   }, [])
 
   const loadDashboardData = async () => {
@@ -165,7 +193,7 @@ const Dashboard = () => {
             <div className="results-header dashboard-results-header">
               <span>{recentNews.length} noticias recientes</span>
               <div className="column-selector">
-                {[2, 3, 4, 5].map(cols => (
+                {[2, 3, 4, 5].filter(cols => cols <= maxColumns).map(cols => (
                   <button
                     key={cols}
                     className={`col-btn ${gridColumns === cols ? 'active' : ''}`}

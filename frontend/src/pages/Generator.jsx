@@ -40,6 +40,7 @@ const Generator = () => {
     const saved = localStorage.getItem('newsGridColumns')
     return saved ? parseInt(saved, 10) : 3
   })
+  const [maxColumns, setMaxColumns] = useState(5) // Máximo de columnas según viewport
 
   // Cargar perfiles al inicio
   useEffect(() => {
@@ -54,6 +55,33 @@ const Generator = () => {
 
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  // Detectar viewport para ajustar máximo de columnas
+  useEffect(() => {
+    const updateMaxColumns = () => {
+      const isLandscape = window.matchMedia('(orientation: landscape)').matches
+      const width = window.innerWidth
+
+      if (width <= 768 && !isLandscape) {
+        setMaxColumns(1) // Portrait móvil: no mostrar selector
+      } else if (width <= 900 && isLandscape) {
+        setMaxColumns(3) // Landscape móvil: máximo 3
+      } else if (width <= 992) {
+        setMaxColumns(3) // Tablet: máximo 3
+      } else {
+        setMaxColumns(5) // Desktop: todas
+      }
+    }
+
+    updateMaxColumns()
+    window.addEventListener('resize', updateMaxColumns)
+    window.addEventListener('orientationchange', updateMaxColumns)
+
+    return () => {
+      window.removeEventListener('resize', updateMaxColumns)
+      window.removeEventListener('orientationchange', updateMaxColumns)
+    }
   }, [])
 
   // Cargar perfil desde URL si existe
@@ -462,7 +490,7 @@ const Generator = () => {
                       <div className="results-actions">
                         {/* Selector de columnas */}
                         <div className="column-selector">
-                          {[2, 3, 4, 5].map(cols => (
+                          {[2, 3, 4, 5].filter(cols => cols <= maxColumns).map(cols => (
                             <button
                               key={cols}
                               className={`col-btn ${gridColumns === cols ? 'active' : ''}`}
@@ -535,7 +563,7 @@ const Generator = () => {
                   <div className="results-header">
                     <span>{breakingNews.length} noticias recientes</span>
                     <div className="column-selector">
-                      {[2, 3, 4, 5].map(cols => (
+                      {[2, 3, 4, 5].filter(cols => cols <= maxColumns).map(cols => (
                         <button
                           key={cols}
                           className={`col-btn ${gridColumns === cols ? 'active' : ''}`}
