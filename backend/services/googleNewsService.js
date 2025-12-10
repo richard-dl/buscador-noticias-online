@@ -35,10 +35,14 @@ const buildGoogleNewsUrl = (query, options = {}) => {
   const { region = 'AR', language = 'es', hoursAgo = null } = options;
 
   // Agregar filtro de tiempo si se especifica
+  // NOTA: No usamos when: muy corto porque puede no haber resultados
+  // El filtro exacto se aplica después en el backend
   let searchQuery = query;
-  if (hoursAgo && hoursAgo <= 24) {
-    // Para menos de 24 horas, usar when:Xh
-    searchQuery = `${query} when:${hoursAgo}h`;
+  if (hoursAgo && hoursAgo <= 12) {
+    // Para menos de 12 horas, usar when:12h (mínimo razonable)
+    searchQuery = `${query} when:12h`;
+  } else if (hoursAgo && hoursAgo <= 24) {
+    searchQuery = `${query} when:1d`;
   } else if (hoursAgo && hoursAgo <= 168) {
     // Para hasta 7 días, usar when:Xd
     const days = Math.ceil(hoursAgo / 24);

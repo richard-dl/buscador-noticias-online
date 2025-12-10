@@ -274,13 +274,24 @@ router.get('/search', authenticateAndRequireSubscription, async (req, res) => {
 
     // FILTRAR POR FECHA - aplicar hoursAgo a TODOS los resultados (RSS + Google)
     const hoursAgoInt = parseInt(hoursAgo);
-    const cutoffDate = new Date(Date.now() - hoursAgoInt * 60 * 60 * 1000);
-    const beforeFilter = allNews.length;
-    allNews = allNews.filter(news => {
-      const pubDate = news.pubDate ? new Date(news.pubDate) : null;
-      return pubDate && pubDate > cutoffDate;
-    });
-    console.log(`Filtro de fecha (${hoursAgoInt}h): ${beforeFilter} -> ${allNews.length} noticias`);
+    if (hoursAgoInt && hoursAgoInt < 72) {
+      // Solo aplicar filtro estricto si es menos de 3 días
+      const cutoffDate = new Date(Date.now() - hoursAgoInt * 60 * 60 * 1000);
+      const beforeFilter = allNews.length;
+      const filteredNews = allNews.filter(news => {
+        const pubDate = news.pubDate ? new Date(news.pubDate) : null;
+        return pubDate && pubDate > cutoffDate;
+      });
+
+      // Si el filtro es muy estricto y no hay resultados, usar las más recientes
+      if (filteredNews.length === 0 && beforeFilter > 0) {
+        console.log(`Filtro de fecha (${hoursAgoInt}h): muy estricto, usando ${Math.min(beforeFilter, 10)} más recientes`);
+        allNews = allNews.slice(0, Math.min(beforeFilter, parseInt(maxItems)));
+      } else {
+        allNews = filteredNews;
+        console.log(`Filtro de fecha (${hoursAgoInt}h): ${beforeFilter} -> ${allNews.length} noticias`);
+      }
+    }
 
     // NOTA: El filtrado por distrito/localidad se hace mediante keywords
     // Los feeds RSS raramente incluyen distrito específico en título/descripción

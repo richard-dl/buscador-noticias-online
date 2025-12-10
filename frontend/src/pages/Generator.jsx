@@ -109,10 +109,17 @@ const Generator = () => {
   }
 
   // Función auxiliar para buscar con filtros específicos
+  // Detectar si es móvil (menos de 768px)
+  const isMobile = () => window.innerWidth < 768
+
   const handleSearchWithFilters = async (searchFilters) => {
     try {
       setLoading(true)
       setNews([])
+      // Colapsar filtros SOLO en móvil para mostrar resultados
+      if (isMobile()) {
+        setFiltersCollapsed(true)
+      }
 
       const params = {
         maxItems: searchCount,
@@ -156,8 +163,10 @@ const Generator = () => {
     try {
       setLoading(true)
       setNews([])
-      // Colapsar filtros en móvil para mostrar resultados
-      setFiltersCollapsed(true)
+      // Colapsar filtros SOLO en móvil para mostrar resultados
+      if (isMobile()) {
+        setFiltersCollapsed(true)
+      }
 
       const params = {
         maxItems: searchCount,
