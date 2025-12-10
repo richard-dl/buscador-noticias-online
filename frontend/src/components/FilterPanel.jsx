@@ -7,6 +7,7 @@ const FilterPanel = ({
   onChange,
   onSaveProfile,
   savedProfiles = [],
+  selectedProfileId = '',
   onSelectProfile,
   showSaveButton = true
 }) => {
@@ -23,7 +24,6 @@ const FilterPanel = ({
   const [loading, setLoading] = useState(true)
   const [keywordInput, setKeywordInput] = useState('')
   const [excludeInput, setExcludeInput] = useState('')
-  const [selectedProfileId, setSelectedProfileId] = useState('')
   const [expandedContent, setExpandedContent] = useState(false)
 
   // Cargar datos geográficos
@@ -121,7 +121,6 @@ const FilterPanel = ({
           <label>Perfiles guardados:</label>
           <select
             onChange={(e) => {
-              setSelectedProfileId(e.target.value)
               onSelectProfile(e.target.value)
             }}
             value={selectedProfileId}

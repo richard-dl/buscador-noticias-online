@@ -1,10 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const { authenticateToken } = require('../middleware/authMiddleware');
 const {
   createUserInFirestore,
   getUserFromFirestore,
   updateLastLogin,
-  verifyIdToken
+  verifyIdToken,
+  getAllUsersFromFirestore
 } = require('../services/firebaseService');
 
 /**
@@ -152,6 +154,36 @@ router.post('/verify', async (req, res) => {
       success: false,
       valid: false,
       error: 'Token inválido'
+    });
+  }
+});
+
+/**
+ * GET /api/auth/users
+ * Obtener lista de todos los usuarios (solo admin)
+ */
+router.get('/users', authenticateToken, async (req, res) => {
+  try {
+    // Verificar que el usuario es admin
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({
+        success: false,
+        error: 'Acceso denegado. Solo administradores pueden ver esta información.'
+      });
+    }
+
+    const users = await getAllUsersFromFirestore();
+
+    res.json({
+      success: true,
+      count: users.length,
+      data: users
+    });
+  } catch (error) {
+    console.error('Error obteniendo usuarios:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Error al obtener usuarios'
     });
   }
 });

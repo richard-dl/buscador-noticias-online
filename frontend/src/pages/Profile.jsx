@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
-import { userApi } from '../services/api'
+import { userApi, authApi } from '../services/api'
 import Header from '../components/Header'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { toast } from 'react-toastify'
 import {
-  FiUser, FiMail, FiCalendar, FiClock, FiEdit2, FiSave, FiX
+  FiUser, FiMail, FiCalendar, FiClock, FiEdit2, FiSave, FiX, FiUsers
 } from 'react-icons/fi'
 
 const Profile = () => {
@@ -15,10 +15,16 @@ const Profile = () => {
   const [saving, setSaving] = useState(false)
   const [searchProfiles, setSearchProfiles] = useState([])
   const [loadingProfiles, setLoadingProfiles] = useState(true)
+  const [users, setUsers] = useState([])
+  const [loadingUsers, setLoadingUsers] = useState(true)
 
   useEffect(() => {
     if (profile) {
       setDisplayName(profile.displayName || '')
+      // Cargar usuarios solo si es admin
+      if (profile.role === 'admin') {
+        loadUsers()
+      }
     }
     loadSearchProfiles()
   }, [profile])
@@ -33,6 +39,20 @@ const Profile = () => {
       console.error('Error cargando perfiles:', error)
     } finally {
       setLoadingProfiles(false)
+    }
+  }
+
+  const loadUsers = async () => {
+    try {
+      const response = await authApi.getAllUsers()
+      if (response.success) {
+        setUsers(response.data)
+      }
+    } catch (error) {
+      console.error('Error cargando usuarios:', error)
+      toast.error('Error al cargar usuarios')
+    } finally {
+      setLoadingUsers(false)
     }
   }
 
@@ -257,6 +277,76 @@ const Profile = () => {
               </div>
             </div>
           </section>
+
+          {/* Sección de usuarios - Solo Admin */}
+          {profile?.role === 'admin' && (
+            <section className="profile-card users-card">
+              <div className="card-header">
+                <h2>
+                  <FiUsers size={24} />
+                  Usuarios Registrados
+                </h2>
+                <span className="badge badge-info">
+                  {users.length} usuarios
+                </span>
+              </div>
+
+              {loadingUsers ? (
+                <LoadingSpinner />
+              ) : (
+                <div className="users-table-container">
+                  <table className="users-table">
+                    <thead>
+                      <tr>
+                        <th>Usuario</th>
+                        <th>Email</th>
+                        <th>Rol</th>
+                        <th>Estado</th>
+                        <th>Días restantes</th>
+                        <th>Fecha de registro</th>
+                        <th>Último acceso</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {users.map(user => (
+                        <tr key={user.uid}>
+                          <td>
+                            <strong>{user.displayName}</strong>
+                          </td>
+                          <td>{user.email}</td>
+                          <td>
+                            <span className={`badge ${user.role === 'admin' ? 'badge-admin' : 'badge-secondary'}`}>
+                              {user.role === 'admin' ? '👑 Admin' : 'Usuario'}
+                            </span>
+                          </td>
+                          <td>
+                            <span className={`badge ${user.isExpired ? 'badge-danger' : 'badge-success'}`}>
+                              {user.isExpired ? 'Expirado' : 'Activo'}
+                            </span>
+                          </td>
+                          <td>
+                            {user.role === 'admin' ? (
+                              <span className="text-success">Ilimitado</span>
+                            ) : (
+                              <span className={user.daysRemaining <= 7 ? 'text-danger' : ''}>
+                                {user.daysRemaining} días
+                              </span>
+                            )}
+                          </td>
+                          <td>
+                            {user.createdAt ? new Date(user.createdAt._seconds * 1000).toLocaleDateString('es-AR') : 'N/A'}
+                          </td>
+                          <td>
+                            {user.lastLogin ? new Date(user.lastLogin._seconds * 1000).toLocaleDateString('es-AR') : 'Nunca'}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </section>
+          )}
         </div>
       </main>
     </div>

@@ -248,6 +248,47 @@ const verifyIdToken = async (idToken) => {
   }
 };
 
+/**
+ * Obtener todos los usuarios desde Firestore
+ */
+const getAllUsersFromFirestore = async () => {
+  try {
+    const usersSnapshot = await db.collection('users').get();
+    const users = [];
+
+    for (const doc of usersSnapshot.docs) {
+      const userData = doc.data();
+      const subscriptionStatus = await checkSubscriptionStatus(doc.id);
+
+      users.push({
+        uid: doc.id,
+        email: userData.email,
+        displayName: userData.displayName || 'Sin nombre',
+        role: userData.role || 'user',
+        status: userData.status,
+        createdAt: userData.createdAt,
+        lastLogin: userData.lastLogin,
+        authProvider: userData.authProvider,
+        subscriptionExpiresAt: userData.subscriptionExpiresAt,
+        daysRemaining: subscriptionStatus.daysRemaining,
+        isExpired: subscriptionStatus.isExpired
+      });
+    }
+
+    // Ordenar por fecha de creación (más recientes primero)
+    users.sort((a, b) => {
+      const dateA = a.createdAt?._seconds || 0;
+      const dateB = b.createdAt?._seconds || 0;
+      return dateB - dateA;
+    });
+
+    return users;
+  } catch (error) {
+    console.error('Error obteniendo usuarios:', error);
+    throw error;
+  }
+};
+
 module.exports = {
   admin,
   db,
@@ -261,5 +302,6 @@ module.exports = {
   updateSearchProfile,
   deleteSearchProfile,
   saveSearchHistory,
-  verifyIdToken
+  verifyIdToken,
+  getAllUsersFromFirestore
 };

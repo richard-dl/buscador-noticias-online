@@ -50,7 +50,8 @@ api.interceptors.response.use(
 export const authApi = {
   register: (userData) => api.post('/auth/register', userData),
   login: () => api.post('/auth/login'),
-  verify: () => api.post('/auth/verify')
+  verify: () => api.post('/auth/verify'),
+  getAllUsers: () => api.get('/auth/users')
 }
 
 // ============ USER ============

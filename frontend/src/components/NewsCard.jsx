@@ -124,7 +124,7 @@ const NewsCard = ({ news }) => {
         </button>
 
         <a
-          href={news.shortUrl || news.link}
+          href={news.link}
           target="_blank"
           rel="noopener noreferrer"
           className="btn-link"

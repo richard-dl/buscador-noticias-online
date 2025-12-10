@@ -33,6 +33,7 @@ const Generator = () => {
   const [showScrollTop, setShowScrollTop] = useState(false)
   const [breakingNews, setBreakingNews] = useState([])
   const [loadingBreaking, setLoadingBreaking] = useState(false)
+  const [selectedProfileId, setSelectedProfileId] = useState('')
 
   // Cargar perfiles al inicio
   useEffect(() => {
@@ -92,6 +93,7 @@ const Generator = () => {
     }
 
     setFilters(newFilters)
+    setSelectedProfileId(profile.id) // Mantener el perfil seleccionado visible
     setActiveTab('search')
 
     // Ejecutar búsqueda automáticamente después de aplicar el perfil
@@ -343,6 +345,7 @@ const Generator = () => {
                   onChange={setFilters}
                   onSaveProfile={() => setShowSaveModal(true)}
                   savedProfiles={searchProfiles}
+                  selectedProfileId={selectedProfileId}
                   onSelectProfile={(id) => {
                     const profile = searchProfiles.find(p => p.id === id)
                     if (profile) applyProfile(profile)

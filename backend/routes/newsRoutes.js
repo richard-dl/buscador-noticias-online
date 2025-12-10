@@ -172,7 +172,7 @@ router.get('/search', authenticateAndRequireSubscription, async (req, res) => {
 
       // Si hay provincia, agregar categoría provincial correspondiente
       if (provincia) {
-        const provinciaKey = provincia.toLowerCase().replace(/\s+/g, '');
+        const provinciaKey = provincia.toLowerCase().replace(/[\s-]+/g, '');
         if (validRssCategories.includes(provinciaKey)) {
           rssCategories.push(provinciaKey);
         }
