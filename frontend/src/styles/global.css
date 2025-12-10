@@ -2128,9 +2128,8 @@ input, select, textarea {
     padding: var(--spacing-3);
   }
 
-  /* News Grid en móvil - siempre 1 columna */
+  /* News Grid en móvil portrait - siempre 1 columna */
   .news-grid,
-  .news-grid.grid-cols-2,
   .news-grid.grid-cols-3,
   .news-grid.grid-cols-4,
   .news-grid.grid-cols-5 {
@@ -2138,7 +2137,12 @@ input, select, textarea {
     gap: var(--spacing-4);
   }
 
-  /* Ocultar selector de columnas en móvil pequeño */
+  /* En móvil portrait, 2 columnas es el máximo */
+  .news-grid.grid-cols-2 {
+    grid-template-columns: 1fr;
+  }
+
+  /* Ocultar selector de columnas en móvil portrait */
   .column-selector {
     display: none;
   }
@@ -2290,6 +2294,43 @@ input, select, textarea {
 
   .dashboard-page .news-grid {
     gap: var(--spacing-4);
+  }
+}
+
+/* Móvil landscape (apaisado) - mostrar selector y permitir 2-3 columnas */
+@media (max-width: 900px) and (orientation: landscape) {
+  .column-selector {
+    display: flex;
+  }
+
+  /* En landscape, permitir hasta 3 columnas */
+  .news-grid.grid-cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .news-grid.grid-cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* 4 y 5 columnas se limitan a 3 en landscape móvil */
+  .news-grid.grid-cols-4,
+  .news-grid.grid-cols-5 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* Ajustar cards en landscape */
+  .news-card-image {
+    height: 120px;
+    min-height: 120px;
+  }
+
+  .news-title {
+    font-size: var(--font-size-sm);
+    -webkit-line-clamp: 2;
+  }
+
+  .news-summary {
+    -webkit-line-clamp: 2;
   }
 }
 
