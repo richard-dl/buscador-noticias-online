@@ -144,7 +144,7 @@ router.get('/search', authenticateAndRequireSubscription, async (req, res) => {
     const excludeList = excludeTerms ? excludeTerms.split(',').map(e => e.trim()) : [];
 
     // Categorías RSS válidas
-    const validRssCategories = ['nacionales', 'deportes', 'politica', 'economia', 'espectaculos', 'tecnologia', 'internacionales', 'policiales', 'buenosaires', 'cordoba', 'santafe', 'mendoza', 'tucuman', 'salta', 'misiones', 'rionegro', 'neuquen', 'chubut'];
+    const validRssCategories = ['nacionales', 'deportes', 'politica', 'economia', 'espectaculos', 'tecnologia', 'ciencia', 'salud', 'internacionales', 'policiales', 'buenosaires', 'cordoba', 'santafe', 'mendoza', 'tucuman', 'salta', 'misiones', 'rionegro', 'neuquen', 'chubut'];
 
     // Verificar si las temáticas coinciden con categorías RSS
     const matchingRssCategories = tematicasList.filter(t => validRssCategories.includes(t.toLowerCase()));
@@ -163,7 +163,7 @@ router.get('/search', authenticateAndRequireSubscription, async (req, res) => {
       if (rssCategories.length === 0) {
         if (keywordsList.length > 0) {
           // Con keywords: buscar en todas las categorías para mayor cobertura
-          rssCategories = ['nacionales', 'deportes', 'politica', 'economia', 'policiales', 'espectaculos', 'tecnologia', 'internacionales'];
+          rssCategories = ['nacionales', 'deportes', 'politica', 'economia', 'policiales', 'espectaculos', 'tecnologia', 'ciencia', 'salud', 'internacionales'];
         } else {
           // Sin keywords: solo nacionales
           rssCategories = ['nacionales'];

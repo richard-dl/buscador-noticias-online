@@ -45,7 +45,8 @@ const RSS_FEEDS = {
     { name: 'Clarín Política', url: 'https://www.clarin.com/rss/politica/', category: 'politica' },
     { name: 'Diagonales (La Plata)', url: 'https://www.diagonales.com/rss/', category: 'politica' },
     { name: 'La Nación Política', url: 'https://www.lanacion.com.ar/politica/rss/', category: 'politica' },
-    { name: 'Infobae Política', url: 'https://www.infobae.com/politica/feed/', category: 'politica' }
+    { name: 'Infobae Política', url: 'https://www.infobae.com/politica/feed/', category: 'politica' },
+    { name: 'Yahoo Politics', url: 'https://news.yahoo.com/rss/politics', category: 'politica' }
   ],
 
   // Economía
@@ -57,17 +58,30 @@ const RSS_FEEDS = {
 
   // Espectáculos
   espectaculos: [
-    { name: 'Clarín Espectáculos', url: 'https://www.clarin.com/rss/espectaculos/', category: 'espectaculos' }
+    { name: 'Clarín Espectáculos', url: 'https://www.clarin.com/rss/espectaculos/', category: 'espectaculos' },
+    { name: 'Yahoo Entertainment', url: 'https://news.yahoo.com/rss/entertainment', category: 'espectaculos' }
   ],
 
   // Tecnología
   tecnologia: [
-    { name: 'Clarín Tecnología', url: 'https://www.clarin.com/rss/tecnologia/', category: 'tecnologia' }
+    { name: 'Clarín Tecnología', url: 'https://www.clarin.com/rss/tecnologia/', category: 'tecnologia' },
+    { name: 'Yahoo Tech', url: 'https://news.yahoo.com/rss/tech', category: 'tecnologia' }
+  ],
+
+  // Ciencia
+  ciencia: [
+    { name: 'Yahoo Science', url: 'https://news.yahoo.com/rss/science', category: 'ciencia' }
+  ],
+
+  // Salud
+  salud: [
+    { name: 'Yahoo Health', url: 'https://news.yahoo.com/rss/health', category: 'salud' }
   ],
 
   // Internacionales
   internacionales: [
-    { name: 'Clarín Mundo', url: 'https://www.clarin.com/rss/mundo/', category: 'internacionales' }
+    { name: 'Clarín Mundo', url: 'https://www.clarin.com/rss/mundo/', category: 'internacionales' },
+    { name: 'Yahoo World News', url: 'https://news.yahoo.com/rss/world', category: 'internacionales' }
   ],
 
   // Policiales
