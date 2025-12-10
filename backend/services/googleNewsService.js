@@ -153,50 +153,39 @@ const extractRealUrl = async (googleUrl) => {
 };
 
 /**
- * Extraer imagen Open Graph de una página web
+ * Extraer imagen Open Graph de una página web (optimizado con timeout corto)
  */
 const extractImageFromPage = async (url) => {
   try {
+    // Timeout muy corto para no bloquear
     const response = await axios.get(url, {
-      timeout: 5000,
+      timeout: 3000,
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml',
+        'Accept-Language': 'es-AR,es;q=0.9'
       },
-      maxRedirects: 3
+      maxRedirects: 2,
+      // Solo leer los primeros 50KB (suficiente para meta tags)
+      maxContentLength: 50000
     });
 
     const $ = cheerio.load(response.data);
 
-    // Intentar obtener imagen en orden de preferencia
+    // Intentar obtener imagen en orden de preferencia (solo meta tags, más rápido)
     let image = null;
 
     // 1. Open Graph image (la más común y mejor calidad)
     image = $('meta[property="og:image"]').attr('content');
-    if (image) return image;
+    if (image && image.startsWith('http')) return image;
 
     // 2. Twitter card image
     image = $('meta[name="twitter:image"]').attr('content');
-    if (image) return image;
+    if (image && image.startsWith('http')) return image;
 
     // 3. Schema.org image
     image = $('meta[itemprop="image"]').attr('content');
-    if (image) return image;
-
-    // 4. Primera imagen grande en el artículo
-    const articleImages = $('article img, .article img, .nota img, .content img, main img');
-    for (let i = 0; i < articleImages.length; i++) {
-      const src = $(articleImages[i]).attr('src') || $(articleImages[i]).attr('data-src');
-      if (src && !src.includes('logo') && !src.includes('icon') && !src.includes('avatar')) {
-        // Convertir URL relativa a absoluta si es necesario
-        if (src.startsWith('//')) {
-          return 'https:' + src;
-        } else if (src.startsWith('/')) {
-          const urlObj = new URL(url);
-          return urlObj.origin + src;
-        }
-        return src;
-      }
-    }
+    if (image && image.startsWith('http')) return image;
 
     return null;
   } catch (error) {
@@ -253,9 +242,10 @@ const parseGoogleNewsRss = async (url) => {
 
 /**
  * Buscar noticias en Google News
+ * Ahora extrae imágenes por defecto usando Open Graph tags
  */
 const searchGoogleNews = async (query, options = {}) => {
-  const { maxItems = 10, extractRealUrls = false, extractImages = false } = options;
+  const { maxItems = 10, extractRealUrls = false, extractImages = true } = options;
 
   const url = buildGoogleNewsUrl(query, options);
   let items = await parseGoogleNewsRss(url);
@@ -263,23 +253,20 @@ const searchGoogleNews = async (query, options = {}) => {
   // Limitar cantidad
   items = items.slice(0, maxItems);
 
-  // DESACTIVADO: La extracción de URLs reales e imágenes está causando problemas
-  // Google bloquea el scraping y las redirecciones no funcionan bien
-  // Las URLs de Google News funcionan directamente (redirigen al medio)
-
-  // Opcional: Intentar extraer URLs e imágenes solo si se solicita explícitamente
-  if ((extractRealUrls || extractImages) && items.length > 0) {
-    const processPromises = items.map(async (item) => {
+  // Extraer imágenes en paralelo (optimizado con timeout corto)
+  if (extractImages && items.length > 0) {
+    // Procesar en paralelo con Promise.allSettled para no fallar si alguno falla
+    const imagePromises = items.map(async (item, index) => {
       try {
-        // Extraer URL real (muy lento y a menudo falla)
-        if (extractRealUrls) {
-          item.realUrl = await extractRealUrl(item.link);
-          item.link = item.realUrl;
-        }
-
-        // Extraer imagen de la página (también muy lento)
-        if (extractImages && !item.image && item.link) {
-          item.image = await extractImageFromPage(item.link);
+        // Primero intentar extraer la URL real del artículo
+        const realUrl = await extractRealUrl(item.link);
+        if (realUrl && realUrl !== item.link) {
+          item.realUrl = realUrl;
+          // Extraer imagen de la URL real
+          const image = await extractImageFromPage(realUrl);
+          if (image) {
+            item.image = image;
+          }
         }
       } catch (error) {
         // Silenciar errores individuales
@@ -287,7 +274,16 @@ const searchGoogleNews = async (query, options = {}) => {
       return item;
     });
 
-    items = await Promise.all(processPromises);
+    // Esperar todas las promesas (máximo 5 segundos total)
+    const results = await Promise.race([
+      Promise.allSettled(imagePromises),
+      new Promise(resolve => setTimeout(() => resolve(items.map(i => ({ status: 'fulfilled', value: i }))), 5000))
+    ]);
+
+    // Actualizar items con los resultados
+    items = results.map((result, index) =>
+      result.status === 'fulfilled' ? result.value : items[index]
+    );
   }
 
   return items;
