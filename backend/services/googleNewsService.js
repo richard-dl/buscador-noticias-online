@@ -61,42 +61,83 @@ const buildGoogleNewsUrl = (query, options = {}) => {
 };
 
 /**
- * Decodificar URL real desde el formato base64 de Google News
- * Google News codifica las URLs en base64 en el path
+ * Decodificar URL real desde el formato base64/protobuf de Google News
+ * Google News usa un formato propietario que codifica la URL
+ * Formato: CBMi[base64_url]...
  */
 const decodeGoogleNewsUrl = (googleUrl) => {
   try {
-    // Extraer el ID del artículo (la parte codificada en base64)
+    // Extraer el ID del artículo (la parte codificada)
     const match = googleUrl.match(/articles\/([^?]+)/);
     if (!match) return null;
 
     const encodedId = match[1];
 
-    // Google usa una variante de base64 con algunos caracteres diferentes
-    // Intentar decodificar la parte base64
-    let decoded;
+    // Método 1: Decodificar base64 estándar y buscar URL
     try {
-      // El ID tiene formato: CBMi...SAAB o similar
-      // La URL real está codificada dentro
-
-      // Buscar patrones de URL en el string codificado
       const base64Chars = encodedId.replace(/-/g, '+').replace(/_/g, '/');
-      decoded = Buffer.from(base64Chars, 'base64').toString('utf-8');
+      // Agregar padding si es necesario
+      const paddedBase64 = base64Chars + '='.repeat((4 - base64Chars.length % 4) % 4);
+      const decoded = Buffer.from(paddedBase64, 'base64').toString('utf-8');
 
-      // Buscar una URL válida en el resultado
-      const urlMatch = decoded.match(/https?:\/\/[^\s"'<>\x00-\x1f]+/);
-      if (urlMatch) {
-        // Limpiar la URL de caracteres basura
-        let url = urlMatch[0];
-        // Remover caracteres no válidos al final
-        url = url.replace(/[\x00-\x1f\x7f-\x9f]+.*$/, '');
-        // Verificar que es una URL válida
-        if (url.startsWith('http') && url.length > 20) {
+      // Buscar URLs en el resultado decodificado
+      const urlMatches = decoded.match(/https?:\/\/[^\s"'<>\x00-\x1f\x7f]+/g);
+      if (urlMatches) {
+        for (const urlCandidate of urlMatches) {
+          // Limpiar la URL de caracteres basura al final
+          let url = urlCandidate
+            .replace(/[\x00-\x1f\x7f-\x9f]+.*$/, '')
+            .replace(/[^\x20-\x7E]+$/, '');
+
+          // Verificar que es una URL válida y no de Google
+          if (url.startsWith('http') &&
+              url.length > 20 &&
+              !url.includes('google.com') &&
+              !url.includes('gstatic.com')) {
+            return url;
+          }
+        }
+      }
+    } catch (e) {
+      // Base64 estándar falló
+    }
+
+    // Método 2: El formato CBMi tiene la URL después de ciertos bytes
+    // CBMi = 0x08 0x13 0x22 (campo protobuf) seguido de longitud y URL
+    try {
+      const base64Chars = encodedId.replace(/-/g, '+').replace(/_/g, '/');
+      const buffer = Buffer.from(base64Chars, 'base64');
+      const str = buffer.toString('binary');
+
+      // Buscar "http" en el buffer binario
+      const httpIndex = str.indexOf('http');
+      if (httpIndex !== -1) {
+        // Extraer desde http hasta el final o hasta un byte de control
+        let url = '';
+        for (let i = httpIndex; i < str.length; i++) {
+          const charCode = str.charCodeAt(i);
+          // Caracteres ASCII imprimibles válidos en URLs
+          if (charCode >= 0x21 && charCode <= 0x7E) {
+            url += str[i];
+          } else if (charCode === 0x20) {
+            // Espacio termina la URL
+            break;
+          } else if (url.length > 10) {
+            // Ya tenemos suficiente URL, parar
+            break;
+          }
+        }
+
+        if (url.startsWith('http') &&
+            url.length > 20 &&
+            !url.includes('google.com')) {
+          // Limpiar caracteres extra al final
+          url = url.replace(/[^a-zA-Z0-9\-._~:/?#\[\]@!$&'()*+,;=%]+$/, '');
           return url;
         }
       }
     } catch (e) {
-      // Decodificación base64 falló
+      // Método binario falló
     }
 
     return null;

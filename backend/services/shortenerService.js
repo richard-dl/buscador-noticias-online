@@ -78,9 +78,9 @@ const validateUrl = async (url) => {
     // Verificar formato básico
     const urlObj = new URL(url);
 
-    // No aceptar URLs de Google News (redirecciones)
+    // URLs de Google News son válidas (se acortan directamente)
     if (urlObj.hostname.includes('news.google.com')) {
-      return { valid: false, reason: 'URL de Google News' };
+      return { valid: true, finalUrl: url };
     }
 
     // Verificar que la URL responde
@@ -105,6 +105,7 @@ const validateUrl = async (url) => {
 /**
  * Resolver URL de Google News a la URL final del artículo
  * Usa la función extractRealUrl de googleNewsService que decodifica base64
+ * Si no se puede resolver, devuelve la URL de Google News para acortarla directamente
  */
 const resolveGoogleNewsUrl = async (url) => {
   try {
@@ -114,27 +115,14 @@ const resolveGoogleNewsUrl = async (url) => {
 
     // Si se obtuvo una URL diferente y no es de Google News, devolverla
     if (realUrl && realUrl !== url && !realUrl.includes('news.google.com')) {
+      console.log('Google News URL decodificada:', realUrl.substring(0, 60) + '...');
       return realUrl;
     }
 
-    // Fallback: intentar con redirecciones HTTP simples
-    try {
-      const response = await axios.get(url, {
-        timeout: 8000,
-        maxRedirects: 10,
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-        },
-        validateStatus: status => status < 400
-      });
-      const finalUrl = response.request?.res?.responseUrl || response.request?.responseURL || url;
-      if (finalUrl && !finalUrl.includes('news.google.com') && finalUrl !== url) {
-        return finalUrl;
-      }
-    } catch (e) {
-      // Ignorar error de request
-    }
-
+    // Si no se pudo decodificar, devolver la URL de Google News
+    // Los acortadores pueden acortar cualquier URL válida
+    // y cuando el usuario haga clic, Google News lo redirigirá
+    console.log('Google News URL no decodificable, se acortará directamente');
     return url;
   } catch (error) {
     console.warn('Error resolviendo Google News URL:', error.message);
@@ -149,21 +137,22 @@ const shortenUrl = async (url, options = {}) => {
   // is.gd redirige directamente (301), v.gd muestra página intermedia
   const { validate = false, preferredService = 'isgd' } = options;
 
-  // Para URLs de Google News, primero resolver a la URL final del artículo
+  // Para URLs de Google News, intentar resolver a la URL final del artículo
+  // Si no se puede resolver, acortar la URL de Google News directamente
   if (url && url.includes('news.google.com')) {
     try {
       const resolvedUrl = await resolveGoogleNewsUrl(url);
-      if (resolvedUrl !== url && !resolvedUrl.includes('news.google.com')) {
+      if (resolvedUrl && resolvedUrl !== url && !resolvedUrl.includes('news.google.com')) {
         url = resolvedUrl;
         console.log('Google News URL resuelta:', url.substring(0, 60) + '...');
       } else {
-        // Si no se pudo resolver, devolver la URL original
-        console.warn('No se pudo resolver URL de Google News, devolviendo original');
-        return url;
+        // No se pudo resolver, pero igual acortamos la URL de Google News
+        // El usuario será redirigido al artículo cuando haga clic
+        console.log('Acortando URL de Google News directamente');
       }
     } catch (err) {
       console.warn('Error resolviendo Google News URL:', err.message);
-      return url;
+      // Continuar con la URL original de Google News
     }
   }
 
