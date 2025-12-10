@@ -241,12 +241,14 @@ const parseGoogleNewsRss = async (url) => {
 };
 
 /**
- * Extraer imagen siguiendo redirects de Google News
- * Hace un request que sigue las redirecciones y extrae la imagen del HTML final
+ * Extraer imagen de Google News
+ * Google News muestra páginas con JavaScript que no redirigen directamente,
+ * pero sí incluyen imágenes og:image de Google (thumbnails).
+ * Estas imágenes son válidas y funcionan bien como thumbnails de noticias.
  */
 const extractImageFromGoogleNewsUrl = async (googleUrl) => {
   try {
-    // Hacer request siguiendo todas las redirecciones
+    // Hacer request a la página de Google News
     const response = await axios.get(googleUrl, {
       timeout: 5000,
       maxRedirects: 10,
@@ -259,13 +261,24 @@ const extractImageFromGoogleNewsUrl = async (googleUrl) => {
 
     const $ = cheerio.load(response.data);
 
-    // Extraer imagen OG
+    // Extraer imagen OG - las imágenes de Google (lh3.googleusercontent.com) son válidas
     let image = $('meta[property="og:image"]').attr('content');
-    if (image && image.startsWith('http')) return image;
+    if (image && image.startsWith('http')) {
+      // Mejorar resolución de imágenes de Google (cambiar de w300 a w600)
+      if (image.includes('googleusercontent.com')) {
+        image = image.replace(/=s\d+-w\d+/, '=s0-w600').replace(/=w\d+/, '=w600');
+      }
+      return image;
+    }
 
-    // Twitter image
+    // Twitter image como fallback
     image = $('meta[name="twitter:image"]').attr('content');
-    if (image && image.startsWith('http')) return image;
+    if (image && image.startsWith('http')) {
+      if (image.includes('googleusercontent.com')) {
+        image = image.replace(/=s\d+-w\d+/, '=s0-w600').replace(/=w\d+/, '=w600');
+      }
+      return image;
+    }
 
     return null;
   } catch (error) {
