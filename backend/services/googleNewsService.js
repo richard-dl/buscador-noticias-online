@@ -39,19 +39,16 @@ const buildGoogleNewsUrl = (query, options = {}) => {
   const language = 'es-419';
 
   // Agregar filtro de tiempo si se especifica
-  // NOTA: No usamos when: muy corto porque puede no haber resultados
-  // El filtro exacto se aplica después en el backend
+  // NOTA: Solo usar when: para búsquedas generales (menos de 24h)
+  // Para temáticas específicas, no usar when: porque reduce demasiado los resultados
+  // El filtro por fecha exacta se aplica después en el backend
   let searchQuery = query;
-  if (hoursAgo && hoursAgo <= 12) {
-    // Para menos de 12 horas, usar when:12h (mínimo razonable)
-    searchQuery = `${query} when:12h`;
-  } else if (hoursAgo && hoursAgo <= 24) {
+  if (hoursAgo && hoursAgo <= 24) {
+    // Solo para búsquedas de últimas 24 horas usar when:1d
     searchQuery = `${query} when:1d`;
-  } else if (hoursAgo && hoursAgo <= 168) {
-    // Para hasta 7 días, usar when:Xd
-    const days = Math.ceil(hoursAgo / 24);
-    searchQuery = `${query} when:${days}d`;
   }
+  // Para más de 24 horas, NO usar when: - dejar que Google devuelva más resultados
+  // y filtrar después en el backend por fecha
 
   // Codificar la query
   const encodedQuery = encodeURIComponent(searchQuery);
@@ -452,9 +449,11 @@ const searchWithFilters = async (filters = {}) => {
   let queryParts = [];
 
   // 1. PRIMERO: Keywords personalizadas (lo más importante)
+  // NOTA: Usar SOLO la primera keyword para evitar búsquedas muy restrictivas
+  // Google busca TODAS las palabras, así que múltiples keywords = pocos/0 resultados
   if (keywords.length > 0) {
-    // Cada keyword se busca de forma prioritaria
-    queryParts.push(keywords.join(' '));
+    // Usar solo la primera keyword (la más relevante)
+    queryParts.push(keywords[0]);
   }
 
   // 2. SEGUNDO: Temáticas (solo si no hay keywords)
