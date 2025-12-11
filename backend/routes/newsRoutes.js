@@ -145,27 +145,42 @@ router.get('/search', authenticateAndRequireSubscription, async (req, res) => {
     const excludeList = excludeTerms ? excludeTerms.split(',').map(e => e.trim()) : [];
 
     // Categorías RSS válidas (las que tienen feeds configurados)
-    const validRssCategories = ['nacionales', 'deportes', 'politica', 'economia', 'espectaculos', 'tecnologia', 'ciencia', 'salud', 'internacionales', 'policiales', 'buenosaires', 'cordoba', 'santafe', 'mendoza', 'tucuman', 'salta', 'misiones', 'rionegro', 'neuquen', 'chubut'];
+    const validRssCategories = [
+      // Categorías temáticas
+      'nacionales', 'deportes', 'politica', 'economia', 'espectaculos', 'tecnologia',
+      'internacionales', 'policiales',
+      // Provincias (31 categorías provinciales)
+      'buenosaires', 'catamarca', 'chaco', 'chubut', 'cordoba', 'corrientes',
+      'entrerios', 'formosa', 'jujuy', 'lapampa', 'larioja', 'mendoza', 'misiones',
+      'neuquen', 'rionegro', 'salta', 'sanjuan', 'sanluis', 'santacruz', 'santafe',
+      'santiago', 'tierradelfuego', 'tucuman'
+    ];
 
     // Mapeo de temáticas que NO son categorías RSS a keywords de búsqueda
     const tematicaToKeywords = {
-      'educacion': ['educación', 'escuela', 'universidad', 'docentes', 'alumnos'],
-      'cultura': ['cultura', 'arte', 'música', 'teatro', 'literatura'],
-      'medioambiente': ['medio ambiente', 'ecología', 'clima', 'contaminación'],
-      'sociedad': ['sociedad', 'comunidad', 'vecinos', 'barrio'],
-      'turismo': ['turismo', 'viajes', 'vacaciones', 'hotel'],
-      'infantil': ['niños', 'infantil', 'chicos', 'menores'],
-      'adolescentes': ['adolescentes', 'jóvenes', 'juventud', 'secundaria'],
-      'adultos': ['adultos', 'trabajo', 'empleo'],
-      'adultos-mayores': ['jubilados', 'adultos mayores', 'tercera edad', 'pensiones'],
-      'masculino': ['hombres', 'masculino', 'varones'],
-      'femenino': ['mujeres', 'femenino', 'género'],
-      'genero-diversidad': ['diversidad', 'LGBTQ', 'género', 'inclusión'],
-      'religion': ['religión', 'fe', 'iglesia'],
-      'catolicismo': ['católico', 'papa', 'iglesia católica', 'vaticano'],
-      'judaismo': ['judío', 'judaísmo', 'sinagoga', 'rabino'],
-      'islam': ['islam', 'musulmán', 'mezquita'],
-      'evangelico': ['evangélico', 'pastor', 'iglesia evangélica']
+      // Temáticas generales
+      'ciencia': ['ciencia', 'científico', 'investigación', 'estudio', 'descubrimiento', 'laboratorio'],
+      'salud': ['salud', 'medicina', 'hospital', 'médico', 'enfermedad', 'tratamiento', 'vacuna'],
+      'educacion': ['educación', 'escuela', 'universidad', 'docentes', 'alumnos', 'educativo'],
+      'cultura': ['cultura', 'arte', 'música', 'teatro', 'literatura', 'cultural'],
+      'medioambiente': ['medio ambiente', 'ecología', 'clima', 'contaminación', 'ambiental'],
+      'sociedad': ['sociedad', 'comunidad', 'vecinos', 'barrio', 'social'],
+      'turismo': ['turismo', 'viajes', 'vacaciones', 'hotel', 'turístico'],
+      // Temáticas por edad
+      'infantil': ['niños', 'infantil', 'chicos', 'menores', 'niñez'],
+      'adolescentes': ['adolescentes', 'jóvenes', 'juventud', 'secundaria', 'adolescencia'],
+      'adultos': ['adultos', 'trabajo', 'empleo', 'adulto'],
+      'adultos-mayores': ['jubilados', 'adultos mayores', 'tercera edad', 'pensiones', 'jubilación'],
+      // Temáticas por género
+      'masculino': ['hombres', 'masculino', 'varones', 'masculina'],
+      'femenino': ['mujeres', 'femenino', 'femenina', 'mujer'],
+      'genero-diversidad': ['diversidad', 'LGBTQ', 'género', 'inclusión', 'diversidad sexual'],
+      // Temáticas por religión
+      'religion': ['religión', 'fe', 'iglesia', 'religioso', 'templo', 'culto', 'espiritual'],
+      'catolicismo': ['católico', 'papa', 'iglesia católica', 'vaticano', 'obispo', 'catolicismo', 'misa'],
+      'judaismo': ['judío', 'judaísmo', 'sinagoga', 'rabino', 'judía', 'hebreo'],
+      'islam': ['islam', 'musulmán', 'mezquita', 'islámico', 'musulmana', 'alá', 'corán', 'imán'],
+      'evangelico': ['evangélico', 'pastor', 'iglesia evangélica', 'evangélica', 'evangelismo']
     };
 
     // Separar temáticas válidas RSS de las que deben convertirse a keywords
