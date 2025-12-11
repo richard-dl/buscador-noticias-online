@@ -267,7 +267,14 @@ router.get('/search', authenticateAndRequireSubscription, async (req, res) => {
         hoursAgo: parseInt(hoursAgo)  // Pasar filtro de tiempo a Google News
       });
 
-      allNews = allNews.concat(googleNews.map(n => ({ ...n, sourceType: 'google' })));
+      // Agregar categoría basada en la primera temática buscada (si existe)
+      const categoryForGoogleNews = tematicasList.length > 0 ? tematicasList[0] : 'general';
+
+      allNews = allNews.concat(googleNews.map(n => ({
+        ...n,
+        sourceType: 'google',
+        category: categoryForGoogleNews
+      })));
       console.log(`Google News devolvió ${googleNews.length} resultados`);
     } catch (err) {
       console.warn('Error en búsqueda Google News:', err.message);
