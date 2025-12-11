@@ -91,8 +91,9 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       setLoading(true)
-      await loginWithEmail(email, password)
-      toast.success('¡Bienvenido!')
+      const firebaseUser = await loginWithEmail(email, password)
+      const name = firebaseUser?.displayName || email.split('@')[0]
+      toast.success(`¡Bienvenido, ${name}!`)
       navigate('/dashboard')
     } catch (error) {
       console.error('Error en login:', error)
@@ -118,7 +119,8 @@ export const AuthProvider = ({ children }) => {
       // Verificar/crear en backend
       await authApi.login()
 
-      toast.success('¡Bienvenido!')
+      const name = firebaseUser?.displayName || firebaseUser?.email?.split('@')[0] || 'Usuario'
+      toast.success(`¡Bienvenido, ${name}!`)
       navigate('/dashboard')
     } catch (error) {
       console.error('Error en login Google:', error)

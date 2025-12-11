@@ -280,7 +280,7 @@ const Profile = () => {
 
           {/* Sección de usuarios - Solo Admin */}
           {profile?.role === 'admin' && (
-            <section className="profile-card users-card">
+            <section className="profile-card users-card users-card-expanded">
               <div className="card-header">
                 <h2>
                   <FiUsers size={24} />
@@ -294,55 +294,65 @@ const Profile = () => {
               {loadingUsers ? (
                 <LoadingSpinner />
               ) : (
-                <div className="users-table-container">
-                  <table className="users-table">
-                    <thead>
-                      <tr>
-                        <th>Usuario</th>
-                        <th>Email</th>
-                        <th>Rol</th>
-                        <th>Estado</th>
-                        <th>Días restantes</th>
-                        <th>Fecha de registro</th>
-                        <th>Último acceso</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {users.map(user => (
-                        <tr key={user.uid}>
-                          <td>
-                            <strong>{user.displayName}</strong>
-                          </td>
-                          <td>{user.email}</td>
-                          <td>
-                            <span className={`badge ${user.role === 'admin' ? 'badge-admin' : 'badge-secondary'}`}>
-                              {user.role === 'admin' ? '👑 Admin' : 'Usuario'}
+                <div className="users-grid">
+                  {users.map(user => (
+                    <div key={user.uid} className="user-card-expanded">
+                      <div className="user-card-header">
+                        <div className="user-avatar">
+                          {user.displayName ? user.displayName.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase()}
+                        </div>
+                        <div className="user-main-info">
+                          <h4>{user.displayName || 'Sin nombre'}</h4>
+                          <span className="user-email">{user.email}</span>
+                        </div>
+                        <span className={`badge ${user.role === 'admin' ? 'badge-admin' : 'badge-secondary'}`}>
+                          {user.role === 'admin' ? '👑 Admin' : 'Usuario'}
+                        </span>
+                      </div>
+
+                      <div className="user-card-body">
+                        <div className="user-stat">
+                          <span className="stat-label">Estado</span>
+                          <span className={`badge ${user.isExpired ? 'badge-danger' : 'badge-success'}`}>
+                            {user.isExpired ? 'Expirado' : 'Activo'}
+                          </span>
+                        </div>
+
+                        <div className="user-stat">
+                          <span className="stat-label">Días restantes</span>
+                          {user.role === 'admin' ? (
+                            <span className="text-success">∞ Ilimitado</span>
+                          ) : (
+                            <span className={user.daysRemaining <= 7 ? 'text-danger' : ''}>
+                              {user.daysRemaining} días
                             </span>
-                          </td>
-                          <td>
-                            <span className={`badge ${user.isExpired ? 'badge-danger' : 'badge-success'}`}>
-                              {user.isExpired ? 'Expirado' : 'Activo'}
-                            </span>
-                          </td>
-                          <td>
-                            {user.role === 'admin' ? (
-                              <span className="text-success">Ilimitado</span>
-                            ) : (
-                              <span className={user.daysRemaining <= 7 ? 'text-danger' : ''}>
-                                {user.daysRemaining} días
-                              </span>
-                            )}
-                          </td>
-                          <td>
+                          )}
+                        </div>
+
+                        <div className="user-stat">
+                          <span className="stat-label">Registro</span>
+                          <span>
                             {user.createdAt ? new Date(user.createdAt._seconds * 1000).toLocaleDateString('es-AR') : 'N/A'}
-                          </td>
-                          <td>
-                            {user.lastLogin ? new Date(user.lastLogin._seconds * 1000).toLocaleDateString('es-AR') : 'Nunca'}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                          </span>
+                        </div>
+
+                        <div className="user-stat">
+                          <span className="stat-label">Último acceso</span>
+                          <span>
+                            {user.lastLogin
+                              ? new Date(user.lastLogin._seconds * 1000).toLocaleString('es-AR', {
+                                  day: '2-digit',
+                                  month: '2-digit',
+                                  year: 'numeric',
+                                  hour: '2-digit',
+                                  minute: '2-digit'
+                                })
+                              : 'Nunca'}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               )}
             </section>
