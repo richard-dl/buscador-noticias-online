@@ -383,11 +383,49 @@ const getNewsFromFeeds = async (feedKeys = ['nacionales'], options = {}) => {
     });
   }
 
+  // Limitar máximo por fuente para diversificar resultados
+  const MAX_PER_SOURCE = 4;
+  const sourceCount = {};
+  allNews = allNews.filter(item => {
+    const source = item.source || 'unknown';
+    sourceCount[source] = (sourceCount[source] || 0) + 1;
+    return sourceCount[source] <= MAX_PER_SOURCE;
+  });
+
   // Ordenar por fecha descendente
   allNews.sort((a, b) => b.pubDate - a.pubDate);
 
+  // Mezclar para que no aparezcan todas las de la misma fuente juntas
+  // Intercalar noticias de diferentes fuentes manteniendo orden cronológico relativo
+  const shuffled = [];
+  const bySource = {};
+
+  // Agrupar por fuente
+  for (const news of allNews) {
+    const source = news.source || 'unknown';
+    if (!bySource[source]) bySource[source] = [];
+    bySource[source].push(news);
+  }
+
+  // Intercalar: tomar una de cada fuente en rondas
+  const sources = Object.keys(bySource);
+  let hasMore = true;
+  let round = 0;
+
+  while (hasMore && shuffled.length < maxItems) {
+    hasMore = false;
+    for (const source of sources) {
+      if (bySource[source][round]) {
+        shuffled.push(bySource[source][round]);
+        hasMore = true;
+        if (shuffled.length >= maxItems) break;
+      }
+    }
+    round++;
+  }
+
   // Limitar cantidad
-  return allNews.slice(0, maxItems);
+  return shuffled.slice(0, maxItems);
 };
 
 /**
