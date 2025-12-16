@@ -8,7 +8,7 @@ import NewsCard from '../components/NewsCard'
 import LoadingSpinner from '../components/LoadingSpinner'
 import {
   FiSearch, FiCopy, FiCheck, FiRefreshCw, FiSave, FiTrash2, FiX, FiArrowUp, FiZap,
-  FiGrid
+  FiGrid, FiPlus, FiAlertCircle
 } from 'react-icons/fi'
 
 const Generator = () => {
@@ -34,6 +34,9 @@ const Generator = () => {
   const [showScrollTop, setShowScrollTop] = useState(false)
   const [breakingNews, setBreakingNews] = useState([])
   const [loadingBreaking, setLoadingBreaking] = useState(false)
+  const [breakingLoadCount, setBreakingLoadCount] = useState(0) // Contador de cargas (máx 5)
+  const [breakingOffset, setBreakingOffset] = useState(0) // Offset para paginación
+  const [loadingMoreBreaking, setLoadingMoreBreaking] = useState(false) // Loading para "cargar más"
   const [selectedProfileId, setSelectedProfileId] = useState('')
   const [filtersCollapsed, setFiltersCollapsed] = useState(false)  // Para colapsar filtros en móvil
   const [gridColumns, setGridColumns] = useState(() => {
@@ -327,19 +330,29 @@ const Generator = () => {
     localStorage.setItem('newsGridColumns', cols.toString())
   }
 
-  const loadBreakingNews = async () => {
+  // Grupos de categorías para cargas incrementales
+  const categoryGroups = [
+    ['nacionales', 'politica', 'economia'],
+    ['deportes', 'espectaculos', 'tecnologia'],
+    ['policiales', 'internacionales'],
+    ['buenosaires', 'cordoba', 'santafe'],
+    ['mendoza', 'tucuman', 'salta']
+  ]
+
+  const loadBreakingNews = async (isRefresh = true) => {
     try {
-      setLoadingBreaking(true)
-      setBreakingNews([])
+      if (isRefresh) {
+        setLoadingBreaking(true)
+        setBreakingNews([])
+        setBreakingLoadCount(1)
+        setBreakingOffset(0)
+      }
 
-      // Usar getRssNews que es el mismo endpoint que funciona en la portada
-      // Buscar en múltiples categorías para mayor cobertura
-      const categories = ['nacionales', 'politica', 'economia', 'deportes', 'policiales', 'internacionales']
-
+      // Primera carga: categorías principales
       const response = await newsApi.getRssNews({
-        categories: categories.join(','),
+        categories: categoryGroups[0].join(','),
         maxItems: 20,
-        hoursAgo: 48,
+        hoursAgo: 72,
         translate: 'true',
         shorten: 'true',
         generateEmojis: 'true'
@@ -360,6 +373,64 @@ const Generator = () => {
     } finally {
       setLoadingBreaking(false)
     }
+  }
+
+  const loadMoreBreakingNews = async () => {
+    if (breakingLoadCount >= 5) return
+
+    try {
+      setLoadingMoreBreaking(true)
+
+      // Usar el siguiente grupo de categorías
+      const nextGroupIndex = breakingLoadCount
+      const categories = categoryGroups[nextGroupIndex] || categoryGroups[0]
+
+      const response = await newsApi.getRssNews({
+        categories: categories.join(','),
+        maxItems: 20,
+        hoursAgo: 72,
+        translate: 'true',
+        shorten: 'true',
+        generateEmojis: 'true'
+      })
+
+      if (response.success && response.data.length > 0) {
+        // Filtrar noticias duplicadas por link
+        const existingLinks = new Set(breakingNews.map(n => n.link))
+        const newNews = response.data.filter(n => !existingLinks.has(n.link))
+
+        // Ordenar las nuevas por fecha
+        const sortedNew = newNews.sort((a, b) => {
+          const dateA = new Date(a.pubDate || 0)
+          const dateB = new Date(b.pubDate || 0)
+          return dateB - dateA
+        })
+
+        if (sortedNew.length > 0) {
+          setBreakingNews(prev => [...prev, ...sortedNew])
+          toast.success(`${sortedNew.length} noticias nuevas cargadas`)
+        } else {
+          toast.info('No hay más noticias nuevas en esta categoría')
+        }
+
+        setBreakingLoadCount(prev => prev + 1)
+      } else {
+        toast.info('No hay más noticias disponibles')
+        setBreakingLoadCount(prev => prev + 1)
+      }
+    } catch (error) {
+      console.error('Error cargando más noticias:', error)
+      toast.error('Error al cargar más noticias')
+    } finally {
+      setLoadingMoreBreaking(false)
+    }
+  }
+
+  const resetBreakingNews = () => {
+    setBreakingNews([])
+    setBreakingLoadCount(0)
+    setBreakingOffset(0)
+    loadBreakingNews(true)
   }
 
   return (
@@ -542,7 +613,7 @@ const Generator = () => {
                 <p>Las noticias más importantes de las últimas horas</p>
                 <button
                   className="btn btn-primary btn-sm"
-                  onClick={loadBreakingNews}
+                  onClick={() => loadBreakingNews(true)}
                   disabled={loadingBreaking}
                 >
                   <FiRefreshCw className={loadingBreaking ? 'spinning' : ''} />
@@ -561,7 +632,7 @@ const Generator = () => {
               ) : (
                 <>
                   <div className="results-header">
-                    <span>{breakingNews.length} noticias recientes</span>
+                    <span>{breakingNews.length} noticias recientes (carga {breakingLoadCount}/5)</span>
                     <div className="column-selector">
                       {[2, 3, 4, 5].filter(cols => cols <= maxColumns).map(cols => (
                         <button
@@ -580,6 +651,44 @@ const Generator = () => {
                     {breakingNews.map((item, index) => (
                       <NewsCard key={index} news={item} />
                     ))}
+                  </div>
+
+                  {/* Botón Cargar Más o Mensaje de Límite */}
+                  <div className="load-more-section">
+                    {breakingLoadCount < 5 ? (
+                      <button
+                        className="btn btn-load-more"
+                        onClick={loadMoreBreakingNews}
+                        disabled={loadingMoreBreaking}
+                      >
+                        {loadingMoreBreaking ? (
+                          <>
+                            <LoadingSpinner size="small" />
+                            Cargando más noticias...
+                          </>
+                        ) : (
+                          <>
+                            <FiPlus size={20} />
+                            Cargar más noticias ({breakingLoadCount}/5 cargas)
+                          </>
+                        )}
+                      </button>
+                    ) : (
+                      <div className="limit-reached">
+                        <FiAlertCircle size={24} />
+                        <div className="limit-message">
+                          <strong>Límite de cargas alcanzado</strong>
+                          <p>Has cargado {breakingNews.length} noticias. Para ver más noticias nuevas, limpia los resultados y vuelve a buscar.</p>
+                        </div>
+                        <button
+                          className="btn btn-primary"
+                          onClick={resetBreakingNews}
+                        >
+                          <FiRefreshCw size={18} />
+                          Reiniciar búsqueda
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </>
               )}

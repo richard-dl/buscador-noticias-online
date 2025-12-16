@@ -2046,6 +2046,80 @@ input, select, textarea {
   }
 }
 
+/* Load More Section - Último Momento */
+.load-more-section {
+  margin-top: var(--spacing-8);
+  text-align: center;
+  padding: var(--spacing-6);
+}
+
+.btn-load-more {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-4) var(--spacing-8);
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  border: none;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+}
+
+.btn-load-more:hover:not(:disabled) {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+}
+
+.btn-load-more:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.limit-reached {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-4);
+  padding: var(--spacing-6);
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border: 2px solid #f59e0b;
+  border-radius: var(--radius-xl);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.limit-reached svg {
+  color: #d97706;
+}
+
+.limit-message {
+  text-align: center;
+}
+
+.limit-message strong {
+  display: block;
+  font-size: var(--font-size-lg);
+  color: #92400e;
+  margin-bottom: var(--spacing-2);
+}
+
+.limit-message p {
+  color: #78350f;
+  font-size: var(--font-size-sm);
+  margin: 0;
+}
+
+.limit-reached .btn-primary {
+  margin-top: var(--spacing-2);
+}
+
 /* ============================================
    BOTÓN PRINCIPAL DE BÚSQUEDA - DESTACADO
    ============================================ */
