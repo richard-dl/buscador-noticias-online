@@ -182,12 +182,14 @@ router.get('/media/:fileId', async (req, res) => {
     const file = await downloadFile(fileId);
     console.log('[VIP Media] Archivo descargado:', file.fileName, file.contentType, file.data?.length, 'bytes');
 
-    // Configurar headers para cache y tipo de contenido
+    // Configurar headers para CORS, cache y tipo de contenido
     res.set({
       'Content-Type': file.contentType,
       'Content-Disposition': `inline; filename="${file.fileName}"`,
       'Cache-Control': 'public, max-age=86400', // Cache por 24 horas
-      'X-Content-Type-Options': 'nosniff'
+      'X-Content-Type-Options': 'nosniff',
+      'Access-Control-Allow-Origin': '*',
+      'Cross-Origin-Resource-Policy': 'cross-origin'
     });
 
     // Enviar el archivo
