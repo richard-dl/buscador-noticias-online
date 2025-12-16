@@ -64,7 +64,12 @@ export const userApi = {
   getSearchProfiles: () => api.get('/user/search-profiles'),
   createSearchProfile: (data) => api.post('/user/search-profiles', data),
   updateSearchProfile: (id, data) => api.put(`/user/search-profiles/${id}`, data),
-  deleteSearchProfile: (id) => api.delete(`/user/search-profiles/${id}`)
+  deleteSearchProfile: (id) => api.delete(`/user/search-profiles/${id}`),
+
+  // Saved News
+  getSavedNews: () => api.get('/user/saved-news'),
+  saveNews: (data) => api.post('/user/saved-news', data),
+  deleteSavedNews: (id) => api.delete(`/user/saved-news/${id}`)
 }
 
 // ============ NEWS ============

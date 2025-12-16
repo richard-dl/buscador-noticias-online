@@ -237,6 +237,74 @@ const saveSearchHistory = async (uid, searchData) => {
 };
 
 /**
+ * Obtener noticias guardadas del usuario
+ */
+const getSavedNews = async (uid) => {
+  const snapshot = await db
+    .collection('users')
+    .doc(uid)
+    .collection('savedNews')
+    .orderBy('savedAt', 'desc')
+    .get();
+
+  return snapshot.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+  }));
+};
+
+/**
+ * Guardar noticia
+ */
+const saveNews = async (uid, newsData) => {
+  // Verificar si ya existe por link
+  const existing = await db
+    .collection('users')
+    .doc(uid)
+    .collection('savedNews')
+    .where('link', '==', newsData.link)
+    .get();
+
+  if (!existing.empty) {
+    throw new Error('Esta noticia ya está guardada');
+  }
+
+  // Limitar a 100 noticias guardadas
+  const allSaved = await getSavedNews(uid);
+  if (allSaved.length >= 100) {
+    throw new Error('Has alcanzado el límite de 100 noticias guardadas');
+  }
+
+  const newsRef = db
+    .collection('users')
+    .doc(uid)
+    .collection('savedNews')
+    .doc();
+
+  const news = {
+    ...newsData,
+    savedAt: admin.firestore.FieldValue.serverTimestamp()
+  };
+
+  await newsRef.set(news);
+  return { id: newsRef.id, ...news };
+};
+
+/**
+ * Eliminar noticia guardada
+ */
+const deleteSavedNews = async (uid, newsId) => {
+  await db
+    .collection('users')
+    .doc(uid)
+    .collection('savedNews')
+    .doc(newsId)
+    .delete();
+
+  return true;
+};
+
+/**
  * Verificar token de Firebase
  */
 const verifyIdToken = async (idToken) => {
@@ -302,6 +370,9 @@ module.exports = {
   updateSearchProfile,
   deleteSearchProfile,
   saveSearchHistory,
+  getSavedNews,
+  saveNews,
+  deleteSavedNews,
   verifyIdToken,
   getAllUsersFromFirestore
 };

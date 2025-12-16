@@ -3,9 +3,10 @@ import { useAuth } from '../context/AuthContext'
 import { userApi, authApi } from '../services/api'
 import Header from '../components/Header'
 import LoadingSpinner from '../components/LoadingSpinner'
+import NewsCard from '../components/NewsCard'
 import { toast } from 'react-toastify'
 import {
-  FiUser, FiMail, FiCalendar, FiClock, FiEdit2, FiSave, FiX, FiUsers
+  FiUser, FiMail, FiCalendar, FiClock, FiEdit2, FiSave, FiX, FiUsers, FiBookmark
 } from 'react-icons/fi'
 
 const Profile = () => {
@@ -17,6 +18,8 @@ const Profile = () => {
   const [loadingProfiles, setLoadingProfiles] = useState(true)
   const [users, setUsers] = useState([])
   const [loadingUsers, setLoadingUsers] = useState(true)
+  const [savedNews, setSavedNews] = useState([])
+  const [loadingSavedNews, setLoadingSavedNews] = useState(true)
 
   useEffect(() => {
     if (profile) {
@@ -27,6 +30,7 @@ const Profile = () => {
       }
     }
     loadSearchProfiles()
+    loadSavedNews()
   }, [profile])
 
   const loadSearchProfiles = async () => {
@@ -40,6 +44,23 @@ const Profile = () => {
     } finally {
       setLoadingProfiles(false)
     }
+  }
+
+  const loadSavedNews = async () => {
+    try {
+      const response = await userApi.getSavedNews()
+      if (response.success) {
+        setSavedNews(response.data)
+      }
+    } catch (error) {
+      console.error('Error cargando noticias guardadas:', error)
+    } finally {
+      setLoadingSavedNews(false)
+    }
+  }
+
+  const handleDeleteSavedNews = (newsId) => {
+    setSavedNews(prev => prev.filter(n => n.id !== newsId))
   }
 
   const loadUsers = async () => {
@@ -272,10 +293,43 @@ const Profile = () => {
                 <span className="stat-label">Perfiles guardados</span>
               </div>
               <div className="stat-item">
+                <span className="stat-value">{savedNews.length}</span>
+                <span className="stat-label">Noticias guardadas</span>
+              </div>
+              <div className="stat-item">
                 <span className="stat-value">{profile.authProvider === 'google' ? 'Google' : 'Email'}</span>
                 <span className="stat-label">Método de acceso</span>
               </div>
             </div>
+          </section>
+
+          {/* Noticias Guardadas */}
+          <section className="profile-card saved-news-card">
+            <div className="card-header">
+              <h2>
+                <FiBookmark size={24} />
+                Noticias Guardadas
+              </h2>
+              <span className="count">{savedNews.length} / 100</span>
+            </div>
+
+            {loadingSavedNews ? (
+              <LoadingSpinner size="small" text="Cargando noticias..." />
+            ) : savedNews.length === 0 ? (
+              <p className="empty-message">No tienes noticias guardadas. Usa el botón de guardar en las tarjetas de noticias para agregar noticias aquí.</p>
+            ) : (
+              <div className="saved-news-grid">
+                {savedNews.map(news => (
+                  <NewsCard
+                    key={news.id}
+                    news={news}
+                    isSaved={true}
+                    savedNewsId={news.id}
+                    onDelete={handleDeleteSavedNews}
+                  />
+                ))}
+              </div>
+            )}
           </section>
 
           {/* Sección de usuarios - Solo Admin */}

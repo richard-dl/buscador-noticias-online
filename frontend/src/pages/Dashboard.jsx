@@ -215,35 +215,6 @@ const Dashboard = () => {
         )}
       </section>
 
-      {/* Saved Profiles */}
-      {searchProfiles.length > 0 && (
-        <section className="saved-profiles container">
-          <div className="section-header">
-            <h2>Tus Perfiles de Búsqueda</h2>
-            <Link to="/generator?tab=profiles" className="btn btn-text">Administrar</Link>
-          </div>
-
-          <div className="profiles-grid">
-            {searchProfiles.slice(0, 4).map(profile => (
-              <Link
-                key={profile.id}
-                to={`/generator?profile=${profile.id}`}
-                className="profile-card"
-              >
-                <h4>{profile.name}</h4>
-                <div className="profile-tags">
-                  {profile.tematicas?.slice(0, 2).map(t => (
-                    <span key={t} className="tag">{t}</span>
-                  ))}
-                  {profile.provincia && (
-                    <span className="tag location">{profile.provincia}</span>
-                  )}
-                </div>
-              </Link>
-            ))}
-          </div>
-        </section>
-      )}
 
       {/* Footer */}
       <footer className="dashboard-footer">

@@ -8,6 +8,9 @@ const {
   createSearchProfile,
   updateSearchProfile,
   deleteSearchProfile,
+  getSavedNews,
+  saveNews,
+  deleteSavedNews,
   db
 } = require('../services/firebaseService');
 
@@ -255,6 +258,107 @@ router.delete('/search-profiles/:id', authenticate, async (req, res) => {
     res.status(500).json({
       success: false,
       error: 'Error al eliminar perfil de búsqueda'
+    });
+  }
+});
+
+// ============ SAVED NEWS ============
+
+/**
+ * GET /api/user/saved-news
+ * Obtener noticias guardadas del usuario
+ */
+router.get('/saved-news', authenticate, async (req, res) => {
+  try {
+    const savedNews = await getSavedNews(req.user.uid);
+
+    res.json({
+      success: true,
+      data: savedNews
+    });
+  } catch (error) {
+    console.error('Error obteniendo noticias guardadas:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Error al obtener noticias guardadas'
+    });
+  }
+});
+
+/**
+ * POST /api/user/saved-news
+ * Guardar una noticia
+ */
+router.post('/saved-news', authenticate, async (req, res) => {
+  try {
+    const {
+      title,
+      link,
+      description,
+      summary,
+      image,
+      source,
+      category,
+      pubDate,
+      emojis,
+      formattedText,
+      shortUrl
+    } = req.body;
+
+    if (!title || !link) {
+      return res.status(400).json({
+        success: false,
+        error: 'El título y link de la noticia son requeridos'
+      });
+    }
+
+    const savedNews = await saveNews(req.user.uid, {
+      title,
+      link,
+      description: description || '',
+      summary: summary || '',
+      image: image || '',
+      source: source || '',
+      category: category || '',
+      pubDate: pubDate || null,
+      emojis: emojis || [],
+      formattedText: formattedText || '',
+      shortUrl: shortUrl || ''
+    });
+
+    res.status(201).json({
+      success: true,
+      message: 'Noticia guardada correctamente',
+      data: savedNews
+    });
+  } catch (error) {
+    console.error('Error guardando noticia:', error);
+    res.status(400).json({
+      success: false,
+      error: error.message || 'Error al guardar noticia'
+    });
+  }
+});
+
+/**
+ * DELETE /api/user/saved-news/:id
+ * Eliminar noticia guardada
+ */
+router.delete('/saved-news/:id', authenticate, async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    await deleteSavedNews(req.user.uid, id);
+
+    res.json({
+      success: true,
+      message: 'Noticia eliminada correctamente'
+    });
+  } catch (error) {
+    console.error('Error eliminando noticia:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Error al eliminar noticia guardada'
     });
   }
 });

@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { FiCopy, FiCheck, FiExternalLink, FiImage } from 'react-icons/fi'
+import { FiCopy, FiCheck, FiExternalLink, FiImage, FiBookmark, FiTrash2 } from 'react-icons/fi'
 import { toast } from 'react-toastify'
+import { userApi } from '../services/api'
 
 // Limpiar entidades HTML del texto
 const cleanHtmlEntities = (text) => {
@@ -18,9 +19,10 @@ const cleanHtmlEntities = (text) => {
     .trim()
 }
 
-const NewsCard = ({ news }) => {
+const NewsCard = ({ news, isSaved = false, onDelete = null, savedNewsId = null }) => {
   const [copied, setCopied] = useState(false)
   const [imageError, setImageError] = useState(false)
+  const [saving, setSaving] = useState(false)
 
   const formatDate = (date) => {
     if (!date) return ''
@@ -64,6 +66,44 @@ const NewsCard = ({ news }) => {
       text += `\n📺 Fuente: ${news.source}`
     }
     return text
+  }
+
+  const handleSaveNews = async () => {
+    if (saving) return
+
+    try {
+      setSaving(true)
+      await userApi.saveNews({
+        title: news.title,
+        link: news.link,
+        description: news.description || '',
+        summary: news.summary || '',
+        image: news.image || '',
+        source: news.source || '',
+        category: news.category || '',
+        pubDate: news.pubDate || null,
+        emojis: news.emojis || [],
+        formattedText: news.formattedText || generateFormattedText(),
+        shortUrl: news.shortUrl || ''
+      })
+      toast.success('Noticia guardada')
+    } catch (err) {
+      toast.error(err.message || 'Error al guardar noticia')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const handleDeleteNews = async () => {
+    if (!savedNewsId || !onDelete) return
+
+    try {
+      await userApi.deleteSavedNews(savedNewsId)
+      onDelete(savedNewsId)
+      toast.success('Noticia eliminada')
+    } catch (err) {
+      toast.error('Error al eliminar noticia')
+    }
   }
 
   return (
@@ -122,6 +162,27 @@ const NewsCard = ({ news }) => {
           {copied ? <FiCheck size={18} /> : <FiCopy size={18} />}
           <span>{copied ? 'Copiado' : 'Copiar'}</span>
         </button>
+
+        {isSaved ? (
+          <button
+            className="btn-delete"
+            onClick={handleDeleteNews}
+            title="Eliminar noticia guardada"
+          >
+            <FiTrash2 size={18} />
+            <span>Eliminar</span>
+          </button>
+        ) : (
+          <button
+            className={`btn-save ${saving ? 'saving' : ''}`}
+            onClick={handleSaveNews}
+            disabled={saving}
+            title="Guardar noticia"
+          >
+            <FiBookmark size={18} />
+            <span>{saving ? 'Guardando...' : 'Guardar'}</span>
+          </button>
+        )}
 
         <a
           href={news.link}

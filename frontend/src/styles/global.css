@@ -1144,6 +1144,44 @@ input, select, textarea {
   background-color: var(--color-gray-50);
 }
 
+.btn-save {
+  color: var(--color-warning);
+  border-right: 1px solid var(--color-border);
+}
+
+.btn-save:hover {
+  background-color: rgba(237, 137, 54, 0.1);
+}
+
+.btn-save.saving {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.btn-delete {
+  color: var(--color-danger);
+  border-right: 1px solid var(--color-border);
+}
+
+.btn-delete:hover {
+  background-color: rgba(229, 62, 62, 0.1);
+}
+
+.news-card-actions .btn-save,
+.news-card-actions .btn-delete {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3);
+  background: none;
+  border: none;
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
 /* ============================================
    GENERATOR PAGE
    ============================================ */
@@ -2473,5 +2511,37 @@ input, select, textarea {
 
   .user-card-body {
     grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Saved News Card */
+.saved-news-card {
+  grid-column: 1 / -1;
+}
+
+.saved-news-card .card-header h2 {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.saved-news-card .count {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  background: var(--color-gray-100);
+  padding: var(--spacing-1) var(--spacing-3);
+  border-radius: var(--radius-full);
+}
+
+.saved-news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--spacing-4);
+  margin-top: var(--spacing-4);
+}
+
+@media (max-width: 768px) {
+  .saved-news-grid {
+    grid-template-columns: 1fr;
   }
 }
