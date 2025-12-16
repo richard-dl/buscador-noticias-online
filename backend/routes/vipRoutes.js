@@ -158,6 +158,8 @@ router.post('/upgrade/:uid', authenticate, async (req, res) => {
 router.get('/media/:fileId', async (req, res) => {
   try {
     const { fileId } = req.params;
+    console.log('[VIP Media] Solicitando fileId:', fileId);
+    console.log('[VIP Media] Token configurado:', process.env.TELEGRAM_BOT_TOKEN ? 'Sí (' + process.env.TELEGRAM_BOT_TOKEN.substring(0, 10) + '...)' : 'NO');
 
     if (!fileId) {
       return res.status(400).json({
@@ -168,6 +170,7 @@ router.get('/media/:fileId', async (req, res) => {
 
     // Descargar archivo de Telegram
     const file = await downloadFile(fileId);
+    console.log('[VIP Media] Archivo descargado:', file.fileName, file.contentType, file.data?.length, 'bytes');
 
     // Configurar headers para cache y tipo de contenido
     res.set({
@@ -180,10 +183,12 @@ router.get('/media/:fileId', async (req, res) => {
     // Enviar el archivo
     res.send(file.data);
   } catch (error) {
-    console.error('Error sirviendo archivo multimedia:', error);
+    console.error('[VIP Media] Error sirviendo archivo:', error.message);
+    console.error('[VIP Media] Error completo:', error.response?.data || error);
     res.status(404).json({
       success: false,
-      error: 'Archivo no encontrado o no disponible'
+      error: 'Archivo no encontrado o no disponible',
+      debug: process.env.NODE_ENV !== 'production' ? error.message : undefined
     });
   }
 });
