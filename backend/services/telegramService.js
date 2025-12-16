@@ -153,32 +153,53 @@ const processPhotoMessage = async (message) => {
  * Procesar update de Telegram (webhook)
  */
 const processTelegramUpdate = async (update) => {
+  console.log('[Webhook] Update recibido:', JSON.stringify(update, null, 2));
+
   const message = update.message || update.channel_post;
 
   if (!message) {
+    console.log('[Webhook] No hay mensaje en el update');
     return { processed: false, reason: 'No message in update' };
   }
 
+  console.log('[Webhook] Mensaje recibido:', {
+    chat_id: message.chat?.id,
+    has_photo: !!message.photo,
+    has_text: !!message.text,
+    has_caption: !!message.caption,
+    photo_count: message.photo?.length || 0
+  });
+
   // Verificar que viene del grupo autorizado
   const authorizedChatId = process.env.TELEGRAM_GROUP_ID;
+  console.log('[Webhook] Chat autorizado:', authorizedChatId, '| Chat actual:', message.chat?.id);
+
   if (authorizedChatId && String(message.chat?.id) !== String(authorizedChatId)) {
+    console.log('[Webhook] Chat no autorizado');
     return { processed: false, reason: 'Unauthorized chat' };
   }
 
   let contentData;
 
   if (message.photo) {
+    console.log('[Webhook] Procesando mensaje con FOTO');
     contentData = await processPhotoMessage(message);
+    console.log('[Webhook] Datos de foto procesados:', JSON.stringify(contentData, null, 2));
   } else if (message.text || message.caption) {
+    console.log('[Webhook] Procesando mensaje de TEXTO');
     contentData = await processTextMessage(message);
   } else {
+    console.log('[Webhook] Tipo de mensaje no soportado');
     return { processed: false, reason: 'Unsupported message type' };
   }
 
   // Solo guardar si tiene título, contenido o imagen
   if (!contentData.titulo && !contentData.contenido && !contentData.imagen) {
+    console.log('[Webhook] No hay contenido para guardar');
     return { processed: false, reason: 'No content to save' };
   }
+
+  console.log('[Webhook] Guardando contenido en Firestore...');
 
   // Guardar en Firestore
   const saved = await saveVipContent(contentData);
