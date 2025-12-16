@@ -74,9 +74,9 @@ const ZonaVip = () => {
     try {
       await userApi.saveNews({
         title: item.titulo || 'Contenido VIP',
+        link: `vip://${item.id}`, // Link interno para contenido VIP
         description: item.contenido,
         source: item.fuente || 'Zona VIP',
-        url: '',
         pubDate: item.createdAt
       })
       toast.success('Noticia guardada')

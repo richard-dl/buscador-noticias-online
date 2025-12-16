@@ -41,7 +41,8 @@
       "Bash(cat:*)",
       "Bash(git merge:*)",
       "Bash(git stash:*)",
-      "Bash(copy \"c:\\Proyectos\\buscador-noticias-online\\frontend\\public\\.htaccess\" \"c:\\Proyectos\\buscador-noticias-online\\frontend\\dist\\.htaccess\")"
+      "Bash(copy \"c:\\Proyectos\\buscador-noticias-online\\frontend\\public\\.htaccess\" \"c:\\Proyectos\\buscador-noticias-online\\frontend\\dist\\.htaccess\")",
+      "Bash(cmd /c copy:*)"
     ]
   }
 }
