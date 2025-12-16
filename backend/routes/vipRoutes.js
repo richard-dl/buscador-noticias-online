@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { authenticateAndRequireVip, authenticate } = require('../middleware/authMiddleware');
 const { getVipContent, deleteVipContent, checkVipAccess, updateUserRole } = require('../services/firebaseService');
-const { processTelegramUpdate, verifyWebhookToken } = require('../services/telegramService');
+const { processTelegramUpdate, verifyWebhookToken, downloadFile } = require('../services/telegramService');
 
 /**
  * GET /api/vip/content
@@ -145,6 +145,45 @@ router.post('/upgrade/:uid', authenticate, async (req, res) => {
     res.status(500).json({
       success: false,
       error: error.message || 'Error al actualizar rol'
+    });
+  }
+});
+
+/**
+ * GET /api/vip/media/:fileId
+ * Proxy para servir archivos multimedia de Telegram
+ * No requiere autenticación para permitir carga en img tags
+ * El fileId es único y no predecible, actuando como token temporal
+ */
+router.get('/media/:fileId', async (req, res) => {
+  try {
+    const { fileId } = req.params;
+
+    if (!fileId) {
+      return res.status(400).json({
+        success: false,
+        error: 'fileId es requerido'
+      });
+    }
+
+    // Descargar archivo de Telegram
+    const file = await downloadFile(fileId);
+
+    // Configurar headers para cache y tipo de contenido
+    res.set({
+      'Content-Type': file.contentType,
+      'Content-Disposition': `inline; filename="${file.fileName}"`,
+      'Cache-Control': 'public, max-age=86400', // Cache por 24 horas
+      'X-Content-Type-Options': 'nosniff'
+    });
+
+    // Enviar el archivo
+    res.send(file.data);
+  } catch (error) {
+    console.error('Error sirviendo archivo multimedia:', error);
+    res.status(404).json({
+      success: false,
+      error: 'Archivo no encontrado o no disponible'
     });
   }
 });

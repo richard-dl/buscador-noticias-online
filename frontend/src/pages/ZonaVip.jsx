@@ -284,7 +284,7 @@ const ZonaVip = () => {
                 {item.imagen && (
                   <div className="vip-content-image">
                     <img
-                      src={`https://api.telegram.org/file/bot${import.meta.env.VITE_TELEGRAM_BOT_TOKEN}/${item.imagen.fileId}`}
+                      src={vipApi.getMediaUrl(item.imagen.fileId)}
                       alt={item.titulo}
                       onError={(e) => e.target.style.display = 'none'}
                     />

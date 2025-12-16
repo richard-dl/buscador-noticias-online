@@ -4,6 +4,10 @@
  */
 
 const { saveVipContent } = require('./firebaseService');
+const axios = require('axios');
+
+const TELEGRAM_API_URL = `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}`;
+const TELEGRAM_FILE_URL = `https://api.telegram.org/file/bot${process.env.TELEGRAM_BOT_TOKEN}`;
 
 /**
  * Hashtags soportados:
@@ -194,11 +198,75 @@ const verifyWebhookToken = (token) => {
   return token === expectedToken;
 };
 
+/**
+ * Obtener información del archivo desde Telegram
+ * @param {string} fileId - ID del archivo en Telegram
+ * @returns {Promise<{file_path: string, file_size: number}>}
+ */
+const getFileInfo = async (fileId) => {
+  try {
+    const response = await axios.get(`${TELEGRAM_API_URL}/getFile`, {
+      params: { file_id: fileId }
+    });
+
+    if (response.data.ok) {
+      return response.data.result;
+    }
+    throw new Error('No se pudo obtener información del archivo');
+  } catch (error) {
+    console.error('Error obteniendo info del archivo:', error.message);
+    throw error;
+  }
+};
+
+/**
+ * Descargar archivo de Telegram como stream/buffer
+ * @param {string} fileId - ID del archivo en Telegram
+ * @returns {Promise<{data: Buffer, contentType: string}>}
+ */
+const downloadFile = async (fileId) => {
+  try {
+    // Primero obtener el file_path
+    const fileInfo = await getFileInfo(fileId);
+    const filePath = fileInfo.file_path;
+
+    // Descargar el archivo
+    const fileUrl = `${TELEGRAM_FILE_URL}/${filePath}`;
+    const response = await axios.get(fileUrl, {
+      responseType: 'arraybuffer'
+    });
+
+    // Determinar content-type basado en la extensión
+    const extension = filePath.split('.').pop().toLowerCase();
+    const contentTypes = {
+      'jpg': 'image/jpeg',
+      'jpeg': 'image/jpeg',
+      'png': 'image/png',
+      'gif': 'image/gif',
+      'webp': 'image/webp',
+      'mp4': 'video/mp4',
+      'webm': 'video/webm',
+      'mov': 'video/quicktime'
+    };
+
+    return {
+      data: Buffer.from(response.data),
+      contentType: contentTypes[extension] || 'application/octet-stream',
+      fileName: filePath.split('/').pop()
+    };
+  } catch (error) {
+    console.error('Error descargando archivo de Telegram:', error.message);
+    throw error;
+  }
+};
+
 module.exports = {
   parseMessageWithHashtags,
   detectSensitiveData,
   processTextMessage,
   processPhotoMessage,
   processTelegramUpdate,
-  verifyWebhookToken
+  verifyWebhookToken,
+  getFileInfo,
+  downloadFile
 };
