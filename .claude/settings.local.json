@@ -28,7 +28,19 @@
       "Bash(dir /s /B \"c:\\Proyectos\\buscador-noticias-online\\frontend\\src\\*.jsx\")",
       "Bash(taskkill /F /PID 16604)",
       "Bash(taskkill //F //PID 16604)",
-      "Bash(tasklist:*)"
+      "Bash(tasklist:*)",
+      "Bash(taskkill //F //PID 12112)",
+      "Bash(del:*)",
+      "Bash(node test-image.js:*)",
+      "Bash(sshpass:*)",
+      "Bash(node scripts/validate-rss-feeds.js:*)",
+      "Bash(node ../scripts/validate-rss-feeds.js:*)",
+      "Bash(npm ls:*)",
+      "Bash(move \"c:\\Proyectos\\buscador-noticias-online\\scripts\\validate-rss-feeds.js\" \"c:\\Proyectos\\buscador-noticias-online\\backend\\scripts\\validate-rss-feeds.js\")",
+      "Bash(node:*)",
+      "Bash(cat:*)",
+      "Bash(git merge:*)",
+      "Bash(git stash:*)"
     ]
   }
 }
