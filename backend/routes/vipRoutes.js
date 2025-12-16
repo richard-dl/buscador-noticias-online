@@ -164,12 +164,12 @@ router.post('/upgrade/:uid', authenticate, async (req, res) => {
  * Proxy para servir archivos multimedia de Telegram
  * No requiere autenticación para permitir carga en img tags
  * El fileId es único y no predecible, actuando como token temporal
+ * Soporta Range requests para streaming de video (requerido por Brave y otros navegadores)
  */
 router.get('/media/:fileId', async (req, res) => {
   try {
     const { fileId } = req.params;
     console.log('[VIP Media] Solicitando fileId:', fileId);
-    console.log('[VIP Media] Token configurado:', process.env.TELEGRAM_BOT_TOKEN ? 'Sí (' + process.env.TELEGRAM_BOT_TOKEN.substring(0, 10) + '...)' : 'NO');
 
     if (!fileId) {
       return res.status(400).json({
@@ -180,27 +180,68 @@ router.get('/media/:fileId', async (req, res) => {
 
     // Descargar archivo de Telegram
     const file = await downloadFile(fileId);
-    console.log('[VIP Media] Archivo descargado:', file.fileName, file.contentType, file.data?.length, 'bytes');
+    const fileSize = file.data.length;
+    console.log('[VIP Media] Archivo descargado:', file.fileName, file.contentType, fileSize, 'bytes');
 
-    // Configurar headers para CORS, cache y tipo de contenido
+    // Headers base para CORS
     res.set({
-      'Content-Type': file.contentType,
-      'Content-Disposition': `inline; filename="${file.fileName}"`,
-      'Cache-Control': 'public, max-age=86400', // Cache por 24 horas
-      'X-Content-Type-Options': 'nosniff',
       'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, HEAD, OPTIONS',
+      'Access-Control-Allow-Headers': 'Range, Content-Type',
+      'Access-Control-Expose-Headers': 'Content-Range, Accept-Ranges, Content-Length',
       'Cross-Origin-Resource-Policy': 'cross-origin'
     });
 
-    // Enviar el archivo
-    res.send(file.data);
+    // Para videos, soportar Range requests (requerido para streaming en Brave/Chrome)
+    if (file.contentType.startsWith('video/')) {
+      const range = req.headers.range;
+
+      if (range) {
+        // Parsear el header Range
+        const parts = range.replace(/bytes=/, '').split('-');
+        const start = parseInt(parts[0], 10);
+        const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+        const chunkSize = end - start + 1;
+
+        console.log('[VIP Media] Range request:', start, '-', end, '/', fileSize);
+
+        res.status(206);
+        res.set({
+          'Content-Type': file.contentType,
+          'Content-Length': chunkSize,
+          'Content-Range': `bytes ${start}-${end}/${fileSize}`,
+          'Accept-Ranges': 'bytes',
+          'Cache-Control': 'public, max-age=86400'
+        });
+
+        // Enviar solo el chunk solicitado
+        res.send(file.data.slice(start, end + 1));
+      } else {
+        // Sin Range header - enviar completo
+        res.set({
+          'Content-Type': file.contentType,
+          'Content-Length': fileSize,
+          'Accept-Ranges': 'bytes',
+          'Cache-Control': 'public, max-age=86400'
+        });
+        res.send(file.data);
+      }
+    } else {
+      // Para imágenes y otros archivos
+      res.set({
+        'Content-Type': file.contentType,
+        'Content-Length': fileSize,
+        'Content-Disposition': `inline; filename="${file.fileName}"`,
+        'Cache-Control': 'public, max-age=86400',
+        'X-Content-Type-Options': 'nosniff'
+      });
+      res.send(file.data);
+    }
   } catch (error) {
     console.error('[VIP Media] Error sirviendo archivo:', error.message);
-    console.error('[VIP Media] Error completo:', error.response?.data || error);
     res.status(404).json({
       success: false,
-      error: 'Archivo no encontrado o no disponible',
-      debug: process.env.NODE_ENV !== 'production' ? error.message : undefined
+      error: 'Archivo no encontrado o no disponible'
     });
   }
 });
