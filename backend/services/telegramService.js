@@ -205,16 +205,25 @@ const verifyWebhookToken = (token) => {
  */
 const getFileInfo = async (fileId) => {
   try {
-    const response = await axios.get(`${TELEGRAM_API_URL}/getFile`, {
+    const url = `${TELEGRAM_API_URL}/getFile`;
+    console.log('[Telegram] Llamando getFile:', url.replace(process.env.TELEGRAM_BOT_TOKEN, 'BOT_TOKEN'));
+    console.log('[Telegram] fileId:', fileId);
+
+    const response = await axios.get(url, {
       params: { file_id: fileId }
     });
+
+    console.log('[Telegram] Respuesta getFile:', JSON.stringify(response.data));
 
     if (response.data.ok) {
       return response.data.result;
     }
-    throw new Error('No se pudo obtener información del archivo');
+    throw new Error('No se pudo obtener información del archivo: ' + JSON.stringify(response.data));
   } catch (error) {
-    console.error('Error obteniendo info del archivo:', error.message);
+    console.error('[Telegram] Error obteniendo info del archivo:', error.message);
+    if (error.response) {
+      console.error('[Telegram] Response data:', JSON.stringify(error.response.data));
+    }
     throw error;
   }
 };
