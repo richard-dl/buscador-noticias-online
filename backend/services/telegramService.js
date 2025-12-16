@@ -153,7 +153,15 @@ const processPhotoMessage = async (message) => {
  * Procesar update de Telegram (webhook)
  */
 const processTelegramUpdate = async (update) => {
-  console.log('[Webhook] Update recibido:', JSON.stringify(update, null, 2));
+  console.log('[Webhook] ====== NUEVO UPDATE ======');
+  console.log('[Webhook] Update ID:', update.update_id);
+  console.log('[Webhook] Tipo de update:',
+    update.message ? 'message' :
+    update.channel_post ? 'channel_post' :
+    update.edited_message ? 'edited_message' :
+    update.edited_channel_post ? 'edited_channel_post' : 'otro'
+  );
+  console.log('[Webhook] Update completo:', JSON.stringify(update, null, 2));
 
   const message = update.message || update.channel_post;
 

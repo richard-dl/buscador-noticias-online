@@ -82,10 +82,17 @@ router.delete('/content/:id', authenticateAndRequireVip, async (req, res) => {
  * Webhook para recibir actualizaciones de Telegram
  */
 router.post('/webhook/telegram', async (req, res) => {
+  // Log inmediato de TODA la request
+  console.log('[Webhook Route] ====== REQUEST RECIBIDA ======');
+  console.log('[Webhook Route] Headers:', JSON.stringify(req.headers, null, 2));
+  console.log('[Webhook Route] Body:', JSON.stringify(req.body, null, 2));
+  console.log('[Webhook Route] Query:', JSON.stringify(req.query, null, 2));
+
   try {
     // Verificar token secreto si está configurado
     const webhookToken = req.query.token || req.headers['x-telegram-bot-api-secret-token'];
     if (process.env.TELEGRAM_WEBHOOK_SECRET && !verifyWebhookToken(webhookToken)) {
+      console.log('[Webhook Route] Token inválido');
       return res.status(401).json({
         success: false,
         error: 'Token de webhook inválido'
@@ -95,13 +102,16 @@ router.post('/webhook/telegram', async (req, res) => {
     const update = req.body;
 
     if (!update) {
+      console.log('[Webhook Route] No hay body');
       return res.status(400).json({
         success: false,
         error: 'No update data received'
       });
     }
 
+    console.log('[Webhook Route] Procesando update...');
     const result = await processTelegramUpdate(update);
+    console.log('[Webhook Route] Resultado:', JSON.stringify(result, null, 2));
 
     // Telegram espera 200 OK para confirmar recepción
     res.status(200).json({
