@@ -26,7 +26,19 @@ const NewsCard = ({ news, isSaved = false, onDelete = null, savedNewsId = null }
 
   const formatDate = (date) => {
     if (!date) return ''
-    const d = new Date(date)
+
+    // Manejar timestamps de Firestore {_seconds, _nanoseconds}
+    let d
+    if (date._seconds) {
+      d = new Date(date._seconds * 1000)
+    } else if (date.seconds) {
+      d = new Date(date.seconds * 1000)
+    } else {
+      d = new Date(date)
+    }
+
+    // Verificar que la fecha es válida
+    if (isNaN(d.getTime())) return ''
 
     // Formato: HH:mm - DD/MM/YYYY
     const hours = d.getHours().toString().padStart(2, '0')
