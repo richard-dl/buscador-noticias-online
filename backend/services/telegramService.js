@@ -175,8 +175,8 @@ const processTelegramUpdate = async (update) => {
     return { processed: false, reason: 'Unsupported message type' };
   }
 
-  // Solo guardar si tiene título o contenido
-  if (!contentData.titulo && !contentData.contenido) {
+  // Solo guardar si tiene título, contenido o imagen
+  if (!contentData.titulo && !contentData.contenido && !contentData.imagen) {
     return { processed: false, reason: 'No content to save' };
   }
 
