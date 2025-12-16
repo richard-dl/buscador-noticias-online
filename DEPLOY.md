@@ -5,13 +5,84 @@ Esta guía describe cómo desplegar el proyecto en producción.
 ## Arquitectura de Deployment
 
 - **Frontend**: Hostinger (Shared Hosting) - https://buscador.tuplay.top
-- **Backend**: Render.com (Free Tier) - API Node.js
+- **Backend**: Vercel (Recomendado) o Render.com - API Node.js
 - **Base de Datos**: Firebase Firestore
 - **Autenticación**: Firebase Authentication
 
 ---
 
-## 1. Deploy del Backend en Render.com
+## 1. Deploy del Backend en Vercel (Recomendado)
+
+### Ventajas sobre Render.com
+- Sin "cold starts" de 30+ segundos (Render Free duerme)
+- Mejor rendimiento global con Edge Network
+- Deploys más rápidos
+- Plan gratuito más generoso
+
+### Paso 1: Crear cuenta en Vercel
+1. Ve a https://vercel.com
+2. Regístrate con tu cuenta de GitHub
+3. Autoriza a Vercel para acceder a tus repositorios
+
+### Paso 2: Importar Proyecto
+1. Click en "Add New..." → "Project"
+2. Importa tu repositorio `buscador-noticias-online`
+3. Configuración importante:
+   - **Framework Preset**: Other
+   - **Root Directory**: `backend` (click en Edit y escribe `backend`)
+   - **Build Command**: `npm install`
+   - **Output Directory**: (dejar vacío)
+   - **Install Command**: `npm install`
+
+### Paso 3: Configurar Variables de Entorno
+En la sección "Environment Variables", agrega:
+
+| Variable | Valor |
+|----------|-------|
+| `NODE_ENV` | `production` |
+| `FRONTEND_URL_PROD` | `https://buscador.tuplay.top` |
+| `FIREBASE_PROJECT_ID` | `buscador-noticias-efc60` |
+| `FIREBASE_CLIENT_EMAIL` | `firebase-adminsdk-xxxxx@buscador-noticias-efc60.iam.gserviceaccount.com` |
+| `FIREBASE_PRIVATE_KEY` | (ver nota abajo) |
+
+**IMPORTANTE para FIREBASE_PRIVATE_KEY**:
+1. Copia la clave completa desde tu archivo JSON de Firebase
+2. Debe incluir `-----BEGIN PRIVATE KEY-----` y `-----END PRIVATE KEY-----`
+3. Los `\n` se convierten automáticamente a saltos de línea en Vercel
+
+### Paso 4: Deploy
+1. Click en "Deploy"
+2. Vercel construirá y desplegará automáticamente
+3. Obtendrás una URL como: `https://buscador-noticias-backend.vercel.app`
+
+### Paso 5: Verificar Health Check
+Visita: `https://tu-proyecto.vercel.app/api/health`
+
+Deberías ver:
+```json
+{
+  "status": "ok",
+  "message": "Buscador de Noticias API funcionando",
+  "timestamp": "2025-12-15T..."
+}
+```
+
+### Paso 6: Actualizar Frontend
+Edita `frontend/.env.production`:
+```env
+VITE_API_URL=https://tu-proyecto.vercel.app/api
+```
+
+Luego reconstruye y sube a Hostinger:
+```bash
+cd frontend
+npm run build
+# Subir dist/ a Hostinger
+```
+
+---
+
+## 1b. Deploy del Backend en Render.com (Alternativa)
 
 ### Paso 1: Crear cuenta en Render.com
 1. Ve a https://render.com
@@ -178,13 +249,14 @@ git push origin develop
 ## 6. Troubleshooting
 
 ### Error: "No permitido por CORS"
-- Verifica `FRONTEND_URL_PROD` en variables de entorno de Render
+- Verifica `FRONTEND_URL_PROD` en variables de entorno de Vercel/Render
 - Verifica `allowedOrigins` en `backend/server.js`
 
 ### Error: "Failed to fetch"
 - Verifica que la URL del backend en `.env.production` sea correcta
 - Verifica que el backend esté corriendo (health check)
-- Verifica que Render no haya pausado el servicio (Free tier)
+- **Render**: Verifica que no haya pausado el servicio (Free tier duerme)
+- **Vercel**: Verifica el log de funciones en el dashboard
 
 ### Frontend muestra página en blanco
 - Verifica que `.htaccess` esté en `public_html/`
@@ -207,7 +279,12 @@ git push origin develop
 - **Dominio**: buscador.tuplay.top
 - **Directorio**: /public_html/
 
-### Render.com
+### Vercel (Backend)
+- Dashboard: https://vercel.com/dashboard
+- Logs: https://vercel.com/[tu-usuario]/[tu-proyecto]/logs
+- Repositorio: GitHub (conectado)
+
+### Render.com (Alternativa)
 - Gestiona deployments desde: https://dashboard.render.com
 - Repositorio: GitHub (conectado)
 
@@ -236,4 +313,4 @@ git push origin develop
 
 ---
 
-**Última actualización**: 2025-12-09
+**Última actualización**: 2025-12-15

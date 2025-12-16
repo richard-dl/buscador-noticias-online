@@ -78,11 +78,13 @@ app.use((req, res) => {
   });
 });
 
-// Iniciar servidor
-app.listen(PORT, () => {
-  console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
-  console.log(`📰 Buscador de Noticias Online - Backend API`);
-  console.log(`🌍 Entorno: ${process.env.NODE_ENV || 'development'}`);
-});
+// Iniciar servidor (solo si no estamos en Vercel)
+if (process.env.VERCEL !== '1') {
+  app.listen(PORT, () => {
+    console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
+    console.log(`📰 Buscador de Noticias Online - Backend API`);
+    console.log(`🌍 Entorno: ${process.env.NODE_ENV || 'development'}`);
+  });
+}
 
 module.exports = app;
