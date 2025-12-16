@@ -144,7 +144,29 @@ const processPhotoMessage = async (message) => {
     imagen: largestPhoto ? {
       fileId: largestPhoto.file_id,
       width: largestPhoto.width,
-      height: largestPhoto.height
+      height: largestPhoto.height,
+      type: 'photo'
+    } : null
+  };
+};
+
+/**
+ * Procesar mensaje de Telegram con video
+ */
+const processVideoMessage = async (message) => {
+  const parsed = await processTextMessage(message);
+
+  const video = message.video;
+
+  return {
+    ...parsed,
+    imagen: video ? {
+      fileId: video.file_id,
+      width: video.width,
+      height: video.height,
+      duration: video.duration,
+      mimeType: video.mime_type,
+      type: 'video'
     } : null
   };
 };
@@ -193,6 +215,10 @@ const processTelegramUpdate = async (update) => {
     console.log('[Webhook] Procesando mensaje con FOTO');
     contentData = await processPhotoMessage(message);
     console.log('[Webhook] Datos de foto procesados:', JSON.stringify(contentData, null, 2));
+  } else if (message.video) {
+    console.log('[Webhook] Procesando mensaje con VIDEO');
+    contentData = await processVideoMessage(message);
+    console.log('[Webhook] Datos de video procesados:', JSON.stringify(contentData, null, 2));
   } else if (message.text || message.caption) {
     console.log('[Webhook] Procesando mensaje de TEXTO');
     contentData = await processTextMessage(message);
@@ -303,6 +329,7 @@ module.exports = {
   detectSensitiveData,
   processTextMessage,
   processPhotoMessage,
+  processVideoMessage,
   processTelegramUpdate,
   verifyWebhookToken,
   getFileInfo,

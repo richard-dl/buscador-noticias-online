@@ -283,11 +283,28 @@ const ZonaVip = () => {
               <div key={item.id} className="vip-content-card">
                 {item.imagen && (
                   <div className="vip-content-image">
-                    <img
-                      src={vipApi.getMediaUrl(item.imagen.fileId)}
-                      alt={item.titulo}
-                      onError={(e) => e.target.style.display = 'none'}
-                    />
+                    {item.imagen.type === 'video' ? (
+                      <video
+                        controls
+                        preload="metadata"
+                        onError={(e) => {
+                          console.error('Error cargando video:', item.imagen.fileId)
+                          e.target.parentElement.innerHTML = '<p class="media-error">Error al cargar video</p>'
+                        }}
+                      >
+                        <source src={vipApi.getMediaUrl(item.imagen.fileId)} type={item.imagen.mimeType || 'video/mp4'} />
+                        Tu navegador no soporta videos HTML5.
+                      </video>
+                    ) : (
+                      <img
+                        src={vipApi.getMediaUrl(item.imagen.fileId)}
+                        alt={item.titulo || 'Imagen VIP'}
+                        onError={(e) => {
+                          console.error('Error cargando imagen:', item.imagen.fileId)
+                          e.target.parentElement.innerHTML = '<p class="media-error">Error al cargar imagen</p>'
+                        }}
+                      />
+                    )}
                   </div>
                 )}
                 <div className="vip-content-body">
