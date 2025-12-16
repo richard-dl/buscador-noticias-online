@@ -1,10 +1,38 @@
 /* Zona VIP Styles */
 
+.zona-vip-page {
+  min-height: 100vh;
+  background: #0d0d14;
+}
+
 .zona-vip-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
   min-height: calc(100vh - 200px);
+}
+
+/* Barra de vencimiento */
+.vip-expiration-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: linear-gradient(90deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 170, 0, 0.15) 100%);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  color: #ffd700;
+  font-size: 0.9rem;
+}
+
+.vip-expiration-bar svg {
+  flex-shrink: 0;
+}
+
+.vip-expiration-bar strong {
+  color: #fff;
 }
 
 /* VIP Header */
@@ -60,6 +88,102 @@
   border-radius: 20px;
   color: #ffd700;
   font-size: 0.9rem;
+}
+
+/* Botón actualizar arriba */
+.btn-refresh-top {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
+  color: #1a1a2e;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-refresh-top:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(255, 215, 0, 0.4);
+}
+
+.btn-refresh-top:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.btn-refresh-top svg.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Filtros */
+.vip-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: linear-gradient(135deg, #1e1e2e 0%, #252538 100%);
+  border-radius: 12px;
+  border: 1px solid #333;
+  margin-bottom: 1.5rem;
+}
+
+.vip-filter-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.vip-filter-group svg {
+  color: #ffd700;
+}
+
+.filter-label {
+  color: #888;
+  font-size: 0.9rem;
+  margin-right: 0.25rem;
+}
+
+.filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid #444;
+  border-radius: 6px;
+  color: #aaa;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-btn:hover {
+  border-color: #ffd700;
+  color: #ffd700;
+}
+
+.filter-btn.active {
+  background: rgba(255, 215, 0, 0.15);
+  border-color: #ffd700;
+  color: #ffd700;
+}
+
+.vip-content-count {
+  margin-left: auto;
+  color: #666;
+  font-size: 0.85rem;
 }
 
 /* VIP Locked State */
@@ -236,6 +360,49 @@
   font-size: 0.85rem;
 }
 
+.vip-content-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-action-vip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid #444;
+  border-radius: 6px;
+  color: #888;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-action-vip:hover {
+  border-color: #ffd700;
+  color: #ffd700;
+  background: rgba(255, 215, 0, 0.1);
+}
+
+.btn-action-vip.btn-save:hover {
+  border-color: #48bb78;
+  color: #48bb78;
+  background: rgba(72, 187, 120, 0.1);
+}
+
+.btn-action-vip.btn-delete {
+  color: #e74c3c;
+  border-color: rgba(231, 76, 60, 0.3);
+  background: rgba(231, 76, 60, 0.1);
+}
+
+.btn-action-vip.btn-delete:hover {
+  background: #e74c3c;
+  color: white;
+  border-color: #e74c3c;
+}
+
 .btn-delete-vip {
   display: flex;
   align-items: center;
@@ -303,12 +470,34 @@
     padding: 1rem;
   }
 
+  .vip-expiration-bar {
+    flex-direction: column;
+    text-align: center;
+    font-size: 0.85rem;
+  }
+
   .vip-header {
     padding: 1.5rem;
   }
 
   .vip-header h1 {
     font-size: 1.8rem;
+  }
+
+  .vip-filters {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .vip-filter-group {
+    flex-wrap: wrap;
+  }
+
+  .vip-content-count {
+    margin-left: 0;
+    width: 100%;
+    text-align: right;
   }
 
   .vip-content-grid {
@@ -318,5 +507,10 @@
   .vip-locked {
     padding: 2rem 1.5rem;
     margin: 1rem;
+  }
+
+  .btn-refresh-top {
+    width: 100%;
+    justify-content: center;
   }
 }
