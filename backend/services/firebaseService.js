@@ -38,6 +38,14 @@ const db = admin.firestore();
 const auth = admin.auth();
 
 /**
+ * Roles de usuario:
+ * - 'user': usuario básico (trial de 30 días)
+ * - 'suscriptor': suscripción vitalicia (después de trial)
+ * - 'vip': suscriptor con acceso a Zona VIP (renovación anual)
+ * - 'admin': administrador
+ */
+
+/**
  * Crear usuario en Firestore con suscripción trial de 30 días
  */
 const createUserInFirestore = async (uid, userData) => {
@@ -52,6 +60,8 @@ const createUserInFirestore = async (uid, userData) => {
     createdAt: admin.firestore.FieldValue.serverTimestamp(),
     expiresAt: admin.firestore.Timestamp.fromDate(expiresAt),
     status: 'trial', // trial, active, expired
+    role: 'user', // user, suscriptor, vip, admin
+    vipExpiresAt: null, // Fecha de expiración VIP (solo para rol vip)
     lastLogin: admin.firestore.FieldValue.serverTimestamp(),
     searchProfilesCount: 0
   };
@@ -317,6 +327,110 @@ const verifyIdToken = async (idToken) => {
 };
 
 /**
+ * Actualizar rol de usuario
+ */
+const updateUserRole = async (uid, newRole, vipExpiresAt = null) => {
+  const validRoles = ['user', 'suscriptor', 'vip', 'admin'];
+  if (!validRoles.includes(newRole)) {
+    throw new Error('Rol inválido');
+  }
+
+  const updateData = { role: newRole };
+
+  if (newRole === 'vip' && vipExpiresAt) {
+    updateData.vipExpiresAt = admin.firestore.Timestamp.fromDate(new Date(vipExpiresAt));
+  } else if (newRole !== 'vip') {
+    updateData.vipExpiresAt = null;
+  }
+
+  await db.collection('users').doc(uid).update(updateData);
+  return getUserFromFirestore(uid);
+};
+
+/**
+ * Verificar si el usuario tiene acceso VIP
+ */
+const checkVipAccess = async (uid) => {
+  const user = await getUserFromFirestore(uid);
+  if (!user) {
+    return { hasAccess: false, reason: 'Usuario no encontrado' };
+  }
+
+  // Admin siempre tiene acceso
+  if (user.role === 'admin') {
+    return { hasAccess: true, isAdmin: true };
+  }
+
+  // Solo rol vip tiene acceso
+  if (user.role !== 'vip') {
+    return { hasAccess: false, reason: 'Requiere suscripción VIP' };
+  }
+
+  // Verificar que la suscripción VIP no haya expirado
+  const now = new Date();
+  const vipExpiresAt = user.vipExpiresAt?.toDate();
+
+  if (vipExpiresAt && now > vipExpiresAt) {
+    // Degradar a suscriptor si expiró VIP
+    await db.collection('users').doc(uid).update({ role: 'suscriptor', vipExpiresAt: null });
+    return { hasAccess: false, reason: 'Suscripción VIP expirada', expiredAt: vipExpiresAt };
+  }
+
+  const daysRemaining = vipExpiresAt ? Math.ceil((vipExpiresAt - now) / (1000 * 60 * 60 * 24)) : null;
+
+  return {
+    hasAccess: true,
+    role: user.role,
+    vipExpiresAt: vipExpiresAt,
+    daysRemaining: daysRemaining
+  };
+};
+
+/**
+ * Guardar contenido VIP desde Telegram
+ */
+const saveVipContent = async (contentData) => {
+  const contentRef = db.collection('vipContent').doc();
+
+  const content = {
+    titulo: contentData.titulo || '',
+    fuente: contentData.fuente || '',
+    contenido: contentData.contenido || '',
+    sensible: contentData.sensible || [],
+    imagen: contentData.imagen || null,
+    telegramMessageId: contentData.telegramMessageId || null,
+    createdAt: admin.firestore.FieldValue.serverTimestamp()
+  };
+
+  await contentRef.set(content);
+  return { id: contentRef.id, ...content };
+};
+
+/**
+ * Obtener contenido VIP
+ */
+const getVipContent = async (limit = 50) => {
+  const snapshot = await db
+    .collection('vipContent')
+    .orderBy('createdAt', 'desc')
+    .limit(limit)
+    .get();
+
+  return snapshot.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+  }));
+};
+
+/**
+ * Eliminar contenido VIP
+ */
+const deleteVipContent = async (contentId) => {
+  await db.collection('vipContent').doc(contentId).delete();
+  return true;
+};
+
+/**
  * Obtener todos los usuarios desde Firestore
  */
 const getAllUsersFromFirestore = async () => {
@@ -374,5 +488,10 @@ module.exports = {
   saveNews,
   deleteSavedNews,
   verifyIdToken,
-  getAllUsersFromFirestore
+  getAllUsersFromFirestore,
+  updateUserRole,
+  checkVipAccess,
+  saveVipContent,
+  getVipContent,
+  deleteVipContent
 };

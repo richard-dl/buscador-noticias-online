@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { FiHome, FiFileText, FiUser, FiLogOut, FiMenu, FiX } from 'react-icons/fi'
+import { FiHome, FiFileText, FiUser, FiLogOut, FiMenu, FiX, FiStar } from 'react-icons/fi'
 import { useState } from 'react'
 
 const Header = () => {
@@ -11,6 +11,7 @@ const Header = () => {
   const navItems = [
     { path: '/dashboard', label: 'Inicio', icon: FiHome },
     { path: '/generator', label: 'Generador', icon: FiFileText },
+    { path: '/zona-vip', label: 'Zona VIP', icon: FiStar, isVip: true },
     { path: '/profile', label: 'Perfil', icon: FiUser }
   ]
 
@@ -43,11 +44,11 @@ const Header = () => {
         </button>
 
         <nav className={`header-nav ${menuOpen ? 'open' : ''}`}>
-          {navItems.map(({ path, label, icon: Icon }) => (
+          {navItems.map(({ path, label, icon: Icon, isVip }) => (
             <Link
               key={path}
               to={path}
-              className={`nav-link ${isActive(path) ? 'active' : ''}`}
+              className={`nav-link ${isActive(path) ? 'active' : ''} ${isVip ? 'nav-link-vip' : ''}`}
               onClick={() => setMenuOpen(false)}
             >
               <Icon size={18} />

@@ -1,4 +1,4 @@
-const { verifyIdToken, checkSubscriptionStatus, getUserFromFirestore } = require('../services/firebaseService');
+const { verifyIdToken, checkSubscriptionStatus, getUserFromFirestore, checkVipAccess } = require('../services/firebaseService');
 
 /**
  * Middleware para verificar autenticación
@@ -108,8 +108,52 @@ const requireActiveSubscription = async (req, res, next) => {
  */
 const authenticateAndRequireSubscription = [authenticate, requireActiveSubscription];
 
+/**
+ * Middleware para verificar acceso VIP
+ * Debe usarse después del middleware authenticate
+ */
+const requireVipAccess = async (req, res, next) => {
+  try {
+    if (!req.user || !req.user.uid) {
+      return res.status(401).json({
+        success: false,
+        error: 'Usuario no autenticado'
+      });
+    }
+
+    const vipStatus = await checkVipAccess(req.user.uid);
+
+    if (!vipStatus.hasAccess) {
+      return res.status(403).json({
+        success: false,
+        error: vipStatus.reason || 'Acceso VIP requerido',
+        expiredAt: vipStatus.expiredAt,
+        code: 'VIP_REQUIRED'
+      });
+    }
+
+    // Agregar info VIP al request
+    req.vipStatus = vipStatus;
+
+    next();
+  } catch (error) {
+    console.error('Error verificando acceso VIP:', error.message);
+    return res.status(500).json({
+      success: false,
+      error: 'Error verificando acceso VIP'
+    });
+  }
+};
+
+/**
+ * Middleware combinado: autenticación + acceso VIP
+ */
+const authenticateAndRequireVip = [authenticate, requireVipAccess];
+
 module.exports = {
   authenticate,
   requireActiveSubscription,
-  authenticateAndRequireSubscription
+  authenticateAndRequireSubscription,
+  requireVipAccess,
+  authenticateAndRequireVip
 };

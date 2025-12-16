@@ -8,6 +8,7 @@ const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const newsRoutes = require('./routes/newsRoutes');
 const geoRoutes = require('./routes/geoRoutes');
+const vipRoutes = require('./routes/vipRoutes');
 
 // Inicializar Firebase Admin
 require('./services/firebaseService');
@@ -49,6 +50,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/news', newsRoutes);
 app.use('/api/geo', geoRoutes);
+app.use('/api/vip', vipRoutes);
 
 // Ruta de salud
 app.get('/api/health', (req, res) => {

@@ -5,7 +5,7 @@ import { newsApi, userApi } from '../services/api'
 import Header from '../components/Header'
 import NewsCard from '../components/NewsCard'
 import LoadingSpinner from '../components/LoadingSpinner'
-import { FiSearch, FiFileText, FiTrendingUp, FiClock, FiGrid } from 'react-icons/fi'
+import { FiSearch, FiFileText, FiTrendingUp, FiClock, FiGrid, FiStar } from 'react-icons/fi'
 
 const Dashboard = () => {
   const { profile, daysRemaining } = useAuth()
@@ -162,6 +162,15 @@ const Dashboard = () => {
             </div>
             <h3>Mi Cuenta</h3>
             <p>Ver suscripción y configuración</p>
+          </Link>
+
+          <Link to="/zona-vip" className="action-card action-card-vip">
+            <div className="action-icon action-icon-vip">
+              <FiStar size={32} />
+            </div>
+            <h3>Zona VIP</h3>
+            <p>Contenido exclusivo para suscriptores VIP</p>
+            <span className="vip-badge-small">VIP</span>
           </Link>
         </div>
       </section>

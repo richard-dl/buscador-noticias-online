@@ -488,6 +488,18 @@ input, select, textarea {
   color: white;
 }
 
+.nav-link-vip {
+  color: #ffd700 !important;
+  background: rgba(255, 215, 0, 0.1);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.nav-link-vip:hover,
+.nav-link-vip.active {
+  background: rgba(255, 215, 0, 0.2);
+  border-color: #ffd700;
+}
+
 .header-user {
   display: flex;
   align-items: center;
@@ -877,6 +889,47 @@ input, select, textarea {
   color: var(--color-text-muted);
   font-size: var(--font-size-sm);
   margin-bottom: 0;
+}
+
+/* VIP Action Card */
+.action-card-vip {
+  position: relative;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border: 2px solid #ffd700;
+  color: #fff;
+}
+
+.action-card-vip:hover {
+  color: #fff;
+  border-color: #ffaa00;
+  box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3);
+}
+
+.action-card-vip h3 {
+  color: #ffd700;
+}
+
+.action-card-vip p {
+  color: #a0a0a0;
+}
+
+.action-icon-vip {
+  background: rgba(255, 215, 0, 0.15);
+  color: #ffd700;
+}
+
+.vip-badge-small {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 4px 10px;
+  background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
+  color: #1a1a2e;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 /* Sections */
