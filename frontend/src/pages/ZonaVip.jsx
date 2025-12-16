@@ -286,15 +286,15 @@ const ZonaVip = () => {
                     {item.imagen.type === 'video' ? (
                       <video
                         controls
-                        preload="metadata"
+                        preload="auto"
+                        crossOrigin="anonymous"
+                        playsInline
+                        src={vipApi.getMediaUrl(item.imagen.fileId)}
                         onError={(e) => {
-                          console.error('Error cargando video:', item.imagen.fileId)
+                          console.error('Error cargando video:', item.imagen.fileId, e)
                           e.target.parentElement.innerHTML = '<p class="media-error">Error al cargar video</p>'
                         }}
-                      >
-                        <source src={vipApi.getMediaUrl(item.imagen.fileId)} type={item.imagen.mimeType || 'video/mp4'} />
-                        Tu navegador no soporta videos HTML5.
-                      </video>
+                      />
                     ) : (
                       <img
                         src={vipApi.getMediaUrl(item.imagen.fileId)}

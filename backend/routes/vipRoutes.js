@@ -159,6 +159,67 @@ router.post('/upgrade/:uid', authenticate, async (req, res) => {
   }
 });
 
+// Cache simple en memoria para archivos de Telegram (evita re-descargas en Range requests)
+const fileCache = new Map();
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutos
+
+const getCachedFile = async (fileId) => {
+  const cached = fileCache.get(fileId);
+  if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+    console.log('[VIP Media] Cache hit para:', fileId);
+    return cached.file;
+  }
+
+  const file = await downloadFile(fileId);
+  fileCache.set(fileId, { file, timestamp: Date.now() });
+
+  // Limpiar cache viejo
+  if (fileCache.size > 50) {
+    const oldest = [...fileCache.entries()]
+      .sort((a, b) => a[1].timestamp - b[1].timestamp)[0];
+    fileCache.delete(oldest[0]);
+  }
+
+  return file;
+};
+
+/**
+ * OPTIONS /api/vip/media/:fileId
+ * Preflight para CORS
+ */
+router.options('/media/:fileId', (req, res) => {
+  res.set({
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, HEAD, OPTIONS',
+    'Access-Control-Allow-Headers': 'Range, Content-Type',
+    'Access-Control-Max-Age': '86400'
+  });
+  res.status(204).end();
+});
+
+/**
+ * HEAD /api/vip/media/:fileId
+ * Metadata del archivo (requerido por video players)
+ */
+router.head('/media/:fileId', async (req, res) => {
+  try {
+    const { fileId } = req.params;
+    const file = await getCachedFile(fileId);
+
+    res.set({
+      'Content-Type': file.contentType,
+      'Content-Length': file.data.length,
+      'Accept-Ranges': 'bytes',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Expose-Headers': 'Content-Length, Accept-Ranges',
+      'Cross-Origin-Resource-Policy': 'cross-origin'
+    });
+    res.status(200).end();
+  } catch (error) {
+    res.status(404).end();
+  }
+});
+
 /**
  * GET /api/vip/media/:fileId
  * Proxy para servir archivos multimedia de Telegram
@@ -169,7 +230,6 @@ router.post('/upgrade/:uid', authenticate, async (req, res) => {
 router.get('/media/:fileId', async (req, res) => {
   try {
     const { fileId } = req.params;
-    console.log('[VIP Media] Solicitando fileId:', fileId);
 
     if (!fileId) {
       return res.status(400).json({
@@ -178,8 +238,8 @@ router.get('/media/:fileId', async (req, res) => {
       });
     }
 
-    // Descargar archivo de Telegram
-    const file = await downloadFile(fileId);
+    // Descargar archivo de Telegram (con cache)
+    const file = await getCachedFile(fileId);
     const fileSize = file.data.length;
     console.log('[VIP Media] Archivo descargado:', file.fileName, file.contentType, fileSize, 'bytes');
 
