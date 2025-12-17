@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { FiHome, FiFileText, FiUser, FiLogOut, FiMenu, FiX, FiStar } from 'react-icons/fi'
 import { useState } from 'react'
@@ -6,6 +6,7 @@ import { useState } from 'react'
 const Header = () => {
   const { user, profile, logout, daysRemaining } = useAuth()
   const location = useLocation()
+  const navigate = useNavigate()
   const [menuOpen, setMenuOpen] = useState(false)
 
   const navItems = [
@@ -16,6 +17,16 @@ const Header = () => {
   ]
 
   const isActive = (path) => location.pathname === path
+
+  // Manejar clic en navegación - forzar recarga si ya estamos en la misma ruta
+  const handleNavClick = (e, path) => {
+    setMenuOpen(false)
+    if (location.pathname === path) {
+      e.preventDefault()
+      // Forzar recarga de la página para resetear el estado (tabs, etc.)
+      window.location.href = path
+    }
+  }
 
   return (
     <header className="header">
@@ -49,7 +60,7 @@ const Header = () => {
               key={path}
               to={path}
               className={`nav-link ${isActive(path) ? 'active' : ''} ${isVip ? 'nav-link-vip' : ''}`}
-              onClick={() => setMenuOpen(false)}
+              onClick={(e) => handleNavClick(e, path)}
             >
               <Icon size={18} />
               <span>{label}</span>
