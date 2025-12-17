@@ -559,6 +559,11 @@
   gap: 0.25rem;
 }
 
+.page-numbers > span {
+  display: inline-flex;
+  align-items: center;
+}
+
 .page-dots {
   color: #666;
   padding: 0 0.5rem;
