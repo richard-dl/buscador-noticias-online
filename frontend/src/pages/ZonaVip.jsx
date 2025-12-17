@@ -37,12 +37,30 @@ const ZonaVip = () => {
 
       if (response.data.hasAccess) {
         loadVipContent()
+        loadSavedItems()
       }
     } catch (error) {
       console.error('Error verificando acceso VIP:', error)
       setVipStatus({ hasAccess: false, reason: error.message })
     } finally {
       setLoading(false)
+    }
+  }
+
+  const loadSavedItems = async () => {
+    try {
+      const response = await userApi.getSavedNews()
+      const saved = {}
+      // Marcar items VIP guardados (tienen link vip://id)
+      ;(response.data || []).forEach(news => {
+        if (news.link && news.link.startsWith('vip://')) {
+          const vipId = news.link.replace('vip://', '')
+          saved[vipId] = true
+        }
+      })
+      setSavedItems(saved)
+    } catch (error) {
+      console.error('Error cargando items guardados:', error)
     }
   }
 
