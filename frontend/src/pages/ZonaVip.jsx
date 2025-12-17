@@ -239,10 +239,18 @@ const ZonaVip = () => {
     return groupArray
   }, [sortedContent, viewMode])
 
-  // Contar grupos con múltiples items
+  // Contar grupos con múltiples items (siempre basado en content original, no en viewMode)
   const groupsWithMultipleItems = useMemo(() => {
-    return groupedContent.filter(g => g.items.length > 1).length
-  }, [groupedContent])
+    const groups = new Map()
+    content.forEach(item => {
+      const gid = item.groupId || item.id
+      if (!groups.has(gid)) {
+        groups.set(gid, 0)
+      }
+      groups.set(gid, groups.get(gid) + 1)
+    })
+    return Array.from(groups.values()).filter(count => count > 1).length
+  }, [content])
 
   const toggleGroupExpand = (groupId) => {
     setExpandedGroups(prev => ({
