@@ -9,6 +9,9 @@ const axios = require('axios');
 const TELEGRAM_API_URL = `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}`;
 const TELEGRAM_FILE_URL = `https://api.telegram.org/file/bot${process.env.TELEGRAM_BOT_TOKEN}`;
 
+// Canal público para embeds de videos (sin límite de 20MB)
+const PUBLIC_CHANNEL_USERNAME = process.env.TELEGRAM_PUBLIC_CHANNEL || 'zona_vip_media';
+
 // Configuración de agrupación
 const BATCH_WINDOW_MINUTES = 5; // Ventana de tiempo para agrupar mensajes del mismo usuario
 const { v4: uuidv4 } = require('uuid');
@@ -336,12 +339,55 @@ const processPhotoMessage = async (message) => {
 };
 
 /**
+ * Reenviar mensaje al canal público para embeds
+ * @param {number} fromChatId - Chat ID origen
+ * @param {number} messageId - ID del mensaje a reenviar
+ * @returns {Promise<{messageId: number, embedUrl: string} | null>}
+ */
+const forwardToPublicChannel = async (fromChatId, messageId) => {
+  try {
+    const channelUsername = `@${PUBLIC_CHANNEL_USERNAME}`;
+    console.log('[Telegram] Reenviando mensaje al canal público:', channelUsername);
+
+    const response = await axios.post(`${TELEGRAM_API_URL}/forwardMessage`, {
+      chat_id: channelUsername,
+      from_chat_id: fromChatId,
+      message_id: messageId
+    });
+
+    if (response.data.ok) {
+      const forwardedMessageId = response.data.result.message_id;
+      const embedUrl = `https://t.me/${PUBLIC_CHANNEL_USERNAME}/${forwardedMessageId}?embed=1`;
+      console.log('[Telegram] Mensaje reenviado, embed URL:', embedUrl);
+      return {
+        messageId: forwardedMessageId,
+        embedUrl
+      };
+    }
+
+    console.error('[Telegram] Error reenviando:', response.data);
+    return null;
+  } catch (error) {
+    console.error('[Telegram] Error reenviando al canal público:', error.message);
+    return null;
+  }
+};
+
+/**
  * Procesar mensaje de Telegram con video
  */
 const processVideoMessage = async (message) => {
   const parsed = await processTextMessage(message);
 
   const video = message.video;
+
+  let embedInfo = null;
+
+  // Si el video es mayor a 20MB, reenviarlo al canal público para embed
+  if (video && video.file_size && video.file_size > 20 * 1024 * 1024) {
+    console.log('[Telegram] Video grande detectado:', (video.file_size / 1024 / 1024).toFixed(2), 'MB');
+    embedInfo = await forwardToPublicChannel(message.chat.id, message.message_id);
+  }
 
   return {
     ...parsed,
@@ -351,7 +397,11 @@ const processVideoMessage = async (message) => {
       height: video.height,
       duration: video.duration,
       mimeType: video.mime_type,
-      type: 'video'
+      fileSize: video.file_size,
+      type: 'video',
+      // Si se reenvió al canal público, guardar info del embed
+      embedUrl: embedInfo?.embedUrl || null,
+      publicMessageId: embedInfo?.messageId || null
     } : null
   };
 };

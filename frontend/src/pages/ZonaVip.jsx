@@ -26,19 +26,6 @@ const ZonaVip = () => {
   const [savedItems, setSavedItems] = useState({}) // Para rastrear items guardados
   const [failedVideos, setFailedVideos] = useState({}) // Para rastrear videos que fallaron al cargar
 
-  // Generar link directo a Telegram para videos grandes
-  const getTelegramLink = (item) => {
-    if (!item.telegramChatId || !item.telegramMessageId) return null
-    // Convertir chatId negativo a formato de canal/grupo privado
-    // Los chat_id negativos de canales/supergrupos son -100XXXXXXXXXX
-    const chatId = String(item.telegramChatId)
-    if (chatId.startsWith('-100')) {
-      const channelId = chatId.substring(4) // Quitar el -100
-      return `https://t.me/c/${channelId}/${item.telegramMessageId}`
-    }
-    return null
-  }
-
   const handleVideoError = (itemId) => {
     setFailedVideos(prev => ({ ...prev, [itemId]: true }))
   }
@@ -478,22 +465,19 @@ const ZonaVip = () => {
                     {item.imagen && (
                       <div className="vip-content-image">
                         {item.imagen.type === 'video' ? (
-                          failedVideos[item.id] ? (
-                            // Video grande: mostrar enlace simple a Telegram
-                            getTelegramLink(item) ? (
-                              <a
-                                href={getTelegramLink(item)}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="video-telegram-link"
-                              >
-                                <div className="video-link-icon">▶</div>
-                                <span>Ver video en Telegram</span>
-                              </a>
-                            ) : (
-                              <p className="media-error">Video no disponible</p>
-                            )
+                          // Si tiene embedUrl (video grande reenviado al canal público), usar iframe
+                          item.imagen.embedUrl ? (
+                            <iframe
+                              src={item.imagen.embedUrl}
+                              className="telegram-embed"
+                              style={{ border: 'none', overflow: 'hidden' }}
+                              allowFullScreen
+                            />
+                          ) : failedVideos[item.id] ? (
+                            // Video falló al cargar y no tiene embed
+                            <p className="media-error">Video no disponible</p>
                           ) : (
+                            // Video normal (<20MB), usar reproductor directo
                             <video
                               controls
                               preload="auto"
