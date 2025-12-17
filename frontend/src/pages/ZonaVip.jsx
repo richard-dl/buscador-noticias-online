@@ -67,7 +67,7 @@ const ZonaVip = () => {
   const loadVipContent = async () => {
     try {
       setLoadingContent(true)
-      const response = await vipApi.getContent(50)
+      const response = await vipApi.getContent(100)
       setContent(response.data || [])
     } catch (error) {
       console.error('Error cargando contenido VIP:', error)
@@ -468,7 +468,7 @@ const ZonaVip = () => {
                             src={vipApi.getMediaUrl(item.imagen.fileId)}
                             onError={(e) => {
                               console.error('Error cargando video:', item.imagen.fileId, e)
-                              e.target.parentElement.innerHTML = '<p class="media-error">Error al cargar video</p>'
+                              e.target.parentElement.innerHTML = '<p class="media-error">Video no disponible (posiblemente excede 20MB)</p>'
                             }}
                           />
                         ) : (

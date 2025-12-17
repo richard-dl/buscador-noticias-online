@@ -14,8 +14,12 @@ const BATCH_WINDOW_MINUTES = 5; // Ventana de tiempo para agrupar mensajes del m
 const { v4: uuidv4 } = require('uuid');
 
 // Cache en memoria para tracking de batches activos
-// Estructura: { odId: { groupId, lastMessageTime, userId } }
+// Estructura: { batchKey: { groupId, lastMessageTime, userId } }
 const activeBatches = new Map();
+
+// Cache para media_group_id de Telegram (álbumes de fotos/videos enviados juntos)
+// Estructura: { media_group_id: groupId }
+const mediaGroupCache = new Map();
 
 /**
  * Hashtags soportados:
@@ -81,14 +85,72 @@ const escapeRegExp = (string) => {
 
 /**
  * Determinar el groupId para un mensaje
- * - Si es reply a otro mensaje, usa el groupId del mensaje padre
- * - Si el usuario envió mensajes en los últimos X minutos, usa el mismo groupId (batch)
- * - Si no, crea un nuevo groupId
+ * Prioridad:
+ * 1. Si tiene media_group_id (álbum de Telegram), usa ese groupId
+ * 2. Si es reply a otro mensaje, usa el groupId del mensaje padre
+ * 3. Si el usuario/canal envió mensajes en los últimos X minutos, usa el mismo groupId (batch)
+ * 4. Si no, crea un nuevo groupId
  */
 const determineGroupId = async (message, chatId) => {
-  const userId = message.from?.id || 'unknown';
+  // Para channel_post, usar sender_chat.id o chat.id como identificador
+  // Para mensajes normales, usar from.id
+  const userId = message.from?.id || message.sender_chat?.id || chatId || 'unknown';
   const now = Date.now();
   const batchKey = `${chatId}_${userId}`;
+
+  // 0. Si tiene media_group_id (álbum de fotos/videos enviados juntos)
+  // Telegram envía cada foto/video del álbum como mensaje separado pero con el mismo media_group_id
+  if (message.media_group_id) {
+    const mediaGroupId = message.media_group_id;
+    console.log('[Grouping] Mensaje tiene media_group_id:', mediaGroupId);
+
+    // Verificar si ya tenemos un groupId para este media_group
+    if (mediaGroupCache.has(mediaGroupId)) {
+      const existingGroupId = mediaGroupCache.get(mediaGroupId);
+      console.log('[Grouping] Usando groupId existente del media_group:', existingGroupId);
+
+      // También actualizar el batch activo
+      const existingBatch = activeBatches.get(batchKey);
+      if (existingBatch) {
+        existingBatch.lastMessageTime = now;
+        existingBatch.messageIds = [...(existingBatch.messageIds || []), message.message_id];
+        activeBatches.set(batchKey, existingBatch);
+      }
+
+      return {
+        groupId: existingGroupId,
+        replyToMessageId: null,
+        isReply: false,
+        isMediaGroup: true
+      };
+    }
+
+    // Crear nuevo groupId para este media_group
+    const newGroupId = uuidv4();
+    console.log('[Grouping] Creando nuevo groupId para media_group:', newGroupId);
+    mediaGroupCache.set(mediaGroupId, newGroupId);
+
+    // Limpiar media_group cache después de 10 minutos
+    setTimeout(() => {
+      mediaGroupCache.delete(mediaGroupId);
+    }, 10 * 60 * 1000);
+
+    // También guardar en batch activo
+    activeBatches.set(batchKey, {
+      groupId: newGroupId,
+      lastMessageTime: now,
+      userId,
+      telegramMessageId: message.message_id,
+      messageIds: [message.message_id]
+    });
+
+    return {
+      groupId: newGroupId,
+      replyToMessageId: null,
+      isReply: false,
+      isMediaGroup: true
+    };
+  }
 
   // 1. Si es un reply, buscar el groupId del mensaje original
   if (message.reply_to_message) {

@@ -10,7 +10,7 @@ const { processTelegramUpdate, verifyWebhookToken, downloadFile } = require('../
  */
 router.get('/content', authenticateAndRequireVip, async (req, res) => {
   try {
-    const limit = parseInt(req.query.limit) || 50;
+    const limit = parseInt(req.query.limit) || 100;
     const content = await getVipContent(limit);
 
     res.json({
@@ -299,6 +299,20 @@ router.get('/media/:fileId', async (req, res) => {
     }
   } catch (error) {
     console.error('[VIP Media] Error sirviendo archivo:', error.message);
+
+    // Detectar error de archivo demasiado grande (límite de Telegram Bot API: 20MB)
+    const isTooLarge = error.response?.data?.description?.includes('file is too big') ||
+                       error.message?.includes('file is too big') ||
+                       error.response?.status === 400;
+
+    if (isTooLarge) {
+      return res.status(413).json({
+        success: false,
+        error: 'El archivo es demasiado grande para descargar (límite: 20MB)',
+        code: 'FILE_TOO_LARGE'
+      });
+    }
+
     res.status(404).json({
       success: false,
       error: 'Archivo no encontrado o no disponible'
