@@ -591,9 +591,25 @@
   border-color: #ffd700;
 }
 
-/* Botón modo vista */
-.view-mode-btn {
+/* Botones modo vista (agrupar/desagrupar) */
+.view-mode-buttons {
+  display: flex;
+  gap: 0.5rem;
   margin-left: auto;
+}
+
+.view-mode-btn {
+  min-width: fit-content;
+}
+
+.view-mode-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.view-mode-btn:disabled:hover {
+  border-color: #ffd700;
+  color: #ffd700;
 }
 
 /* ============================================
@@ -833,10 +849,14 @@
     height: 50px;
   }
 
-  .view-mode-btn {
+  .view-mode-buttons {
     margin-left: 0;
     width: 100%;
-    justify-content: center;
     margin-top: 0.5rem;
+  }
+
+  .view-mode-btn {
+    flex: 1;
+    justify-content: center;
   }
 }

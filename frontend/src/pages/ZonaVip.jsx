@@ -400,14 +400,26 @@ const ZonaVip = () => {
               }
             </span>
             {groupsWithMultipleItems > 0 && (
-              <button
-                className={`filter-btn view-mode-btn ${viewMode === 'grouped' ? 'active' : ''}`}
-                onClick={() => setViewMode(viewMode === 'grouped' ? 'flat' : 'grouped')}
-                title={viewMode === 'grouped' ? 'Ver todos separados' : 'Ver agrupados'}
-              >
-                <FiLayers />
-                <span>{viewMode === 'grouped' ? 'Agrupado' : 'Separado'}</span>
-              </button>
+              <div className="view-mode-buttons">
+                <button
+                  className={`filter-btn view-mode-btn ${viewMode === 'grouped' ? 'active' : ''}`}
+                  onClick={() => setViewMode('grouped')}
+                  title="Ver contenido agrupado"
+                  disabled={viewMode === 'grouped'}
+                >
+                  <FiLayers />
+                  <span>Agrupar</span>
+                </button>
+                <button
+                  className={`filter-btn view-mode-btn ${viewMode === 'flat' ? 'active' : ''}`}
+                  onClick={() => setViewMode('flat')}
+                  title="Ver todos separados"
+                  disabled={viewMode === 'flat'}
+                >
+                  <FiLayers />
+                  <span>Desagrupar</span>
+                </button>
+              </div>
             )}
           </div>
         )}
