@@ -34,7 +34,7 @@ const Generator = () => {
   const [showScrollTop, setShowScrollTop] = useState(false)
   const [breakingNews, setBreakingNews] = useState([])
   const [loadingBreaking, setLoadingBreaking] = useState(false)
-  const [breakingLoadCount, setBreakingLoadCount] = useState(0) // Contador de cargas (máx 5)
+  const [breakingLoadCount, setBreakingLoadCount] = useState(0) // Contador de cargas (máx 8 - todos los grupos)
   const [breakingOffset, setBreakingOffset] = useState(0) // Offset para paginación
   const [loadingMoreBreaking, setLoadingMoreBreaking] = useState(false) // Loading para "cargar más"
   const [selectedProfileId, setSelectedProfileId] = useState('')
@@ -330,13 +330,25 @@ const Generator = () => {
     localStorage.setItem('newsGridColumns', cols.toString())
   }
 
-  // Grupos de categorías para cargas incrementales
+  // Grupos de categorías para cargas incrementales en ÚLTIMO MOMENTO
+  // Incluye todas las temáticas RSS y todas las provincias argentinas
   const categoryGroups = [
+    // Grupo 1: Principales nacionales
     ['nacionales', 'politica', 'economia'],
+    // Grupo 2: Entretenimiento y tech
     ['deportes', 'espectaculos', 'tecnologia'],
+    // Grupo 3: Policiales e internacionales
     ['policiales', 'internacionales'],
-    ['buenosaires', 'cordoba', 'santafe'],
-    ['mendoza', 'tucuman', 'salta']
+    // Grupo 4: Provincias principales (más población)
+    ['buenosaires', 'cordoba', 'santafe', 'mendoza'],
+    // Grupo 5: NOA (Noroeste)
+    ['tucuman', 'salta', 'jujuy', 'catamarca', 'santiago'],
+    // Grupo 6: NEA (Noreste)
+    ['chaco', 'corrientes', 'misiones', 'formosa', 'entrerios'],
+    // Grupo 7: Cuyo
+    ['sanjuan', 'sanluis', 'larioja', 'lapampa'],
+    // Grupo 8: Patagonia
+    ['neuquen', 'rionegro', 'chubut', 'santacruz', 'tierradelfuego']
   ]
 
   const loadBreakingNews = async (isRefresh = true) => {
@@ -376,7 +388,7 @@ const Generator = () => {
   }
 
   const loadMoreBreakingNews = async () => {
-    if (breakingLoadCount >= 5) return
+    if (breakingLoadCount >= 8) return
 
     try {
       setLoadingMoreBreaking(true)
@@ -632,7 +644,7 @@ const Generator = () => {
               ) : (
                 <>
                   <div className="results-header">
-                    <span>{breakingNews.length} noticias recientes (carga {breakingLoadCount}/5)</span>
+                    <span>{breakingNews.length} noticias recientes (carga {breakingLoadCount}/8)</span>
                     <div className="column-selector">
                       {[2, 3, 4, 5].filter(cols => cols <= maxColumns).map(cols => (
                         <button
@@ -655,7 +667,7 @@ const Generator = () => {
 
                   {/* Botón Cargar Más o Mensaje de Límite */}
                   <div className="load-more-section">
-                    {breakingLoadCount < 5 ? (
+                    {breakingLoadCount < 8 ? (
                       <button
                         className="btn btn-load-more"
                         onClick={loadMoreBreakingNews}
@@ -669,7 +681,7 @@ const Generator = () => {
                         ) : (
                           <>
                             <FiPlus size={20} />
-                            Cargar más noticias ({breakingLoadCount}/5 cargas)
+                            Cargar más noticias ({breakingLoadCount}/8 cargas)
                           </>
                         )}
                       </button>
