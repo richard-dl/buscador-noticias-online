@@ -399,6 +399,7 @@ const saveVipContent = async (contentData) => {
     sensible: contentData.sensible || [],
     imagen: contentData.imagen || null,
     telegramMessageId: contentData.telegramMessageId || null,
+    telegramChatId: contentData.telegramChatId || null, // Para generar link directo a Telegram
     // Campos de agrupación
     groupId: contentData.groupId || null,
     replyToMessageId: contentData.replyToMessageId || null,

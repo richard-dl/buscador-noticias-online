@@ -429,6 +429,7 @@ const processTelegramUpdate = async (update) => {
   contentData.isReply = groupingInfo.isReply;
   contentData.telegramUserId = message.from?.id || null;
   contentData.telegramUserName = message.from?.first_name || message.from?.username || null;
+  contentData.telegramChatId = message.chat?.id || null; // Para generar link directo a Telegram
 
   console.log('[Webhook] Guardando contenido en Firestore...');
 

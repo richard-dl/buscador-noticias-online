@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { vipApi, userApi } from '../services/api'
 import { toast } from 'react-toastify'
-import { FiStar, FiLock, FiClock, FiTrash2, FiImage, FiAlertTriangle, FiRefreshCw, FiCopy, FiBookmark, FiFilter, FiCalendar, FiChevronLeft, FiChevronRight, FiChevronDown, FiChevronUp, FiLayers } from 'react-icons/fi'
+import { FiStar, FiLock, FiClock, FiTrash2, FiImage, FiAlertTriangle, FiRefreshCw, FiCopy, FiBookmark, FiFilter, FiCalendar, FiChevronLeft, FiChevronRight, FiChevronDown, FiChevronUp, FiLayers, FiExternalLink } from 'react-icons/fi'
 import Header from '../components/Header'
 import LoadingSpinner from '../components/LoadingSpinner'
 import '../styles/zonavip.css'
@@ -24,6 +24,24 @@ const ZonaVip = () => {
   const [expandedGroups, setExpandedGroups] = useState({}) // Para expandir/colapsar grupos
   const [viewMode, setViewMode] = useState('grouped') // 'grouped' o 'flat'
   const [savedItems, setSavedItems] = useState({}) // Para rastrear items guardados
+  const [failedVideos, setFailedVideos] = useState({}) // Para rastrear videos que fallaron al cargar
+
+  // Generar link directo a Telegram para videos grandes
+  const getTelegramLink = (item) => {
+    if (!item.telegramChatId || !item.telegramMessageId) return null
+    // Convertir chatId negativo a formato de canal/grupo privado
+    // Los chat_id negativos de canales/supergrupos son -100XXXXXXXXXX
+    const chatId = String(item.telegramChatId)
+    if (chatId.startsWith('-100')) {
+      const channelId = chatId.substring(4) // Quitar el -100
+      return `https://t.me/c/${channelId}/${item.telegramMessageId}`
+    }
+    return null
+  }
+
+  const handleVideoError = (itemId) => {
+    setFailedVideos(prev => ({ ...prev, [itemId]: true }))
+  }
 
   useEffect(() => {
     checkVipAccess()
@@ -460,17 +478,31 @@ const ZonaVip = () => {
                     {item.imagen && (
                       <div className="vip-content-image">
                         {item.imagen.type === 'video' ? (
-                          <video
-                            controls
-                            preload="auto"
-                            crossOrigin="anonymous"
-                            playsInline
-                            src={vipApi.getMediaUrl(item.imagen.fileId)}
-                            onError={(e) => {
-                              console.error('Error cargando video:', item.imagen.fileId, e)
-                              e.target.parentElement.innerHTML = '<p class="media-error">Video no disponible (posiblemente excede 20MB)</p>'
-                            }}
-                          />
+                          failedVideos[item.id] ? (
+                            <div className="video-error-container">
+                              <p className="media-error">Video no disponible (excede 20MB)</p>
+                              {getTelegramLink(item) && (
+                                <a
+                                  href={getTelegramLink(item)}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="btn-open-telegram"
+                                >
+                                  <FiExternalLink size={16} />
+                                  <span>Abrir en Telegram</span>
+                                </a>
+                              )}
+                            </div>
+                          ) : (
+                            <video
+                              controls
+                              preload="auto"
+                              crossOrigin="anonymous"
+                              playsInline
+                              src={vipApi.getMediaUrl(item.imagen.fileId)}
+                              onError={() => handleVideoError(item.id)}
+                            />
+                          )
                         ) : (
                           <img
                             src={vipApi.getMediaUrl(item.imagen.fileId)}
