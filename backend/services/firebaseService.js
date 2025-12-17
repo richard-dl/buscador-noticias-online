@@ -437,6 +437,30 @@ const deleteVipContent = async (contentId) => {
 };
 
 /**
+ * Obtener contenido VIP por telegramMessageId
+ * Útil para encontrar el groupId cuando se responde a un mensaje
+ */
+const getVipContentByTelegramMessageId = async (telegramMessageId, chatId) => {
+  try {
+    const snapshot = await db
+      .collection('vipContent')
+      .where('telegramMessageId', '==', telegramMessageId)
+      .limit(1)
+      .get();
+
+    if (snapshot.empty) {
+      return null;
+    }
+
+    const doc = snapshot.docs[0];
+    return { id: doc.id, ...doc.data() };
+  } catch (error) {
+    console.error('Error buscando contenido por telegramMessageId:', error);
+    return null;
+  }
+};
+
+/**
  * Obtener todos los usuarios desde Firestore
  */
 const getAllUsersFromFirestore = async () => {
@@ -499,5 +523,6 @@ module.exports = {
   checkVipAccess,
   saveVipContent,
   getVipContent,
-  deleteVipContent
+  deleteVipContent,
+  getVipContentByTelegramMessageId
 };

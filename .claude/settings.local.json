@@ -42,7 +42,15 @@
       "Bash(git merge:*)",
       "Bash(git stash:*)",
       "Bash(copy \"c:\\Proyectos\\buscador-noticias-online\\frontend\\public\\.htaccess\" \"c:\\Proyectos\\buscador-noticias-online\\frontend\\dist\\.htaccess\")",
-      "Bash(cmd /c copy:*)"
+      "Bash(cmd /c copy:*)",
+      "Bash(git show:*)",
+      "Bash(git restore:*)",
+      "Bash(git -C \"c:/Proyectos/buscador-noticias-online\" status)",
+      "Bash(git -C \"c:/Proyectos/buscador-noticias-online\" diff --stat)",
+      "Bash(git -C \"c:/Proyectos/buscador-noticias-online\" log --oneline -10)",
+      "Bash(git -C \"c:/Proyectos/buscador-noticias-online\" diff HEAD~5 --name-only)",
+      "Bash(git -C \"c:/Proyectos/buscador-noticias-online\" diff f0a62eb..HEAD -- frontend/src/pages/ZonaVip.jsx)",
+      "Bash(git -C \"c:/Proyectos/buscador-noticias-online\" diff f0a62eb..HEAD -- backend/)"
     ]
   }
 }

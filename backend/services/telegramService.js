@@ -3,7 +3,7 @@
  * Procesa mensajes del grupo VIP y extrae contenido con hashtags
  */
 
-const { saveVipContent, getRecentVipContentByUser } = require('./firebaseService');
+const { saveVipContent, getVipContentByTelegramMessageId } = require('./firebaseService');
 const axios = require('axios');
 
 const TELEGRAM_API_URL = `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}`;
@@ -95,12 +95,19 @@ const determineGroupId = async (message, chatId) => {
     const replyToMessageId = message.reply_to_message.message_id;
     console.log('[Grouping] Mensaje es reply a:', replyToMessageId);
 
-    // Buscar en cache activa primero
+    // Buscar en cache activa primero (por telegramMessageId)
     for (const [key, batch] of activeBatches.entries()) {
-      if (batch.telegramMessageId === replyToMessageId) {
+      // Buscar en el mensaje principal o en los mensajes secundarios del batch
+      if (batch.telegramMessageId === replyToMessageId ||
+          (batch.messageIds && batch.messageIds.includes(replyToMessageId))) {
         console.log('[Grouping] Encontrado en cache, groupId:', batch.groupId);
-        // Actualizar tiempo del batch
-        activeBatches.set(key, { ...batch, lastMessageTime: now });
+        // Actualizar tiempo del batch y agregar este mensaje a la lista
+        const updatedBatch = {
+          ...batch,
+          lastMessageTime: now,
+          messageIds: [...(batch.messageIds || [batch.telegramMessageId]), message.message_id]
+        };
+        activeBatches.set(key, updatedBatch);
         return {
           groupId: batch.groupId,
           replyToMessageId,
@@ -109,19 +116,46 @@ const determineGroupId = async (message, chatId) => {
       }
     }
 
-    // Si no está en cache, el reply creará un nuevo grupo que incluirá la referencia
-    console.log('[Grouping] Reply no encontrado en cache, creando nuevo grupo con referencia');
+    // Si no está en cache, buscar en Firestore
+    console.log('[Grouping] Buscando en Firestore el mensaje original...');
+    const originalContent = await getVipContentByTelegramMessageId(replyToMessageId, chatId);
+
+    if (originalContent && originalContent.groupId) {
+      console.log('[Grouping] Encontrado en Firestore, groupId:', originalContent.groupId);
+
+      // Actualizar cache con este grupo para futuros replies
+      activeBatches.set(batchKey, {
+        groupId: originalContent.groupId,
+        lastMessageTime: now,
+        userId,
+        telegramMessageId: replyToMessageId,
+        messageIds: [replyToMessageId, message.message_id]
+      });
+
+      return {
+        groupId: originalContent.groupId,
+        replyToMessageId,
+        isReply: true
+      };
+    }
+
+    console.log('[Grouping] Reply no encontrado en cache ni Firestore, creando nuevo grupo con referencia');
   }
 
-  // 2. Verificar si hay un batch activo para este usuario
+  // 2. Verificar si hay un batch activo para este usuario (ventana de 5 minutos)
   const existingBatch = activeBatches.get(batchKey);
   if (existingBatch) {
     const timeDiff = (now - existingBatch.lastMessageTime) / 1000 / 60; // en minutos
 
     if (timeDiff < BATCH_WINDOW_MINUTES) {
       console.log(`[Grouping] Batch activo encontrado (${timeDiff.toFixed(1)} min), groupId:`, existingBatch.groupId);
-      // Actualizar tiempo del batch
-      activeBatches.set(batchKey, { ...existingBatch, lastMessageTime: now });
+      // Actualizar tiempo del batch y agregar este mensaje
+      const updatedBatch = {
+        ...existingBatch,
+        lastMessageTime: now,
+        messageIds: [...(existingBatch.messageIds || [existingBatch.telegramMessageId]), message.message_id]
+      };
+      activeBatches.set(batchKey, updatedBatch);
       return {
         groupId: existingBatch.groupId,
         replyToMessageId: message.reply_to_message?.message_id || null,
@@ -141,7 +175,8 @@ const determineGroupId = async (message, chatId) => {
     groupId: newGroupId,
     lastMessageTime: now,
     userId,
-    telegramMessageId: message.message_id
+    telegramMessageId: message.message_id,
+    messageIds: [message.message_id]
   });
 
   // Limpiar batches viejos (más de 30 minutos)
