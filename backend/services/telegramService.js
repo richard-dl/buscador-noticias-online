@@ -3,11 +3,19 @@
  * Procesa mensajes del grupo VIP y extrae contenido con hashtags
  */
 
-const { saveVipContent } = require('./firebaseService');
+const { saveVipContent, getRecentVipContentByUser } = require('./firebaseService');
 const axios = require('axios');
 
 const TELEGRAM_API_URL = `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}`;
 const TELEGRAM_FILE_URL = `https://api.telegram.org/file/bot${process.env.TELEGRAM_BOT_TOKEN}`;
+
+// Configuración de agrupación
+const BATCH_WINDOW_MINUTES = 5; // Ventana de tiempo para agrupar mensajes del mismo usuario
+const { v4: uuidv4 } = require('uuid');
+
+// Cache en memoria para tracking de batches activos
+// Estructura: { odId: { groupId, lastMessageTime, userId } }
+const activeBatches = new Map();
 
 /**
  * Hashtags soportados:
@@ -69,6 +77,86 @@ const parseMessageWithHashtags = (text) => {
  */
 const escapeRegExp = (string) => {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+};
+
+/**
+ * Determinar el groupId para un mensaje
+ * - Si es reply a otro mensaje, usa el groupId del mensaje padre
+ * - Si el usuario envió mensajes en los últimos X minutos, usa el mismo groupId (batch)
+ * - Si no, crea un nuevo groupId
+ */
+const determineGroupId = async (message, chatId) => {
+  const userId = message.from?.id || 'unknown';
+  const now = Date.now();
+  const batchKey = `${chatId}_${userId}`;
+
+  // 1. Si es un reply, buscar el groupId del mensaje original
+  if (message.reply_to_message) {
+    const replyToMessageId = message.reply_to_message.message_id;
+    console.log('[Grouping] Mensaje es reply a:', replyToMessageId);
+
+    // Buscar en cache activa primero
+    for (const [key, batch] of activeBatches.entries()) {
+      if (batch.telegramMessageId === replyToMessageId) {
+        console.log('[Grouping] Encontrado en cache, groupId:', batch.groupId);
+        // Actualizar tiempo del batch
+        activeBatches.set(key, { ...batch, lastMessageTime: now });
+        return {
+          groupId: batch.groupId,
+          replyToMessageId,
+          isReply: true
+        };
+      }
+    }
+
+    // Si no está en cache, el reply creará un nuevo grupo que incluirá la referencia
+    console.log('[Grouping] Reply no encontrado en cache, creando nuevo grupo con referencia');
+  }
+
+  // 2. Verificar si hay un batch activo para este usuario
+  const existingBatch = activeBatches.get(batchKey);
+  if (existingBatch) {
+    const timeDiff = (now - existingBatch.lastMessageTime) / 1000 / 60; // en minutos
+
+    if (timeDiff < BATCH_WINDOW_MINUTES) {
+      console.log(`[Grouping] Batch activo encontrado (${timeDiff.toFixed(1)} min), groupId:`, existingBatch.groupId);
+      // Actualizar tiempo del batch
+      activeBatches.set(batchKey, { ...existingBatch, lastMessageTime: now });
+      return {
+        groupId: existingBatch.groupId,
+        replyToMessageId: message.reply_to_message?.message_id || null,
+        isReply: !!message.reply_to_message
+      };
+    } else {
+      console.log(`[Grouping] Batch expirado (${timeDiff.toFixed(1)} min > ${BATCH_WINDOW_MINUTES} min)`);
+    }
+  }
+
+  // 3. Crear nuevo groupId
+  const newGroupId = uuidv4();
+  console.log('[Grouping] Creando nuevo groupId:', newGroupId);
+
+  // Guardar en cache
+  activeBatches.set(batchKey, {
+    groupId: newGroupId,
+    lastMessageTime: now,
+    userId,
+    telegramMessageId: message.message_id
+  });
+
+  // Limpiar batches viejos (más de 30 minutos)
+  const cleanupThreshold = 30 * 60 * 1000;
+  for (const [key, batch] of activeBatches.entries()) {
+    if (now - batch.lastMessageTime > cleanupThreshold) {
+      activeBatches.delete(key);
+    }
+  }
+
+  return {
+    groupId: newGroupId,
+    replyToMessageId: message.reply_to_message?.message_id || null,
+    isReply: !!message.reply_to_message
+  };
 };
 
 /**
@@ -233,6 +321,18 @@ const processTelegramUpdate = async (update) => {
     return { processed: false, reason: 'No content to save' };
   }
 
+  // Determinar groupId para agrupación de contenido relacionado
+  console.log('[Webhook] Determinando groupId...');
+  const groupingInfo = await determineGroupId(message, message.chat?.id);
+  console.log('[Webhook] Grouping info:', groupingInfo);
+
+  // Agregar información de agrupación al contenido
+  contentData.groupId = groupingInfo.groupId;
+  contentData.replyToMessageId = groupingInfo.replyToMessageId;
+  contentData.isReply = groupingInfo.isReply;
+  contentData.telegramUserId = message.from?.id || null;
+  contentData.telegramUserName = message.from?.first_name || message.from?.username || null;
+
   console.log('[Webhook] Guardando contenido en Firestore...');
 
   // Guardar en Firestore
@@ -241,6 +341,7 @@ const processTelegramUpdate = async (update) => {
   return {
     processed: true,
     contentId: saved.id,
+    groupId: groupingInfo.groupId,
     data: contentData
   };
 };

@@ -399,6 +399,12 @@ const saveVipContent = async (contentData) => {
     sensible: contentData.sensible || [],
     imagen: contentData.imagen || null,
     telegramMessageId: contentData.telegramMessageId || null,
+    // Campos de agrupación
+    groupId: contentData.groupId || null,
+    replyToMessageId: contentData.replyToMessageId || null,
+    isReply: contentData.isReply || false,
+    telegramUserId: contentData.telegramUserId || null,
+    telegramUserName: contentData.telegramUserName || null,
     createdAt: admin.firestore.FieldValue.serverTimestamp()
   };
 
