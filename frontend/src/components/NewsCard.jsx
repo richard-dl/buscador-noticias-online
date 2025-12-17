@@ -29,11 +29,9 @@ const NewsCard = ({ news, isSaved = false, onDelete = null, savedNewsId = null }
   const [extractedImage, setExtractedImage] = useState(null)
   const [loadingImage, setLoadingImage] = useState(false)
 
-  // Intentar extraer imagen si no tiene y es de Google News
+  // Intentar extraer imagen si no tiene (Google News, RSS sin imagen, etc.)
   useEffect(() => {
-    const shouldExtractImage = !news.image &&
-                               news.link &&
-                               (news.sourceType === 'google' || news.link.includes('news.google.com'))
+    const shouldExtractImage = !news.image && news.link
 
     if (!shouldExtractImage) return
 
