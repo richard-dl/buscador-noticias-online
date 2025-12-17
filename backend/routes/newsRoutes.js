@@ -557,6 +557,129 @@ router.post('/generate', authenticateAndRequireSubscription, async (req, res) =>
 const imageCache = new Map();
 const CACHE_TTL = 30 * 60 * 1000; // 30 minutos
 
+/**
+ * Imagen genérica de Google News que se devuelve para todas las noticias
+ * Esta imagen es un placeholder y no es útil mostrarla
+ */
+const GOOGLE_NEWS_GENERIC_IMAGE = 'J6_coFbogxhRI9iM864NL_liGXvsQp2AupsKei7z0cNNfDvGUmWUy20nuUhkREQyrpY4bEeIBuc';
+
+/**
+ * Verificar si una imagen es la genérica de Google News
+ */
+const isGoogleNewsGenericImage = (imageUrl) => {
+  if (!imageUrl) return false;
+  return imageUrl.includes(GOOGLE_NEWS_GENERIC_IMAGE);
+};
+
+/**
+ * Extraer imagen de una página web normal (no Google News)
+ */
+const extractImageFromPage = async (url) => {
+  try {
+    const response = await axios.get(url, {
+      timeout: 5000,
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml',
+        'Accept-Language': 'es-AR,es;q=0.9'
+      },
+      maxRedirects: 5,
+      maxContentLength: 100000
+    });
+
+    const $ = cheerio.load(response.data);
+
+    // Intentar obtener imagen en orden de preferencia
+    let image = $('meta[property="og:image"]').attr('content');
+    if (image && image.startsWith('http')) return image;
+
+    image = $('meta[name="twitter:image"]').attr('content');
+    if (image && image.startsWith('http')) return image;
+
+    image = $('meta[itemprop="image"]').attr('content');
+    if (image && image.startsWith('http')) return image;
+
+    // Primera imagen grande en el contenido
+    $('article img, .article img, main img, .content img').each((i, el) => {
+      const src = $(el).attr('src');
+      if (src && src.startsWith('http') && !src.includes('avatar') && !src.includes('logo') && !src.includes('icon')) {
+        image = src;
+        return false;
+      }
+    });
+
+    return image || null;
+  } catch (e) {
+    return null;
+  }
+};
+
+/**
+ * Extraer imagen de una página de Google News
+ * Intenta obtener la URL real y extraer la imagen de la fuente original
+ */
+const extractImageFromGoogleNews = async (googleNewsUrl) => {
+  try {
+    // Primero intentar resolver la URL real
+    const realUrl = await extractRealUrl(googleNewsUrl);
+
+    // Si pudimos obtener la URL real (diferente de Google News), extraer imagen de ahí
+    if (realUrl && !realUrl.includes('news.google.com')) {
+      const image = await extractImageFromPage(realUrl);
+      if (image && !isGoogleNewsGenericImage(image)) {
+        return image;
+      }
+    }
+
+    // Fallback: extraer de la página de Google News (aunque puede ser genérica)
+    const response = await axios.get(googleNewsUrl, {
+      timeout: 8000,
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
+        'Accept': 'text/html,application/xhtml+xml'
+      },
+      maxRedirects: 5,
+      validateStatus: (status) => status < 500
+    });
+
+    if (response.data) {
+      const $ = cheerio.load(response.data);
+      let image = $('meta[property="og:image"]').attr('content');
+
+      // Verificar que no sea la imagen genérica
+      if (image && image.startsWith('http') && !isGoogleNewsGenericImage(image)) {
+        if (image.includes('googleusercontent.com')) {
+          image = image.replace(/=s\d+-w\d+/, '=s0-w600').replace(/=w\d+/, '=w600');
+        }
+        return image;
+      }
+
+      image = $('meta[name="twitter:image"]').attr('content');
+      if (image && image.startsWith('http') && !isGoogleNewsGenericImage(image)) {
+        if (image.includes('googleusercontent.com')) {
+          image = image.replace(/=s\d+-w\d+/, '=s0-w600').replace(/=w\d+/, '=w600');
+        }
+        return image;
+      }
+    }
+    return null;
+  } catch (e) {
+    if (e.response?.data) {
+      try {
+        const $ = cheerio.load(e.response.data);
+        let image = $('meta[property="og:image"]').attr('content');
+        if (image && image.startsWith('http') && !isGoogleNewsGenericImage(image)) {
+          if (image.includes('googleusercontent.com')) {
+            image = image.replace(/=s\d+-w\d+/, '=s0-w600').replace(/=w\d+/, '=w600');
+          }
+          return image;
+        }
+      } catch (parseErr) {}
+    }
+    return null;
+  }
+};
+
 router.get('/extract-image', authenticateAndRequireSubscription, async (req, res) => {
   try {
     const { url } = req.query;
@@ -578,56 +701,16 @@ router.get('/extract-image', authenticateAndRequireSubscription, async (req, res
       });
     }
 
-    let targetUrl = url;
-
-    // Si es URL de Google News, resolver la URL real primero
-    if (url.includes('news.google.com')) {
-      try {
-        targetUrl = await extractRealUrl(url);
-      } catch (e) {
-        console.warn('Error extrayendo URL real:', e.message);
-      }
-    }
-
-    // Extraer imagen de la página de destino
     let image = null;
-    try {
-      const response = await axios.get(targetUrl, {
-        timeout: 5000,
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-          'Accept': 'text/html,application/xhtml+xml',
-          'Accept-Language': 'es-AR,es;q=0.9'
-        },
-        maxRedirects: 5,
-        maxContentLength: 100000 // Solo leer primeros 100KB
-      });
 
-      const $ = cheerio.load(response.data);
-
-      // Intentar obtener imagen en orden de preferencia
-      // 1. Open Graph image (la más común y mejor calidad)
-      image = $('meta[property="og:image"]').attr('content');
-      if (!image || !image.startsWith('http')) {
-        // 2. Twitter card image
-        image = $('meta[name="twitter:image"]').attr('content');
-      }
-      if (!image || !image.startsWith('http')) {
-        // 3. Schema.org image
-        image = $('meta[itemprop="image"]').attr('content');
-      }
-      if (!image || !image.startsWith('http')) {
-        // 4. Primera imagen grande en el contenido
-        $('article img, .article img, main img, .content img').each((i, el) => {
-          const src = $(el).attr('src');
-          if (src && src.startsWith('http') && !src.includes('avatar') && !src.includes('logo') && !src.includes('icon')) {
-            image = src;
-            return false; // break
-          }
-        });
-      }
-    } catch (e) {
-      console.warn('Error extrayendo imagen de', targetUrl, ':', e.message);
+    // Estrategia según el tipo de URL
+    if (url.includes('news.google.com')) {
+      // Para Google News: extraer imagen directamente de la página de Google
+      // (las imágenes de googleusercontent.com sí funcionan)
+      image = await extractImageFromGoogleNews(url);
+    } else {
+      // Para otras páginas: extraer og:image normalmente
+      image = await extractImageFromPage(url);
     }
 
     // Guardar en cache (incluso si es null para evitar requests repetidos)
@@ -636,7 +719,7 @@ router.get('/extract-image', authenticateAndRequireSubscription, async (req, res
       timestamp: Date.now()
     });
 
-    // Limpiar cache viejo (cada 100 requests)
+    // Limpiar cache viejo periódicamente
     if (imageCache.size > 500) {
       const now = Date.now();
       for (const [key, value] of imageCache.entries()) {
