@@ -582,5 +582,6 @@ module.exports = {
   processTelegramUpdate,
   verifyWebhookToken,
   getFileInfo,
-  downloadFile
+  downloadFile,
+  forwardToPublicChannel
 };

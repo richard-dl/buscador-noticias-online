@@ -438,6 +438,29 @@ const deleteVipContent = async (contentId) => {
 };
 
 /**
+ * Actualizar contenido VIP existente
+ */
+const updateVipContent = async (contentId, updateData) => {
+  await db.collection('vipContent').doc(contentId).update(updateData);
+  return { id: contentId, ...updateData };
+};
+
+/**
+ * Obtener videos sin embedUrl (para migración)
+ */
+const getVideosWithoutEmbed = async () => {
+  const snapshot = await db
+    .collection('vipContent')
+    .where('imagen.type', '==', 'video')
+    .get();
+
+  // Filtrar los que no tienen embedUrl
+  return snapshot.docs
+    .map(doc => ({ id: doc.id, ...doc.data() }))
+    .filter(item => item.imagen && !item.imagen.embedUrl);
+};
+
+/**
  * Obtener contenido VIP por telegramMessageId
  * Útil para encontrar el groupId cuando se responde a un mensaje
  */
@@ -525,5 +548,7 @@ module.exports = {
   saveVipContent,
   getVipContent,
   deleteVipContent,
-  getVipContentByTelegramMessageId
+  getVipContentByTelegramMessageId,
+  updateVipContent,
+  getVideosWithoutEmbed
 };
