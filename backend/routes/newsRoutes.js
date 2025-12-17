@@ -3,7 +3,8 @@ const router = express.Router();
 const { authenticateAndRequireSubscription } = require('../middleware/authMiddleware');
 const { getNewsFromFeeds, searchNews, getAvailableFeeds, getCategories } = require('../services/rssService');
 const { searchGoogleNews, searchWithFilters, searchByProvincia, searchByTematica, extractRealUrl } = require('../services/googleNewsService');
-const { findImageByTitle } = require('../services/bingNewsService');
+const { findImageByTitle: findImageByTitleBing } = require('../services/bingNewsService');
+const { findImageByTitle: findImageByTitleCurrents, isConfigured: isCurrentsConfigured } = require('../services/currentsApiService');
 const axios = require('axios');
 const cheerio = require('cheerio');
 const { translateNews } = require('../services/translationService');
@@ -711,13 +712,26 @@ router.get('/extract-image', authenticateAndRequireSubscription, async (req, res
       // Para Google News: intentar extraer imagen
       image = await extractImageFromGoogleNews(url);
 
-      // Si no hay imagen y tenemos título, buscar en Bing News como fallback
+      // Si no hay imagen y tenemos título, buscar en APIs alternativas como fallback
       if (!image && title) {
-        console.log('Buscando imagen en Bing News para:', title.substring(0, 50));
-        image = await findImageByTitle(title);
-        if (image) {
-          imageSource = 'bing';
-          console.log('Imagen encontrada en Bing News');
+        // Primero intentar con Currents API (mejor calidad, 600 req/día)
+        if (isCurrentsConfigured()) {
+          console.log('Buscando imagen en Currents API para:', title.substring(0, 50));
+          image = await findImageByTitleCurrents(title);
+          if (image) {
+            imageSource = 'currents';
+            console.log('Imagen encontrada en Currents API');
+          }
+        }
+
+        // Fallback a Bing News si Currents no encontró
+        if (!image) {
+          console.log('Buscando imagen en Bing News para:', title.substring(0, 50));
+          image = await findImageByTitleBing(title);
+          if (image) {
+            imageSource = 'bing';
+            console.log('Imagen encontrada en Bing News');
+          }
         }
       }
     } else {
