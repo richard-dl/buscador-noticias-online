@@ -25,6 +25,7 @@ const extractedImagesCache = new Map()
 const NewsCard = ({ news, isSaved = false, onDelete = null, savedNewsId = null }) => {
   const [copied, setCopied] = useState(false)
   const [imageError, setImageError] = useState(false)
+  const [useProxy, setUseProxy] = useState(false) // Usar proxy si falla la carga directa
   const [saving, setSaving] = useState(false)
   const [extractedImage, setExtractedImage] = useState(null)
   const [loadingImage, setLoadingImage] = useState(false)
@@ -64,8 +65,21 @@ const NewsCard = ({ news, isSaved = false, onDelete = null, savedNewsId = null }
     extractImage()
   }, [news.link, news.image, news.sourceType, news.title])
 
-  // Imagen a mostrar (original o extraída)
-  const displayImage = news.image || extractedImage
+  // Imagen a mostrar (original, extraída, o via proxy)
+  const rawImage = news.image || extractedImage
+  const displayImage = rawImage ? (useProxy ? newsApi.getProxyImageUrl(rawImage) : rawImage) : null
+
+  // Handler para error de imagen - intentar con proxy antes de mostrar placeholder
+  const handleImageError = () => {
+    if (!useProxy && rawImage) {
+      // Intentar con proxy
+      console.log('Imagen falló, intentando con proxy:', rawImage.substring(0, 50))
+      setUseProxy(true)
+    } else {
+      // Ya intentamos con proxy, mostrar placeholder
+      setImageError(true)
+    }
+  }
 
   const formatDate = (date) => {
     if (!date) return ''
@@ -178,7 +192,7 @@ const NewsCard = ({ news, isSaved = false, onDelete = null, savedNewsId = null }
               src={displayImage}
               alt={news.title}
               referrerPolicy="no-referrer"
-              onError={() => setImageError(true)}
+              onError={handleImageError}
               loading="lazy"
             />
           )

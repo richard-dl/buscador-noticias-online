@@ -97,6 +97,25 @@ export const newsApi = {
       queryUrl += `&title=${encodeURIComponent(title)}`
     }
     return api.get(queryUrl)
+  },
+
+  // Obtener URL del proxy de imágenes (para imágenes que bloquean CORS/referer)
+  getProxyImageUrl: (imageUrl) => {
+    // Dominios que necesitan proxy
+    const needsProxy = [
+      'googleusercontent.com',
+      'gstatic.com',
+      'ggpht.com',
+      'news.google.com'
+    ]
+
+    const needsProxyCheck = needsProxy.some(domain => imageUrl.includes(domain))
+
+    if (needsProxyCheck) {
+      return `${API_URL}/news/proxy-image?url=${encodeURIComponent(imageUrl)}`
+    }
+
+    return imageUrl
   }
 }
 

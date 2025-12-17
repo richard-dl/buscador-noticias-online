@@ -773,4 +773,102 @@ router.get('/extract-image', authenticateAndRequireSubscription, async (req, res
   }
 });
 
+/**
+ * GET /api/news/proxy-image
+ * Proxy para servir imágenes externas que bloquean CORS/referer
+ * Útil para imágenes de Google News, googleusercontent, etc.
+ */
+const proxyImageCache = new Map();
+const PROXY_CACHE_TTL = 60 * 60 * 1000; // 1 hora
+
+router.get('/proxy-image', async (req, res) => {
+  try {
+    const { url } = req.query;
+
+    if (!url) {
+      return res.status(400).json({ error: 'URL requerida' });
+    }
+
+    // Validar que es una URL de imagen válida
+    const allowedDomains = [
+      'googleusercontent.com',
+      'gstatic.com',
+      'google.com',
+      'ggpht.com',
+      'googleapis.com',
+      'cloudfront.net',
+      'amazonaws.com',
+      'imgix.net',
+      'wp.com',
+      'medium.com'
+    ];
+
+    const urlObj = new URL(url);
+    const isAllowed = allowedDomains.some(domain => urlObj.hostname.includes(domain));
+
+    if (!isAllowed) {
+      // Para dominios no en la lista, intentar servir de todas formas
+      // pero con más precaución
+      console.log('[Proxy Image] Dominio no en whitelist:', urlObj.hostname);
+    }
+
+    // Verificar cache
+    const cached = proxyImageCache.get(url);
+    if (cached && Date.now() - cached.timestamp < PROXY_CACHE_TTL) {
+      res.set({
+        'Content-Type': cached.contentType,
+        'Cache-Control': 'public, max-age=3600',
+        'Access-Control-Allow-Origin': '*'
+      });
+      return res.send(cached.data);
+    }
+
+    // Descargar imagen
+    const response = await axios.get(url, {
+      responseType: 'arraybuffer',
+      timeout: 10000,
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'image/webp,image/apng,image/*,*/*;q=0.8',
+        'Accept-Language': 'es-AR,es;q=0.9,en;q=0.8',
+        'Referer': 'https://news.google.com/'
+      },
+      maxRedirects: 5
+    });
+
+    const contentType = response.headers['content-type'] || 'image/jpeg';
+    const imageData = Buffer.from(response.data);
+
+    // Guardar en cache
+    proxyImageCache.set(url, {
+      data: imageData,
+      contentType,
+      timestamp: Date.now()
+    });
+
+    // Limpiar cache viejo
+    if (proxyImageCache.size > 200) {
+      const now = Date.now();
+      for (const [key, value] of proxyImageCache.entries()) {
+        if (now - value.timestamp > PROXY_CACHE_TTL) {
+          proxyImageCache.delete(key);
+        }
+      }
+    }
+
+    res.set({
+      'Content-Type': contentType,
+      'Content-Length': imageData.length,
+      'Cache-Control': 'public, max-age=3600',
+      'Access-Control-Allow-Origin': '*',
+      'X-Proxy-Source': 'news-proxy'
+    });
+
+    res.send(imageData);
+  } catch (error) {
+    console.error('[Proxy Image] Error:', error.message);
+    res.status(404).json({ error: 'Imagen no disponible' });
+  }
+});
+
 module.exports = router;
