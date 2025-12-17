@@ -15,6 +15,8 @@
   Header set X-Content-Type-Options "nosniff"
   Header set X-Frame-Options "SAMEORIGIN"
   Header set X-XSS-Protection "1; mode=block"
+  # Referrer Policy para permitir carga de imágenes externas
+  Header set Referrer-Policy "no-referrer-when-downgrade"
 </IfModule>
 
 # Compresión GZIP

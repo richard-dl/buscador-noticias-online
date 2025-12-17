@@ -169,7 +169,6 @@ const NewsCard = ({ news, isSaved = false, onDelete = null, savedNewsId = null }
             <video
               controls
               preload="metadata"
-              crossOrigin="anonymous"
               playsInline
               src={displayImage}
               onError={() => setImageError(true)}
@@ -178,7 +177,7 @@ const NewsCard = ({ news, isSaved = false, onDelete = null, savedNewsId = null }
             <img
               src={displayImage}
               alt={news.title}
-              crossOrigin="anonymous"
+              referrerPolicy="no-referrer"
               onError={() => setImageError(true)}
               loading="lazy"
             />
