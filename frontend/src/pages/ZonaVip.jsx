@@ -23,6 +23,7 @@ const ZonaVip = () => {
   const [expandedTexts, setExpandedTexts] = useState({}) // Para manejar textos expandidos
   const [expandedGroups, setExpandedGroups] = useState({}) // Para expandir/colapsar grupos
   const [viewMode, setViewMode] = useState('grouped') // 'grouped' o 'flat'
+  const [savedItems, setSavedItems] = useState({}) // Para rastrear items guardados
 
   useEffect(() => {
     checkVipAccess()
@@ -77,6 +78,11 @@ const ZonaVip = () => {
   }
 
   const handleSaveNews = async (item) => {
+    if (savedItems[item.id]) {
+      toast.info('Este contenido ya está guardado')
+      return
+    }
+
     try {
       await userApi.saveNews({
         title: item.titulo || 'Contenido VIP',
@@ -87,6 +93,7 @@ const ZonaVip = () => {
         image: item.imagen ? vipApi.getMediaUrl(item.imagen.fileId) : '',
         category: item.imagen?.type === 'video' ? 'video' : ''
       })
+      setSavedItems(prev => ({ ...prev, [item.id]: true }))
       toast.success('Noticia guardada')
     } catch (error) {
       toast.error(error.message || 'Error al guardar noticia')
@@ -487,9 +494,9 @@ const ZonaVip = () => {
                             <FiCopy />
                           </button>
                           <button
-                            className="btn-action-vip btn-save"
+                            className={`btn-action-vip btn-save ${savedItems[item.id] ? 'saved' : ''}`}
                             onClick={() => handleSaveNews(item)}
-                            title="Guardar noticia"
+                            title={savedItems[item.id] ? 'Guardado' : 'Guardar noticia'}
                           >
                             <FiBookmark />
                           </button>

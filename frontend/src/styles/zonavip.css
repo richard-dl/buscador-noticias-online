@@ -409,6 +409,17 @@
   background: rgba(72, 187, 120, 0.1);
 }
 
+.btn-action-vip.btn-save.saved {
+  background: #48bb78;
+  border-color: #48bb78;
+  color: white;
+}
+
+.btn-action-vip.btn-save.saved:hover {
+  background: #38a169;
+  border-color: #38a169;
+}
+
 .btn-action-vip.btn-delete {
   color: #e74c3c;
   border-color: rgba(231, 76, 60, 0.3);
