@@ -135,6 +135,7 @@ const NewsCard = ({ news, isSaved = false, onDelete = null, savedNewsId = null }
             <img
               src={news.image}
               alt={news.title}
+              crossOrigin="anonymous"
               onError={() => setImageError(true)}
               loading="lazy"
             />
