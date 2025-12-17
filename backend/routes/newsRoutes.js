@@ -574,44 +574,105 @@ const isGoogleNewsGenericImage = (imageUrl) => {
 };
 
 /**
+ * Convertir URL relativa a absoluta
+ */
+const resolveUrl = (baseUrl, relativeUrl) => {
+  if (!relativeUrl) return null;
+  if (relativeUrl.startsWith('http')) return relativeUrl;
+  if (relativeUrl.startsWith('//')) return 'https:' + relativeUrl;
+  try {
+    const base = new URL(baseUrl);
+    if (relativeUrl.startsWith('/')) {
+      return base.origin + relativeUrl;
+    }
+    // Ruta relativa sin /
+    const basePath = base.pathname.substring(0, base.pathname.lastIndexOf('/') + 1);
+    return base.origin + basePath + relativeUrl;
+  } catch (e) {
+    return null;
+  }
+};
+
+/**
  * Extraer imagen de una página web normal (no Google News)
  */
 const extractImageFromPage = async (url) => {
   try {
     const response = await axios.get(url, {
-      timeout: 5000,
+      timeout: 8000,
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         'Accept': 'text/html,application/xhtml+xml',
         'Accept-Language': 'es-AR,es;q=0.9'
       },
       maxRedirects: 5,
-      maxContentLength: 100000
+      maxContentLength: 200000
     });
 
     const $ = cheerio.load(response.data);
 
-    // Intentar obtener imagen en orden de preferencia
-    let image = $('meta[property="og:image"]').attr('content');
-    if (image && image.startsWith('http')) return image;
+    // Función helper para resolver y validar imagen
+    const resolveImage = (imgUrl) => {
+      if (!imgUrl) return null;
+      const resolved = resolveUrl(url, imgUrl);
+      return resolved;
+    };
 
-    image = $('meta[name="twitter:image"]').attr('content');
-    if (image && image.startsWith('http')) return image;
+    // Intentar obtener imagen en orden de preferencia (metadatos primero)
+    let image = resolveImage($('meta[property="og:image"]').attr('content'));
+    if (image) return image;
 
-    image = $('meta[itemprop="image"]').attr('content');
-    if (image && image.startsWith('http')) return image;
+    image = resolveImage($('meta[name="twitter:image"]').attr('content'));
+    if (image) return image;
 
-    // Primera imagen grande en el contenido
-    $('article img, .article img, main img, .content img').each((i, el) => {
-      const src = $(el).attr('src');
-      if (src && src.startsWith('http') && !src.includes('avatar') && !src.includes('logo') && !src.includes('icon')) {
-        image = src;
+    image = resolveImage($('meta[itemprop="image"]').attr('content'));
+    if (image) return image;
+
+    // Buscar en selectores comunes de contenido principal
+    const contentSelectors = [
+      'article img',
+      '.article img',
+      'main img',
+      '.content img',
+      '.noticia img',
+      '.post img',
+      '.news img',
+      '.entry-content img',
+      '.detail img',
+      '.detalle img',
+      '#content img',
+      '.nota img',
+      '.imagen img',
+      '.foto img'
+    ];
+
+    for (const selector of contentSelectors) {
+      const $img = $(selector).first();
+      const src = $img.attr('src') || $img.attr('data-src');
+      if (src && !src.includes('avatar') && !src.includes('logo') && !src.includes('icon') &&
+          !src.includes('pixel') && !src.includes('tracker') && !src.includes('spacer') &&
+          !src.includes('1x1') && !src.includes('small')) {
+        image = resolveImage(src);
+        if (image) return image;
+      }
+    }
+
+    // Fallback: primera imagen válida en la página
+    $('img').each((i, el) => {
+      if (image) return false; // Ya encontramos una
+      const src = $(el).attr('src') || $(el).attr('data-src');
+      if (src && !src.includes('avatar') && !src.includes('logo') && !src.includes('icon') &&
+          !src.includes('pixel') && !src.includes('tracker') && !src.includes('spacer') &&
+          !src.includes('1x1') && !src.includes('small') && !src.includes('banner') &&
+          !src.includes('ad-') && !src.includes('ads/')) {
+        image = resolveImage(src);
         return false;
       }
     });
 
     return image || null;
   } catch (e) {
+    console.warn('Error extrayendo imagen de página:', e.message);
     return null;
   }
 };
