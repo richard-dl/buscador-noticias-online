@@ -44,11 +44,11 @@ const NewsCard = ({ news, isSaved = false, onDelete = null, savedNewsId = null }
       return
     }
 
-    // Extraer imagen del backend
+    // Extraer imagen del backend (envía título para búsqueda en Bing como fallback)
     const extractImage = async () => {
       setLoadingImage(true)
       try {
-        const response = await newsApi.extractImage(news.link)
+        const response = await newsApi.extractImage(news.link, news.title)
         if (response.success && response.image) {
           setExtractedImage(response.image)
           extractedImagesCache.set(news.link, response.image)
@@ -64,7 +64,7 @@ const NewsCard = ({ news, isSaved = false, onDelete = null, savedNewsId = null }
     }
 
     extractImage()
-  }, [news.link, news.image, news.sourceType])
+  }, [news.link, news.image, news.sourceType, news.title])
 
   // Imagen a mostrar (original o extraída)
   const displayImage = news.image || extractedImage

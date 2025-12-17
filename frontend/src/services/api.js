@@ -90,7 +90,14 @@ export const newsApi = {
   generate: (data) => api.post('/news/generate', data),
 
   // Extraer imagen de una URL (para noticias de Google News sin imagen)
-  extractImage: (url) => api.get(`/news/extract-image?url=${encodeURIComponent(url)}`)
+  // Incluye título para búsqueda alternativa en Bing News
+  extractImage: (url, title) => {
+    let queryUrl = `/news/extract-image?url=${encodeURIComponent(url)}`
+    if (title) {
+      queryUrl += `&title=${encodeURIComponent(title)}`
+    }
+    return api.get(queryUrl)
+  }
 }
 
 // ============ GEO ============

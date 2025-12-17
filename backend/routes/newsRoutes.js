@@ -3,6 +3,7 @@ const router = express.Router();
 const { authenticateAndRequireSubscription } = require('../middleware/authMiddleware');
 const { getNewsFromFeeds, searchNews, getAvailableFeeds, getCategories } = require('../services/rssService');
 const { searchGoogleNews, searchWithFilters, searchByProvincia, searchByTematica, extractRealUrl } = require('../services/googleNewsService');
+const { findImageByTitle } = require('../services/bingNewsService');
 const axios = require('axios');
 const cheerio = require('cheerio');
 const { translateNews } = require('../services/translationService');
@@ -682,7 +683,7 @@ const extractImageFromGoogleNews = async (googleNewsUrl) => {
 
 router.get('/extract-image', authenticateAndRequireSubscription, async (req, res) => {
   try {
-    const { url } = req.query;
+    const { url, title } = req.query;
 
     if (!url) {
       return res.status(400).json({
@@ -697,17 +698,28 @@ router.get('/extract-image', authenticateAndRequireSubscription, async (req, res
       return res.json({
         success: true,
         image: cached.image,
-        cached: true
+        cached: true,
+        source: cached.source
       });
     }
 
     let image = null;
+    let imageSource = null;
 
     // Estrategia según el tipo de URL
     if (url.includes('news.google.com')) {
-      // Para Google News: extraer imagen directamente de la página de Google
-      // (las imágenes de googleusercontent.com sí funcionan)
+      // Para Google News: intentar extraer imagen
       image = await extractImageFromGoogleNews(url);
+
+      // Si no hay imagen y tenemos título, buscar en Bing News como fallback
+      if (!image && title) {
+        console.log('Buscando imagen en Bing News para:', title.substring(0, 50));
+        image = await findImageByTitle(title);
+        if (image) {
+          imageSource = 'bing';
+          console.log('Imagen encontrada en Bing News');
+        }
+      }
     } else {
       // Para otras páginas: extraer og:image normalmente
       image = await extractImageFromPage(url);
@@ -716,7 +728,8 @@ router.get('/extract-image', authenticateAndRequireSubscription, async (req, res
     // Guardar en cache (incluso si es null para evitar requests repetidos)
     imageCache.set(url, {
       image: image,
-      timestamp: Date.now()
+      timestamp: Date.now(),
+      source: imageSource
     });
 
     // Limpiar cache viejo periódicamente
@@ -732,7 +745,8 @@ router.get('/extract-image', authenticateAndRequireSubscription, async (req, res
     res.json({
       success: true,
       image: image,
-      cached: false
+      cached: false,
+      source: imageSource
     });
   } catch (error) {
     console.error('Error extrayendo imagen:', error);
