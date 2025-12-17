@@ -1160,6 +1160,25 @@ input, select, textarea {
   to { transform: rotate(360deg); }
 }
 
+.image-placeholder.image-retry {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.image-placeholder.image-retry:hover {
+  color: var(--color-primary);
+  background-color: var(--color-gray-50);
+}
+
+.image-placeholder .retry-hint {
+  font-size: 0.7rem;
+  opacity: 0.6;
+}
+
+.image-placeholder.image-retry:hover .retry-hint {
+  opacity: 1;
+}
+
 .news-category {
   position: absolute;
   top: var(--spacing-3);

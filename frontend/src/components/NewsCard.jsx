@@ -20,7 +20,10 @@ const cleanHtmlEntities = (text) => {
 }
 
 // Cache global para imágenes extraídas (persiste entre renderizados)
+// Formato: { image: string|null, timestamp: number }
 const extractedImagesCache = new Map()
+const CACHE_TTL_POSITIVE = 30 * 60 * 1000 // 30 minutos para imágenes encontradas
+const CACHE_TTL_NEGATIVE = 2 * 60 * 1000  // 2 minutos para cache negativo (permite reintentar pronto)
 
 const NewsCard = ({ news, isSaved = false, onDelete = null, savedNewsId = null }) => {
   const [copied, setCopied] = useState(false)
@@ -29,6 +32,7 @@ const NewsCard = ({ news, isSaved = false, onDelete = null, savedNewsId = null }
   const [saving, setSaving] = useState(false)
   const [extractedImage, setExtractedImage] = useState(null)
   const [loadingImage, setLoadingImage] = useState(false)
+  const [retryCount, setRetryCount] = useState(0) // Para forzar re-extracción
 
   // Intentar extraer imagen si no tiene (Google News, RSS sin imagen, etc.)
   useEffect(() => {
@@ -36,11 +40,20 @@ const NewsCard = ({ news, isSaved = false, onDelete = null, savedNewsId = null }
 
     if (!shouldExtractImage) return
 
-    // Verificar cache primero
+    // Verificar cache con TTL
     if (extractedImagesCache.has(news.link)) {
       const cached = extractedImagesCache.get(news.link)
-      if (cached) setExtractedImage(cached)
-      return
+      const now = Date.now()
+      const ttl = cached.image ? CACHE_TTL_POSITIVE : CACHE_TTL_NEGATIVE
+
+      if (now - cached.timestamp < ttl) {
+        // Cache válido
+        if (cached.image) setExtractedImage(cached.image)
+        return
+      } else {
+        // Cache expirado, eliminar
+        extractedImagesCache.delete(news.link)
+      }
     }
 
     // Extraer imagen del backend (envía título para búsqueda en Bing como fallback)
@@ -50,20 +63,20 @@ const NewsCard = ({ news, isSaved = false, onDelete = null, savedNewsId = null }
         const response = await newsApi.extractImage(news.link, news.title)
         if (response.success && response.image) {
           setExtractedImage(response.image)
-          extractedImagesCache.set(news.link, response.image)
+          extractedImagesCache.set(news.link, { image: response.image, timestamp: Date.now() })
         } else {
-          extractedImagesCache.set(news.link, null) // Cache negativo
+          extractedImagesCache.set(news.link, { image: null, timestamp: Date.now() })
         }
       } catch (err) {
         console.warn('Error extrayendo imagen:', err.message)
-        extractedImagesCache.set(news.link, null)
+        extractedImagesCache.set(news.link, { image: null, timestamp: Date.now() })
       } finally {
         setLoadingImage(false)
       }
     }
 
     extractImage()
-  }, [news.link, news.image, news.sourceType, news.title])
+  }, [news.link, news.image, news.sourceType, news.title, retryCount])
 
   // Imagen a mostrar (original, extraída, o via proxy)
   const rawImage = news.image || extractedImage
@@ -202,8 +215,19 @@ const NewsCard = ({ news, isSaved = false, onDelete = null, savedNewsId = null }
             <span>Cargando imagen...</span>
           </div>
         ) : (
-          <div className="image-placeholder">
+          <div
+            className="image-placeholder image-retry"
+            onClick={() => {
+              // Limpiar cache y reintentar
+              extractedImagesCache.delete(news.link)
+              setImageError(false)
+              setUseProxy(false)
+              setRetryCount(c => c + 1)
+            }}
+            title="Clic para reintentar cargar imagen"
+          >
             <FiImage size={40} />
+            <span className="retry-hint">Reintentar</span>
           </div>
         )}
         {news.category && news.category !== 'video' && (
