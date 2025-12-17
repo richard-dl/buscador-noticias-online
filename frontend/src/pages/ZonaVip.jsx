@@ -411,7 +411,7 @@ const ZonaVip = () => {
               <div className="view-mode-buttons">
                 <button
                   className={`filter-btn view-mode-btn ${viewMode === 'grouped' ? 'active' : ''}`}
-                  onClick={() => setViewMode('grouped')}
+                  onClick={() => { setViewMode('grouped'); setCurrentPage(1); }}
                   title="Ver contenido agrupado"
                   disabled={viewMode === 'grouped'}
                 >
@@ -420,7 +420,7 @@ const ZonaVip = () => {
                 </button>
                 <button
                   className={`filter-btn view-mode-btn ${viewMode === 'flat' ? 'active' : ''}`}
-                  onClick={() => setViewMode('flat')}
+                  onClick={() => { setViewMode('flat'); setCurrentPage(1); }}
                   title="Ver todos separados"
                   disabled={viewMode === 'flat'}
                 >
