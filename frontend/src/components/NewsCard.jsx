@@ -122,18 +122,29 @@ const NewsCard = ({ news, isSaved = false, onDelete = null, savedNewsId = null }
     <article className="news-card">
       <div className="news-card-image">
         {news.image && !imageError ? (
-          <img
-            src={news.image}
-            alt={news.title}
-            onError={() => setImageError(true)}
-            loading="lazy"
-          />
+          news.category === 'video' ? (
+            <video
+              controls
+              preload="metadata"
+              crossOrigin="anonymous"
+              playsInline
+              src={news.image}
+              onError={() => setImageError(true)}
+            />
+          ) : (
+            <img
+              src={news.image}
+              alt={news.title}
+              onError={() => setImageError(true)}
+              loading="lazy"
+            />
+          )
         ) : (
           <div className="image-placeholder">
             <FiImage size={40} />
           </div>
         )}
-        {news.category && (
+        {news.category && news.category !== 'video' && (
           <span className="news-category">{news.category}</span>
         )}
       </div>
