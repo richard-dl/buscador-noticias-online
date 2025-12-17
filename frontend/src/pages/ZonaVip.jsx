@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { vipApi, userApi } from '../services/api'
 import { toast } from 'react-toastify'
-import { FiStar, FiLock, FiClock, FiTrash2, FiImage, FiAlertTriangle, FiRefreshCw, FiCopy, FiBookmark, FiFilter, FiCalendar, FiChevronLeft, FiChevronRight, FiChevronDown, FiChevronUp, FiLayers } from 'react-icons/fi'
+import { FiStar, FiLock, FiClock, FiTrash2, FiImage, FiAlertTriangle, FiRefreshCw, FiCopy, FiBookmark, FiFilter, FiCalendar, FiChevronLeft, FiChevronRight, FiChevronDown, FiChevronUp, FiLayers, FiUpload } from 'react-icons/fi'
 import Header from '../components/Header'
 import LoadingSpinner from '../components/LoadingSpinner'
 import '../styles/zonavip.css'
@@ -25,9 +25,27 @@ const ZonaVip = () => {
   const [viewMode, setViewMode] = useState('grouped') // 'grouped' o 'flat'
   const [savedItems, setSavedItems] = useState({}) // Para rastrear items guardados
   const [failedVideos, setFailedVideos] = useState({}) // Para rastrear videos que fallaron al cargar
+  const [migrating, setMigrating] = useState(false)
 
   const handleVideoError = (itemId) => {
     setFailedVideos(prev => ({ ...prev, [itemId]: true }))
+  }
+
+  const handleMigrateVideos = async () => {
+    if (!window.confirm('¿Migrar videos existentes al canal público? Esto reenviará los videos al canal @zona_vip_media')) return
+
+    try {
+      setMigrating(true)
+      const response = await vipApi.migrateVideos()
+      toast.success(`Migración completada: ${response.data.migrated} videos migrados, ${response.data.failed} fallidos`)
+      if (response.data.migrated > 0) {
+        loadVipContent() // Recargar contenido
+      }
+    } catch (error) {
+      toast.error(error.message || 'Error al migrar videos')
+    } finally {
+      setMigrating(false)
+    }
   }
 
   useEffect(() => {
@@ -362,14 +380,29 @@ const ZonaVip = () => {
           <p className="vip-subtitle">Contenido exclusivo para suscriptores VIP</p>
 
           {/* Botón actualizar centrado arriba */}
-          <button
-            className="btn-refresh-top"
-            onClick={loadVipContent}
-            disabled={loadingContent}
-          >
-            <FiRefreshCw className={loadingContent ? 'spinning' : ''} />
-            <span>{loadingContent ? 'Actualizando...' : 'Actualizar contenido'}</span>
-          </button>
+          <div className="vip-header-buttons">
+            <button
+              className="btn-refresh-top"
+              onClick={loadVipContent}
+              disabled={loadingContent}
+            >
+              <FiRefreshCw className={loadingContent ? 'spinning' : ''} />
+              <span>{loadingContent ? 'Actualizando...' : 'Actualizar contenido'}</span>
+            </button>
+
+            {/* Botón migrar videos (solo admin) */}
+            {profile?.role === 'admin' && (
+              <button
+                className="btn-migrate"
+                onClick={handleMigrateVideos}
+                disabled={migrating}
+                title="Migrar videos existentes al canal público"
+              >
+                <FiUpload className={migrating ? 'spinning' : ''} />
+                <span>{migrating ? 'Migrando...' : 'Migrar videos'}</span>
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Filtros */}
