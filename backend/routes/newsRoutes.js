@@ -2,7 +2,9 @@ const express = require('express');
 const router = express.Router();
 const { authenticateAndRequireSubscription } = require('../middleware/authMiddleware');
 const { getNewsFromFeeds, searchNews, getAvailableFeeds, getCategories } = require('../services/rssService');
-const { searchGoogleNews, searchWithFilters, searchByProvincia, searchByTematica } = require('../services/googleNewsService');
+const { searchGoogleNews, searchWithFilters, searchByProvincia, searchByTematica, extractRealUrl } = require('../services/googleNewsService');
+const axios = require('axios');
+const cheerio = require('cheerio');
 const { translateNews } = require('../services/translationService');
 const { shortenUrl } = require('../services/shortenerService');
 const { generateNewsEmojis, emojisToString } = require('../utils/emojiGenerator');
@@ -543,6 +545,117 @@ router.post('/generate', authenticateAndRequireSubscription, async (req, res) =>
     res.status(500).json({
       success: false,
       error: 'Error al generar noticias'
+    });
+  }
+});
+
+/**
+ * GET /api/news/extract-image
+ * Extraer imagen og:image de una URL (para noticias de Google News sin imagen)
+ * Cache simple en memoria para evitar requests repetidos
+ */
+const imageCache = new Map();
+const CACHE_TTL = 30 * 60 * 1000; // 30 minutos
+
+router.get('/extract-image', authenticateAndRequireSubscription, async (req, res) => {
+  try {
+    const { url } = req.query;
+
+    if (!url) {
+      return res.status(400).json({
+        success: false,
+        error: 'URL requerida'
+      });
+    }
+
+    // Verificar cache
+    const cached = imageCache.get(url);
+    if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+      return res.json({
+        success: true,
+        image: cached.image,
+        cached: true
+      });
+    }
+
+    let targetUrl = url;
+
+    // Si es URL de Google News, resolver la URL real primero
+    if (url.includes('news.google.com')) {
+      try {
+        targetUrl = await extractRealUrl(url);
+      } catch (e) {
+        console.warn('Error extrayendo URL real:', e.message);
+      }
+    }
+
+    // Extraer imagen de la página de destino
+    let image = null;
+    try {
+      const response = await axios.get(targetUrl, {
+        timeout: 5000,
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+          'Accept': 'text/html,application/xhtml+xml',
+          'Accept-Language': 'es-AR,es;q=0.9'
+        },
+        maxRedirects: 5,
+        maxContentLength: 100000 // Solo leer primeros 100KB
+      });
+
+      const $ = cheerio.load(response.data);
+
+      // Intentar obtener imagen en orden de preferencia
+      // 1. Open Graph image (la más común y mejor calidad)
+      image = $('meta[property="og:image"]').attr('content');
+      if (!image || !image.startsWith('http')) {
+        // 2. Twitter card image
+        image = $('meta[name="twitter:image"]').attr('content');
+      }
+      if (!image || !image.startsWith('http')) {
+        // 3. Schema.org image
+        image = $('meta[itemprop="image"]').attr('content');
+      }
+      if (!image || !image.startsWith('http')) {
+        // 4. Primera imagen grande en el contenido
+        $('article img, .article img, main img, .content img').each((i, el) => {
+          const src = $(el).attr('src');
+          if (src && src.startsWith('http') && !src.includes('avatar') && !src.includes('logo') && !src.includes('icon')) {
+            image = src;
+            return false; // break
+          }
+        });
+      }
+    } catch (e) {
+      console.warn('Error extrayendo imagen de', targetUrl, ':', e.message);
+    }
+
+    // Guardar en cache (incluso si es null para evitar requests repetidos)
+    imageCache.set(url, {
+      image: image,
+      timestamp: Date.now()
+    });
+
+    // Limpiar cache viejo (cada 100 requests)
+    if (imageCache.size > 500) {
+      const now = Date.now();
+      for (const [key, value] of imageCache.entries()) {
+        if (now - value.timestamp > CACHE_TTL) {
+          imageCache.delete(key);
+        }
+      }
+    }
+
+    res.json({
+      success: true,
+      image: image,
+      cached: false
+    });
+  } catch (error) {
+    console.error('Error extrayendo imagen:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Error al extraer imagen'
     });
   }
 });

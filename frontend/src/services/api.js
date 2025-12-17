@@ -87,7 +87,10 @@ export const newsApi = {
     return api.get(`/news/search?${queryString}`)
   },
 
-  generate: (data) => api.post('/news/generate', data)
+  generate: (data) => api.post('/news/generate', data),
+
+  // Extraer imagen de una URL (para noticias de Google News sin imagen)
+  extractImage: (url) => api.get(`/news/extract-image?url=${encodeURIComponent(url)}`)
 }
 
 // ============ GEO ============

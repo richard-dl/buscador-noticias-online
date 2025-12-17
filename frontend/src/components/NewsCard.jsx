@@ -1,7 +1,7 @@
-import { useState } from 'react'
-import { FiCopy, FiCheck, FiExternalLink, FiImage, FiBookmark, FiTrash2 } from 'react-icons/fi'
+import { useState, useEffect } from 'react'
+import { FiCopy, FiCheck, FiExternalLink, FiImage, FiBookmark, FiTrash2, FiLoader } from 'react-icons/fi'
 import { toast } from 'react-toastify'
-import { userApi } from '../services/api'
+import { userApi, newsApi } from '../services/api'
 
 // Limpiar entidades HTML del texto
 const cleanHtmlEntities = (text) => {
@@ -19,10 +19,55 @@ const cleanHtmlEntities = (text) => {
     .trim()
 }
 
+// Cache global para imágenes extraídas (persiste entre renderizados)
+const extractedImagesCache = new Map()
+
 const NewsCard = ({ news, isSaved = false, onDelete = null, savedNewsId = null }) => {
   const [copied, setCopied] = useState(false)
   const [imageError, setImageError] = useState(false)
   const [saving, setSaving] = useState(false)
+  const [extractedImage, setExtractedImage] = useState(null)
+  const [loadingImage, setLoadingImage] = useState(false)
+
+  // Intentar extraer imagen si no tiene y es de Google News
+  useEffect(() => {
+    const shouldExtractImage = !news.image &&
+                               news.link &&
+                               (news.sourceType === 'google' || news.link.includes('news.google.com'))
+
+    if (!shouldExtractImage) return
+
+    // Verificar cache primero
+    if (extractedImagesCache.has(news.link)) {
+      const cached = extractedImagesCache.get(news.link)
+      if (cached) setExtractedImage(cached)
+      return
+    }
+
+    // Extraer imagen del backend
+    const extractImage = async () => {
+      setLoadingImage(true)
+      try {
+        const response = await newsApi.extractImage(news.link)
+        if (response.success && response.image) {
+          setExtractedImage(response.image)
+          extractedImagesCache.set(news.link, response.image)
+        } else {
+          extractedImagesCache.set(news.link, null) // Cache negativo
+        }
+      } catch (err) {
+        console.warn('Error extrayendo imagen:', err.message)
+        extractedImagesCache.set(news.link, null)
+      } finally {
+        setLoadingImage(false)
+      }
+    }
+
+    extractImage()
+  }, [news.link, news.image, news.sourceType])
+
+  // Imagen a mostrar (original o extraída)
+  const displayImage = news.image || extractedImage
 
   const formatDate = (date) => {
     if (!date) return ''
@@ -90,7 +135,7 @@ const NewsCard = ({ news, isSaved = false, onDelete = null, savedNewsId = null }
         link: news.link,
         description: news.description || '',
         summary: news.summary || '',
-        image: news.image || '',
+        image: displayImage || '', // Usar imagen extraída si está disponible
         source: news.source || '',
         category: news.category || '',
         pubDate: news.pubDate || null,
@@ -121,25 +166,30 @@ const NewsCard = ({ news, isSaved = false, onDelete = null, savedNewsId = null }
   return (
     <article className="news-card">
       <div className="news-card-image">
-        {news.image && !imageError ? (
+        {displayImage && !imageError ? (
           news.category === 'video' ? (
             <video
               controls
               preload="metadata"
               crossOrigin="anonymous"
               playsInline
-              src={news.image}
+              src={displayImage}
               onError={() => setImageError(true)}
             />
           ) : (
             <img
-              src={news.image}
+              src={displayImage}
               alt={news.title}
               crossOrigin="anonymous"
               onError={() => setImageError(true)}
               loading="lazy"
             />
           )
+        ) : loadingImage ? (
+          <div className="image-placeholder image-loading">
+            <FiLoader size={30} className="spinner" />
+            <span>Cargando imagen...</span>
+          </div>
         ) : (
           <div className="image-placeholder">
             <FiImage size={40} />
