@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { vipApi, userApi } from '../services/api'
 import { toast } from 'react-toastify'
-import { FiStar, FiLock, FiClock, FiTrash2, FiImage, FiAlertTriangle, FiRefreshCw, FiCopy, FiBookmark, FiFilter, FiCalendar, FiChevronLeft, FiChevronRight, FiChevronDown, FiChevronUp, FiLayers, FiExternalLink } from 'react-icons/fi'
+import { FiStar, FiLock, FiClock, FiTrash2, FiImage, FiAlertTriangle, FiRefreshCw, FiCopy, FiBookmark, FiFilter, FiCalendar, FiChevronLeft, FiChevronRight, FiChevronDown, FiChevronUp, FiLayers } from 'react-icons/fi'
 import Header from '../components/Header'
 import LoadingSpinner from '../components/LoadingSpinner'
 import '../styles/zonavip.css'
@@ -479,20 +479,20 @@ const ZonaVip = () => {
                       <div className="vip-content-image">
                         {item.imagen.type === 'video' ? (
                           failedVideos[item.id] ? (
-                            <div className="video-error-container">
-                              <p className="media-error">Video no disponible (excede 20MB)</p>
-                              {getTelegramLink(item) && (
-                                <a
-                                  href={getTelegramLink(item)}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="btn-open-telegram"
-                                >
-                                  <FiExternalLink size={16} />
-                                  <span>Abrir en Telegram</span>
-                                </a>
-                              )}
-                            </div>
+                            // Video grande: mostrar enlace simple a Telegram
+                            getTelegramLink(item) ? (
+                              <a
+                                href={getTelegramLink(item)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="video-telegram-link"
+                              >
+                                <div className="video-link-icon">▶</div>
+                                <span>Ver video en Telegram</span>
+                              </a>
+                            ) : (
+                              <p className="media-error">Video no disponible</p>
+                            )
                           ) : (
                             <video
                               controls
