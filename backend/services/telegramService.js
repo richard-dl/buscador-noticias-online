@@ -380,39 +380,53 @@ const forwardToPublicChannel = async (fromChatId, messageId) => {
 
 /**
  * Procesar mensaje de Telegram con video
+ * Soporta: video, video_note (circular), animation (GIF), document (video sin compresión)
+ * NOTA: Siempre reenviamos videos al canal público porque:
+ * 1. Telegram Bot API solo permite descargar archivos < 20MB
+ * 2. El campo file_size no siempre está disponible para videos grandes
+ * 3. Al reenviar al canal público, podemos usar el embed de Telegram que no tiene límite
  */
 const processVideoMessage = async (message) => {
   const parsed = await processTextMessage(message);
 
-  const video = message.video;
+  // Obtener el objeto de video según el tipo de mensaje
+  // Prioridad: video > video_note > animation > document (video)
+  const video = message.video || message.video_note || message.animation ||
+    (message.document?.mime_type?.startsWith('video/') ? message.document : null);
+
+  const videoType = message.video ? 'video' :
+    message.video_note ? 'video_note' :
+    message.animation ? 'animation' :
+    'document';
 
   let embedInfo = null;
 
-  // Si el video es mayor a 20MB, reenviarlo al canal público para embed
-  if (video && video.file_size && video.file_size > 20 * 1024 * 1024) {
-    console.log('[Telegram] Video grande detectado:', (video.file_size / 1024 * 1024).toFixed(2), 'MB');
+  // Siempre intentar reenviar videos al canal público para obtener embedUrl
+  // Esto garantiza que videos de cualquier tamaño puedan verse en la plataforma
+  if (video) {
+    const fileSizeMB = video.file_size ? (video.file_size / 1024 / 1024).toFixed(2) : 'desconocido';
+    console.log(`[Telegram] ${videoType} detectado:`, fileSizeMB, 'MB');
     console.log('[Telegram] Intentando reenviar al canal público. chat.id:', message.chat.id, 'message_id:', message.message_id);
     try {
       embedInfo = await forwardToPublicChannel(message.chat.id, message.message_id);
       console.log('[Telegram] Reenvío exitoso:', embedInfo);
     } catch (forwardError) {
-      console.error('[Telegram] Error al reenviar video grande:', forwardError.message);
+      console.error('[Telegram] Error al reenviar video:', forwardError.message);
       // No lanzar error, continuar sin embed
+      // Los videos < 20MB aún podrán verse via el proxy /api/vip/media/:fileId
     }
-  } else if (video) {
-    console.log('[Telegram] Video pequeño:', video.file_size ? (video.file_size / 1024 / 1024).toFixed(2) + ' MB' : 'tamaño desconocido');
   }
 
   return {
     ...parsed,
     imagen: video ? {
       fileId: video.file_id,
-      width: video.width,
-      height: video.height,
+      width: video.width || video.length, // video_note usa 'length' para dimensiones
+      height: video.height || video.length,
       duration: video.duration,
       mimeType: video.mime_type,
       fileSize: video.file_size,
-      type: 'video',
+      type: videoType === 'animation' ? 'animation' : 'video',
       // Si se reenvió al canal público, guardar info del embed
       embedUrl: embedInfo?.embedUrl || null,
       publicMessageId: embedInfo?.messageId || null
@@ -443,10 +457,17 @@ const processTelegramUpdate = async (update) => {
 
   console.log('[Webhook] Mensaje recibido:', {
     chat_id: message.chat?.id,
+    message_id: message.message_id,
     has_photo: !!message.photo,
+    has_video: !!message.video,
+    has_video_note: !!message.video_note,
+    has_animation: !!message.animation,
+    has_document: !!message.document,
+    document_mime: message.document?.mime_type || null,
     has_text: !!message.text,
     has_caption: !!message.caption,
-    photo_count: message.photo?.length || 0
+    photo_count: message.photo?.length || 0,
+    video_file_size: message.video?.file_size || null
   });
 
   // Verificar que viene del grupo autorizado
@@ -464,10 +485,17 @@ const processTelegramUpdate = async (update) => {
     console.log('[Webhook] Procesando mensaje con FOTO');
     contentData = await processPhotoMessage(message);
     console.log('[Webhook] Datos de foto procesados:', JSON.stringify(contentData, null, 2));
-  } else if (message.video) {
-    console.log('[Webhook] Procesando mensaje con VIDEO');
+  } else if (message.video || message.video_note || message.animation) {
+    // Soportar video, video_note (videos circulares) y animation (GIFs)
+    const videoType = message.video ? 'VIDEO' : message.video_note ? 'VIDEO_NOTE' : 'ANIMATION';
+    console.log(`[Webhook] Procesando mensaje con ${videoType}`);
     contentData = await processVideoMessage(message);
     console.log('[Webhook] Datos de video procesados:', JSON.stringify(contentData, null, 2));
+  } else if (message.document && message.document.mime_type?.startsWith('video/')) {
+    // Videos enviados como documentos (sin compresión)
+    console.log('[Webhook] Procesando DOCUMENTO de video:', message.document.mime_type);
+    contentData = await processVideoMessage(message);
+    console.log('[Webhook] Datos de video (documento) procesados:', JSON.stringify(contentData, null, 2));
   } else if (message.text || message.caption) {
     console.log('[Webhook] Procesando mensaje de TEXTO');
     contentData = await processTextMessage(message);
