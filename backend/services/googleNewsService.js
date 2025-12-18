@@ -17,12 +17,14 @@ const TEMATICAS = {
   deportes: ['fútbol', 'deportes', 'selección argentina', 'liga profesional', 'mundial', 'copa', 'jugador', 'equipo', 'torneo', 'gol', 'pelea', 'boxeo', 'mma', 'básquet', 'tenis', 'rugby', 'natación', 'atletismo', 'carrera', 'maratón', 'dt', 'técnico deportivo', 'entrenador', 'scaloni', 'finalissima', 'partido', 'cancha', 'estadio', 'hincha', 'arquero'],
   espectaculos: ['espectáculos', 'famosos', 'televisión', 'cine', 'actor', 'actriz', 'película', 'serie', 'streaming', 'festival', 'show', 'artista', 'estreno', 'celebridad', 'cantante', 'música', 'premio', 'gala', 'alfombra roja', 'hollywood'],
   tecnologia: ['tecnología', 'inteligencia artificial', 'apps', 'internet', 'celular', 'software', 'digital', 'innovación', 'startup', 'ciberseguridad', 'samsung', 'iphone', 'android', 'smartphone', 'tablet', 'función', 'activar', 'configuración', 'dispositivo', 'móvil'],
-  policiales: ['policiales', 'seguridad', 'crimen', 'justicia', 'robo', 'asesinato', 'delito', 'policía', 'detención', 'investigación policial', 'homicidio', 'violencia', 'sospechoso', 'arresto', 'víctima', 'fiscalía', 'juicio', 'condena', 'denuncia', 'allanamiento', 'cayó', 'operativo', 'red criminal', 'abuso', 'pedofilia', 'secuestro', 'banda', 'captura', 'procedimiento'],
+  policiales: ['policiales', 'seguridad', 'crimen', 'robo', 'asesinato', 'delito', 'policía', 'detención', 'homicidio', 'violencia', 'sospechoso', 'arresto', 'víctima', 'allanamiento', 'cayó', 'operativo', 'red criminal', 'abuso', 'pedofilia', 'secuestro', 'banda', 'captura', 'procedimiento', 'baleado', 'apuñalado', 'asalto', 'tiroteo', 'narcotráfico', 'droga'],
+  judiciales: ['judiciales', 'justicia', 'tribunal', 'juez', 'jueza', 'corte suprema', 'fiscal', 'fiscalía', 'causa', 'expediente', 'sentencia', 'condena', 'absolución', 'imputado', 'procesado', 'acusado', 'demanda', 'querella', 'apelación', 'recurso', 'fallo', 'magistrado', 'juzgado', 'cámara federal', 'comodoro py', 'casación', 'oral', 'penal', 'civil', 'amparo'],
   salud: ['salud', 'medicina', 'hospitales', 'pandemia', 'vacuna', 'enfermedad', 'médico', 'tratamiento', 'paciente', 'síntoma', 'sueño', 'descanso', 'dormir', 'niños', 'bienestar', 'alimentación', 'ejercicio físico', 'prevención', 'cuidados', 'hábitos saludables'],
   educacion: ['educación', 'universidades', 'escuelas', 'docentes', 'estudiantes', 'clases', 'profesor', 'maestro', 'campus', 'cursada'],
   cultura: ['cultura', 'arte', 'música', 'teatro', 'literatura', 'artista', 'exposición', 'concierto', 'libro', 'escritor'],
   ciencia: ['ciencia', 'investigación', 'conicet', 'descubrimiento', 'estudio', 'científico', 'experimento', 'universidad', 'laboratorio', 'avance'],
-  medioambiente: ['medio ambiente', 'clima', 'ecología', 'contaminación', 'ambiental', 'naturaleza', 'sustentable', 'cambio climático', 'biodiversidad', 'emisiones']
+  medioambiente: ['medio ambiente', 'clima', 'ecología', 'contaminación', 'ambiental', 'naturaleza', 'sustentable', 'cambio climático', 'biodiversidad', 'emisiones'],
+  internacional: ['internacional', 'estados unidos', 'eeuu', 'trump', 'biden', 'casa blanca', 'venezuela', 'maduro', 'brasil', 'lula', 'chile', 'boric', 'uruguay', 'colombia', 'petro', 'méxico', 'guerra', 'ucrania', 'rusia', 'putin', 'china', 'xi jinping', 'europa', 'onu', 'otan', 'g20', 'cumbre', 'embajada', 'diplomacia', 'relaciones exteriores', 'cancillería', 'tratado', 'frontera', 'migrantes', 'refugiados', 'conflicto', 'sanciones', 'petróleo', 'crudo', 'geopolítica', 'potencia', 'invasión', 'israel', 'gaza', 'palestina', 'medio oriente', 'corea del norte', 'irán']
 };
 
 // Reglas de contexto para resolver conflictos entre categorías
@@ -42,14 +44,21 @@ const REGLAS_CONTEXTO = [
     destino: 'economia',
     bonus: 5
   },
-  // Si hay palabras policiales fuertes junto con educación (profesor acusado) -> policiales
+  // Si hay palabras policiales (crimen, violencia) junto con educación -> policiales
   {
-    contexto: ['acusado', 'detenido', 'arrestado', 'abuso', 'denuncia', 'víctima', 'imputado', 'condenado'],
+    contexto: ['detenido', 'arrestado', 'abuso', 'víctima', 'baleado', 'asesinato', 'violación'],
     conflicto: 'educacion',
     destino: 'policiales',
     bonus: 5
   },
-  // Si hay palabras policiales junto con deportes (violencia en cancha, pelea) -> policiales
+  // Si hay palabras judiciales junto con educación (profesor acusado/imputado) -> judiciales
+  {
+    contexto: ['acusado', 'imputado', 'procesado', 'condenado', 'sentencia', 'tribunal', 'juicio'],
+    conflicto: 'educacion',
+    destino: 'judiciales',
+    bonus: 5
+  },
+  // Si hay palabras policiales junto con deportes (violencia en cancha) -> policiales
   {
     contexto: ['asesinato', 'homicidio', 'muerto', 'víctima', 'baleado', 'apuñalado', 'crimen'],
     conflicto: 'deportes',
@@ -61,6 +70,13 @@ const REGLAS_CONTEXTO = [
     contexto: ['tarifa', 'precio', 'costo', 'factura', 'boleta', 'aumento'],
     conflicto: 'tecnologia',
     destino: 'economia',
+    bonus: 4
+  },
+  // Si hay palabras judiciales junto con política (causas judiciales a políticos) -> judiciales
+  {
+    contexto: ['tribunal', 'juez', 'causa', 'sentencia', 'procesado', 'imputado', 'comodoro py'],
+    conflicto: 'politica',
+    destino: 'judiciales',
     bonus: 4
   }
 ];
