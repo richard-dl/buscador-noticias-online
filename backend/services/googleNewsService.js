@@ -12,11 +12,11 @@ const PROVINCIAS_ARGENTINA = [
 
 // Temáticas predefinidas
 const TEMATICAS = {
-  politica: ['política', 'gobierno', 'congreso', 'diputados', 'senadores', 'presidente', 'ministerio', 'ley', 'elecciones', 'partido', 'peronismo', 'kirchner', 'milei', 'reforma', 'minoría', 'oficialismo', 'oposición', 'votación', 'sesión', 'cámara', 'senado', 'legislador', 'mandato', 'gobernador', 'intendente'],
+  politica: ['política', 'gobierno', 'congreso', 'diputados', 'senadores', 'presidente', 'ministerio', 'ley', 'elecciones', 'partido', 'peronismo', 'kirchner', 'milei', 'reforma', 'minoría', 'oficialismo', 'oposición', 'votación', 'sesión', 'senado', 'legislador', 'mandato', 'gobernador', 'intendente', 'golpe de estado', 'dictadura', 'militar', 'junta', 'perón', 'derrocar'],
   economia: ['economía', 'dólar', 'inflación', 'banco central', 'mercados', 'peso', 'inversión', 'bolsa', 'finanzas', 'comercio', 'bcra', 'deuda', 'presupuesto', 'déficit', 'pbi', 'tipo de cambio', 'cepo', 'reservas', 'bonos', 'acciones'],
   deportes: ['fútbol', 'deportes', 'selección argentina', 'liga profesional', 'mundial', 'copa', 'jugador', 'equipo', 'torneo', 'gol', 'pelea', 'boxeo', 'mma', 'básquet', 'tenis', 'rugby', 'natación', 'atletismo', 'carrera', 'maratón'],
   espectaculos: ['espectáculos', 'famosos', 'televisión', 'cine', 'actor', 'actriz', 'película', 'serie', 'streaming', 'festival', 'show', 'artista', 'estreno', 'celebridad', 'cantante', 'música', 'premio', 'gala', 'alfombra roja', 'hollywood'],
-  tecnologia: ['tecnología', 'inteligencia artificial', 'apps', 'internet', 'celular', 'software', 'digital', 'innovación', 'startup', 'ciberseguridad'],
+  tecnologia: ['tecnología', 'inteligencia artificial', 'apps', 'internet', 'celular', 'software', 'digital', 'innovación', 'startup', 'ciberseguridad', 'samsung', 'iphone', 'android', 'smartphone', 'tablet', 'función', 'activar', 'configuración', 'dispositivo', 'móvil'],
   policiales: ['policiales', 'seguridad', 'crimen', 'justicia', 'robo', 'asesinato', 'delito', 'policía', 'detención', 'investigación', 'homicidio', 'violencia', 'sospechoso', 'arresto', 'víctima', 'fiscalía', 'juicio', 'condena', 'denuncia', 'allanamiento'],
   salud: ['salud', 'medicina', 'hospitales', 'pandemia', 'vacuna', 'enfermedad', 'médico', 'tratamiento', 'paciente', 'síntoma'],
   educacion: ['educación', 'universidades', 'escuelas', 'docentes', 'estudiantes', 'clases', 'profesor', 'maestro', 'campus', 'cursada'],
