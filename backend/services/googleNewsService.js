@@ -14,7 +14,7 @@ const PROVINCIAS_ARGENTINA = [
 const TEMATICAS = {
   politica: ['política', 'gobierno', 'congreso', 'diputados', 'senadores', 'presidente', 'ministerio', 'ley', 'elecciones', 'partido'],
   economia: ['economía', 'dólar', 'inflación', 'banco central', 'mercados', 'peso', 'inversión', 'bolsa', 'finanzas', 'comercio'],
-  deportes: ['fútbol', 'deportes', 'selección argentina', 'liga profesional', 'mundial', 'copa', 'jugador', 'equipo', 'torneo', 'gol'],
+  deportes: ['fútbol', 'deportes', 'selección argentina', 'liga profesional', 'mundial', 'copa', 'jugador', 'equipo', 'torneo', 'gol', 'pelea', 'boxeo', 'mma', 'básquet', 'tenis', 'rugby', 'natación', 'atletismo', 'carrera', 'maratón'],
   espectaculos: ['espectáculos', 'famosos', 'televisión', 'cine', 'actor', 'actriz', 'película', 'serie', 'streaming', 'festival'],
   tecnologia: ['tecnología', 'inteligencia artificial', 'apps', 'internet', 'celular', 'software', 'digital', 'innovación', 'startup', 'ciberseguridad'],
   policiales: ['policiales', 'seguridad', 'crimen', 'justicia', 'robo', 'asesinato', 'delito', 'policía', 'detención', 'investigación'],
