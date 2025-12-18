@@ -390,8 +390,17 @@ const processVideoMessage = async (message) => {
 
   // Si el video es mayor a 20MB, reenviarlo al canal público para embed
   if (video && video.file_size && video.file_size > 20 * 1024 * 1024) {
-    console.log('[Telegram] Video grande detectado:', (video.file_size / 1024 / 1024).toFixed(2), 'MB');
-    embedInfo = await forwardToPublicChannel(message.chat.id, message.message_id);
+    console.log('[Telegram] Video grande detectado:', (video.file_size / 1024 * 1024).toFixed(2), 'MB');
+    console.log('[Telegram] Intentando reenviar al canal público. chat.id:', message.chat.id, 'message_id:', message.message_id);
+    try {
+      embedInfo = await forwardToPublicChannel(message.chat.id, message.message_id);
+      console.log('[Telegram] Reenvío exitoso:', embedInfo);
+    } catch (forwardError) {
+      console.error('[Telegram] Error al reenviar video grande:', forwardError.message);
+      // No lanzar error, continuar sin embed
+    }
+  } else if (video) {
+    console.log('[Telegram] Video pequeño:', video.file_size ? (video.file_size / 1024 / 1024).toFixed(2) + ' MB' : 'tamaño desconocido');
   }
 
   return {
