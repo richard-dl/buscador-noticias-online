@@ -126,47 +126,6 @@
   to { transform: rotate(360deg); }
 }
 
-.vip-header-buttons {
-  display: flex;
-  gap: 1rem;
-  margin-top: 1.5rem;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.vip-header-buttons .btn-refresh-top {
-  margin-top: 0;
-}
-
-.btn-migrate {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.btn-migrate:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 20px rgba(108, 92, 231, 0.4);
-}
-
-.btn-migrate:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-.btn-migrate svg.spinning {
-  animation: spin 1s linear infinite;
-}
-
 /* Filtros */
 .vip-filters {
   display: flex;
@@ -354,13 +313,6 @@
 .vip-content-image video {
   width: 100%;
   max-height: 400px;
-  background: #000;
-}
-
-/* Embed de Telegram para videos grandes */
-.vip-content-image .telegram-embed {
-  width: 100%;
-  min-height: 400px;
   background: #000;
 }
 

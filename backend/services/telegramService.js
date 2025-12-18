@@ -9,20 +9,13 @@ const axios = require('axios');
 const TELEGRAM_API_URL = `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}`;
 const TELEGRAM_FILE_URL = `https://api.telegram.org/file/bot${process.env.TELEGRAM_BOT_TOKEN}`;
 
-// Canal público para embeds de videos (sin límite de 20MB)
-const PUBLIC_CHANNEL_USERNAME = process.env.TELEGRAM_PUBLIC_CHANNEL || 'privatexzona';
-
 // Configuración de agrupación
 const BATCH_WINDOW_MINUTES = 5; // Ventana de tiempo para agrupar mensajes del mismo usuario
 const { v4: uuidv4 } = require('uuid');
 
 // Cache en memoria para tracking de batches activos
-// Estructura: { batchKey: { groupId, lastMessageTime, userId } }
+// Estructura: { odId: { groupId, lastMessageTime, userId } }
 const activeBatches = new Map();
-
-// Cache para media_group_id de Telegram (álbumes de fotos/videos enviados juntos)
-// Estructura: { media_group_id: groupId }
-const mediaGroupCache = new Map();
 
 /**
  * Hashtags soportados:
@@ -88,72 +81,14 @@ const escapeRegExp = (string) => {
 
 /**
  * Determinar el groupId para un mensaje
- * Prioridad:
- * 1. Si tiene media_group_id (álbum de Telegram), usa ese groupId
- * 2. Si es reply a otro mensaje, usa el groupId del mensaje padre
- * 3. Si el usuario/canal envió mensajes en los últimos X minutos, usa el mismo groupId (batch)
- * 4. Si no, crea un nuevo groupId
+ * - Si es reply a otro mensaje, usa el groupId del mensaje padre
+ * - Si el usuario envió mensajes en los últimos X minutos, usa el mismo groupId (batch)
+ * - Si no, crea un nuevo groupId
  */
 const determineGroupId = async (message, chatId) => {
-  // Para channel_post, usar sender_chat.id o chat.id como identificador
-  // Para mensajes normales, usar from.id
-  const userId = message.from?.id || message.sender_chat?.id || chatId || 'unknown';
+  const userId = message.from?.id || 'unknown';
   const now = Date.now();
   const batchKey = `${chatId}_${userId}`;
-
-  // 0. Si tiene media_group_id (álbum de fotos/videos enviados juntos)
-  // Telegram envía cada foto/video del álbum como mensaje separado pero con el mismo media_group_id
-  if (message.media_group_id) {
-    const mediaGroupId = message.media_group_id;
-    console.log('[Grouping] Mensaje tiene media_group_id:', mediaGroupId);
-
-    // Verificar si ya tenemos un groupId para este media_group
-    if (mediaGroupCache.has(mediaGroupId)) {
-      const existingGroupId = mediaGroupCache.get(mediaGroupId);
-      console.log('[Grouping] Usando groupId existente del media_group:', existingGroupId);
-
-      // También actualizar el batch activo
-      const existingBatch = activeBatches.get(batchKey);
-      if (existingBatch) {
-        existingBatch.lastMessageTime = now;
-        existingBatch.messageIds = [...(existingBatch.messageIds || []), message.message_id];
-        activeBatches.set(batchKey, existingBatch);
-      }
-
-      return {
-        groupId: existingGroupId,
-        replyToMessageId: null,
-        isReply: false,
-        isMediaGroup: true
-      };
-    }
-
-    // Crear nuevo groupId para este media_group
-    const newGroupId = uuidv4();
-    console.log('[Grouping] Creando nuevo groupId para media_group:', newGroupId);
-    mediaGroupCache.set(mediaGroupId, newGroupId);
-
-    // Limpiar media_group cache después de 10 minutos
-    setTimeout(() => {
-      mediaGroupCache.delete(mediaGroupId);
-    }, 10 * 60 * 1000);
-
-    // También guardar en batch activo
-    activeBatches.set(batchKey, {
-      groupId: newGroupId,
-      lastMessageTime: now,
-      userId,
-      telegramMessageId: message.message_id,
-      messageIds: [message.message_id]
-    });
-
-    return {
-      groupId: newGroupId,
-      replyToMessageId: null,
-      isReply: false,
-      isMediaGroup: true
-    };
-  }
 
   // 1. Si es un reply, buscar el groupId del mensaje original
   if (message.reply_to_message) {
@@ -339,69 +274,12 @@ const processPhotoMessage = async (message) => {
 };
 
 /**
- * Reenviar mensaje al canal público para embeds
- * @param {number} fromChatId - Chat ID origen
- * @param {number} messageId - ID del mensaje a reenviar
- * @returns {Promise<{messageId: number, embedUrl: string} | null>}
- */
-const forwardToPublicChannel = async (fromChatId, messageId) => {
-  try {
-    const channelUsername = `@${PUBLIC_CHANNEL_USERNAME}`;
-    console.log('[Telegram] Reenviando mensaje al canal público:', channelUsername);
-    console.log('[Telegram] from_chat_id:', fromChatId, 'message_id:', messageId);
-
-    const response = await axios.post(`${TELEGRAM_API_URL}/forwardMessage`, {
-      chat_id: channelUsername,
-      from_chat_id: fromChatId,
-      message_id: messageId
-    });
-
-    if (response.data.ok) {
-      const forwardedMessageId = response.data.result.message_id;
-      const embedUrl = `https://t.me/${PUBLIC_CHANNEL_USERNAME}/${forwardedMessageId}?embed=1`;
-      console.log('[Telegram] Mensaje reenviado, embed URL:', embedUrl);
-      return {
-        messageId: forwardedMessageId,
-        embedUrl
-      };
-    }
-
-    console.error('[Telegram] Error reenviando - response no ok:', JSON.stringify(response.data, null, 2));
-    throw new Error(response.data?.description || 'Error desconocido de Telegram');
-  } catch (error) {
-    console.error('[Telegram] Error reenviando al canal público:', error.message);
-    if (error.response) {
-      console.error('[Telegram] Error response data:', JSON.stringify(error.response.data, null, 2));
-      console.error('[Telegram] Error response status:', error.response.status);
-    }
-    throw error; // Re-lanzar para capturar en el endpoint
-  }
-};
-
-/**
  * Procesar mensaje de Telegram con video
  */
 const processVideoMessage = async (message) => {
   const parsed = await processTextMessage(message);
 
   const video = message.video;
-
-  let embedInfo = null;
-
-  // Si el video es mayor a 20MB, reenviarlo al canal público para embed
-  if (video && video.file_size && video.file_size > 20 * 1024 * 1024) {
-    console.log('[Telegram] Video grande detectado:', (video.file_size / 1024 * 1024).toFixed(2), 'MB');
-    console.log('[Telegram] Intentando reenviar al canal público. chat.id:', message.chat.id, 'message_id:', message.message_id);
-    try {
-      embedInfo = await forwardToPublicChannel(message.chat.id, message.message_id);
-      console.log('[Telegram] Reenvío exitoso:', embedInfo);
-    } catch (forwardError) {
-      console.error('[Telegram] Error al reenviar video grande:', forwardError.message);
-      // No lanzar error, continuar sin embed
-    }
-  } else if (video) {
-    console.log('[Telegram] Video pequeño:', video.file_size ? (video.file_size / 1024 / 1024).toFixed(2) + ' MB' : 'tamaño desconocido');
-  }
 
   return {
     ...parsed,
@@ -411,11 +289,7 @@ const processVideoMessage = async (message) => {
       height: video.height,
       duration: video.duration,
       mimeType: video.mime_type,
-      fileSize: video.file_size,
-      type: 'video',
-      // Si se reenvió al canal público, guardar info del embed
-      embedUrl: embedInfo?.embedUrl || null,
-      publicMessageId: embedInfo?.messageId || null
+      type: 'video'
     } : null
   };
 };
@@ -493,7 +367,6 @@ const processTelegramUpdate = async (update) => {
   contentData.isReply = groupingInfo.isReply;
   contentData.telegramUserId = message.from?.id || null;
   contentData.telegramUserName = message.from?.first_name || message.from?.username || null;
-  contentData.telegramChatId = message.chat?.id || null; // Para generar link directo a Telegram
 
   console.log('[Webhook] Guardando contenido en Firestore...');
 
@@ -596,6 +469,5 @@ module.exports = {
   processTelegramUpdate,
   verifyWebhookToken,
   getFileInfo,
-  downloadFile,
-  forwardToPublicChannel
+  downloadFile
 };

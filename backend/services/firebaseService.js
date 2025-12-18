@@ -399,7 +399,6 @@ const saveVipContent = async (contentData) => {
     sensible: contentData.sensible || [],
     imagen: contentData.imagen || null,
     telegramMessageId: contentData.telegramMessageId || null,
-    telegramChatId: contentData.telegramChatId || null, // Para generar link directo a Telegram
     // Campos de agrupación
     groupId: contentData.groupId || null,
     replyToMessageId: contentData.replyToMessageId || null,
@@ -435,29 +434,6 @@ const getVipContent = async (limit = 50) => {
 const deleteVipContent = async (contentId) => {
   await db.collection('vipContent').doc(contentId).delete();
   return true;
-};
-
-/**
- * Actualizar contenido VIP existente
- */
-const updateVipContent = async (contentId, updateData) => {
-  await db.collection('vipContent').doc(contentId).update(updateData);
-  return { id: contentId, ...updateData };
-};
-
-/**
- * Obtener videos sin embedUrl (para migración)
- */
-const getVideosWithoutEmbed = async () => {
-  const snapshot = await db
-    .collection('vipContent')
-    .where('imagen.type', '==', 'video')
-    .get();
-
-  // Filtrar los que no tienen embedUrl
-  return snapshot.docs
-    .map(doc => ({ id: doc.id, ...doc.data() }))
-    .filter(item => item.imagen && !item.imagen.embedUrl);
 };
 
 /**
@@ -548,7 +524,5 @@ module.exports = {
   saveVipContent,
   getVipContent,
   deleteVipContent,
-  getVipContentByTelegramMessageId,
-  updateVipContent,
-  getVideosWithoutEmbed
+  getVipContentByTelegramMessageId
 };

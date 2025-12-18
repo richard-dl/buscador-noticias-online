@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { authenticateAndRequireVip, authenticate } = require('../middleware/authMiddleware');
-const { getVipContent, deleteVipContent, checkVipAccess, updateUserRole, getVideosWithoutEmbed, updateVipContent } = require('../services/firebaseService');
-const { processTelegramUpdate, verifyWebhookToken, downloadFile, forwardToPublicChannel } = require('../services/telegramService');
+const { getVipContent, deleteVipContent, checkVipAccess, updateUserRole } = require('../services/firebaseService');
+const { processTelegramUpdate, verifyWebhookToken, downloadFile } = require('../services/telegramService');
 
 /**
  * GET /api/vip/content
@@ -10,7 +10,7 @@ const { processTelegramUpdate, verifyWebhookToken, downloadFile, forwardToPublic
  */
 router.get('/content', authenticateAndRequireVip, async (req, res) => {
   try {
-    const limit = parseInt(req.query.limit) || 100;
+    const limit = parseInt(req.query.limit) || 50;
     const content = await getVipContent(limit);
 
     res.json({
@@ -159,89 +159,6 @@ router.post('/upgrade/:uid', authenticate, async (req, res) => {
   }
 });
 
-/**
- * POST /api/vip/migrate-videos
- * Migrar videos existentes al canal público (solo admin)
- * Reenvía videos sin embedUrl al canal público y actualiza Firestore
- */
-router.post('/migrate-videos', authenticate, async (req, res) => {
-  try {
-    // Solo admin puede migrar
-    if (req.user.role !== 'admin') {
-      return res.status(403).json({
-        success: false,
-        error: 'Solo administradores pueden migrar videos'
-      });
-    }
-
-    console.log('[Migrate] Buscando videos sin embedUrl...');
-    const videos = await getVideosWithoutEmbed();
-    console.log('[Migrate] Videos encontrados:', videos.length);
-
-    const results = {
-      total: videos.length,
-      migrated: 0,
-      failed: 0,
-      errors: []
-    };
-
-    for (const video of videos) {
-      try {
-        console.log('[Migrate] Procesando video:', video.id, {
-          telegramChatId: video.telegramChatId,
-          telegramMessageId: video.telegramMessageId,
-          imagen: video.imagen ? { type: video.imagen.type, fileSize: video.imagen.fileSize } : null
-        });
-
-        if (!video.telegramChatId || !video.telegramMessageId) {
-          console.log('[Migrate] Video sin datos de Telegram:', video.id);
-          results.failed++;
-          results.errors.push({ id: video.id, error: 'Sin datos de Telegram', chatId: video.telegramChatId, messageId: video.telegramMessageId });
-          continue;
-        }
-
-        console.log('[Migrate] Reenviando video:', video.id, 'chatId:', video.telegramChatId, 'messageId:', video.telegramMessageId);
-        const embedInfo = await forwardToPublicChannel(video.telegramChatId, video.telegramMessageId);
-
-        if (embedInfo) {
-          // Actualizar en Firestore
-          await updateVipContent(video.id, {
-            'imagen.embedUrl': embedInfo.embedUrl,
-            'imagen.publicMessageId': embedInfo.messageId
-          });
-          results.migrated++;
-          console.log('[Migrate] Video migrado:', video.id, embedInfo.embedUrl);
-        } else {
-          results.failed++;
-          results.errors.push({ id: video.id, error: 'forwardToPublicChannel retornó null' });
-        }
-      } catch (error) {
-        console.error('[Migrate] Error con video:', video.id, error.message);
-        const errorDetail = error.response?.data?.description || error.message;
-        results.failed++;
-        results.errors.push({
-          id: video.id,
-          error: errorDetail,
-          telegramChatId: video.telegramChatId,
-          telegramMessageId: video.telegramMessageId,
-          telegramError: error.response?.data || null
-        });
-      }
-    }
-
-    res.json({
-      success: true,
-      data: results
-    });
-  } catch (error) {
-    console.error('Error migrando videos:', error);
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
-  }
-});
-
 // Cache simple en memoria para archivos de Telegram (evita re-descargas en Range requests)
 const fileCache = new Map();
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutos
@@ -382,20 +299,6 @@ router.get('/media/:fileId', async (req, res) => {
     }
   } catch (error) {
     console.error('[VIP Media] Error sirviendo archivo:', error.message);
-
-    // Detectar error de archivo demasiado grande (límite de Telegram Bot API: 20MB)
-    const isTooLarge = error.response?.data?.description?.includes('file is too big') ||
-                       error.message?.includes('file is too big') ||
-                       error.response?.status === 400;
-
-    if (isTooLarge) {
-      return res.status(413).json({
-        success: false,
-        error: 'El archivo es demasiado grande para descargar (límite: 20MB)',
-        code: 'FILE_TOO_LARGE'
-      });
-    }
-
     res.status(404).json({
       success: false,
       error: 'Archivo no encontrado o no disponible'
