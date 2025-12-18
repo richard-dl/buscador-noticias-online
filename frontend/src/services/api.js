@@ -99,6 +99,9 @@ export const newsApi = {
     return api.get(queryUrl)
   },
 
+  // Generar resumen IA de una noticia (para republicación)
+  getAISummary: (newsData) => api.post('/news/ai-summary', newsData),
+
   // Obtener URL del proxy de imágenes (para imágenes que bloquean CORS/referer)
   getProxyImageUrl: (imageUrl) => {
     // Dominios que necesitan proxy
