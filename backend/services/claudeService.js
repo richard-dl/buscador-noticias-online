@@ -234,17 +234,26 @@ const processNewsWithAI = async (newsItem) => {
 
   const { title, description, source } = newsItem;
 
-  const prompt = `Analiza esta noticia y proporciona clasificación y resumen.
+  const prompt = `Eres un redactor periodístico profesional. Tu tarea es REESCRIBIR esta noticia con formato periodístico completo.
+
+INSTRUCCIONES:
+1. Crea un TÍTULO atractivo y conciso (máximo 15 palabras)
+2. Escribe una BAJADA/COPETE que resuma lo esencial (1-2 oraciones)
+3. Redacta el CUERPO de la noticia (2-3 párrafos informativos)
+4. Usa tono informativo, directo y profesional
+5. NO uses frases como "La noticia describe...", "Este artículo habla de..."
+6. Escribe como si TÚ fueras el periodista reportando el hecho
+7. Los puntos clave deben ser HECHOS CONCRETOS
 
 CATEGORÍAS: politica, economia, deportes, espectaculos, tecnologia, policiales, judiciales, salud, educacion, cultura, ciencia, medioambiente, internacional
 
-REGLAS:
+REGLAS DE CLASIFICACIÓN:
 - SALARIOS/PARITARIAS = "economia"
 - CRÍMENES/VIOLENCIA = "policiales"
 - CAUSAS JUDICIALES = "judiciales"
 - PAÍSES EXTRANJEROS = "internacional"
 
-NOTICIA:
+NOTICIA ORIGINAL:
 Título: ${title}
 Fuente: ${source || 'No especificada'}
 Contenido: ${description || 'Sin descripción'}
@@ -253,14 +262,16 @@ Responde SOLO con JSON:
 {
   "category": "nombre_categoria",
   "confidence": 0.95,
-  "summary": "Resumen de 2-3 oraciones",
-  "keyPoints": ["Punto 1", "Punto 2"]
+  "headline": "Tu título periodístico",
+  "lead": "Tu bajada/copete aquí",
+  "body": "El cuerpo de la noticia (2-3 párrafos)",
+  "keyPoints": ["Hecho 1", "Hecho 2", "Hecho 3"]
 }`;
 
   try {
     const response = await client.messages.create({
       model: 'claude-3-haiku-20240307',
-      max_tokens: 400,
+      max_tokens: 800,
       messages: [{ role: 'user', content: prompt }]
     });
 
@@ -273,7 +284,13 @@ Responde SOLO con JSON:
         return {
           category: parsed.category,
           confidence: parsed.confidence || 0.9,
-          summary: parsed.summary || '',
+          headline: parsed.headline || title,
+          lead: parsed.lead || '',
+          body: parsed.body || '',
+          // Compatibilidad: summary combina lead + body para formatos que lo usen
+          summary: parsed.lead && parsed.body
+            ? `${parsed.lead}\n\n${parsed.body}`
+            : (parsed.summary || ''),
           keyPoints: parsed.keyPoints || []
         };
       }
