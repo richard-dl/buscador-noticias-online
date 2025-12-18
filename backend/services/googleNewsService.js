@@ -12,12 +12,12 @@ const PROVINCIAS_ARGENTINA = [
 
 // Temáticas predefinidas
 const TEMATICAS = {
-  politica: ['política', 'gobierno', 'congreso', 'diputados', 'senadores', 'presidente', 'ministerio', 'ley', 'elecciones', 'partido'],
-  economia: ['economía', 'dólar', 'inflación', 'banco central', 'mercados', 'peso', 'inversión', 'bolsa', 'finanzas', 'comercio'],
+  politica: ['política', 'gobierno', 'congreso', 'diputados', 'senadores', 'presidente', 'ministerio', 'ley', 'elecciones', 'partido', 'peronismo', 'kirchner', 'milei', 'reforma', 'minoría', 'oficialismo', 'oposición', 'votación', 'sesión', 'cámara', 'senado', 'legislador', 'mandato', 'gobernador', 'intendente'],
+  economia: ['economía', 'dólar', 'inflación', 'banco central', 'mercados', 'peso', 'inversión', 'bolsa', 'finanzas', 'comercio', 'bcra', 'deuda', 'presupuesto', 'déficit', 'pbi', 'tipo de cambio', 'cepo', 'reservas', 'bonos', 'acciones'],
   deportes: ['fútbol', 'deportes', 'selección argentina', 'liga profesional', 'mundial', 'copa', 'jugador', 'equipo', 'torneo', 'gol', 'pelea', 'boxeo', 'mma', 'básquet', 'tenis', 'rugby', 'natación', 'atletismo', 'carrera', 'maratón'],
-  espectaculos: ['espectáculos', 'famosos', 'televisión', 'cine', 'actor', 'actriz', 'película', 'serie', 'streaming', 'festival'],
+  espectaculos: ['espectáculos', 'famosos', 'televisión', 'cine', 'actor', 'actriz', 'película', 'serie', 'streaming', 'festival', 'show', 'artista', 'estreno', 'celebridad', 'cantante', 'música', 'premio', 'gala', 'alfombra roja', 'hollywood'],
   tecnologia: ['tecnología', 'inteligencia artificial', 'apps', 'internet', 'celular', 'software', 'digital', 'innovación', 'startup', 'ciberseguridad'],
-  policiales: ['policiales', 'seguridad', 'crimen', 'justicia', 'robo', 'asesinato', 'delito', 'policía', 'detención', 'investigación'],
+  policiales: ['policiales', 'seguridad', 'crimen', 'justicia', 'robo', 'asesinato', 'delito', 'policía', 'detención', 'investigación', 'homicidio', 'violencia', 'sospechoso', 'arresto', 'víctima', 'fiscalía', 'juicio', 'condena', 'denuncia', 'allanamiento'],
   salud: ['salud', 'medicina', 'hospitales', 'pandemia', 'vacuna', 'enfermedad', 'médico', 'tratamiento', 'paciente', 'síntoma'],
   educacion: ['educación', 'universidades', 'escuelas', 'docentes', 'estudiantes', 'clases', 'profesor', 'maestro', 'campus', 'cursada'],
   cultura: ['cultura', 'arte', 'música', 'teatro', 'literatura', 'artista', 'exposición', 'concierto', 'libro', 'escritor'],
