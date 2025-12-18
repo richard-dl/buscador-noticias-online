@@ -1097,26 +1097,15 @@ router.post('/ai-summary', authenticateAndRequireSubscription, async (req, res) 
       });
     }
 
-    // Generar texto formateado listo para republicar
-    const formattedForWeb = `
-## ${title}
-
-${aiResult.summary}
-
-### Puntos clave:
-${aiResult.keyPoints.map(point => `- ${point}`).join('\n')}
-
-${source ? `*Fuente: ${source}*` : ''}
-    `.trim();
-
     res.json({
       success: true,
       data: {
         category: aiResult.category,
         confidence: aiResult.confidence,
-        summary: aiResult.summary,
-        keyPoints: aiResult.keyPoints,
-        formattedForWeb,
+        headline: aiResult.headline,
+        lead: aiResult.lead,
+        body: aiResult.body,
+        hashtags: aiResult.hashtags,
         originalTitle: title,
         source: source || null,
         link: link || null

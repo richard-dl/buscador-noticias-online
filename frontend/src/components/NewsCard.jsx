@@ -228,43 +228,44 @@ const NewsCard = ({ news, isSaved = false, onDelete = null, savedNewsId = null }
   const getFormattedOutput = () => {
     if (!aiSummary) return ''
 
-    const { summary, keyPoints, originalTitle, source, link } = aiSummary
+    const { headline, lead, body, hashtags, source, link } = aiSummary
+    const hashtagsStr = hashtags?.map(tag => `#${tag}`).join(' ') || ''
 
     switch (outputFormat) {
       case 'html':
         return `<article>
-  <h2>${originalTitle}</h2>
-  <p>${summary}</p>
-  <h3>Puntos clave:</h3>
-  <ul>
-${keyPoints.map(point => `    <li>${point}</li>`).join('\n')}
-  </ul>
+  <h1>${headline}</h1>
+  <p><strong>${lead}</strong></p>
+  ${body.split('\n\n').map(p => `<p>${p}</p>`).join('\n  ')}
 ${source ? `  <p><em>Fuente: ${source}</em></p>` : ''}
-${link ? `  <p><a href="${link}" target="_blank">Leer más</a></p>` : ''}
+${link ? `  <p><a href="${link}" target="_blank" rel="noopener">Leer más</a></p>` : ''}
+  <p>${hashtagsStr}</p>
 </article>`
 
       case 'text':
-        return `${originalTitle}
+        return `${headline}
 
-${summary}
+${lead}
 
-Puntos clave:
-${keyPoints.map(point => `• ${point}`).join('\n')}
+${body}
 
 ${source ? `Fuente: ${source}` : ''}
-${link ? `Link: ${link}` : ''}`
+${link ? `Link: ${link}` : ''}
+
+${hashtagsStr}`
 
       case 'markdown':
       default:
-        return `## ${originalTitle}
+        return `# ${headline}
 
-${summary}
+**${lead}**
 
-### Puntos clave:
-${keyPoints.map(point => `- ${point}`).join('\n')}
+${body}
 
 ${source ? `*Fuente: ${source}*` : ''}
-${link ? `[Leer más](${link})` : ''}`
+${link ? `[Leer más](${link})` : ''}
+
+${hashtagsStr}`
     }
   }
 
@@ -438,20 +439,22 @@ ${link ? `[Leer más](${link})` : ''}`
                     </span>
                   </div>
 
-                  {/* Resumen */}
-                  <div className="ai-summary">
-                    <h4>Resumen</h4>
-                    <p>{aiSummary.summary}</p>
+                  {/* Contenido periodístico sin etiquetas */}
+                  <div className="ai-article">
+                    <h2 className="ai-headline">{aiSummary.headline}</h2>
+                    <p className="ai-lead"><strong>{aiSummary.lead}</strong></p>
+                    <div className="ai-body">
+                      {aiSummary.body.split('\n\n').map((paragraph, idx) => (
+                        <p key={idx}>{paragraph}</p>
+                      ))}
+                    </div>
                   </div>
 
-                  {/* Puntos clave */}
-                  <div className="ai-keypoints">
-                    <h4>Puntos clave</h4>
-                    <ul>
-                      {aiSummary.keyPoints.map((point, idx) => (
-                        <li key={idx}>{point}</li>
-                      ))}
-                    </ul>
+                  {/* Hashtags */}
+                  <div className="ai-hashtags">
+                    {aiSummary.hashtags?.map((tag, idx) => (
+                      <span key={idx} className="hashtag">#{tag}</span>
+                    ))}
                   </div>
 
                   {/* Selector de formato */}
