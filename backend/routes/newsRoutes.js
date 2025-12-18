@@ -1058,4 +1058,77 @@ router.get('/proxy-image', async (req, res) => {
   }
 });
 
+/**
+ * POST /api/news/ai-summary
+ * Generar resumen IA de una noticia para republicación
+ * Devuelve: resumen, puntos clave, categoría y texto formateado listo para copiar
+ */
+router.post('/ai-summary', authenticateAndRequireSubscription, async (req, res) => {
+  try {
+    const { title, description, source, link } = req.body;
+
+    if (!title) {
+      return res.status(400).json({
+        success: false,
+        error: 'Título requerido'
+      });
+    }
+
+    // Verificar si Claude está disponible
+    if (!isClaudeAvailable()) {
+      return res.status(503).json({
+        success: false,
+        error: 'Servicio de IA no disponible'
+      });
+    }
+
+    console.log(`Generando resumen IA para: ${title.substring(0, 50)}...`);
+
+    const aiResult = await processNewsWithAI({
+      title,
+      description: description || '',
+      source: source || ''
+    });
+
+    if (!aiResult) {
+      return res.status(500).json({
+        success: false,
+        error: 'No se pudo generar el resumen'
+      });
+    }
+
+    // Generar texto formateado listo para republicar
+    const formattedForWeb = `
+## ${title}
+
+${aiResult.summary}
+
+### Puntos clave:
+${aiResult.keyPoints.map(point => `- ${point}`).join('\n')}
+
+${source ? `*Fuente: ${source}*` : ''}
+    `.trim();
+
+    res.json({
+      success: true,
+      data: {
+        category: aiResult.category,
+        confidence: aiResult.confidence,
+        summary: aiResult.summary,
+        keyPoints: aiResult.keyPoints,
+        formattedForWeb,
+        originalTitle: title,
+        source: source || null,
+        link: link || null
+      }
+    });
+  } catch (error) {
+    console.error('Error generando resumen IA:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Error al generar resumen'
+    });
+  }
+});
+
 module.exports = router;

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { FiCopy, FiCheck, FiExternalLink, FiImage, FiBookmark, FiTrash2, FiLoader } from 'react-icons/fi'
+import { FiCopy, FiCheck, FiExternalLink, FiImage, FiBookmark, FiTrash2, FiLoader, FiZap, FiX, FiCode, FiFileText, FiHash } from 'react-icons/fi'
 import { toast } from 'react-toastify'
 import { userApi, newsApi } from '../services/api'
 
@@ -33,6 +33,13 @@ const NewsCard = ({ news, isSaved = false, onDelete = null, savedNewsId = null }
   const [extractedImage, setExtractedImage] = useState(null)
   const [loadingImage, setLoadingImage] = useState(false)
   const [retryCount, setRetryCount] = useState(0) // Para forzar re-extracción
+
+  // Estado para modal de resumen IA
+  const [showAIModal, setShowAIModal] = useState(false)
+  const [aiSummary, setAiSummary] = useState(null)
+  const [loadingAI, setLoadingAI] = useState(false)
+  const [outputFormat, setOutputFormat] = useState('markdown') // markdown, html, text
+  const [copiedFormat, setCopiedFormat] = useState(null)
 
   // Intentar extraer imagen si no tiene (Google News, RSS sin imagen, etc.)
   useEffect(() => {
@@ -188,6 +195,91 @@ const NewsCard = ({ news, isSaved = false, onDelete = null, savedNewsId = null }
     }
   }
 
+  // Generar resumen IA
+  const handleGenerateAISummary = async () => {
+    if (loadingAI) return
+
+    setShowAIModal(true)
+    setLoadingAI(true)
+
+    try {
+      const response = await newsApi.getAISummary({
+        title: news.title,
+        description: news.description || '',
+        source: news.source || '',
+        link: news.link || ''
+      })
+
+      if (response.success) {
+        setAiSummary(response.data)
+      } else {
+        toast.error(response.error || 'Error al generar resumen')
+        setShowAIModal(false)
+      }
+    } catch (err) {
+      toast.error(err.message || 'Error al conectar con IA')
+      setShowAIModal(false)
+    } finally {
+      setLoadingAI(false)
+    }
+  }
+
+  // Formatear salida según el formato seleccionado
+  const getFormattedOutput = () => {
+    if (!aiSummary) return ''
+
+    const { summary, keyPoints, originalTitle, source, link } = aiSummary
+
+    switch (outputFormat) {
+      case 'html':
+        return `<article>
+  <h2>${originalTitle}</h2>
+  <p>${summary}</p>
+  <h3>Puntos clave:</h3>
+  <ul>
+${keyPoints.map(point => `    <li>${point}</li>`).join('\n')}
+  </ul>
+${source ? `  <p><em>Fuente: ${source}</em></p>` : ''}
+${link ? `  <p><a href="${link}" target="_blank">Leer más</a></p>` : ''}
+</article>`
+
+      case 'text':
+        return `${originalTitle}
+
+${summary}
+
+Puntos clave:
+${keyPoints.map(point => `• ${point}`).join('\n')}
+
+${source ? `Fuente: ${source}` : ''}
+${link ? `Link: ${link}` : ''}`
+
+      case 'markdown':
+      default:
+        return `## ${originalTitle}
+
+${summary}
+
+### Puntos clave:
+${keyPoints.map(point => `- ${point}`).join('\n')}
+
+${source ? `*Fuente: ${source}*` : ''}
+${link ? `[Leer más](${link})` : ''}`
+    }
+  }
+
+  // Copiar formato específico
+  const copyFormattedOutput = async () => {
+    try {
+      await navigator.clipboard.writeText(getFormattedOutput())
+      setCopiedFormat(outputFormat)
+      toast.success(`Copiado en formato ${outputFormat.toUpperCase()}`)
+      setTimeout(() => setCopiedFormat(null), 2000)
+    } catch (err) {
+      toast.error('Error al copiar')
+    }
+  }
+
   return (
     <article className="news-card">
       <div className="news-card-image">
@@ -293,6 +385,16 @@ const NewsCard = ({ news, isSaved = false, onDelete = null, savedNewsId = null }
           </button>
         )}
 
+        <button
+          className="btn-ai"
+          onClick={handleGenerateAISummary}
+          disabled={loadingAI}
+          title="Generar resumen con IA"
+        >
+          <FiZap size={18} />
+          <span>IA</span>
+        </button>
+
         <a
           href={news.link}
           target="_blank"
@@ -304,6 +406,101 @@ const NewsCard = ({ news, isSaved = false, onDelete = null, savedNewsId = null }
           <span>Ver</span>
         </a>
       </div>
+
+      {/* Modal de Resumen IA */}
+      {showAIModal && (
+        <div className="ai-modal-overlay" onClick={() => !loadingAI && setShowAIModal(false)}>
+          <div className="ai-modal" onClick={e => e.stopPropagation()}>
+            <div className="ai-modal-header">
+              <h3><FiZap /> Resumen IA</h3>
+              <button
+                className="ai-modal-close"
+                onClick={() => setShowAIModal(false)}
+                disabled={loadingAI}
+              >
+                <FiX size={20} />
+              </button>
+            </div>
+
+            <div className="ai-modal-content">
+              {loadingAI ? (
+                <div className="ai-loading">
+                  <FiLoader size={40} className="spinner" />
+                  <p>Generando resumen con Claude IA...</p>
+                </div>
+              ) : aiSummary ? (
+                <>
+                  {/* Categoría detectada */}
+                  <div className="ai-category">
+                    <span className="ai-category-badge">{aiSummary.category}</span>
+                    <span className="ai-confidence">
+                      {Math.round(aiSummary.confidence * 100)}% confianza
+                    </span>
+                  </div>
+
+                  {/* Resumen */}
+                  <div className="ai-summary">
+                    <h4>Resumen</h4>
+                    <p>{aiSummary.summary}</p>
+                  </div>
+
+                  {/* Puntos clave */}
+                  <div className="ai-keypoints">
+                    <h4>Puntos clave</h4>
+                    <ul>
+                      {aiSummary.keyPoints.map((point, idx) => (
+                        <li key={idx}>{point}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Selector de formato */}
+                  <div className="ai-format-selector">
+                    <span>Formato de salida:</span>
+                    <div className="format-buttons">
+                      <button
+                        className={outputFormat === 'markdown' ? 'active' : ''}
+                        onClick={() => setOutputFormat('markdown')}
+                        title="Markdown"
+                      >
+                        <FiHash size={16} /> MD
+                      </button>
+                      <button
+                        className={outputFormat === 'html' ? 'active' : ''}
+                        onClick={() => setOutputFormat('html')}
+                        title="HTML"
+                      >
+                        <FiCode size={16} /> HTML
+                      </button>
+                      <button
+                        className={outputFormat === 'text' ? 'active' : ''}
+                        onClick={() => setOutputFormat('text')}
+                        title="Texto plano"
+                      >
+                        <FiFileText size={16} /> TXT
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Preview del formato */}
+                  <div className="ai-preview">
+                    <pre>{getFormattedOutput()}</pre>
+                  </div>
+
+                  {/* Botón copiar */}
+                  <button
+                    className={`ai-copy-btn ${copiedFormat ? 'copied' : ''}`}
+                    onClick={copyFormattedOutput}
+                  >
+                    {copiedFormat ? <FiCheck size={18} /> : <FiCopy size={18} />}
+                    {copiedFormat ? 'Copiado!' : `Copiar ${outputFormat.toUpperCase()}`}
+                  </button>
+                </>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      )}
     </article>
   )
 }
