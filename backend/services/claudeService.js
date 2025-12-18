@@ -234,17 +234,24 @@ const processNewsWithAI = async (newsItem) => {
 
   const { title, description, source } = newsItem;
 
-  const prompt = `Analiza esta noticia y proporciona clasificación y resumen.
+  const prompt = `Eres un redactor periodístico. Reescribe esta noticia con formato profesional.
+
+INSTRUCCIONES:
+1. Crea un TITULAR atractivo y conciso (máximo 15 palabras)
+2. Escribe un COPETE/BAJADA que resuma lo esencial (1-2 oraciones)
+3. Redacta el CUERPO de la noticia (2-3 párrafos informativos)
+4. Genera 3-5 HASHTAGS relevantes (palabras clave sin #, yo los agrego después)
+5. Escribe como periodista reportando el hecho, NO describas la noticia
 
 CATEGORÍAS: politica, economia, deportes, espectaculos, tecnologia, policiales, judiciales, salud, educacion, cultura, ciencia, medioambiente, internacional
 
-REGLAS:
+REGLAS DE CLASIFICACIÓN:
 - SALARIOS/PARITARIAS = "economia"
 - CRÍMENES/VIOLENCIA = "policiales"
 - CAUSAS JUDICIALES = "judiciales"
 - PAÍSES EXTRANJEROS = "internacional"
 
-NOTICIA:
+NOTICIA ORIGINAL:
 Título: ${title}
 Fuente: ${source || 'No especificada'}
 Contenido: ${description || 'Sin descripción'}
@@ -253,14 +260,16 @@ Responde SOLO con JSON:
 {
   "category": "nombre_categoria",
   "confidence": 0.95,
-  "summary": "Resumen de 2-3 oraciones",
-  "keyPoints": ["Punto 1", "Punto 2"]
+  "headline": "Tu titular periodístico aquí",
+  "lead": "Tu copete/bajada aquí",
+  "body": "El cuerpo de la noticia aquí",
+  "hashtags": ["palabra1", "palabra2", "palabra3"]
 }`;
 
   try {
     const response = await client.messages.create({
       model: 'claude-3-haiku-20240307',
-      max_tokens: 400,
+      max_tokens: 800,
       messages: [{ role: 'user', content: prompt }]
     });
 
@@ -285,8 +294,10 @@ Responde SOLO con JSON:
         return {
           category: parsed.category,
           confidence: parsed.confidence || 0.9,
-          summary: (parsed.summary || '').replace(/\\n/g, '\n'),
-          keyPoints: parsed.keyPoints || []
+          headline: parsed.headline || title,
+          lead: (parsed.lead || '').replace(/\\n/g, '\n'),
+          body: (parsed.body || '').replace(/\\n/g, '\n'),
+          hashtags: parsed.hashtags || []
         };
       }
     }
