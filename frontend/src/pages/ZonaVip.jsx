@@ -37,11 +37,16 @@ const ZonaVip = () => {
     try {
       setMigrating(true)
       const response = await vipApi.migrateVideos()
+      console.log('[Migrate] Resultado completo:', response.data)
+      if (response.data.errors?.length > 0) {
+        console.log('[Migrate] Errores detallados:', response.data.errors)
+      }
       toast.success(`Migración completada: ${response.data.migrated} videos migrados, ${response.data.failed} fallidos`)
       if (response.data.migrated > 0) {
         loadVipContent() // Recargar contenido
       }
     } catch (error) {
+      console.error('[Migrate] Error:', error)
       toast.error(error.message || 'Error al migrar videos')
     } finally {
       setMigrating(false)

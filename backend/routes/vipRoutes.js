@@ -219,7 +219,13 @@ router.post('/migrate-videos', authenticate, async (req, res) => {
         console.error('[Migrate] Error con video:', video.id, error.message);
         const errorDetail = error.response?.data?.description || error.message;
         results.failed++;
-        results.errors.push({ id: video.id, error: errorDetail });
+        results.errors.push({
+          id: video.id,
+          error: errorDetail,
+          telegramChatId: video.telegramChatId,
+          telegramMessageId: video.telegramMessageId,
+          telegramError: error.response?.data || null
+        });
       }
     }
 
