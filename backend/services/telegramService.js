@@ -367,7 +367,7 @@ const forwardToPublicChannel = async (fromChatId, messageId) => {
     }
 
     console.error('[Telegram] Error reenviando - response no ok:', JSON.stringify(response.data, null, 2));
-    return null;
+    throw new Error(response.data?.description || 'Error desconocido de Telegram');
   } catch (error) {
     console.error('[Telegram] Error reenviando al canal público:', error.message);
     if (error.response) {
