@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { authenticateAndRequireSubscription } = require('../middleware/authMiddleware');
 const { getNewsFromFeeds, searchNews, getAvailableFeeds, getCategories } = require('../services/rssService');
-const { searchGoogleNews, searchWithFilters, searchByProvincia, searchByTematica, extractRealUrl } = require('../services/googleNewsService');
+const { searchGoogleNews, searchWithFilters, searchByProvincia, searchByTematica, extractRealUrl, classifyNewsCategory } = require('../services/googleNewsService');
 const { findImageByTitle: findImageByTitleBing } = require('../services/bingNewsService');
 const { findImageByTitle: findImageByTitleCurrents, isConfigured: isCurrentsConfigured } = require('../services/currentsApiService');
 const axios = require('axios');
@@ -271,15 +271,22 @@ router.get('/search', authenticateAndRequireSubscription, async (req, res) => {
         hoursAgo: parseInt(hoursAgo)  // Pasar filtro de tiempo a Google News
       });
 
-      // Agregar categoría basada en la primera temática buscada (si existe)
-      const categoryForGoogleNews = tematicasList.length > 0 ? tematicasList[0] : 'general';
+      // Clasificar cada noticia automáticamente según su contenido
+      allNews = allNews.concat(googleNews.map(n => {
+        // Usar clasificación automática con las temáticas buscadas como candidatas
+        const autoCategory = classifyNewsCategory(
+          n.title || '',
+          n.description || '',
+          tematicasList.length > 0 ? tematicasList : []
+        );
 
-      allNews = allNews.concat(googleNews.map(n => ({
-        ...n,
-        sourceType: 'google',
-        category: categoryForGoogleNews
-      })));
-      console.log(`Google News devolvió ${googleNews.length} resultados`);
+        return {
+          ...n,
+          sourceType: 'google',
+          category: autoCategory
+        };
+      }));
+      console.log(`Google News devolvió ${googleNews.length} resultados con clasificación automática`);
     } catch (err) {
       console.warn('Error en búsqueda Google News:', err.message);
     }

@@ -12,17 +12,68 @@ const PROVINCIAS_ARGENTINA = [
 
 // Temáticas predefinidas
 const TEMATICAS = {
-  politica: ['política', 'gobierno', 'congreso', 'diputados', 'senadores'],
-  economia: ['economía', 'dólar', 'inflación', 'banco central', 'mercados'],
-  deportes: ['fútbol', 'deportes', 'selección argentina', 'liga profesional'],
-  espectaculos: ['espectáculos', 'famosos', 'televisión', 'cine'],
-  tecnologia: ['tecnología', 'inteligencia artificial', 'apps', 'internet'],
-  policiales: ['policiales', 'seguridad', 'crimen', 'justicia'],
-  salud: ['salud', 'medicina', 'hospitales', 'pandemia'],
-  educacion: ['educación', 'universidades', 'escuelas', 'docentes'],
-  cultura: ['cultura', 'arte', 'música', 'teatro', 'literatura'],
-  ciencia: ['ciencia', 'investigación', 'conicet', 'descubrimiento'],
-  medioambiente: ['medio ambiente', 'clima', 'ecología', 'contaminación']
+  politica: ['política', 'gobierno', 'congreso', 'diputados', 'senadores', 'presidente', 'ministerio', 'ley', 'elecciones', 'partido'],
+  economia: ['economía', 'dólar', 'inflación', 'banco central', 'mercados', 'peso', 'inversión', 'bolsa', 'finanzas', 'comercio'],
+  deportes: ['fútbol', 'deportes', 'selección argentina', 'liga profesional', 'mundial', 'copa', 'jugador', 'equipo', 'torneo', 'gol'],
+  espectaculos: ['espectáculos', 'famosos', 'televisión', 'cine', 'actor', 'actriz', 'película', 'serie', 'streaming', 'festival'],
+  tecnologia: ['tecnología', 'inteligencia artificial', 'apps', 'internet', 'celular', 'software', 'digital', 'innovación', 'startup', 'ciberseguridad'],
+  policiales: ['policiales', 'seguridad', 'crimen', 'justicia', 'robo', 'asesinato', 'delito', 'policía', 'detención', 'investigación'],
+  salud: ['salud', 'medicina', 'hospitales', 'pandemia', 'vacuna', 'enfermedad', 'médico', 'tratamiento', 'paciente', 'síntoma'],
+  educacion: ['educación', 'universidades', 'escuelas', 'docentes', 'estudiantes', 'clases', 'profesor', 'maestro', 'campus', 'cursada'],
+  cultura: ['cultura', 'arte', 'música', 'teatro', 'literatura', 'artista', 'exposición', 'concierto', 'libro', 'escritor'],
+  ciencia: ['ciencia', 'investigación', 'conicet', 'descubrimiento', 'estudio', 'científico', 'experimento', 'universidad', 'laboratorio', 'avance'],
+  medioambiente: ['medio ambiente', 'clima', 'ecología', 'contaminación', 'ambiental', 'naturaleza', 'sustentable', 'cambio climático', 'biodiversidad', 'emisiones']
+};
+
+/**
+ * Clasificar automáticamente una noticia según su contenido
+ * Analiza título y descripción para determinar la categoría más apropiada
+ * @param {string} title - Título de la noticia
+ * @param {string} description - Descripción de la noticia
+ * @param {array} candidateCategories - Categorías candidatas (opcional, si se especificaron en búsqueda)
+ * @returns {string} - Categoría detectada o 'general'
+ */
+const classifyNewsCategory = (title, description, candidateCategories = []) => {
+  const text = `${title} ${description}`.toLowerCase();
+  const scores = {};
+
+  // Categorías a analizar (si hay candidatas, solo esas; si no, todas)
+  const categoriesToCheck = candidateCategories.length > 0
+    ? candidateCategories
+    : Object.keys(TEMATICAS);
+
+  // Calcular puntaje para cada categoría
+  for (const category of categoriesToCheck) {
+    const keywords = TEMATICAS[category];
+    if (!keywords) continue;
+
+    let score = 0;
+    for (const keyword of keywords) {
+      const regex = new RegExp(`\\b${keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`, 'gi');
+      const matches = text.match(regex);
+      if (matches) {
+        // Ponderación: primera keyword vale más (es la más representativa)
+        const weight = keywords.indexOf(keyword) === 0 ? 3 : 1;
+        score += matches.length * weight;
+      }
+    }
+
+    if (score > 0) {
+      scores[category] = score;
+    }
+  }
+
+  // Si no hay coincidencias, devolver 'general' o la primera candidata
+  if (Object.keys(scores).length === 0) {
+    return candidateCategories.length > 0 ? candidateCategories[0] : 'general';
+  }
+
+  // Devolver la categoría con mayor puntaje
+  const bestCategory = Object.keys(scores).reduce((a, b) =>
+    scores[a] > scores[b] ? a : b
+  );
+
+  return bestCategory;
 };
 
 /**
@@ -520,6 +571,7 @@ module.exports = {
   getAvailableTematicas,
   getProvincias,
   extractRealUrl,
+  classifyNewsCategory,
   PROVINCIAS_ARGENTINA,
   TEMATICAS
 };
