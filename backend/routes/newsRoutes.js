@@ -72,10 +72,11 @@ router.get('/rss', authenticateAndRequireSubscription, async (req, res) => {
 
     // Aplicar clasificación automática a todas las noticias RSS
     news = news.map(n => {
+      // SIEMPRE clasificar contra todas las categorías para precisión
       const autoCategory = classifyNewsCategory(
         n.title || '',
         n.description || '',
-        categoryList
+        [] // Array vacío = analizar todas las categorías
       );
       return {
         ...n,
@@ -266,11 +267,12 @@ router.get('/search', authenticateAndRequireSubscription, async (req, res) => {
 
       // Clasificar noticias RSS automáticamente según su contenido
       allNews = rssNews.map(n => {
-        // Verificar si la categoría RSS es precisa o reclasificar
+        // SIEMPRE clasificar contra todas las categorías para precisión
+        // No restringir por tematicasList - puede ser de otra categoría
         const autoCategory = classifyNewsCategory(
           n.title || '',
           n.description || '',
-          tematicasList.length > 0 ? tematicasList : []
+          [] // Array vacío = analizar todas las categorías
         );
 
         return {
@@ -301,10 +303,11 @@ router.get('/search', authenticateAndRequireSubscription, async (req, res) => {
 
       // Clasificar cada noticia de Google News automáticamente según su contenido
       allNews = allNews.concat(googleNews.map(n => {
+        // SIEMPRE clasificar contra todas las categorías para precisión
         const autoCategory = classifyNewsCategory(
           n.title || '',
           n.description || '',
-          tematicasList.length > 0 ? tematicasList : []
+          [] // Array vacío = analizar todas las categorías
         );
 
         return {
@@ -515,10 +518,11 @@ router.post('/generate', authenticateAndRequireSubscription, async (req, res) =>
 
       // Clasificar noticias RSS
       const classifiedRssNews = rssNews.map(n => {
+        // SIEMPRE clasificar contra todas las categorías para precisión
         const autoCategory = classifyNewsCategory(
           n.title || '',
           n.description || '',
-          tematicasList
+          [] // Array vacío = analizar todas las categorías
         );
         return {
           ...n,
@@ -540,10 +544,11 @@ router.post('/generate', authenticateAndRequireSubscription, async (req, res) =>
 
       // Clasificar noticias de Google News
       const classifiedGoogleNews = googleNews.map(n => {
+        // SIEMPRE clasificar contra todas las categorías para precisión
         const autoCategory = classifyNewsCategory(
           n.title || '',
           n.description || '',
-          tematicasList
+          [] // Array vacío = analizar todas las categorías
         );
         return {
           ...n,
