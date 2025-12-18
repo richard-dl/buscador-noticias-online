@@ -39,10 +39,12 @@ const classifyNewsWithAIOrFallback = async (news) => {
             if (batchResults[idx]) {
               item.category = batchResults[idx].category;
               item.aiConfidence = batchResults[idx].confidence;
+              item.mediaType = batchResults[idx].mediaType || 'text';
               item.classifiedBy = 'claude';
             } else {
               // Fallback a keywords si IA no pudo clasificar este item
               item.category = classifyNewsCategory(item.title || '', item.description || '', []);
+              item.mediaType = 'text';
               item.classifiedBy = 'keywords';
             }
             results.push(item);
@@ -51,6 +53,7 @@ const classifyNewsWithAIOrFallback = async (news) => {
           // Fallback completo a keywords para este batch
           batch.forEach(item => {
             item.category = classifyNewsCategory(item.title || '', item.description || '', []);
+            item.mediaType = 'text';
             item.classifiedBy = 'keywords';
             results.push(item);
           });
@@ -411,9 +414,30 @@ router.get('/search', authenticateAndRequireSubscription, async (req, res) => {
     // Los feeds RSS raramente incluyen distrito específico en título/descripción
     // Por lo tanto, el usuario debe agregar el distrito como keyword para filtrar
 
-    // Filtrar por tipo de contenido
+    // Limitar resultados antes de clasificar (para optimizar llamadas a Claude)
+    allNews = allNews.slice(0, parseInt(maxItems) * 2); // Tomamos el doble para tener margen tras filtrar
+
+    // Clasificar todas las noticias con IA (incluye detección de mediaType)
+    allNews = await classifyNewsWithAIOrFallback(allNews);
+
+    // Filtrar por tipo de contenido (usa mediaType detectado por Claude)
     if (contentType && contentType !== 'all') {
       allNews = allNews.filter(news => {
+        // Usar detección de Claude si está disponible
+        if (news.mediaType) {
+          switch (contentType) {
+            case 'with-image':
+              return news.mediaType === 'image';
+            case 'with-video':
+              return news.mediaType === 'video';
+            case 'text-only':
+              return news.mediaType === 'text';
+            default:
+              return true;
+          }
+        }
+
+        // Fallback a detección básica si no hay mediaType de Claude
         const hasImage = news.image && news.image.length > 0;
         const hasVideo = news.link && (
           news.link.includes('youtube.com') ||
@@ -435,11 +459,8 @@ router.get('/search', authenticateAndRequireSubscription, async (req, res) => {
       });
     }
 
-    // Limitar resultados
+    // Limitar resultados finales
     allNews = allNews.slice(0, parseInt(maxItems));
-
-    // Clasificar todas las noticias con IA (o fallback a keywords)
-    allNews = await classifyNewsWithAIOrFallback(allNews);
 
     // Procesar cada noticia
     allNews = await Promise.all(allNews.map(async (item) => {

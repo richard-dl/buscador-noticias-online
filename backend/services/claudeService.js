@@ -115,28 +115,33 @@ const classifyBatchWithAI = async (news) => {
   const batch = news.slice(0, 10);
 
   const newsText = batch.map((n, i) =>
-    `[${i}] Título: ${n.title}\nDescripción: ${n.description || 'Sin descripción'}`
+    `[${i}] Título: ${n.title}\nDescripción: ${n.description || 'Sin descripción'}\nURL: ${n.link || 'N/A'}`
   ).join('\n\n');
 
-  const prompt = `Clasifica cada noticia en una categoría.
+  const prompt = `Clasifica cada noticia en categoría y detecta tipo de contenido multimedia.
 
 CATEGORÍAS: politica, economia, deportes, espectaculos, tecnologia, policiales, judiciales, salud, educacion, cultura, ciencia, medioambiente, internacional
 
-REGLAS:
+REGLAS CATEGORÍA:
 - SALARIOS/PARITARIAS = "economia"
 - CRÍMENES/VIOLENCIA = "policiales"
 - CAUSAS JUDICIALES = "judiciales"
 - PAÍSES EXTRANJEROS = "internacional"
 
+TIPOS DE CONTENIDO (mediaType):
+- "video" = menciona video, mirá, YouTube, streaming, transmisión en vivo
+- "image" = menciona fotos, galería, imágenes, infografía, mirá las fotos
+- "text" = noticia puramente informativa sin multimedia evidente
+
 NOTICIAS:
 ${newsText}
 
-Responde SOLO con JSON array: [{"index": 0, "category": "cat", "confidence": 0.95}, ...]`;
+Responde SOLO con JSON array: [{"index": 0, "category": "cat", "confidence": 0.95, "mediaType": "text"}, ...]`;
 
   try {
     const response = await client.messages.create({
       model: 'claude-3-haiku-20240307',
-      max_tokens: 500,
+      max_tokens: 600,
       messages: [{ role: 'user', content: prompt }]
     });
 
@@ -154,7 +159,8 @@ Responde SOLO con JSON array: [{"index": 0, "category": "cat", "confidence": 0.9
             CATEGORIAS_DISPONIBLES.includes(item.category)) {
           results[item.index] = {
             category: item.category,
-            confidence: item.confidence || 0.9
+            confidence: item.confidence || 0.9,
+            mediaType: ['video', 'image', 'text'].includes(item.mediaType) ? item.mediaType : 'text'
           };
         }
       }
