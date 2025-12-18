@@ -371,35 +371,38 @@ const ZonaVip = () => {
         {content.length > 0 && (
           <div className="vip-filters">
             <div className="vip-filter-group">
-              <FiFilter />
-              <span className="filter-label">Ordenar por:</span>
-              <button
-                className={`filter-btn ${sortBy === 'fecha' ? 'active' : ''}`}
-                onClick={() => setSortBy('fecha')}
-              >
-                <FiCalendar /> Fecha
-              </button>
-              <button
-                className={`filter-btn ${sortBy === 'fuente' ? 'active' : ''}`}
-                onClick={() => setSortBy('fuente')}
-              >
-                Fuente
-              </button>
+              <span className="filter-label"><FiFilter /> Ordenar por:</span>
+              <div className="filter-buttons-row">
+                <button
+                  className={`filter-btn ${sortBy === 'fecha' ? 'active' : ''}`}
+                  onClick={() => setSortBy('fecha')}
+                >
+                  <FiCalendar /> Fecha
+                </button>
+                <button
+                  className={`filter-btn ${sortBy === 'fuente' ? 'active' : ''}`}
+                  onClick={() => setSortBy('fuente')}
+                >
+                  Fuente
+                </button>
+              </div>
             </div>
             <div className="vip-filter-group">
               <span className="filter-label">Orden:</span>
-              <button
-                className={`filter-btn ${sortOrder === 'desc' ? 'active' : ''}`}
-                onClick={() => setSortOrder('desc')}
-              >
-                Más reciente
-              </button>
-              <button
-                className={`filter-btn ${sortOrder === 'asc' ? 'active' : ''}`}
-                onClick={() => setSortOrder('asc')}
-              >
-                Más antiguo
-              </button>
+              <div className="filter-buttons-row">
+                <button
+                  className={`filter-btn ${sortOrder === 'desc' ? 'active' : ''}`}
+                  onClick={() => setSortOrder('desc')}
+                >
+                  Más reciente
+                </button>
+                <button
+                  className={`filter-btn ${sortOrder === 'asc' ? 'active' : ''}`}
+                  onClick={() => setSortOrder('asc')}
+                >
+                  Más antiguo
+                </button>
+              </div>
             </div>
             <span className="vip-content-count">
               {viewMode === 'grouped' && groupsWithMultipleItems > 0
