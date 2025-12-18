@@ -12,7 +12,7 @@ const { shortenUrl } = require('../services/shortenerService');
 const { generateNewsEmojis, emojisToString } = require('../utils/emojiGenerator');
 const { summarize, formatForSocialMedia } = require('../utils/summarizer');
 const { saveSearchHistory } = require('../services/firebaseService');
-const { classifyBatchWithAI, processNewsWithAI, isGeminiAvailable } = require('../services/geminiService');
+const { classifyBatchWithAI, processNewsWithAI, isClaudeAvailable } = require('../services/claudeService');
 
 /**
  * Clasificar noticias usando IA (si está disponible) o fallback a keywords
@@ -20,10 +20,10 @@ const { classifyBatchWithAI, processNewsWithAI, isGeminiAvailable } = require('.
  * @returns {Promise<Array>} - Noticias con categoría asignada
  */
 const classifyNewsWithAIOrFallback = async (news) => {
-  // Si Gemini está disponible, usar clasificación IA en batch
-  if (isGeminiAvailable() && news.length > 0) {
+  // Si Claude está disponible, usar clasificación IA en batch
+  if (isClaudeAvailable() && news.length > 0) {
     try {
-      console.log(`Clasificando ${news.length} noticias con Gemini IA...`);
+      console.log(`Clasificando ${news.length} noticias con Claude IA...`);
 
       // Procesar en batches de 10 para optimizar
       const batchSize = 10;
@@ -39,7 +39,7 @@ const classifyNewsWithAIOrFallback = async (news) => {
             if (batchResults[idx]) {
               item.category = batchResults[idx].category;
               item.aiConfidence = batchResults[idx].confidence;
-              item.classifiedBy = 'gemini';
+              item.classifiedBy = 'claude';
             } else {
               // Fallback a keywords si IA no pudo clasificar este item
               item.category = classifyNewsCategory(item.title || '', item.description || '', []);
@@ -57,7 +57,7 @@ const classifyNewsWithAIOrFallback = async (news) => {
         }
       }
 
-      const aiClassified = results.filter(r => r.classifiedBy === 'gemini').length;
+      const aiClassified = results.filter(r => r.classifiedBy === 'claude').length;
       console.log(`Clasificación completada: ${aiClassified}/${results.length} con IA`);
       return results;
     } catch (error) {
@@ -66,7 +66,7 @@ const classifyNewsWithAIOrFallback = async (news) => {
   }
 
   // Fallback: clasificación por keywords
-  console.log('Usando clasificación por keywords (Gemini no disponible o error)');
+  console.log('Usando clasificación por keywords (Claude no disponible o error)');
   return news.map(item => ({
     ...item,
     category: classifyNewsCategory(item.title || '', item.description || '', []),
@@ -80,7 +80,7 @@ const classifyNewsWithAIOrFallback = async (news) => {
  * @returns {Promise<Object>} - Noticia con resumen IA
  */
 const enhanceWithAISummary = async (item) => {
-  if (!isGeminiAvailable()) {
+  if (!isClaudeAvailable()) {
     return item;
   }
 
