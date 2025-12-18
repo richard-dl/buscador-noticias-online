@@ -228,30 +228,25 @@ const NewsCard = ({ news, isSaved = false, onDelete = null, savedNewsId = null }
   const getFormattedOutput = () => {
     if (!aiSummary) return ''
 
-    const { headline, lead, body, keyPoints, source, link } = aiSummary
+    const { summary, keyPoints, originalTitle, source, link } = aiSummary
 
     switch (outputFormat) {
       case 'html':
         return `<article>
-  <h1>${headline}</h1>
-  <p class="lead"><strong>${lead}</strong></p>
-  <div class="body">
-    ${body.split('\n\n').map(p => `<p>${p}</p>`).join('\n    ')}
-  </div>
+  <h2>${originalTitle}</h2>
+  <p>${summary}</p>
   <h3>Puntos clave:</h3>
   <ul>
 ${keyPoints.map(point => `    <li>${point}</li>`).join('\n')}
   </ul>
-${source ? `  <p class="source"><em>Fuente: ${source}</em></p>` : ''}
-${link ? `  <p><a href="${link}" target="_blank" rel="noopener">Leer nota original</a></p>` : ''}
+${source ? `  <p><em>Fuente: ${source}</em></p>` : ''}
+${link ? `  <p><a href="${link}" target="_blank">Leer más</a></p>` : ''}
 </article>`
 
       case 'text':
-        return `${headline}
+        return `${originalTitle}
 
-${lead}
-
-${body}
+${summary}
 
 Puntos clave:
 ${keyPoints.map(point => `• ${point}`).join('\n')}
@@ -261,17 +256,15 @@ ${link ? `Link: ${link}` : ''}`
 
       case 'markdown':
       default:
-        return `# ${headline}
+        return `## ${originalTitle}
 
-**${lead}**
+${summary}
 
-${body}
-
-## Puntos clave
+### Puntos clave:
 ${keyPoints.map(point => `- ${point}`).join('\n')}
 
 ${source ? `*Fuente: ${source}*` : ''}
-${link ? `[Leer nota original](${link})` : ''}`
+${link ? `[Leer más](${link})` : ''}`
     }
   }
 
@@ -433,7 +426,7 @@ ${link ? `[Leer nota original](${link})` : ''}`
               {loadingAI ? (
                 <div className="ai-loading">
                   <FiLoader size={40} className="spinner" />
-                  <p>Redactando noticia con Claude IA...</p>
+                  <p>Generando resumen con Claude IA...</p>
                 </div>
               ) : aiSummary ? (
                 <>
@@ -445,24 +438,10 @@ ${link ? `[Leer nota original](${link})` : ''}`
                     </span>
                   </div>
 
-                  {/* Título */}
-                  <div className="ai-headline">
-                    <h4>Título</h4>
-                    <h2>{aiSummary.headline}</h2>
-                  </div>
-
-                  {/* Bajada/Copete */}
-                  <div className="ai-lead">
-                    <h4>Bajada</h4>
-                    <p className="lead-text">{aiSummary.lead}</p>
-                  </div>
-
-                  {/* Cuerpo */}
-                  <div className="ai-body">
-                    <h4>Contenido</h4>
-                    {aiSummary.body.split('\n\n').map((paragraph, idx) => (
-                      <p key={idx}>{paragraph}</p>
-                    ))}
+                  {/* Resumen */}
+                  <div className="ai-summary">
+                    <h4>Resumen</h4>
+                    <p>{aiSummary.summary}</p>
                   </div>
 
                   {/* Puntos clave */}
