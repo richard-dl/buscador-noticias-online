@@ -12,6 +12,95 @@ const { shortenUrl } = require('../services/shortenerService');
 const { generateNewsEmojis, emojisToString } = require('../utils/emojiGenerator');
 const { summarize, formatForSocialMedia } = require('../utils/summarizer');
 const { saveSearchHistory } = require('../services/firebaseService');
+const { classifyBatchWithAI, processNewsWithAI, isGeminiAvailable } = require('../services/geminiService');
+
+/**
+ * Clasificar noticias usando IA (si está disponible) o fallback a keywords
+ * @param {Array} news - Array de noticias a clasificar
+ * @returns {Promise<Array>} - Noticias con categoría asignada
+ */
+const classifyNewsWithAIOrFallback = async (news) => {
+  // Si Gemini está disponible, usar clasificación IA en batch
+  if (isGeminiAvailable() && news.length > 0) {
+    try {
+      console.log(`Clasificando ${news.length} noticias con Gemini IA...`);
+
+      // Procesar en batches de 10 para optimizar
+      const batchSize = 10;
+      const results = [];
+
+      for (let i = 0; i < news.length; i += batchSize) {
+        const batch = news.slice(i, i + batchSize);
+        const batchResults = await classifyBatchWithAI(batch);
+
+        if (batchResults) {
+          // Aplicar resultados de IA
+          batch.forEach((item, idx) => {
+            if (batchResults[idx]) {
+              item.category = batchResults[idx].category;
+              item.aiConfidence = batchResults[idx].confidence;
+              item.classifiedBy = 'gemini';
+            } else {
+              // Fallback a keywords si IA no pudo clasificar este item
+              item.category = classifyNewsCategory(item.title || '', item.description || '', []);
+              item.classifiedBy = 'keywords';
+            }
+            results.push(item);
+          });
+        } else {
+          // Fallback completo a keywords para este batch
+          batch.forEach(item => {
+            item.category = classifyNewsCategory(item.title || '', item.description || '', []);
+            item.classifiedBy = 'keywords';
+            results.push(item);
+          });
+        }
+      }
+
+      const aiClassified = results.filter(r => r.classifiedBy === 'gemini').length;
+      console.log(`Clasificación completada: ${aiClassified}/${results.length} con IA`);
+      return results;
+    } catch (error) {
+      console.error('Error en clasificación IA, usando fallback:', error.message);
+    }
+  }
+
+  // Fallback: clasificación por keywords
+  console.log('Usando clasificación por keywords (Gemini no disponible o error)');
+  return news.map(item => ({
+    ...item,
+    category: classifyNewsCategory(item.title || '', item.description || '', []),
+    classifiedBy: 'keywords'
+  }));
+};
+
+/**
+ * Generar resúmenes con IA para noticias (opcional, más costoso)
+ * @param {Object} item - Noticia a resumir
+ * @returns {Promise<Object>} - Noticia con resumen IA
+ */
+const enhanceWithAISummary = async (item) => {
+  if (!isGeminiAvailable()) {
+    return item;
+  }
+
+  try {
+    const aiResult = await processNewsWithAI({
+      title: item.title,
+      description: item.description,
+      source: item.source
+    });
+
+    if (aiResult) {
+      item.aiSummary = aiResult.summary;
+      item.keyPoints = aiResult.keyPoints;
+    }
+  } catch (error) {
+    console.warn('Error generando resumen IA:', error.message);
+  }
+
+  return item;
+};
 
 /**
  * GET /api/news/feeds
@@ -70,19 +159,8 @@ router.get('/rss', authenticateAndRequireSubscription, async (req, res) => {
       excludeTerms: excludeList
     });
 
-    // Aplicar clasificación automática a todas las noticias RSS
-    news = news.map(n => {
-      // SIEMPRE clasificar contra todas las categorías para precisión
-      const autoCategory = classifyNewsCategory(
-        n.title || '',
-        n.description || '',
-        [] // Array vacío = analizar todas las categorías
-      );
-      return {
-        ...n,
-        category: autoCategory !== 'general' ? autoCategory : (n.category || 'general')
-      };
-    });
+    // Aplicar clasificación automática con IA (o fallback a keywords)
+    news = await classifyNewsWithAIOrFallback(news);
 
     // Procesar cada noticia
     news = await Promise.all(news.map(async (item) => {
@@ -152,7 +230,8 @@ router.get('/search', authenticateAndRequireSubscription, async (req, res) => {
       translate = 'false',
       shorten = 'true',
       generateEmojis = 'true',
-      contentType = 'all' // with-image, with-video, text-only, all
+      contentType = 'all', // with-image, with-video, text-only, all
+      aiSummary = 'false' // Generar resúmenes con IA (más costoso, mejor calidad)
     } = req.query;
 
     let allNews = [];
@@ -265,24 +344,9 @@ router.get('/search', authenticateAndRequireSubscription, async (req, res) => {
         excludeTerms: excludeList
       });
 
-      // Clasificar noticias RSS automáticamente según su contenido
-      allNews = rssNews.map(n => {
-        // SIEMPRE clasificar contra todas las categorías para precisión
-        // No restringir por tematicasList - puede ser de otra categoría
-        const autoCategory = classifyNewsCategory(
-          n.title || '',
-          n.description || '',
-          [] // Array vacío = analizar todas las categorías
-        );
-
-        return {
-          ...n,
-          sourceType: 'rss',
-          // Usar clasificación automática si es más específica que la del RSS
-          category: autoCategory !== 'general' ? autoCategory : (n.category || 'general')
-        };
-      });
-      console.log(`RSS devolvió ${rssNews.length} resultados de categorías: ${rssCategories.join(', ')} (clasificación automática aplicada)`);
+      // Agregar sourceType a noticias RSS
+      allNews = rssNews.map(n => ({ ...n, sourceType: 'rss' }));
+      console.log(`RSS devolvió ${rssNews.length} resultados de categorías: ${rssCategories.join(', ')}`);
     } catch (err) {
       console.warn('Error en búsqueda RSS:', err.message);
     }
@@ -301,22 +365,9 @@ router.get('/search', authenticateAndRequireSubscription, async (req, res) => {
         hoursAgo: parseInt(hoursAgo)  // Pasar filtro de tiempo a Google News
       });
 
-      // Clasificar cada noticia de Google News automáticamente según su contenido
-      allNews = allNews.concat(googleNews.map(n => {
-        // SIEMPRE clasificar contra todas las categorías para precisión
-        const autoCategory = classifyNewsCategory(
-          n.title || '',
-          n.description || '',
-          [] // Array vacío = analizar todas las categorías
-        );
-
-        return {
-          ...n,
-          sourceType: 'google',
-          category: autoCategory
-        };
-      }));
-      console.log(`Google News devolvió ${googleNews.length} resultados con clasificación automática`);
+      // Agregar sourceType a noticias Google
+      allNews = allNews.concat(googleNews.map(n => ({ ...n, sourceType: 'google' })));
+      console.log(`Google News devolvió ${googleNews.length} resultados`);
     } catch (err) {
       console.warn('Error en búsqueda Google News:', err.message);
     }
@@ -387,6 +438,9 @@ router.get('/search', authenticateAndRequireSubscription, async (req, res) => {
     // Limitar resultados
     allNews = allNews.slice(0, parseInt(maxItems));
 
+    // Clasificar todas las noticias con IA (o fallback a keywords)
+    allNews = await classifyNewsWithAIOrFallback(allNews);
+
     // Procesar cada noticia
     allNews = await Promise.all(allNews.map(async (item) => {
       // Traducir si es necesario
@@ -394,8 +448,13 @@ router.get('/search', authenticateAndRequireSubscription, async (req, res) => {
         item = await translateNews(item);
       }
 
-      // Generar resumen
+      // Generar resumen básico
       item.summary = summarize(item.description, { maxSentences: 2 });
+
+      // Generar resumen con IA si está habilitado
+      if (aiSummary === 'true') {
+        item = await enhanceWithAISummary(item);
+      }
 
       // Acortar URL
       if (shorten === 'true' && item.link) {
