@@ -1097,26 +1097,16 @@ router.post('/ai-summary', authenticateAndRequireSubscription, async (req, res) 
       });
     }
 
-    // Generar texto formateado listo para republicar
-    const formattedForWeb = `
-## ${title}
-
-${aiResult.summary}
-
-### Puntos clave:
-${aiResult.keyPoints.map(point => `- ${point}`).join('\n')}
-
-${source ? `*Fuente: ${source}*` : ''}
-    `.trim();
-
     res.json({
       success: true,
       data: {
         category: aiResult.category,
         confidence: aiResult.confidence,
-        summary: aiResult.summary,
+        headline: aiResult.headline || title,
+        lead: aiResult.lead || '',
+        body: aiResult.body || '',
+        summary: aiResult.summary, // Compatibilidad: lead + body combinados
         keyPoints: aiResult.keyPoints,
-        formattedForWeb,
         originalTitle: title,
         source: source || null,
         link: link || null
