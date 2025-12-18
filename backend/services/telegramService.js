@@ -348,6 +348,7 @@ const forwardToPublicChannel = async (fromChatId, messageId) => {
   try {
     const channelUsername = `@${PUBLIC_CHANNEL_USERNAME}`;
     console.log('[Telegram] Reenviando mensaje al canal público:', channelUsername);
+    console.log('[Telegram] from_chat_id:', fromChatId, 'message_id:', messageId);
 
     const response = await axios.post(`${TELEGRAM_API_URL}/forwardMessage`, {
       chat_id: channelUsername,
@@ -365,11 +366,15 @@ const forwardToPublicChannel = async (fromChatId, messageId) => {
       };
     }
 
-    console.error('[Telegram] Error reenviando:', response.data);
+    console.error('[Telegram] Error reenviando - response no ok:', JSON.stringify(response.data, null, 2));
     return null;
   } catch (error) {
     console.error('[Telegram] Error reenviando al canal público:', error.message);
-    return null;
+    if (error.response) {
+      console.error('[Telegram] Error response data:', JSON.stringify(error.response.data, null, 2));
+      console.error('[Telegram] Error response status:', error.response.status);
+    }
+    throw error; // Re-lanzar para capturar en el endpoint
   }
 };
 

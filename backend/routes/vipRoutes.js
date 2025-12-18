@@ -187,14 +187,20 @@ router.post('/migrate-videos', authenticate, async (req, res) => {
 
     for (const video of videos) {
       try {
+        console.log('[Migrate] Procesando video:', video.id, {
+          telegramChatId: video.telegramChatId,
+          telegramMessageId: video.telegramMessageId,
+          imagen: video.imagen ? { type: video.imagen.type, fileSize: video.imagen.fileSize } : null
+        });
+
         if (!video.telegramChatId || !video.telegramMessageId) {
           console.log('[Migrate] Video sin datos de Telegram:', video.id);
           results.failed++;
-          results.errors.push({ id: video.id, error: 'Sin datos de Telegram' });
+          results.errors.push({ id: video.id, error: 'Sin datos de Telegram', chatId: video.telegramChatId, messageId: video.telegramMessageId });
           continue;
         }
 
-        console.log('[Migrate] Reenviando video:', video.id);
+        console.log('[Migrate] Reenviando video:', video.id, 'chatId:', video.telegramChatId, 'messageId:', video.telegramMessageId);
         const embedInfo = await forwardToPublicChannel(video.telegramChatId, video.telegramMessageId);
 
         if (embedInfo) {
@@ -207,12 +213,13 @@ router.post('/migrate-videos', authenticate, async (req, res) => {
           console.log('[Migrate] Video migrado:', video.id, embedInfo.embedUrl);
         } else {
           results.failed++;
-          results.errors.push({ id: video.id, error: 'Error al reenviar' });
+          results.errors.push({ id: video.id, error: 'forwardToPublicChannel retornó null' });
         }
       } catch (error) {
         console.error('[Migrate] Error con video:', video.id, error.message);
+        const errorDetail = error.response?.data?.description || error.message;
         results.failed++;
-        results.errors.push({ id: video.id, error: error.message });
+        results.errors.push({ id: video.id, error: errorDetail });
       }
     }
 
