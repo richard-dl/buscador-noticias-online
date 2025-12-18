@@ -10,7 +10,7 @@ const TELEGRAM_API_URL = `https://api.telegram.org/bot${process.env.TELEGRAM_BOT
 const TELEGRAM_FILE_URL = `https://api.telegram.org/file/bot${process.env.TELEGRAM_BOT_TOKEN}`;
 
 // Configuración de agrupación
-const BATCH_WINDOW_MINUTES = 5; // Ventana de tiempo para agrupar mensajes del mismo usuario
+const BATCH_WINDOW_MINUTES = 10; // Ventana de tiempo para agrupar mensajes del mismo usuario
 const { v4: uuidv4 } = require('uuid');
 
 // Cache en memoria para tracking de batches activos
