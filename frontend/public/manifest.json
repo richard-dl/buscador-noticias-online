@@ -1,0 +1,18 @@
+{
+  "name": "Buscador de Noticias Online",
+  "short_name": "Noticias",
+  "description": "Busca, traduce, crea emojis y da formato listo para publicar",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a365d",
+  "theme_color": "#1a365d",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/image-splash.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
