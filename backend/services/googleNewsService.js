@@ -13,7 +13,7 @@ const PROVINCIAS_ARGENTINA = [
 // Temáticas predefinidas
 const TEMATICAS = {
   politica: ['política', 'gobierno', 'congreso', 'diputados', 'senadores', 'presidente', 'ministerio', 'ley', 'elecciones', 'partido', 'peronismo', 'kirchner', 'milei', 'reforma', 'minoría', 'oficialismo', 'oposición', 'votación', 'sesión', 'senado', 'legislador', 'mandato', 'gobernador', 'intendente', 'golpe de estado', 'dictadura', 'militar', 'junta', 'perón', 'derrocar'],
-  economia: ['economía', 'dólar', 'inflación', 'banco central', 'mercados', 'peso', 'inversión', 'bolsa', 'finanzas', 'comercio', 'bcra', 'deuda', 'presupuesto', 'déficit', 'pbi', 'tipo de cambio', 'cepo', 'reservas', 'bonos', 'acciones'],
+  economia: ['economía', 'dólar', 'inflación', 'banco central', 'mercados', 'peso', 'inversión', 'bolsa', 'finanzas', 'comercio', 'bcra', 'deuda', 'presupuesto', 'déficit', 'pbi', 'tipo de cambio', 'cepo', 'reservas', 'bonos', 'acciones', 'salario', 'sueldo', 'aumento', 'incremento salarial', 'paritaria', 'remuneración', 'aguinaldo', 'bono salarial', 'ajuste salarial', 'tarifas', 'precios', 'costo de vida', 'canasta básica', 'ganancias', 'impuesto', 'recaudación', 'subsidio', 'jubilación', 'pensión', 'haber'],
   deportes: ['fútbol', 'deportes', 'selección argentina', 'liga profesional', 'mundial', 'copa', 'jugador', 'equipo', 'torneo', 'gol', 'pelea', 'boxeo', 'mma', 'básquet', 'tenis', 'rugby', 'natación', 'atletismo', 'carrera', 'maratón', 'dt', 'técnico deportivo', 'entrenador', 'scaloni', 'finalissima', 'partido', 'cancha', 'estadio', 'hincha', 'arquero'],
   espectaculos: ['espectáculos', 'famosos', 'televisión', 'cine', 'actor', 'actriz', 'película', 'serie', 'streaming', 'festival', 'show', 'artista', 'estreno', 'celebridad', 'cantante', 'música', 'premio', 'gala', 'alfombra roja', 'hollywood'],
   tecnologia: ['tecnología', 'inteligencia artificial', 'apps', 'internet', 'celular', 'software', 'digital', 'innovación', 'startup', 'ciberseguridad', 'samsung', 'iphone', 'android', 'smartphone', 'tablet', 'función', 'activar', 'configuración', 'dispositivo', 'móvil'],
@@ -24,6 +24,46 @@ const TEMATICAS = {
   ciencia: ['ciencia', 'investigación', 'conicet', 'descubrimiento', 'estudio', 'científico', 'experimento', 'universidad', 'laboratorio', 'avance'],
   medioambiente: ['medio ambiente', 'clima', 'ecología', 'contaminación', 'ambiental', 'naturaleza', 'sustentable', 'cambio climático', 'biodiversidad', 'emisiones']
 };
+
+// Reglas de contexto para resolver conflictos entre categorías
+// Si aparecen keywords de CONTEXTO junto con keywords de OTRA categoría, gana la CATEGORIA_DESTINO
+const REGLAS_CONTEXTO = [
+  // Si hay palabras económicas (aumento, salario, sueldo, paritaria) junto con educación -> economía
+  {
+    contexto: ['aumento', 'salario', 'sueldo', 'paritaria', 'incremento', 'remuneración', 'aguinaldo', 'bono salarial', 'ajuste salarial', 'haber'],
+    conflicto: 'educacion',
+    destino: 'economia',
+    bonus: 5
+  },
+  // Si hay palabras económicas junto con salud (aumento a médicos) -> economía
+  {
+    contexto: ['aumento', 'salario', 'sueldo', 'paritaria', 'incremento', 'remuneración'],
+    conflicto: 'salud',
+    destino: 'economia',
+    bonus: 5
+  },
+  // Si hay palabras policiales fuertes junto con educación (profesor acusado) -> policiales
+  {
+    contexto: ['acusado', 'detenido', 'arrestado', 'abuso', 'denuncia', 'víctima', 'imputado', 'condenado'],
+    conflicto: 'educacion',
+    destino: 'policiales',
+    bonus: 5
+  },
+  // Si hay palabras policiales junto con deportes (violencia en cancha, pelea) -> policiales
+  {
+    contexto: ['asesinato', 'homicidio', 'muerto', 'víctima', 'baleado', 'apuñalado', 'crimen'],
+    conflicto: 'deportes',
+    destino: 'policiales',
+    bonus: 5
+  },
+  // Si hay tarifas/precios junto con cualquier servicio -> economía
+  {
+    contexto: ['tarifa', 'precio', 'costo', 'factura', 'boleta', 'aumento'],
+    conflicto: 'tecnologia',
+    destino: 'economia',
+    bonus: 4
+  }
+];
 
 /**
  * Clasificar automáticamente una noticia según su contenido
@@ -66,6 +106,23 @@ const classifyNewsCategory = (title, description, candidateCategories = []) => {
   // Si no hay coincidencias, devolver 'general' o la primera candidata
   if (Object.keys(scores).length === 0) {
     return candidateCategories.length > 0 ? candidateCategories[0] : 'general';
+  }
+
+  // Aplicar reglas de contexto para resolver conflictos
+  for (const regla of REGLAS_CONTEXTO) {
+    // Verificar si hay conflicto (ambas categorías tienen puntaje)
+    if (scores[regla.conflicto] && scores[regla.destino]) {
+      // Verificar si alguna palabra de contexto está presente
+      const tieneContexto = regla.contexto.some(palabra => {
+        const regex = new RegExp(`\\b${palabra.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`, 'gi');
+        return regex.test(text);
+      });
+
+      if (tieneContexto) {
+        // Aplicar bonus a la categoría destino
+        scores[regla.destino] += regla.bonus;
+      }
+    }
   }
 
   // Devolver la categoría con mayor puntaje
