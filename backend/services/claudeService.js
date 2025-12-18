@@ -279,17 +279,29 @@ Responde SOLO con JSON:
     const jsonMatch = text.match(/\{[\s\S]*\}/);
 
     if (jsonMatch) {
-      const parsed = JSON.parse(jsonMatch[0]);
+      // Limpiar caracteres de control dentro de strings JSON
+      // Claude a veces devuelve newlines literales dentro de valores de string
+      let jsonStr = jsonMatch[0];
+
+      // Reemplazar newlines/tabs dentro de strings JSON por versiones escapadas
+      jsonStr = jsonStr.replace(/"([^"\\]|\\.)*"/g, (match) => {
+        return match
+          .replace(/\n/g, '\\n')
+          .replace(/\r/g, '\\r')
+          .replace(/\t/g, '\\t');
+      });
+
+      const parsed = JSON.parse(jsonStr);
       if (CATEGORIAS_DISPONIBLES.includes(parsed.category)) {
         return {
           category: parsed.category,
           confidence: parsed.confidence || 0.9,
           headline: parsed.headline || title,
           lead: parsed.lead || '',
-          body: parsed.body || '',
+          body: (parsed.body || '').replace(/\\n/g, '\n'),
           // Compatibilidad: summary combina lead + body para formatos que lo usen
           summary: parsed.lead && parsed.body
-            ? `${parsed.lead}\n\n${parsed.body}`
+            ? `${parsed.lead}\n\n${parsed.body.replace(/\\n/g, '\n')}`
             : (parsed.summary || ''),
           keyPoints: parsed.keyPoints || []
         };
