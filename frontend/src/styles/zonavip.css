@@ -779,20 +779,66 @@
     font-size: 1.8rem;
   }
 
+  /* Filtros móvil - diseño compacto en filas */
   .vip-filters {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 0.75rem;
+    padding: 1rem;
   }
 
   .vip-filter-group {
-    flex-wrap: wrap;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    width: 100%;
+  }
+
+  .vip-filter-group .filter-label {
+    min-width: 70px;
+    flex-shrink: 0;
+    font-size: 0.8rem;
+  }
+
+  .vip-filter-group .filter-btn {
+    flex: 1;
+    justify-content: center;
+    padding: 0.5rem 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .vip-filter-group .filter-btn svg {
+    display: none;
   }
 
   .vip-content-count {
     margin-left: 0;
     width: 100%;
-    text-align: right;
+    text-align: center;
+    padding-top: 0.5rem;
+    border-top: 1px solid #333;
+    font-size: 0.8rem;
+  }
+
+  /* Botones Agrupar/Desagrupar en fila completa */
+  .view-mode-buttons {
+    display: flex;
+    width: 100%;
+    gap: 0.5rem;
+    margin-left: 0;
+    margin-top: 0;
+  }
+
+  .view-mode-btn {
+    flex: 1;
+    justify-content: center;
+    padding: 0.6rem 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .view-mode-btn svg {
+    width: 14px;
+    height: 14px;
   }
 
   .vip-content-grid {
@@ -852,16 +898,5 @@
   .vip-thumbnail {
     width: 50px;
     height: 50px;
-  }
-
-  .view-mode-buttons {
-    margin-left: 0;
-    width: 100%;
-    margin-top: 0.5rem;
-  }
-
-  .view-mode-btn {
-    flex: 1;
-    justify-content: center;
   }
 }
