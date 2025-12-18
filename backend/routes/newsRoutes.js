@@ -70,6 +70,19 @@ router.get('/rss', authenticateAndRequireSubscription, async (req, res) => {
       excludeTerms: excludeList
     });
 
+    // Aplicar clasificación automática a todas las noticias RSS
+    news = news.map(n => {
+      const autoCategory = classifyNewsCategory(
+        n.title || '',
+        n.description || '',
+        categoryList
+      );
+      return {
+        ...n,
+        category: autoCategory !== 'general' ? autoCategory : (n.category || 'general')
+      };
+    });
+
     // Procesar cada noticia
     news = await Promise.all(news.map(async (item) => {
       // Traducir si es necesario
@@ -251,8 +264,23 @@ router.get('/search', authenticateAndRequireSubscription, async (req, res) => {
         excludeTerms: excludeList
       });
 
-      allNews = rssNews.map(n => ({ ...n, sourceType: 'rss' }));
-      console.log(`RSS devolvió ${rssNews.length} resultados de categorías: ${rssCategories.join(', ')}`);
+      // Clasificar noticias RSS automáticamente según su contenido
+      allNews = rssNews.map(n => {
+        // Verificar si la categoría RSS es precisa o reclasificar
+        const autoCategory = classifyNewsCategory(
+          n.title || '',
+          n.description || '',
+          tematicasList.length > 0 ? tematicasList : []
+        );
+
+        return {
+          ...n,
+          sourceType: 'rss',
+          // Usar clasificación automática si es más específica que la del RSS
+          category: autoCategory !== 'general' ? autoCategory : (n.category || 'general')
+        };
+      });
+      console.log(`RSS devolvió ${rssNews.length} resultados de categorías: ${rssCategories.join(', ')} (clasificación automática aplicada)`);
     } catch (err) {
       console.warn('Error en búsqueda RSS:', err.message);
     }
@@ -271,9 +299,8 @@ router.get('/search', authenticateAndRequireSubscription, async (req, res) => {
         hoursAgo: parseInt(hoursAgo)  // Pasar filtro de tiempo a Google News
       });
 
-      // Clasificar cada noticia automáticamente según su contenido
+      // Clasificar cada noticia de Google News automáticamente según su contenido
       allNews = allNews.concat(googleNews.map(n => {
-        // Usar clasificación automática con las temáticas buscadas como candidatas
         const autoCategory = classifyNewsCategory(
           n.title || '',
           n.description || '',
@@ -485,7 +512,21 @@ router.post('/generate', authenticateAndRequireSubscription, async (req, res) =>
         tematicasList.length > 0 ? tematicasList : ['nacionales'],
         { maxItems: Math.ceil(count / 2), keywords: keywordsList }
       );
-      news = news.concat(rssNews);
+
+      // Clasificar noticias RSS
+      const classifiedRssNews = rssNews.map(n => {
+        const autoCategory = classifyNewsCategory(
+          n.title || '',
+          n.description || '',
+          tematicasList
+        );
+        return {
+          ...n,
+          category: autoCategory !== 'general' ? autoCategory : (n.category || 'general')
+        };
+      });
+
+      news = news.concat(classifiedRssNews);
     } catch (err) {
       console.warn('Error RSS:', err.message);
     }
@@ -496,7 +537,21 @@ router.post('/generate', authenticateAndRequireSubscription, async (req, res) =>
         ...searchFilters,
         maxItems: Math.ceil(count / 2)
       });
-      news = news.concat(googleNews);
+
+      // Clasificar noticias de Google News
+      const classifiedGoogleNews = googleNews.map(n => {
+        const autoCategory = classifyNewsCategory(
+          n.title || '',
+          n.description || '',
+          tematicasList
+        );
+        return {
+          ...n,
+          category: autoCategory
+        };
+      });
+
+      news = news.concat(classifiedGoogleNews);
     } catch (err) {
       console.warn('Error Google:', err.message);
     }
