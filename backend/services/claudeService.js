@@ -234,26 +234,17 @@ const processNewsWithAI = async (newsItem) => {
 
   const { title, description, source } = newsItem;
 
-  const prompt = `Eres un redactor periodístico profesional. Tu tarea es REESCRIBIR esta noticia con formato periodístico completo.
-
-INSTRUCCIONES:
-1. Crea un TÍTULO atractivo y conciso (máximo 15 palabras)
-2. Escribe una BAJADA/COPETE que resuma lo esencial (1-2 oraciones)
-3. Redacta el CUERPO de la noticia (2-3 párrafos informativos)
-4. Usa tono informativo, directo y profesional
-5. NO uses frases como "La noticia describe...", "Este artículo habla de..."
-6. Escribe como si TÚ fueras el periodista reportando el hecho
-7. Los puntos clave deben ser HECHOS CONCRETOS
+  const prompt = `Analiza esta noticia y proporciona clasificación y resumen.
 
 CATEGORÍAS: politica, economia, deportes, espectaculos, tecnologia, policiales, judiciales, salud, educacion, cultura, ciencia, medioambiente, internacional
 
-REGLAS DE CLASIFICACIÓN:
+REGLAS:
 - SALARIOS/PARITARIAS = "economia"
 - CRÍMENES/VIOLENCIA = "policiales"
 - CAUSAS JUDICIALES = "judiciales"
 - PAÍSES EXTRANJEROS = "internacional"
 
-NOTICIA ORIGINAL:
+NOTICIA:
 Título: ${title}
 Fuente: ${source || 'No especificada'}
 Contenido: ${description || 'Sin descripción'}
@@ -262,16 +253,14 @@ Responde SOLO con JSON:
 {
   "category": "nombre_categoria",
   "confidence": 0.95,
-  "headline": "Tu título periodístico",
-  "lead": "Tu bajada/copete aquí",
-  "body": "El cuerpo de la noticia (2-3 párrafos)",
-  "keyPoints": ["Hecho 1", "Hecho 2", "Hecho 3"]
+  "summary": "Resumen de 2-3 oraciones",
+  "keyPoints": ["Punto 1", "Punto 2"]
 }`;
 
   try {
     const response = await client.messages.create({
       model: 'claude-3-haiku-20240307',
-      max_tokens: 800,
+      max_tokens: 400,
       messages: [{ role: 'user', content: prompt }]
     });
 
@@ -279,30 +268,12 @@ Responde SOLO con JSON:
     const jsonMatch = text.match(/\{[\s\S]*\}/);
 
     if (jsonMatch) {
-      // Limpiar caracteres de control dentro de strings JSON
-      // Claude a veces devuelve newlines literales dentro de valores de string
-      let jsonStr = jsonMatch[0];
-
-      // Reemplazar newlines/tabs dentro de strings JSON por versiones escapadas
-      jsonStr = jsonStr.replace(/"([^"\\]|\\.)*"/g, (match) => {
-        return match
-          .replace(/\n/g, '\\n')
-          .replace(/\r/g, '\\r')
-          .replace(/\t/g, '\\t');
-      });
-
-      const parsed = JSON.parse(jsonStr);
+      const parsed = JSON.parse(jsonMatch[0]);
       if (CATEGORIAS_DISPONIBLES.includes(parsed.category)) {
         return {
           category: parsed.category,
           confidence: parsed.confidence || 0.9,
-          headline: parsed.headline || title,
-          lead: parsed.lead || '',
-          body: (parsed.body || '').replace(/\\n/g, '\n'),
-          // Compatibilidad: summary combina lead + body para formatos que lo usen
-          summary: parsed.lead && parsed.body
-            ? `${parsed.lead}\n\n${parsed.body.replace(/\\n/g, '\n')}`
-            : (parsed.summary || ''),
+          summary: parsed.summary || '',
           keyPoints: parsed.keyPoints || []
         };
       }
