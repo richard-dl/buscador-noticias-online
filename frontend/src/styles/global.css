@@ -3063,6 +3063,18 @@ input, select, textarea {
   background: var(--color-success);
 }
 
+/* Disclaimer IA */
+.ai-disclaimer {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  text-align: center;
+  margin: var(--spacing-3) 0;
+  padding: var(--spacing-2);
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
+  font-style: italic;
+}
+
 /* Responsive */
 @media (max-width: 640px) {
   .ai-modal {
