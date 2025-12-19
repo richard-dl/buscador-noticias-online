@@ -1075,12 +1075,12 @@ input, select, textarea {
 }
 
 .profile-card {
-  background: white;
+  background: linear-gradient(135deg, #1A2B47 0%, #0d2440 100%);
   padding: var(--spacing-4);
   border-radius: var(--radius-lg);
-  border: 1px solid var(--color-border);
+  border: 1px solid rgba(64, 151, 154, 0.3);
   transition: all var(--transition-fast);
-  color: var(--color-text);
+  color: white;
 }
 
 .profile-card:hover {
@@ -1299,7 +1299,8 @@ input, select, textarea {
 }
 
 .btn-link:hover {
-  background-color: rgba(181, 232, 228, 0.1);
+  background-color: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
 }
 
 .btn-save {
@@ -1440,6 +1441,7 @@ input, select, textarea {
   font-size: var(--font-size-sm);
   font-weight: 500;
   margin-bottom: var(--spacing-2);
+  color: white;
 }
 
 .filter-profiles select {
@@ -1468,6 +1470,7 @@ input, select, textarea {
   cursor: pointer;
   border-radius: var(--radius-md);
   transition: background var(--transition-fast);
+  color: white;
 }
 
 .filter-section-header:hover {
@@ -1569,7 +1572,7 @@ input, select, textarea {
 .filter-row label {
   display: block;
   font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
+  color: var(--color-text-light);
   margin-bottom: var(--spacing-1);
 }
 
@@ -1747,14 +1750,16 @@ input, select, textarea {
   justify-content: space-between;
   align-items: center;
   padding: var(--spacing-4);
-  background: white;
+  background: linear-gradient(135deg, #1A2B47 0%, #0d2440 100%);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(64, 151, 154, 0.2);
 }
 
 .profile-info h3 {
   font-size: var(--font-size-base);
   margin-bottom: var(--spacing-1);
+  color: white;
 }
 
 .profile-details {
@@ -1762,7 +1767,7 @@ input, select, textarea {
   flex-wrap: wrap;
   gap: var(--spacing-3);
   font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
+  color: var(--color-text-light);
 }
 
 .profile-actions {
@@ -1783,16 +1788,19 @@ input, select, textarea {
 }
 
 .modal {
-  background: white;
+  background: linear-gradient(135deg, #1A2B47 0%, #0d2440 100%);
   border-radius: var(--radius-xl);
   padding: var(--spacing-6);
   max-width: 400px;
   width: 100%;
   box-shadow: var(--shadow-xl);
+  border: 1px solid rgba(64, 151, 154, 0.3);
+  color: white;
 }
 
 .modal h2 {
   margin-bottom: var(--spacing-4);
+  color: white;
 }
 
 .modal-actions {
@@ -1816,6 +1824,7 @@ input, select, textarea {
 
 .profile-main h1 {
   margin-bottom: var(--spacing-6);
+  color: white;
 }
 
 .profile-grid {
@@ -1824,11 +1833,13 @@ input, select, textarea {
   gap: var(--spacing-6);
 }
 
-.profile-card {
-  background: white;
+.profile-page .profile-card {
+  background: linear-gradient(135deg, #1A2B47 0%, #0d2440 100%);
   border-radius: var(--radius-xl);
   padding: var(--spacing-6);
   box-shadow: var(--shadow-md);
+  border: 1px solid rgba(64, 151, 154, 0.3);
+  color: white;
 }
 
 .card-header {
@@ -1837,11 +1848,12 @@ input, select, textarea {
   align-items: center;
   margin-bottom: var(--spacing-4);
   padding-bottom: var(--spacing-4);
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid rgba(64, 151, 154, 0.3);
 }
 
 .card-header h2 {
   font-size: var(--font-size-lg);
+  color: white;
 }
 
 .edit-actions {
@@ -1854,7 +1866,7 @@ input, select, textarea {
   align-items: flex-start;
   gap: var(--spacing-3);
   padding: var(--spacing-3) 0;
-  border-bottom: 1px solid var(--color-gray-100);
+  border-bottom: 1px solid rgba(64, 151, 154, 0.2);
 }
 
 .info-row:last-child {
@@ -1862,7 +1874,7 @@ input, select, textarea {
 }
 
 .info-row svg {
-  color: var(--color-gray-400);
+  color: var(--color-teal);
   flex-shrink: 0;
   margin-top: var(--spacing-1);
 }
@@ -1874,19 +1886,22 @@ input, select, textarea {
 .info-content label {
   display: block;
   font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
+  color: var(--color-text-light);
   margin-bottom: var(--spacing-1);
 }
 
 .info-content span {
   font-weight: 500;
+  color: white;
 }
 
 .info-content input {
   width: 100%;
   padding: var(--spacing-2);
-  border: 1px solid var(--color-border);
+  border: 1px solid rgba(64, 151, 154, 0.3);
   border-radius: var(--radius-md);
+  background: rgba(10, 30, 59, 0.8);
+  color: white;
 }
 
 /* Subscription card */
@@ -1928,7 +1943,7 @@ input, select, textarea {
 
 .subscription-details p {
   margin-bottom: var(--spacing-2);
-  color: var(--color-text-muted);
+  color: var(--color-text-light);
 }
 
 .expiry-date {
@@ -1936,6 +1951,7 @@ input, select, textarea {
   align-items: center;
   gap: var(--spacing-1);
   font-size: var(--font-size-sm);
+  color: var(--color-text-light);
 }
 
 .admin-subscription {
@@ -1945,12 +1961,12 @@ input, select, textarea {
 
 .admin-message {
   font-size: var(--font-size-lg);
-  color: var(--color-text);
+  color: white;
   line-height: 1.6;
 }
 
 .admin-message strong {
-  color: var(--color-primary);
+  color: var(--color-accent);
   font-weight: 700;
 }
 
@@ -2010,14 +2026,14 @@ input, select, textarea {
 }
 
 .renewal-notice {
-  background-color: #fffaf0;
-  border: 1px solid #fbd38d;
+  background-color: rgba(251, 211, 141, 0.1);
+  border: 1px solid rgba(251, 211, 141, 0.4);
   border-radius: var(--radius-md);
   padding: var(--spacing-4);
 }
 
 .renewal-notice p {
-  color: #975a16;
+  color: #fbd38d;
   font-size: var(--font-size-sm);
   margin-bottom: var(--spacing-3);
 }
@@ -2037,7 +2053,7 @@ input, select, textarea {
   justify-content: space-between;
   align-items: center;
   padding: var(--spacing-2) 0;
-  border-bottom: 1px solid var(--color-gray-100);
+  border-bottom: 1px solid rgba(64, 151, 154, 0.2);
 }
 
 .profiles-card .profiles-list li:last-child {
@@ -2046,6 +2062,7 @@ input, select, textarea {
 
 .profiles-card .profile-name {
   font-weight: 500;
+  color: white;
 }
 
 .profiles-card .profile-meta {
@@ -2056,7 +2073,7 @@ input, select, textarea {
 }
 
 .profiles-card .empty-message {
-  color: var(--color-text-muted);
+  color: var(--color-text-light);
   font-size: var(--font-size-sm);
   text-align: center;
   padding: var(--spacing-4);
@@ -2072,20 +2089,21 @@ input, select, textarea {
 .stat-item {
   text-align: center;
   padding: var(--spacing-4);
-  background-color: var(--color-gray-50);
+  background-color: rgba(64, 151, 154, 0.1);
   border-radius: var(--radius-md);
+  border: 1px solid rgba(64, 151, 154, 0.2);
 }
 
 .stat-value {
   display: block;
   font-size: var(--font-size-2xl);
   font-weight: 700;
-  color: var(--color-primary);
+  color: var(--color-accent);
 }
 
 .stat-label {
   font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
+  color: var(--color-text-light);
 }
 
 /* ============================================
@@ -2256,6 +2274,32 @@ input, select, textarea {
   opacity: 0.7;
   cursor: not-allowed;
   transform: none;
+}
+
+/* Spinner naranja dentro del botón Cargar más */
+.btn-load-more .spinner-container {
+  display: inline-flex;
+  align-items: center;
+}
+
+.btn-load-more .spinner {
+  border-color: rgba(255, 255, 255, 0.3);
+  border-top-color: #f59e0b;
+}
+
+/* Botón Cargar más en móvil */
+@media (max-width: 768px) {
+  .btn-load-more {
+    padding: var(--spacing-3) var(--spacing-5);
+    font-size: var(--font-size-sm);
+    width: auto;
+    max-width: 280px;
+  }
+
+  .load-more-section {
+    padding: var(--spacing-4);
+    margin-top: var(--spacing-4);
+  }
 }
 
 .limit-reached {
@@ -2435,14 +2479,15 @@ input, select, textarea {
     display: none;
   }
 
-  /* News Card en móvil - CORRECCIÓN CRÍTICA */
+  /* News Card en móvil - tema oscuro */
   .news-card {
     display: flex;
     flex-direction: column;
-    background: white;
+    background: linear-gradient(135deg, #1A2B47 0%, #0d2440 100%);
     border-radius: var(--radius-lg);
     overflow: hidden;
     box-shadow: var(--shadow-md);
+    border: 1px solid rgba(64, 151, 154, 0.2);
   }
 
   .news-card-image {
@@ -2453,19 +2498,17 @@ input, select, textarea {
   .news-card-content {
     flex: 1;
     padding: var(--spacing-3);
-    background: white;
   }
 
   .news-title {
     font-size: var(--font-size-sm);
     margin-bottom: var(--spacing-2);
-    color: var(--color-text);
+    color: white;
   }
 
   .news-summary {
     font-size: var(--font-size-xs);
     color: var(--color-text-light);
-    background: transparent;
     -webkit-line-clamp: 4;
   }
 
@@ -2478,7 +2521,8 @@ input, select, textarea {
   }
 
   .news-card-actions {
-    background: var(--color-gray-50);
+    background: rgba(26, 43, 71, 0.5);
+    border-top: 1px solid rgba(64, 151, 154, 0.2);
   }
 
   .news-card-actions .btn-copy,
@@ -2661,16 +2705,17 @@ input, select, textarea {
 }
 
 .user-card-expanded {
-  background: var(--color-gray-50);
+  background: linear-gradient(135deg, #1A2B47 0%, #0d2440 100%);
   border-radius: var(--radius-lg);
   overflow: hidden;
   transition: all var(--transition-normal);
-  border: 1px solid var(--color-gray-200);
+  border: 1px solid rgba(64, 151, 154, 0.3);
 }
 
 .user-card-expanded:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(64, 151, 154, 0.2);
   transform: translateY(-2px);
+  border-color: var(--color-teal);
 }
 
 .user-card-header {
@@ -2678,8 +2723,8 @@ input, select, textarea {
   align-items: center;
   gap: var(--spacing-3);
   padding: var(--spacing-4);
-  background: white;
-  border-bottom: 1px solid var(--color-gray-100);
+  background: rgba(10, 30, 59, 0.5);
+  border-bottom: 1px solid rgba(64, 151, 154, 0.2);
 }
 
 .user-avatar {
@@ -2705,7 +2750,7 @@ input, select, textarea {
   margin: 0;
   font-size: var(--font-size-base);
   font-weight: 600;
-  color: var(--color-text);
+  color: white;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -2735,7 +2780,7 @@ input, select, textarea {
 
 .user-stat .stat-label {
   font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
+  color: var(--color-text-light);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -2743,7 +2788,7 @@ input, select, textarea {
 .user-stat span:last-child {
   font-size: var(--font-size-sm);
   font-weight: 500;
-  color: var(--color-text);
+  color: white;
 }
 
 .user-stat .text-success {
@@ -2777,8 +2822,8 @@ input, select, textarea {
 
 .saved-news-card .count {
   font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
-  background: var(--color-gray-100);
+  color: var(--color-text-light);
+  background: rgba(64, 151, 154, 0.2);
   padding: var(--spacing-1) var(--spacing-3);
   border-radius: var(--radius-full);
 }

@@ -41,6 +41,9 @@ const NewsCard = ({ news, isSaved = false, onDelete = null, savedNewsId = null }
   const [outputFormat, setOutputFormat] = useState('markdown') // markdown, html, text
   const [copiedFormat, setCopiedFormat] = useState(null)
 
+  // Detectar si es contenido VIP guardado (enlace vip://)
+  const isVipContent = news.link && news.link.startsWith('vip://')
+
   // Intentar extraer imagen si no tiene (Google News, RSS sin imagen, etc.)
   useEffect(() => {
     const shouldExtractImage = !news.image && news.link
@@ -386,26 +389,30 @@ ${hashtagsStr}`
           </button>
         )}
 
-        <button
-          className="btn-ai"
-          onClick={handleGenerateAISummary}
-          disabled={loadingAI}
-          title="Generar resumen con IA"
-        >
-          <FiZap size={18} />
-          <span>IA</span>
-        </button>
+        {!isVipContent && (
+          <button
+            className="btn-ai"
+            onClick={handleGenerateAISummary}
+            disabled={loadingAI}
+            title="Generar resumen con IA"
+          >
+            <FiZap size={18} />
+            <span>IA</span>
+          </button>
+        )}
 
-        <a
-          href={news.link}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="btn-link"
-          title="Abrir noticia"
-        >
-          <FiExternalLink size={18} />
-          <span>Ver</span>
-        </a>
+        {!isVipContent && (
+          <a
+            href={news.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-link"
+            title="Abrir noticia"
+          >
+            <FiExternalLink size={18} />
+            <span>Ver</span>
+          </a>
+        )}
       </div>
 
       {/* Modal de Resumen IA */}
