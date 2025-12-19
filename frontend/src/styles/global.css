@@ -1690,16 +1690,22 @@ input, select, textarea {
 .empty-results {
   text-align: center;
   padding: var(--spacing-16);
-  color: var(--color-text-muted);
+  color: var(--color-accent-glow);
 }
 
 .empty-results svg {
   margin-bottom: var(--spacing-4);
-  opacity: 0.3;
+  opacity: 0.5;
+  color: var(--color-teal);
 }
 
 .empty-results h3 {
   margin-bottom: var(--spacing-2);
+  color: white;
+}
+
+.empty-results p {
+  color: var(--color-text-muted);
 }
 
 /* Profiles Section */
@@ -1710,13 +1716,14 @@ input, select, textarea {
 .empty-profiles {
   text-align: center;
   padding: var(--spacing-12);
-  background: white;
+  background: linear-gradient(135deg, #1A2B47 0%, #0d2440 100%);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-md);
+  border: 1px solid rgba(64, 151, 154, 0.3);
 }
 
 .empty-profiles svg {
-  color: var(--color-gray-300);
+  color: var(--color-teal);
   margin-bottom: var(--spacing-4);
 }
 
