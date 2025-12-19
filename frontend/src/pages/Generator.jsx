@@ -681,7 +681,7 @@ const Generator = () => {
                         ) : (
                           <>
                             <FiPlus size={20} />
-                            Cargar más noticias ({breakingLoadCount}/8 cargas)
+                            Cargar más noticias
                           </>
                         )}
                       </button>

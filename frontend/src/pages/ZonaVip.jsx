@@ -387,23 +387,6 @@ const ZonaVip = () => {
                 </button>
               </div>
             </div>
-            <div className="vip-filter-group">
-              <span className="filter-label">Orden:</span>
-              <div className="filter-buttons-row">
-                <button
-                  className={`filter-btn ${sortOrder === 'desc' ? 'active' : ''}`}
-                  onClick={() => setSortOrder('desc')}
-                >
-                  Más reciente
-                </button>
-                <button
-                  className={`filter-btn ${sortOrder === 'asc' ? 'active' : ''}`}
-                  onClick={() => setSortOrder('asc')}
-                >
-                  Más antiguo
-                </button>
-              </div>
-            </div>
             <span className="vip-content-count">
               {viewMode === 'grouped' && groupsWithMultipleItems > 0
                 ? `${groupedContent.length} grupos (${content.length} elementos)`
