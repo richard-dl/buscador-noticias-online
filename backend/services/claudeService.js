@@ -242,6 +242,27 @@ const processNewsWithAI = async (newsItem, retryCount = 0) => {
 
   const { title, description, source } = newsItem;
 
+  // Truncar descripción si es muy larga para evitar errores de token
+  const MAX_DESC_LENGTH = 4000;
+  let truncatedDesc = description || '';
+  if (truncatedDesc.length > MAX_DESC_LENGTH) {
+    truncatedDesc = truncatedDesc.substring(0, MAX_DESC_LENGTH) + '... [contenido truncado]';
+  }
+
+  // Limpiar caracteres problemáticos
+  const cleanText = (text) => {
+    if (!text) return '';
+    return text
+      .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '') // Caracteres de control
+      .replace(/\u2028/g, ' ') // Line separator
+      .replace(/\u2029/g, ' ') // Paragraph separator
+      .trim();
+  };
+
+  const cleanTitle = cleanText(title);
+  const cleanDesc = cleanText(truncatedDesc);
+  const cleanSource = cleanText(source);
+
   const prompt = `Eres un redactor periodístico. Reescribe esta noticia con formato profesional.
 
 INSTRUCCIONES:
@@ -262,9 +283,9 @@ REGLAS DE CLASIFICACIÓN:
 - TEMAS SOCIALES GENERALES = "sociedad"
 
 NOTICIA ORIGINAL:
-Título: ${title}
-Fuente: ${source || 'No especificada'}
-Contenido: ${description || 'Sin descripción'}
+Título: ${cleanTitle}
+Fuente: ${cleanSource || 'No especificada'}
+Contenido: ${cleanDesc || 'Sin descripción'}
 
 IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON válido, sin texto adicional antes o después:
 {
@@ -308,7 +329,7 @@ IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON válido, sin texto adicional
         return {
           category: parsed.category,
           confidence: parsed.confidence || 0.9,
-          headline: parsed.headline || title,
+          headline: parsed.headline || cleanTitle,
           lead: (parsed.lead || '').replace(/\\n/g, '\n'),
           body: (parsed.body || '').replace(/\\n/g, '\n'),
           hashtags: parsed.hashtags || []
@@ -319,7 +340,7 @@ IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON válido, sin texto adicional
         return {
           category: 'sociedad',
           confidence: parsed.confidence || 0.7,
-          headline: parsed.headline || title,
+          headline: parsed.headline || cleanTitle,
           lead: (parsed.lead || '').replace(/\\n/g, '\n'),
           body: (parsed.body || '').replace(/\\n/g, '\n'),
           hashtags: parsed.hashtags || []
