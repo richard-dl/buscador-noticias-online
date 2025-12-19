@@ -415,7 +415,7 @@ const saveVipContent = async (contentData) => {
 /**
  * Obtener contenido VIP
  */
-const getVipContent = async (limit = 50) => {
+const getVipContent = async (limit = 150) => {
   const snapshot = await db
     .collection('vipContent')
     .orderBy('createdAt', 'desc')

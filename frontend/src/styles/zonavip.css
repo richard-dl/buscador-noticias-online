@@ -441,6 +441,23 @@
   border-color: #e74c3c;
 }
 
+.btn-action-vip.btn-ai {
+  color: #a855f7;
+  border-color: rgba(168, 85, 247, 0.3);
+  background: rgba(168, 85, 247, 0.1);
+}
+
+.btn-action-vip.btn-ai:hover:not(:disabled) {
+  background: #a855f7;
+  color: white;
+  border-color: #a855f7;
+}
+
+.btn-action-vip.btn-ai:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .btn-delete-vip {
   display: flex;
   align-items: center;

@@ -10,7 +10,7 @@ const { processTelegramUpdate, verifyWebhookToken, downloadFile } = require('../
  */
 router.get('/content', authenticateAndRequireVip, async (req, res) => {
   try {
-    const limit = parseInt(req.query.limit) || 50;
+    const limit = parseInt(req.query.limit) || 150;
     const content = await getVipContent(limit);
 
     res.json({
