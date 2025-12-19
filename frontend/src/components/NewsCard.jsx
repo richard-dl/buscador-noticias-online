@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { FiCopy, FiCheck, FiExternalLink, FiImage, FiBookmark, FiTrash2, FiLoader, FiZap, FiX, FiCode, FiFileText, FiHash } from 'react-icons/fi'
 import { toast } from 'react-toastify'
 import { userApi, newsApi } from '../services/api'
@@ -428,8 +429,8 @@ ${hashtagsStr}`
         )}
       </div>
 
-      {/* Modal de Resumen IA */}
-      {showAIModal && (
+      {/* Modal de Resumen IA - usando portal para evitar problemas de z-index */}
+      {showAIModal && createPortal(
         <div className="ai-modal-overlay" onClick={() => !loadingAI && setShowAIModal(false)}>
           <div className="ai-modal" onClick={e => e.stopPropagation()}>
             <div className="ai-modal-header">
@@ -525,7 +526,8 @@ ${hashtagsStr}`
               ) : null}
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </article>
   )
