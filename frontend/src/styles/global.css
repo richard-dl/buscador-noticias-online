@@ -1331,6 +1331,15 @@ input, select, textarea {
   cursor: not-allowed;
 }
 
+.btn-save.saved {
+  color: var(--color-success);
+  cursor: default;
+}
+
+.btn-save.saved:hover {
+  background-color: transparent;
+}
+
 .btn-delete {
   color: var(--color-danger);
   border-right: 1px solid var(--color-border);
