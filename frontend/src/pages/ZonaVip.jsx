@@ -1,9 +1,10 @@
 import { useState, useEffect, useMemo } from 'react'
+import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { vipApi, userApi } from '../services/api'
+import { vipApi, userApi, newsApi } from '../services/api'
 import { toast } from 'react-toastify'
-import { FiStar, FiLock, FiClock, FiTrash2, FiImage, FiAlertTriangle, FiRefreshCw, FiCopy, FiBookmark, FiFilter, FiCalendar, FiChevronLeft, FiChevronRight, FiChevronDown, FiChevronUp, FiLayers } from 'react-icons/fi'
+import { FiStar, FiLock, FiClock, FiTrash2, FiImage, FiAlertTriangle, FiRefreshCw, FiCopy, FiBookmark, FiFilter, FiCalendar, FiChevronLeft, FiChevronRight, FiChevronDown, FiChevronUp, FiLayers, FiZap, FiX, FiLoader, FiCode, FiFileText, FiHash, FiCheck } from 'react-icons/fi'
 import Header from '../components/Header'
 import LoadingSpinner from '../components/LoadingSpinner'
 import '../styles/zonavip.css'
@@ -24,6 +25,14 @@ const ZonaVip = () => {
   const [expandedGroups, setExpandedGroups] = useState({}) // Para expandir/colapsar grupos
   const [viewMode, setViewMode] = useState('grouped') // 'grouped' o 'flat'
   const [savedItems, setSavedItems] = useState({}) // Para rastrear items guardados
+
+  // Estados para modal de resumen IA
+  const [showAIModal, setShowAIModal] = useState(false)
+  const [aiSummary, setAiSummary] = useState(null)
+  const [loadingAI, setLoadingAI] = useState(false)
+  const [outputFormat, setOutputFormat] = useState('markdown') // markdown, html, text
+  const [copiedFormat, setCopiedFormat] = useState(null)
+  const [currentAIItem, setCurrentAIItem] = useState(null) // Item actual para IA
 
   useEffect(() => {
     checkVipAccess()
@@ -284,6 +293,100 @@ const ZonaVip = () => {
     return { text: text.substring(0, maxLength) + '...', isTruncated: true }
   }
 
+  // Generar resumen IA para contenido VIP
+  const handleGenerateAISummary = async (item) => {
+    if (loadingAI || !item.contenido) return
+
+    setCurrentAIItem(item)
+    setShowAIModal(true)
+    setLoadingAI(true)
+    setAiSummary(null)
+
+    try {
+      const response = await newsApi.getAISummary({
+        title: item.titulo || '',
+        description: item.contenido,
+        source: item.fuente || 'Zona VIP',
+        link: ''
+      })
+
+      if (response.success) {
+        setAiSummary(response.data)
+      } else {
+        toast.error(response.error || 'Error al generar resumen')
+        setShowAIModal(false)
+      }
+    } catch (err) {
+      toast.error(err.message || 'Error al conectar con IA')
+      setShowAIModal(false)
+    } finally {
+      setLoadingAI(false)
+    }
+  }
+
+  // Formatear salida según el formato seleccionado
+  const getFormattedOutput = () => {
+    if (!aiSummary) return ''
+
+    const { headline, lead, body, hashtags, source } = aiSummary
+    const hashtagsStr = hashtags?.map(tag => `#${tag}`).join(' ') || ''
+
+    switch (outputFormat) {
+      case 'html':
+        return `<article>
+  <h1>${headline}</h1>
+  <p><strong>${lead}</strong></p>
+  ${body.split('\n\n').map(p => `<p>${p}</p>`).join('\n  ')}
+${source ? `  <p><em>Fuente: ${source}</em></p>` : ''}
+  <p>${hashtagsStr}</p>
+</article>`
+
+      case 'text':
+        return `${headline}
+
+${lead}
+
+${body}
+
+${source ? `Fuente: ${source}` : ''}
+
+${hashtagsStr}`
+
+      case 'markdown':
+      default:
+        return `# ${headline}
+
+**${lead}**
+
+${body}
+
+${source ? `*Fuente: ${source}*` : ''}
+
+${hashtagsStr}`
+    }
+  }
+
+  // Copiar formato específico
+  const copyFormattedOutput = async () => {
+    try {
+      await navigator.clipboard.writeText(getFormattedOutput())
+      setCopiedFormat(outputFormat)
+      toast.success(`Copiado en formato ${outputFormat.toUpperCase()}`)
+      setTimeout(() => setCopiedFormat(null), 2000)
+    } catch (err) {
+      toast.error('Error al copiar')
+    }
+  }
+
+  // Cerrar modal IA
+  const closeAIModal = () => {
+    if (!loadingAI) {
+      setShowAIModal(false)
+      setAiSummary(null)
+      setCurrentAIItem(null)
+    }
+  }
+
   if (loading) {
     return (
       <div className="zona-vip-page">
@@ -524,6 +627,16 @@ const ZonaVip = () => {
                           >
                             <FiBookmark />
                           </button>
+                          {item.contenido && (
+                            <button
+                              className="btn-action-vip btn-ai"
+                              onClick={() => handleGenerateAISummary(item)}
+                              disabled={loadingAI}
+                              title="Generar resumen con IA"
+                            >
+                              <FiZap />
+                            </button>
+                          )}
                           {(profile?.role === 'admin') && (
                             <button
                               className="btn-action-vip btn-delete"
@@ -658,6 +771,108 @@ const ZonaVip = () => {
           </>
         )}
       </div>
+
+      {/* Modal de Resumen IA - usando portal para evitar problemas de z-index */}
+      {showAIModal && createPortal(
+        <div className="ai-modal-overlay" onClick={closeAIModal}>
+          <div className="ai-modal" onClick={e => e.stopPropagation()}>
+            <div className="ai-modal-header">
+              <h3><FiZap /> Resumen IA</h3>
+              <button
+                className="ai-modal-close"
+                onClick={closeAIModal}
+                disabled={loadingAI}
+                title="Cerrar"
+              >
+                <FiX size={20} />
+              </button>
+            </div>
+
+            <div className="ai-modal-content">
+              {loadingAI ? (
+                <div className="ai-loading">
+                  <FiLoader size={40} className="spinner" />
+                  <p>Generando resumen con Claude IA...</p>
+                </div>
+              ) : aiSummary ? (
+                <>
+                  {/* Categoría detectada */}
+                  <div className="ai-category">
+                    <span className="ai-category-badge">{aiSummary.category}</span>
+                    <span className="ai-confidence">
+                      {Math.round(aiSummary.confidence * 100)}% confianza
+                    </span>
+                  </div>
+
+                  {/* Contenido periodístico sin etiquetas */}
+                  <div className="ai-article">
+                    <h2 className="ai-headline">{aiSummary.headline}</h2>
+                    <p className="ai-lead"><strong>{aiSummary.lead}</strong></p>
+                    <div className="ai-body">
+                      {aiSummary.body.split('\n\n').map((paragraph, idx) => (
+                        <p key={idx}>{paragraph}</p>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Hashtags */}
+                  <div className="ai-hashtags">
+                    {aiSummary.hashtags?.map((tag, idx) => (
+                      <span key={idx} className="hashtag">#{tag}</span>
+                    ))}
+                  </div>
+
+                  {/* Disclaimer IA */}
+                  <p className="ai-disclaimer">La IA puede cometer errores, siempre revisa la información.</p>
+
+                  {/* Selector de formato */}
+                  <div className="ai-format-selector">
+                    <span>Formato de salida:</span>
+                    <div className="format-buttons">
+                      <button
+                        className={outputFormat === 'markdown' ? 'active' : ''}
+                        onClick={() => setOutputFormat('markdown')}
+                        title="Markdown"
+                      >
+                        <FiHash size={16} /> MD
+                      </button>
+                      <button
+                        className={outputFormat === 'html' ? 'active' : ''}
+                        onClick={() => setOutputFormat('html')}
+                        title="HTML"
+                      >
+                        <FiCode size={16} /> HTML
+                      </button>
+                      <button
+                        className={outputFormat === 'text' ? 'active' : ''}
+                        onClick={() => setOutputFormat('text')}
+                        title="Texto plano"
+                      >
+                        <FiFileText size={16} /> TXT
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Preview del formato */}
+                  <div className="ai-preview">
+                    <pre>{getFormattedOutput()}</pre>
+                  </div>
+
+                  {/* Botón copiar */}
+                  <button
+                    className={`ai-copy-btn ${copiedFormat ? 'copied' : ''}`}
+                    onClick={copyFormattedOutput}
+                  >
+                    {copiedFormat ? <FiCheck size={18} /> : <FiCopy size={18} />}
+                    {copiedFormat ? 'Copiado!' : `Copiar ${outputFormat.toUpperCase()}`}
+                  </button>
+                </>
+              ) : null}
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
     </div>
   )
 }
