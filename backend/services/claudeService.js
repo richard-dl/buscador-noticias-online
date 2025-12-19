@@ -314,12 +314,17 @@ IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON válido, sin texto adicional
   try {
     const response = await client.messages.create({
       model: 'claude-3-haiku-20240307',
-      max_tokens: 1000,
+      max_tokens: 1500,
       messages: [{ role: 'user', content: prompt }]
     });
 
     const text = response.content[0].text.trim();
     console.log(`[Claude] Respuesta (${text.length} chars), stop: ${response.stop_reason}`);
+
+    // Detectar si la respuesta fue truncada
+    if (response.stop_reason === 'max_tokens') {
+      console.warn('[Claude] ADVERTENCIA: Respuesta truncada por límite de tokens');
+    }
 
     const jsonMatch = text.match(/\{[\s\S]*\}/);
 
