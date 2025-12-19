@@ -302,9 +302,17 @@ const ZonaVip = () => {
     setLoadingAI(true)
     setAiSummary(null)
 
+    // Si no hay título, extraer las primeras palabras del contenido
+    let title = item.titulo
+    if (!title && item.contenido) {
+      // Buscar la primera línea o los primeros 100 caracteres
+      const firstLine = item.contenido.split('\n')[0].trim()
+      title = firstLine.length > 100 ? firstLine.substring(0, 100) + '...' : firstLine
+    }
+
     try {
       const response = await newsApi.getAISummary({
-        title: item.titulo || '',
+        title: title || 'Contenido VIP',
         description: item.contenido,
         source: item.fuente || 'Zona VIP',
         link: ''
