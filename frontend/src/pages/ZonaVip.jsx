@@ -76,7 +76,7 @@ const ZonaVip = () => {
   const loadVipContent = async () => {
     try {
       setLoadingContent(true)
-      const response = await vipApi.getContent(50)
+      const response = await vipApi.getContent(150)
       setContent(response.data || [])
     } catch (error) {
       console.error('Error cargando contenido VIP:', error)

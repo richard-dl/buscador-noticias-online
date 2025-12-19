@@ -134,7 +134,7 @@ export const geoApi = {
 // ============ VIP ============
 
 export const vipApi = {
-  getContent: (limit = 50) => api.get(`/vip/content?limit=${limit}`),
+  getContent: (limit = 150) => api.get(`/vip/content?limit=${limit}`),
   getStatus: () => api.get('/vip/status'),
   deleteContent: (id) => api.delete(`/vip/content/${id}`),
   upgradeUser: (uid, role, vipExpiresAt) => api.post(`/vip/upgrade/${uid}`, { role, vipExpiresAt }),
