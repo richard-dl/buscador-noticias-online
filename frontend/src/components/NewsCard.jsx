@@ -31,6 +31,7 @@ const NewsCard = ({ news, isSaved = false, onDelete = null, savedNewsId = null }
   const [imageError, setImageError] = useState(false)
   const [useProxy, setUseProxy] = useState(false) // Usar proxy si falla la carga directa
   const [saving, setSaving] = useState(false)
+  const [saved, setSaved] = useState(false)
   const [extractedImage, setExtractedImage] = useState(null)
   const [loadingImage, setLoadingImage] = useState(false)
   const [retryCount, setRetryCount] = useState(0) // Para forzar re-extracción
@@ -175,7 +176,7 @@ const NewsCard = ({ news, isSaved = false, onDelete = null, savedNewsId = null }
   }
 
   const handleSaveNews = async () => {
-    if (saving) return
+    if (saving || saved) return
 
     try {
       setSaving(true)
@@ -192,6 +193,7 @@ const NewsCard = ({ news, isSaved = false, onDelete = null, savedNewsId = null }
         formattedText: news.formattedText || generateFormattedText(),
         shortUrl: news.shortUrl || ''
       })
+      setSaved(true)
       toast.success('Noticia guardada')
     } catch (err) {
       toast.error(err.message || 'Error al guardar noticia')
@@ -393,13 +395,13 @@ ${hashtagsStr}`
           </button>
         ) : (
           <button
-            className={`btn-save ${saving ? 'saving' : ''}`}
+            className={`btn-save ${saving ? 'saving' : ''} ${saved ? 'saved' : ''}`}
             onClick={handleSaveNews}
-            disabled={saving}
-            title="Guardar noticia"
+            disabled={saving || saved}
+            title={saved ? 'Noticia guardada' : 'Guardar noticia'}
           >
-            <FiBookmark size={18} />
-            <span>{saving ? 'Guardando...' : 'Guardar'}</span>
+            <FiBookmark size={18} style={saved ? { fill: 'currentColor' } : {}} />
+            <span>{saving ? 'Guardando...' : saved ? 'Guardado' : 'Guardar'}</span>
           </button>
         )}
 
