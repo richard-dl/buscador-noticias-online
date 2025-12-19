@@ -268,6 +268,11 @@ const processNewsWithAI = async (newsItem, retryCount = 0) => {
   const cleanDesc = cleanText(truncatedDesc);
   const cleanSource = cleanText(source);
 
+  // Log para debugging
+  if (retryCount === 0) {
+    console.log(`[Claude] Procesando: título=${cleanTitle?.substring(0, 50)}..., desc=${cleanDesc?.length} chars`);
+  }
+
   const prompt = `Eres un redactor periodístico. Reescribe esta noticia con formato profesional.
 
 INSTRUCCIONES:
@@ -310,6 +315,8 @@ IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON válido, sin texto adicional
     });
 
     const text = response.content[0].text.trim();
+    console.log(`[Claude] Respuesta (${text.length} chars), stop: ${response.stop_reason}`);
+
     const jsonMatch = text.match(/\{[\s\S]*\}/);
 
     if (jsonMatch) {
@@ -368,8 +375,22 @@ IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON válido, sin texto adicional
       code: error.code,
       type: error.type,
       titleLength: cleanTitle?.length,
-      descLength: cleanDesc?.length
+      descLength: cleanDesc?.length,
+      errorType: error.constructor.name
     });
+
+    // Si Claude rechazó el contenido (content policy), devolver resultado genérico
+    if (error.status === 400 || error.message?.includes('content') || error.message?.includes('policy')) {
+      console.log('Contenido posiblemente rechazado por políticas, generando respuesta básica');
+      return {
+        category: 'policiales',
+        confidence: 0.5,
+        headline: cleanTitle || 'Noticia policial',
+        lead: cleanDesc?.substring(0, 200) || '',
+        body: cleanDesc || '',
+        hashtags: ['noticias', 'actualidad']
+      };
+    }
 
     // Reintentar en caso de error de API (rate limit, timeout, etc.)
     if (retryCount < MAX_RETRIES && (error.status === 429 || error.status === 500 || error.status === 503)) {
