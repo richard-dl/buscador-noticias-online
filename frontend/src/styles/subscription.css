@@ -1,0 +1,365 @@
+/* ============================================
+   SUBSCRIPTION PAGE STYLES
+   ============================================ */
+
+.subscription-page {
+  min-height: 100vh;
+  background-color: var(--color-bg);
+}
+
+.subscription-main {
+  padding: var(--spacing-8) var(--spacing-4);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Header */
+.subscription-header {
+  text-align: center;
+  margin-bottom: var(--spacing-8);
+}
+
+.subscription-header h1 {
+  font-size: var(--font-size-3xl);
+  color: var(--color-text);
+  margin-bottom: var(--spacing-2);
+}
+
+.subscription-subtitle {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-lg);
+}
+
+/* Current Status Card */
+.current-status-card {
+  background: linear-gradient(135deg, var(--color-bg-tertiary), var(--color-bg-secondary));
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-6);
+  margin-bottom: var(--spacing-8);
+}
+
+.status-info h3 {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--spacing-3);
+}
+
+.status-details {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  flex-wrap: wrap;
+}
+
+.days-remaining,
+.lifetime-badge,
+.admin-badge {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  color: var(--color-text-light);
+  font-size: var(--font-size-sm);
+}
+
+.vip-access-note {
+  margin-top: var(--spacing-3);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  color: var(--color-accent);
+  font-size: var(--font-size-sm);
+}
+
+/* Badges */
+.badge-lg {
+  padding: var(--spacing-2) var(--spacing-4);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+}
+
+.badge-trial {
+  background: rgba(255, 170, 0, 0.2);
+  color: #ffaa00;
+}
+
+.badge-suscriptor {
+  background: rgba(64, 151, 154, 0.2);
+  color: var(--color-teal);
+}
+
+.badge-vip-trial {
+  background: rgba(193, 255, 77, 0.2);
+  color: var(--color-accent);
+}
+
+.badge-vip {
+  background: linear-gradient(135deg, rgba(193, 255, 77, 0.3), rgba(64, 151, 154, 0.3));
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+}
+
+.badge-admin {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(255, 170, 0, 0.3));
+  color: #ffd700;
+}
+
+/* Plans Grid */
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--spacing-6);
+  margin-bottom: var(--spacing-10);
+}
+
+/* Plan Card */
+.plan-card {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-6);
+  position: relative;
+  transition: all var(--transition-base);
+  display: flex;
+  flex-direction: column;
+}
+
+.plan-card:hover {
+  border-color: var(--color-border-dark);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+}
+
+.plan-card.current-plan {
+  border-color: var(--color-teal);
+  box-shadow: 0 0 20px rgba(64, 151, 154, 0.2);
+}
+
+.plan-card.plan-featured {
+  border-color: var(--color-teal);
+  background: linear-gradient(135deg, var(--color-bg-secondary), rgba(64, 151, 154, 0.1));
+}
+
+.plan-card.plan-premium {
+  border-color: var(--color-accent);
+  background: linear-gradient(135deg, var(--color-bg-secondary), rgba(193, 255, 77, 0.05));
+}
+
+.plan-badge {
+  position: absolute;
+  top: -12px;
+  right: var(--spacing-4);
+  background: var(--color-teal);
+  color: var(--color-primary);
+  padding: var(--spacing-1) var(--spacing-3);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.plan-badge.premium {
+  background: linear-gradient(135deg, var(--color-accent), #a8e63e);
+  color: var(--color-primary);
+}
+
+/* Plan Header */
+.plan-header {
+  text-align: center;
+  padding-bottom: var(--spacing-4);
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: var(--spacing-4);
+}
+
+.plan-header h2 {
+  color: var(--color-text);
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--spacing-3);
+}
+
+.plan-price {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.plan-price .price {
+  font-size: var(--font-size-4xl);
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.plan-price .period {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+/* Plan Features */
+.plan-features {
+  list-style: none;
+  flex: 1;
+  margin-bottom: var(--spacing-6);
+}
+
+.plan-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-2);
+  padding: var(--spacing-2) 0;
+  color: var(--color-text-light);
+  font-size: var(--font-size-sm);
+}
+
+.plan-features .check {
+  color: var(--color-success);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.plan-features .x {
+  color: var(--color-danger);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.plan-features .limitation {
+  color: var(--color-text-muted);
+}
+
+/* Plan Action */
+.plan-action {
+  text-align: center;
+}
+
+.plan-action .current-label {
+  display: inline-block;
+  padding: var(--spacing-2) var(--spacing-4);
+  background: rgba(64, 151, 154, 0.2);
+  color: var(--color-teal);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+}
+
+.plan-action .not-available {
+  display: inline-block;
+  padding: var(--spacing-2) var(--spacing-4);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.plan-action .admin-note {
+  display: inline-block;
+  padding: var(--spacing-2) var(--spacing-4);
+  background: rgba(255, 215, 0, 0.1);
+  color: #ffd700;
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-sm);
+}
+
+/* Buttons */
+.btn-block {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+}
+
+.btn-vip {
+  background: linear-gradient(135deg, var(--color-accent), #a8e63e);
+  color: var(--color-primary);
+  border: none;
+  padding: var(--spacing-3) var(--spacing-6);
+  border-radius: var(--radius-lg);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.btn-vip:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(193, 255, 77, 0.3);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-light);
+  padding: var(--spacing-2) var(--spacing-4);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.btn-outline:hover {
+  border-color: var(--color-teal);
+  color: var(--color-teal);
+}
+
+.mt-2 {
+  margin-top: var(--spacing-2);
+}
+
+/* FAQ Section */
+.subscription-info {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-8);
+}
+
+.subscription-info h3 {
+  color: var(--color-text);
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--spacing-6);
+  text-align: center;
+}
+
+.faq-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-6);
+}
+
+.faq-item {
+  padding: var(--spacing-4);
+  background: var(--color-bg-tertiary);
+  border-radius: var(--radius-lg);
+}
+
+.faq-item h4 {
+  color: var(--color-text);
+  font-size: var(--font-size-base);
+  margin-bottom: var(--spacing-2);
+}
+
+.faq-item p {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  line-height: 1.6;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .subscription-main {
+    padding: var(--spacing-4);
+  }
+
+  .subscription-header h1 {
+    font-size: var(--font-size-2xl);
+  }
+
+  .plans-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .status-details {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

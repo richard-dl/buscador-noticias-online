@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { FiHome, FiFileText, FiUser, FiLogOut, FiMenu, FiX, FiStar } from 'react-icons/fi'
+import { FiHome, FiFileText, FiUser, FiLogOut, FiMenu, FiX, FiStar, FiCreditCard } from 'react-icons/fi'
 import { useState } from 'react'
 
 const Header = () => {
@@ -13,6 +13,7 @@ const Header = () => {
     { path: '/dashboard', label: 'Inicio', icon: FiHome },
     { path: '/generator', label: 'Generador', icon: FiFileText },
     { path: '/zona-vip', label: 'Zona VIP', icon: FiStar, isVip: true },
+    { path: '/subscription', label: 'Planes', icon: FiCreditCard },
     { path: '/profile', label: 'Perfil', icon: FiUser }
   ]
 

@@ -175,6 +175,9 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  // Verificar si el usuario tiene acceso VIP (vip_trial, vip, admin)
+  const hasVipAccess = ['vip_trial', 'vip', 'admin'].includes(profile?.role)
+
   const value = {
     user,
     profile,
@@ -182,6 +185,7 @@ export const AuthProvider = ({ children }) => {
     isAuthenticated: !!user,
     isExpired: profile?.subscription?.status === 'expired',
     daysRemaining: profile?.subscription?.daysRemaining || 0,
+    hasVipAccess,
     register,
     login,
     loginGoogle,

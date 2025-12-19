@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { authenticateAndRequireSubscription } = require('../middleware/authMiddleware');
+const { authenticateAndRequireSubscription, authenticateAndRequireVip } = require('../middleware/authMiddleware');
 const { getNewsFromFeeds, searchNews, getAvailableFeeds, getCategories } = require('../services/rssService');
 const { searchGoogleNews, searchWithFilters, searchByProvincia, searchByTematica, extractRealUrl, classifyNewsCategory } = require('../services/googleNewsService');
 const { findImageByTitle: findImageByTitleBing } = require('../services/bingNewsService');
@@ -1083,8 +1083,9 @@ router.get('/proxy-image', async (req, res) => {
  * POST /api/news/ai-summary
  * Generar resumen IA de una noticia para republicación
  * Devuelve: resumen, puntos clave, categoría y texto formateado listo para copiar
+ * REQUIERE: Acceso VIP (vip_trial, vip, admin)
  */
-router.post('/ai-summary', authenticateAndRequireSubscription, async (req, res) => {
+router.post('/ai-summary', authenticateAndRequireVip, async (req, res) => {
   try {
     const { title, description, source, link } = req.body;
 

@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
-import { FiCopy, FiCheck, FiExternalLink, FiImage, FiBookmark, FiTrash2, FiLoader, FiZap, FiX, FiCode, FiFileText, FiHash } from 'react-icons/fi'
+import { FiCopy, FiCheck, FiExternalLink, FiImage, FiBookmark, FiTrash2, FiLoader, FiZap, FiX, FiCode, FiFileText, FiHash, FiLock } from 'react-icons/fi'
 import { toast } from 'react-toastify'
 import { userApi, newsApi } from '../services/api'
+import { useAuth } from '../context/AuthContext'
 
 // Limpiar entidades HTML del texto
 const cleanHtmlEntities = (text) => {
@@ -27,6 +28,7 @@ const CACHE_TTL_POSITIVE = 30 * 60 * 1000 // 30 minutos para imágenes encontrad
 const CACHE_TTL_NEGATIVE = 2 * 60 * 1000  // 2 minutos para cache negativo (permite reintentar pronto)
 
 const NewsCard = ({ news, isSaved = false, onDelete = null, savedNewsId = null }) => {
+  const { hasVipAccess } = useAuth()
   const [copied, setCopied] = useState(false)
   const [imageError, setImageError] = useState(false)
   const [useProxy, setUseProxy] = useState(false) // Usar proxy si falla la carga directa
@@ -405,7 +407,7 @@ ${hashtagsStr}`
           </button>
         )}
 
-        {!isVipContent && !isSaved && (
+        {!isVipContent && !isSaved && hasVipAccess && (
           <button
             className="btn-ai"
             onClick={handleGenerateAISummary}
@@ -413,6 +415,17 @@ ${hashtagsStr}`
             title="Generar resumen con IA"
           >
             <FiZap size={18} />
+            <span>IA</span>
+          </button>
+        )}
+
+        {!isVipContent && !isSaved && !hasVipAccess && (
+          <button
+            className="btn-ai btn-ai-locked"
+            onClick={() => toast.info('Actualiza a VIP para usar herramientas de IA')}
+            title="Requiere suscripción VIP"
+          >
+            <FiLock size={16} />
             <span>IA</span>
           </button>
         )}

@@ -39,18 +39,37 @@ const auth = admin.auth();
 
 /**
  * Roles de usuario:
- * - 'user': usuario básico (trial de 30 días)
- * - 'suscriptor': suscripción vitalicia (después de trial)
- * - 'vip': suscriptor con acceso a Zona VIP (renovación anual)
- * - 'admin': administrador
+ * - 'trial': usuario en período de prueba (30 días gratis, sin IA)
+ * - 'suscriptor': suscripción vitalicia pagada ($39 USD, sin IA)
+ * - 'vip_trial': suscriptor probando zona VIP (30 días gratis con IA)
+ * - 'vip': suscriptor VIP anual pagado ($90 USD/año, con IA)
+ * - 'admin': administrador (acceso total)
+ *
+ * Flujo de roles:
+ * trial (30 días) → suscriptor ($39) → vip_trial (30 días) → vip ($90/año)
+ *                                                              ↓ (no renueva)
+ *                                                          suscriptor
  */
+
+/**
+ * Constantes de suscripción
+ */
+const SUBSCRIPTION_CONFIG = {
+  TRIAL_DAYS: 30,
+  VIP_TRIAL_DAYS: 30,
+  VIP_ANNUAL_DAYS: 365,
+  PRICES: {
+    SUSCRIPTOR: 39,  // USD, pago único vitalicio
+    VIP_ANNUAL: 90   // USD, pago anual
+  }
+};
 
 /**
  * Crear usuario en Firestore con suscripción trial de 30 días
  */
 const createUserInFirestore = async (uid, userData) => {
   const now = new Date();
-  const expiresAt = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000); // 30 días
+  const trialExpiresAt = new Date(now.getTime() + SUBSCRIPTION_CONFIG.TRIAL_DAYS * 24 * 60 * 60 * 1000);
 
   const userDoc = {
     uid,
@@ -58,12 +77,24 @@ const createUserInFirestore = async (uid, userData) => {
     displayName: userData.displayName || '',
     authProvider: userData.authProvider || 'email',
     createdAt: admin.firestore.FieldValue.serverTimestamp(),
-    expiresAt: admin.firestore.Timestamp.fromDate(expiresAt),
-    status: 'trial', // trial, active, expired
-    role: 'user', // user, suscriptor, vip, admin
-    vipExpiresAt: null, // Fecha de expiración VIP (solo para rol vip)
     lastLogin: admin.firestore.FieldValue.serverTimestamp(),
-    searchProfilesCount: 0
+    searchProfilesCount: 0,
+
+    // Sistema de roles y suscripciones
+    role: 'trial', // trial, suscriptor, vip_trial, vip, admin
+
+    // Fechas de expiración por tipo
+    trialExpiresAt: admin.firestore.Timestamp.fromDate(trialExpiresAt),
+    vipTrialExpiresAt: null,  // Se activa cuando pasa a vip_trial
+    vipExpiresAt: null,       // Se activa cuando paga VIP anual
+
+    // Historial de pagos
+    subscriptionPaidAt: null, // Fecha de pago vitalicio ($39)
+    vipPaidAt: null,          // Fecha de último pago VIP ($90)
+
+    // Campo legacy para compatibilidad (se eliminará después)
+    expiresAt: admin.firestore.Timestamp.fromDate(trialExpiresAt),
+    status: 'trial'
   };
 
   await db.collection('users').doc(uid).set(userDoc);
@@ -327,20 +358,24 @@ const verifyIdToken = async (idToken) => {
 };
 
 /**
- * Actualizar rol de usuario
+ * Actualizar rol de usuario (uso interno/admin)
  */
-const updateUserRole = async (uid, newRole, vipExpiresAt = null) => {
-  const validRoles = ['user', 'suscriptor', 'vip', 'admin'];
+const updateUserRole = async (uid, newRole, options = {}) => {
+  const validRoles = ['trial', 'suscriptor', 'vip_trial', 'vip', 'admin'];
   if (!validRoles.includes(newRole)) {
     throw new Error('Rol inválido');
   }
 
   const updateData = { role: newRole };
+  const now = new Date();
 
-  if (newRole === 'vip' && vipExpiresAt) {
-    updateData.vipExpiresAt = admin.firestore.Timestamp.fromDate(new Date(vipExpiresAt));
-  } else if (newRole !== 'vip') {
-    updateData.vipExpiresAt = null;
+  // Configurar fechas según el rol
+  if (newRole === 'vip' && options.vipExpiresAt) {
+    updateData.vipExpiresAt = admin.firestore.Timestamp.fromDate(new Date(options.vipExpiresAt));
+  }
+
+  if (newRole === 'vip_trial' && options.vipTrialExpiresAt) {
+    updateData.vipTrialExpiresAt = admin.firestore.Timestamp.fromDate(new Date(options.vipTrialExpiresAt));
   }
 
   await db.collection('users').doc(uid).update(updateData);
@@ -348,7 +383,112 @@ const updateUserRole = async (uid, newRole, vipExpiresAt = null) => {
 };
 
 /**
- * Verificar si el usuario tiene acceso VIP
+ * Activar suscripción vitalicia ($39 USD)
+ * Transición: trial → suscriptor
+ */
+const activateSuscriptor = async (uid, paymentData = {}) => {
+  const user = await getUserFromFirestore(uid);
+  if (!user) {
+    throw new Error('Usuario no encontrado');
+  }
+
+  // Solo trial puede activar suscriptor
+  if (user.role !== 'trial' && user.role !== 'admin') {
+    throw new Error('Solo usuarios en trial pueden activar suscripción');
+  }
+
+  const now = new Date();
+  const updateData = {
+    role: 'suscriptor',
+    subscriptionPaidAt: admin.firestore.Timestamp.fromDate(now),
+    status: 'active', // Campo legacy
+    // Guardar referencia de pago si existe
+    ...(paymentData.paymentId && { lastPaymentId: paymentData.paymentId }),
+    ...(paymentData.paymentMethod && { paymentMethod: paymentData.paymentMethod })
+  };
+
+  await db.collection('users').doc(uid).update(updateData);
+  return getUserFromFirestore(uid);
+};
+
+/**
+ * Activar período de prueba VIP (30 días gratis)
+ * Transición: suscriptor → vip_trial
+ */
+const activateVipTrial = async (uid) => {
+  const user = await getUserFromFirestore(uid);
+  if (!user) {
+    throw new Error('Usuario no encontrado');
+  }
+
+  // Solo suscriptor puede activar VIP trial
+  if (user.role !== 'suscriptor') {
+    throw new Error('Solo suscriptores pueden activar prueba VIP');
+  }
+
+  // Verificar que no haya usado VIP trial antes
+  if (user.vipTrialExpiresAt) {
+    throw new Error('Ya utilizaste tu período de prueba VIP');
+  }
+
+  const now = new Date();
+  const vipTrialExpiresAt = new Date(now.getTime() + SUBSCRIPTION_CONFIG.VIP_TRIAL_DAYS * 24 * 60 * 60 * 1000);
+
+  const updateData = {
+    role: 'vip_trial',
+    vipTrialExpiresAt: admin.firestore.Timestamp.fromDate(vipTrialExpiresAt)
+  };
+
+  await db.collection('users').doc(uid).update(updateData);
+  return getUserFromFirestore(uid);
+};
+
+/**
+ * Activar suscripción VIP anual ($90 USD)
+ * Transición: vip_trial → vip (o renovación vip → vip)
+ */
+const activateVipAnnual = async (uid, paymentData = {}) => {
+  const user = await getUserFromFirestore(uid);
+  if (!user) {
+    throw new Error('Usuario no encontrado');
+  }
+
+  // Solo vip_trial, vip (renovación) o suscriptor pueden activar VIP anual
+  const allowedRoles = ['vip_trial', 'vip', 'suscriptor'];
+  if (!allowedRoles.includes(user.role) && user.role !== 'admin') {
+    throw new Error('No puedes activar VIP anual desde tu rol actual');
+  }
+
+  const now = new Date();
+  let vipExpiresAt;
+
+  // Si ya es VIP y está renovando, extender desde la fecha actual de expiración
+  if (user.role === 'vip' && user.vipExpiresAt) {
+    const currentExpiry = user.vipExpiresAt.toDate();
+    // Si aún no expiró, extender desde esa fecha
+    if (currentExpiry > now) {
+      vipExpiresAt = new Date(currentExpiry.getTime() + SUBSCRIPTION_CONFIG.VIP_ANNUAL_DAYS * 24 * 60 * 60 * 1000);
+    } else {
+      vipExpiresAt = new Date(now.getTime() + SUBSCRIPTION_CONFIG.VIP_ANNUAL_DAYS * 24 * 60 * 60 * 1000);
+    }
+  } else {
+    vipExpiresAt = new Date(now.getTime() + SUBSCRIPTION_CONFIG.VIP_ANNUAL_DAYS * 24 * 60 * 60 * 1000);
+  }
+
+  const updateData = {
+    role: 'vip',
+    vipExpiresAt: admin.firestore.Timestamp.fromDate(vipExpiresAt),
+    vipPaidAt: admin.firestore.Timestamp.fromDate(now),
+    ...(paymentData.paymentId && { lastVipPaymentId: paymentData.paymentId }),
+    ...(paymentData.paymentMethod && { vipPaymentMethod: paymentData.paymentMethod })
+  };
+
+  await db.collection('users').doc(uid).update(updateData);
+  return getUserFromFirestore(uid);
+};
+
+/**
+ * Verificar si el usuario tiene acceso VIP (IA)
  */
 const checkVipAccess = async (uid) => {
   const user = await getUserFromFirestore(uid);
@@ -361,29 +501,176 @@ const checkVipAccess = async (uid) => {
     return { hasAccess: true, isAdmin: true };
   }
 
-  // Solo rol vip tiene acceso
-  if (user.role !== 'vip') {
-    return { hasAccess: false, reason: 'Requiere suscripción VIP' };
-  }
-
-  // Verificar que la suscripción VIP no haya expirado
   const now = new Date();
-  const vipExpiresAt = user.vipExpiresAt?.toDate();
 
-  if (vipExpiresAt && now > vipExpiresAt) {
-    // Degradar a suscriptor si expiró VIP
-    await db.collection('users').doc(uid).update({ role: 'suscriptor', vipExpiresAt: null });
-    return { hasAccess: false, reason: 'Suscripción VIP expirada', expiredAt: vipExpiresAt };
+  // VIP Trial - verificar expiración
+  if (user.role === 'vip_trial') {
+    const vipTrialExpiresAt = user.vipTrialExpiresAt?.toDate();
+
+    if (vipTrialExpiresAt && now > vipTrialExpiresAt) {
+      // Degradar a suscriptor si expiró VIP trial
+      await db.collection('users').doc(uid).update({ role: 'suscriptor' });
+      return { hasAccess: false, reason: 'Período de prueba VIP expirado', expiredAt: vipTrialExpiresAt };
+    }
+
+    const daysRemaining = vipTrialExpiresAt ? Math.ceil((vipTrialExpiresAt - now) / (1000 * 60 * 60 * 24)) : null;
+
+    return {
+      hasAccess: true,
+      role: user.role,
+      isTrial: true,
+      expiresAt: vipTrialExpiresAt,
+      daysRemaining: daysRemaining
+    };
   }
 
-  const daysRemaining = vipExpiresAt ? Math.ceil((vipExpiresAt - now) / (1000 * 60 * 60 * 24)) : null;
+  // VIP Anual - verificar expiración
+  if (user.role === 'vip') {
+    const vipExpiresAt = user.vipExpiresAt?.toDate();
 
-  return {
-    hasAccess: true,
-    role: user.role,
-    vipExpiresAt: vipExpiresAt,
-    daysRemaining: daysRemaining
-  };
+    if (vipExpiresAt && now > vipExpiresAt) {
+      // Degradar a suscriptor si expiró VIP anual
+      await db.collection('users').doc(uid).update({ role: 'suscriptor' });
+      return { hasAccess: false, reason: 'Suscripción VIP expirada', expiredAt: vipExpiresAt };
+    }
+
+    const daysRemaining = vipExpiresAt ? Math.ceil((vipExpiresAt - now) / (1000 * 60 * 60 * 24)) : null;
+
+    return {
+      hasAccess: true,
+      role: user.role,
+      isTrial: false,
+      expiresAt: vipExpiresAt,
+      daysRemaining: daysRemaining
+    };
+  }
+
+  // Otros roles no tienen acceso VIP
+  return { hasAccess: false, reason: 'Requiere suscripción VIP' };
+};
+
+/**
+ * Verificar estado completo de suscripción del usuario
+ */
+const getSubscriptionStatus = async (uid) => {
+  const user = await getUserFromFirestore(uid);
+  if (!user) {
+    return { valid: false, reason: 'Usuario no encontrado' };
+  }
+
+  const now = new Date();
+  const role = user.role;
+
+  // Admin
+  if (role === 'admin') {
+    return {
+      valid: true,
+      role: 'admin',
+      hasVipAccess: true,
+      isAdmin: true
+    };
+  }
+
+  // Trial
+  if (role === 'trial') {
+    const trialExpiresAt = user.trialExpiresAt?.toDate();
+
+    if (trialExpiresAt && now > trialExpiresAt) {
+      return {
+        valid: false,
+        role: 'trial',
+        reason: 'Período de prueba expirado',
+        expiredAt: trialExpiresAt,
+        hasVipAccess: false,
+        canUpgradeTo: ['suscriptor']
+      };
+    }
+
+    const daysRemaining = trialExpiresAt ? Math.ceil((trialExpiresAt - now) / (1000 * 60 * 60 * 24)) : 0;
+
+    return {
+      valid: true,
+      role: 'trial',
+      expiresAt: trialExpiresAt,
+      daysRemaining: daysRemaining,
+      hasVipAccess: false,
+      canUpgradeTo: ['suscriptor']
+    };
+  }
+
+  // Suscriptor (vitalicio)
+  if (role === 'suscriptor') {
+    const canActivateVipTrial = !user.vipTrialExpiresAt; // Solo si nunca usó VIP trial
+
+    return {
+      valid: true,
+      role: 'suscriptor',
+      isLifetime: true,
+      hasVipAccess: false,
+      canActivateVipTrial: canActivateVipTrial,
+      canUpgradeTo: canActivateVipTrial ? ['vip_trial', 'vip'] : ['vip']
+    };
+  }
+
+  // VIP Trial
+  if (role === 'vip_trial') {
+    const vipTrialExpiresAt = user.vipTrialExpiresAt?.toDate();
+
+    if (vipTrialExpiresAt && now > vipTrialExpiresAt) {
+      // Auto-degradar
+      await db.collection('users').doc(uid).update({ role: 'suscriptor' });
+      return {
+        valid: true,
+        role: 'suscriptor',
+        isLifetime: true,
+        hasVipAccess: false,
+        vipTrialExpired: true,
+        canUpgradeTo: ['vip']
+      };
+    }
+
+    const daysRemaining = vipTrialExpiresAt ? Math.ceil((vipTrialExpiresAt - now) / (1000 * 60 * 60 * 24)) : 0;
+
+    return {
+      valid: true,
+      role: 'vip_trial',
+      expiresAt: vipTrialExpiresAt,
+      daysRemaining: daysRemaining,
+      hasVipAccess: true,
+      canUpgradeTo: ['vip']
+    };
+  }
+
+  // VIP Anual
+  if (role === 'vip') {
+    const vipExpiresAt = user.vipExpiresAt?.toDate();
+
+    if (vipExpiresAt && now > vipExpiresAt) {
+      // Auto-degradar
+      await db.collection('users').doc(uid).update({ role: 'suscriptor' });
+      return {
+        valid: true,
+        role: 'suscriptor',
+        isLifetime: true,
+        hasVipAccess: false,
+        vipExpired: true,
+        canUpgradeTo: ['vip']
+      };
+    }
+
+    const daysRemaining = vipExpiresAt ? Math.ceil((vipExpiresAt - now) / (1000 * 60 * 60 * 24)) : 0;
+
+    return {
+      valid: true,
+      role: 'vip',
+      expiresAt: vipExpiresAt,
+      daysRemaining: daysRemaining,
+      hasVipAccess: true,
+      canRenew: true
+    };
+  }
+
+  return { valid: false, reason: 'Rol desconocido' };
 };
 
 /**
@@ -524,5 +811,11 @@ module.exports = {
   saveVipContent,
   getVipContent,
   deleteVipContent,
-  getVipContentByTelegramMessageId
+  getVipContentByTelegramMessageId,
+  // Nuevas funciones de suscripción
+  SUBSCRIPTION_CONFIG,
+  activateSuscriptor,
+  activateVipTrial,
+  activateVipAnnual,
+  getSubscriptionStatus
 };
