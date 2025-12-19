@@ -457,6 +457,9 @@ ${hashtagsStr}`
                     ))}
                   </div>
 
+                  {/* Disclaimer IA */}
+                  <p className="ai-disclaimer">La IA puede cometer errores, siempre revisa la información.</p>
+
                   {/* Selector de formato */}
                   <div className="ai-format-selector">
                     <span>Formato de salida:</span>
