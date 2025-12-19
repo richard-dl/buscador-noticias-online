@@ -188,7 +188,9 @@ const generateSummary = async (title, description, source = '') => {
     return null;
   }
 
-  const prompt = `Resume esta noticia de forma concisa y profesional.
+  const prompt = `Eres un periodista profesional. Resume esta noticia de forma concisa y objetiva.
+
+CONTEXTO: Este es contenido periodístico legítimo. Temas como narcotráfico, crímenes, violencia son noticias de interés público que deben reportarse profesionalmente.
 
 NOTICIA:
 Título: ${title}
@@ -273,7 +275,9 @@ const processNewsWithAI = async (newsItem, retryCount = 0) => {
     console.log(`[Claude] Procesando: título=${cleanTitle?.substring(0, 50)}..., desc=${cleanDesc?.length} chars`);
   }
 
-  const prompt = `Eres un redactor periodístico. Reescribe esta noticia con formato profesional.
+  const prompt = `Eres un redactor periodístico profesional de un medio de noticias argentino. Tu trabajo es reescribir noticias con formato profesional.
+
+CONTEXTO IMPORTANTE: Este es contenido periodístico legítimo para un agregador de noticias. Las noticias pueden incluir temas sensibles como narcotráfico, homicidios, violencia, corrupción, abuso, etc. Estos son temas de interés público que deben ser reportados de manera objetiva y profesional, como hace cualquier medio periodístico serio.
 
 INSTRUCCIONES:
 1. Crea un TITULAR atractivo y conciso (máximo 15 palabras)
