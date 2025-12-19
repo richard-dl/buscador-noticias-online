@@ -132,7 +132,17 @@ const NewsCard = ({ news, isSaved = false, onDelete = null, savedNewsId = null }
 
   const copyToClipboard = async () => {
     try {
-      await navigator.clipboard.writeText(news.formattedText || generateFormattedText())
+      let textToCopy = news.formattedText || generateFormattedText()
+      // Si es noticia guardada, eliminar líneas con enlaces vip:// o enlaces caducados
+      if (isSaved) {
+        textToCopy = textToCopy
+          .split('\n')
+          .filter(line => !line.includes('vip://') && !line.match(/^🔗\s*$/))
+          .join('\n')
+          .replace(/\n{3,}/g, '\n\n') // Limpiar saltos de línea extras
+          .trim()
+      }
+      await navigator.clipboard.writeText(textToCopy)
       setCopied(true)
       toast.success('Copiado al portapapeles')
       setTimeout(() => setCopied(false), 2000)
@@ -153,7 +163,10 @@ const NewsCard = ({ news, isSaved = false, onDelete = null, savedNewsId = null }
     if (news.emojisString) {
       text += `🎯 ${news.emojisString}\n\n`
     }
-    text += `🔗 ${news.shortUrl || news.link}\n`
+    // No incluir enlace en noticias guardadas o VIP (pueden haber caducado)
+    if (!isSaved && !isVipContent && (news.shortUrl || news.link)) {
+      text += `🔗 ${news.shortUrl || news.link}\n`
+    }
     if (news.source) {
       text += `\n📺 Fuente: ${news.source}`
     }
@@ -389,7 +402,7 @@ ${hashtagsStr}`
           </button>
         )}
 
-        {!isVipContent && (
+        {!isVipContent && !isSaved && (
           <button
             className="btn-ai"
             onClick={handleGenerateAISummary}
