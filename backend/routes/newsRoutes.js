@@ -1104,6 +1104,7 @@ router.post('/ai-summary', authenticateAndRequireSubscription, async (req, res) 
     }
 
     console.log(`Generando resumen IA para: ${title.substring(0, 50)}...`);
+    console.log(`Longitud título: ${title.length}, descripción: ${(description || '').length}`);
 
     const aiResult = await processNewsWithAI({
       title,
@@ -1112,9 +1113,10 @@ router.post('/ai-summary', authenticateAndRequireSubscription, async (req, res) 
     });
 
     if (!aiResult) {
+      console.error('processNewsWithAI retornó null para:', title.substring(0, 100));
       return res.status(500).json({
         success: false,
-        error: 'No se pudo generar el resumen'
+        error: 'No se pudo generar el resumen. Intenta de nuevo.'
       });
     }
 

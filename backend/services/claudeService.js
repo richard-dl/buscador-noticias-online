@@ -256,6 +256,11 @@ const processNewsWithAI = async (newsItem, retryCount = 0) => {
       .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '') // Caracteres de control
       .replace(/\u2028/g, ' ') // Line separator
       .replace(/\u2029/g, ' ') // Paragraph separator
+      .replace(/[""]/g, '"') // Comillas tipográficas a normales
+      .replace(/['']/g, "'") // Apóstrofes tipográficos
+      .replace(/[–—]/g, '-') // Guiones largos
+      .replace(/…/g, '...') // Elipsis
+      .replace(/\*/g, '') // Asteriscos (usados para formato)
       .trim();
   };
 
@@ -358,6 +363,13 @@ IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON válido, sin texto adicional
     return null;
   } catch (error) {
     console.error('Error procesando noticia con Claude:', error.message);
+    console.error('Detalles del error:', {
+      status: error.status,
+      code: error.code,
+      type: error.type,
+      titleLength: cleanTitle?.length,
+      descLength: cleanDesc?.length
+    });
 
     // Reintentar en caso de error de API (rate limit, timeout, etc.)
     if (retryCount < MAX_RETRIES && (error.status === 429 || error.status === 500 || error.status === 503)) {
