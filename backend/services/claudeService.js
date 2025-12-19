@@ -229,10 +229,12 @@ Responde SOLO con JSON:
 /**
  * Procesar noticia completa: clasificar + resumir
  * @param {Object} newsItem
+ * @param {number} retryCount - Número de reintentos (interno)
  * @returns {Promise<{category: string, confidence: number, summary: string, keyPoints: string[]}|null>}
  */
-const processNewsWithAI = async (newsItem) => {
+const processNewsWithAI = async (newsItem, retryCount = 0) => {
   const claude = initClaude();
+  const MAX_RETRIES = 2;
 
   if (!claude) {
     return null;
@@ -249,20 +251,22 @@ INSTRUCCIONES:
 4. Genera 3-5 HASHTAGS relevantes (palabras clave sin #, yo los agrego después)
 5. Escribe como periodista reportando el hecho, NO describas la noticia
 
-CATEGORÍAS: politica, economia, deportes, espectaculos, tecnologia, policiales, judiciales, salud, educacion, cultura, ciencia, medioambiente, internacional
+CATEGORÍAS: politica, economia, deportes, espectaculos, tecnologia, policiales, judiciales, salud, educacion, cultura, ciencia, medioambiente, internacional, sociedad, turismo
 
 REGLAS DE CLASIFICACIÓN:
 - SALARIOS/PARITARIAS = "economia"
 - CRÍMENES/VIOLENCIA = "policiales"
 - CAUSAS JUDICIALES = "judiciales"
 - PAÍSES EXTRANJEROS = "internacional"
+- VIAJES/VACACIONES/DESTINOS = "turismo"
+- TEMAS SOCIALES GENERALES = "sociedad"
 
 NOTICIA ORIGINAL:
 Título: ${title}
 Fuente: ${source || 'No especificada'}
 Contenido: ${description || 'Sin descripción'}
 
-Responde SOLO con JSON:
+IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON válido, sin texto adicional antes o después:
 {
   "category": "nombre_categoria",
   "confidence": 0.95,
@@ -275,7 +279,7 @@ Responde SOLO con JSON:
   try {
     const response = await client.messages.create({
       model: 'claude-3-haiku-20240307',
-      max_tokens: 800,
+      max_tokens: 1000,
       messages: [{ role: 'user', content: prompt }]
     });
 
@@ -296,7 +300,11 @@ Responde SOLO con JSON:
       });
 
       const parsed = JSON.parse(jsonStr);
-      if (CATEGORIAS_DISPONIBLES.includes(parsed.category)) {
+
+      // Lista extendida de categorías válidas
+      const validCategories = [...CATEGORIAS_DISPONIBLES, 'sociedad', 'turismo'];
+
+      if (validCategories.includes(parsed.category)) {
         return {
           category: parsed.category,
           confidence: parsed.confidence || 0.9,
@@ -305,12 +313,39 @@ Responde SOLO con JSON:
           body: (parsed.body || '').replace(/\\n/g, '\n'),
           hashtags: parsed.hashtags || []
         };
+      } else {
+        // Categoría no válida, asignar "sociedad" como fallback
+        console.warn(`Categoría "${parsed.category}" no válida, usando "sociedad"`);
+        return {
+          category: 'sociedad',
+          confidence: parsed.confidence || 0.7,
+          headline: parsed.headline || title,
+          lead: (parsed.lead || '').replace(/\\n/g, '\n'),
+          body: (parsed.body || '').replace(/\\n/g, '\n'),
+          hashtags: parsed.hashtags || []
+        };
       }
+    }
+
+    // No se encontró JSON válido, reintentar si es posible
+    console.warn('Respuesta de Claude sin JSON válido:', text.substring(0, 100));
+    if (retryCount < MAX_RETRIES) {
+      console.log(`Reintentando (${retryCount + 1}/${MAX_RETRIES})...`);
+      return processNewsWithAI(newsItem, retryCount + 1);
     }
 
     return null;
   } catch (error) {
     console.error('Error procesando noticia con Claude:', error.message);
+
+    // Reintentar en caso de error de API (rate limit, timeout, etc.)
+    if (retryCount < MAX_RETRIES && (error.status === 429 || error.status === 500 || error.status === 503)) {
+      const delay = (retryCount + 1) * 1000; // 1s, 2s, 3s
+      console.log(`Error temporal, reintentando en ${delay}ms...`);
+      await new Promise(resolve => setTimeout(resolve, delay));
+      return processNewsWithAI(newsItem, retryCount + 1);
+    }
+
     return null;
   }
 };
