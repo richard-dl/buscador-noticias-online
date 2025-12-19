@@ -332,7 +332,48 @@ IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON válido, sin texto adicional
           .replace(/\t/g, '\\t');
       });
 
-      const parsed = JSON.parse(jsonStr);
+      let parsed;
+      try {
+        parsed = JSON.parse(jsonStr);
+      } catch (parseError) {
+        console.warn('Error parseando JSON, intentando reparar:', parseError.message);
+        console.log('JSON problemático (primeros 200 chars):', jsonStr.substring(0, 200));
+
+        // Intentar extraer campos manualmente con regex
+        try {
+          const categoryMatch = jsonStr.match(/"category"\s*:\s*"([^"]+)"/);
+          const headlineMatch = jsonStr.match(/"headline"\s*:\s*"([^"]+)"/);
+          const leadMatch = jsonStr.match(/"lead"\s*:\s*"((?:[^"\\]|\\.)*)"/);
+          const bodyMatch = jsonStr.match(/"body"\s*:\s*"((?:[^"\\]|\\.)*)"/s);
+          const hashtagsMatch = jsonStr.match(/"hashtags"\s*:\s*\[(.*?)\]/s);
+
+          if (headlineMatch) {
+            const hashtags = hashtagsMatch
+              ? hashtagsMatch[1].match(/"([^"]+)"/g)?.map(h => h.replace(/"/g, '')) || []
+              : [];
+
+            parsed = {
+              category: categoryMatch ? categoryMatch[1] : 'policiales',
+              confidence: 0.7,
+              headline: headlineMatch[1],
+              lead: leadMatch ? leadMatch[1].replace(/\\n/g, '\n') : '',
+              body: bodyMatch ? bodyMatch[1].replace(/\\n/g, '\n') : cleanDesc,
+              hashtags: hashtags
+            };
+            console.log('JSON reparado exitosamente');
+          } else {
+            throw new Error('No se pudo extraer headline');
+          }
+        } catch (repairError) {
+          console.error('No se pudo reparar JSON:', repairError.message);
+          // Reintentar si es posible
+          if (retryCount < MAX_RETRIES) {
+            console.log(`Reintentando por JSON inválido (${retryCount + 1}/${MAX_RETRIES})...`);
+            return processNewsWithAI(newsItem, retryCount + 1);
+          }
+          return null;
+        }
+      }
 
       // Lista extendida de categorías válidas
       const validCategories = [...CATEGORIAS_DISPONIBLES, 'sociedad', 'turismo'];
