@@ -142,4 +142,26 @@ export const vipApi = {
   getMediaUrl: (fileId) => `${API_URL}/vip/media/${fileId}`
 }
 
+// ============ SUBSCRIPTION ============
+
+export const subscriptionApi = {
+  // Obtener planes disponibles (público)
+  getPlans: () => api.get('/subscription/plans'),
+
+  // Obtener estado de suscripción del usuario
+  getStatus: () => api.get('/subscription/status'),
+
+  // Activar suscripción vitalicia ($39)
+  activateSuscriptor: (paymentData) => api.post('/subscription/activate-suscriptor', paymentData),
+
+  // Activar período de prueba VIP (30 días gratis)
+  activateVipTrial: () => api.post('/subscription/activate-vip-trial'),
+
+  // Activar suscripción VIP anual ($90)
+  activateVip: (paymentData) => api.post('/subscription/activate-vip', paymentData),
+
+  // Renovar VIP anual
+  renewVip: (paymentData) => api.post('/subscription/renew-vip', paymentData)
+}
+
 export default api

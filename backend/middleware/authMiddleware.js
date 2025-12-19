@@ -1,4 +1,10 @@
-const { verifyIdToken, checkSubscriptionStatus, getUserFromFirestore, checkVipAccess } = require('../services/firebaseService');
+const {
+  verifyIdToken,
+  checkSubscriptionStatus,
+  getUserFromFirestore,
+  checkVipAccess,
+  getSubscriptionStatus
+} = require('../services/firebaseService');
 
 /**
  * Middleware para verificar autenticación
@@ -56,6 +62,7 @@ const authenticate = async (req, res, next) => {
 
 /**
  * Middleware para verificar suscripción activa
+ * Permite acceso a: trial (activo), suscriptor, vip_trial, vip, admin
  * Debe usarse después del middleware authenticate
  */
 const requireActiveSubscription = async (req, res, next) => {
@@ -67,26 +74,23 @@ const requireActiveSubscription = async (req, res, next) => {
       });
     }
 
-    // Si el usuario es admin, bypass la verificación de suscripción
-    if (req.user.role === 'admin') {
-      req.subscription = {
-        valid: true,
-        isAdmin: true,
-        plan: 'admin',
-        daysRemaining: 999
-      };
+    const subscription = await getSubscriptionStatus(req.user.uid);
+
+    // Admin siempre tiene acceso
+    if (subscription.isAdmin) {
+      req.subscription = subscription;
       return next();
     }
 
-    const subscription = await checkSubscriptionStatus(req.user.uid);
-
+    // Verificar que la suscripción sea válida
     if (!subscription.valid) {
       return res.status(403).json({
         success: false,
         error: 'Suscripción expirada',
         reason: subscription.reason,
         expiredAt: subscription.expiredAt,
-        code: 'SUBSCRIPTION_EXPIRED'
+        code: 'SUBSCRIPTION_EXPIRED',
+        canUpgradeTo: subscription.canUpgradeTo
       });
     }
 
@@ -150,10 +154,90 @@ const requireVipAccess = async (req, res, next) => {
  */
 const authenticateAndRequireVip = [authenticate, requireVipAccess];
 
+/**
+ * Middleware para verificar rol de administrador
+ * Debe usarse después del middleware authenticate
+ */
+const requireAdmin = async (req, res, next) => {
+  try {
+    if (!req.user || !req.user.uid) {
+      return res.status(401).json({
+        success: false,
+        error: 'Usuario no autenticado'
+      });
+    }
+
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({
+        success: false,
+        error: 'Acceso denegado. Se requiere rol de administrador.',
+        code: 'ADMIN_REQUIRED'
+      });
+    }
+
+    next();
+  } catch (error) {
+    console.error('Error verificando rol admin:', error.message);
+    return res.status(500).json({
+      success: false,
+      error: 'Error verificando permisos'
+    });
+  }
+};
+
+/**
+ * Middleware para verificar rol de suscriptor o superior
+ * Permite: suscriptor, vip_trial, vip, admin
+ * Debe usarse después del middleware authenticate
+ */
+const requireSuscriptor = async (req, res, next) => {
+  try {
+    if (!req.user || !req.user.uid) {
+      return res.status(401).json({
+        success: false,
+        error: 'Usuario no autenticado'
+      });
+    }
+
+    const allowedRoles = ['suscriptor', 'vip_trial', 'vip', 'admin'];
+
+    if (!allowedRoles.includes(req.user.role)) {
+      return res.status(403).json({
+        success: false,
+        error: 'Se requiere suscripción activa para acceder a esta función',
+        code: 'SUSCRIPTOR_REQUIRED',
+        currentRole: req.user.role
+      });
+    }
+
+    next();
+  } catch (error) {
+    console.error('Error verificando rol suscriptor:', error.message);
+    return res.status(500).json({
+      success: false,
+      error: 'Error verificando permisos'
+    });
+  }
+};
+
+/**
+ * Middleware combinado: autenticación + rol admin
+ */
+const authenticateAndRequireAdmin = [authenticate, requireAdmin];
+
+/**
+ * Middleware combinado: autenticación + rol suscriptor o superior
+ */
+const authenticateAndRequireSuscriptor = [authenticate, requireSuscriptor];
+
 module.exports = {
   authenticate,
   requireActiveSubscription,
   authenticateAndRequireSubscription,
   requireVipAccess,
-  authenticateAndRequireVip
+  authenticateAndRequireVip,
+  requireAdmin,
+  requireSuscriptor,
+  authenticateAndRequireAdmin,
+  authenticateAndRequireSuscriptor
 };

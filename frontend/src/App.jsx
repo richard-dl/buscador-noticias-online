@@ -10,6 +10,7 @@ import Generator from './pages/Generator'
 import Profile from './pages/Profile'
 import Expired from './pages/Expired'
 import ZonaVip from './pages/ZonaVip'
+import Subscription from './pages/Subscription'
 
 // Components
 import ProtectedRoute from './components/ProtectedRoute'
@@ -65,6 +66,14 @@ function App() {
         element={
           <ProtectedRoute>
             <ZonaVip />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/subscription"
+        element={
+          <ProtectedRoute>
+            <Subscription />
           </ProtectedRoute>
         }
       />
