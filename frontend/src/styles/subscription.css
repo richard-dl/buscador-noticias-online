@@ -9,8 +9,27 @@
 
 .subscription-main {
   padding: var(--spacing-8) var(--spacing-4);
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
+}
+
+/* Layout principal: 2 columnas en desktop */
+.subscription-content {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: var(--spacing-8);
+  align-items: start;
+}
+
+.subscription-left {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+}
+
+.subscription-right {
+  position: sticky;
+  top: var(--spacing-4);
 }
 
 /* Header */
@@ -108,10 +127,9 @@
 
 /* Plans Grid */
 .plans-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: var(--spacing-6);
-  margin-bottom: var(--spacing-10);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
 }
 
 /* Plan Card */
@@ -321,9 +339,9 @@
 }
 
 .faq-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--spacing-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
 }
 
 .faq-item {
@@ -345,6 +363,16 @@
 }
 
 /* Responsive */
+@media (max-width: 1024px) {
+  .subscription-content {
+    grid-template-columns: 1fr;
+  }
+
+  .subscription-right {
+    position: static;
+  }
+}
+
 @media (max-width: 768px) {
   .subscription-main {
     padding: var(--spacing-4);
@@ -352,10 +380,6 @@
 
   .subscription-header h1 {
     font-size: var(--font-size-2xl);
-  }
-
-  .plans-grid {
-    grid-template-columns: 1fr;
   }
 
   .status-details {
