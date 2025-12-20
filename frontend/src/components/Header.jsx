@@ -79,7 +79,6 @@ const Header = () => {
               {daysRemaining} días restantes
             </span>
           )}
-          <span className="user-email">{user?.email}</span>
           <button className="btn-logout" onClick={logout} title="Cerrar sesión">
             <FiLogOut size={18} />
             <span>Salir</span>
