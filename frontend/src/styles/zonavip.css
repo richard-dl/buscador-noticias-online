@@ -934,244 +934,27 @@
 }
 
 /* ============================================
-   TARJETAS CONSOLIDADAS (TEXTO + MULTIMEDIA)
+   TARJETA DE SOLO TEXTO EN GRUPOS
    ============================================ */
 
-/* Tarjeta consolidada - agrupa texto y multimedia en una sola vista */
-.vip-card-consolidated {
-  border: 2px solid rgba(193, 255, 77, 0.25);
-  background: linear-gradient(135deg, rgba(193, 255, 77, 0.03) 0%, #1A2B47 50%, #0d2440 100%);
+/* Tarjeta de solo texto (sin multimedia) - para el texto consolidado del grupo */
+.vip-card-text-only {
+  border-bottom: 1px solid rgba(193, 255, 77, 0.15);
+  background: linear-gradient(135deg, rgba(193, 255, 77, 0.05) 0%, #1A2B47 100%);
 }
 
-.vip-card-consolidated:hover {
-  border-color: rgba(193, 255, 77, 0.5);
-}
-
-/* Contenedor de multimedia del grupo */
-.vip-content-media {
-  border-top: 1px solid rgba(64, 151, 154, 0.2);
-}
-
-.vip-content-media.vip-media-gallery {
-  background: rgba(0, 0, 0, 0.15);
-}
-
-/* Header de galería multimedia */
-.vip-gallery-header {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.25rem;
-  color: #B5E8E4;
-  font-size: 0.85rem;
-  border-bottom: 1px solid rgba(64, 151, 154, 0.15);
-}
-
-.vip-gallery-header svg {
-  color: #C1FF4D;
-}
-
-.btn-expand-gallery {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  margin-left: auto;
-  padding: 0.35rem 0.75rem;
-  background: rgba(193, 255, 77, 0.1);
-  border: 1px solid rgba(193, 255, 77, 0.3);
-  border-radius: 6px;
-  color: #C1FF4D;
-  font-size: 0.75rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.btn-expand-gallery:hover {
-  background: rgba(193, 255, 77, 0.2);
-  border-color: #C1FF4D;
-}
-
-/* Imagen principal en galería */
-.vip-main-media {
-  border-bottom: 1px solid rgba(64, 151, 154, 0.15);
-}
-
-/* Galería expandida */
-.vip-gallery-expanded {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.vip-gallery-expanded .vip-content-image {
-  border-bottom: 1px solid rgba(64, 151, 154, 0.1);
-}
-
-.vip-gallery-expanded .vip-content-image:last-of-type {
-  border-bottom: none;
-}
-
-.btn-collapse-gallery {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  width: 100%;
-  padding: 0.75rem;
-  background: rgba(193, 255, 77, 0.1);
-  border: none;
-  border-top: 1px solid rgba(193, 255, 77, 0.2);
-  color: #C1FF4D;
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.btn-collapse-gallery:hover {
-  background: rgba(193, 255, 77, 0.2);
-}
-
-/* Badge de consolidado en el footer */
-.vip-consolidated-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  margin-left: 0.75rem;
-  padding: 0.2rem 0.5rem;
-  background: rgba(193, 255, 77, 0.15);
-  border: 1px solid rgba(193, 255, 77, 0.3);
-  border-radius: 4px;
-  color: #C1FF4D;
-  font-size: 0.75rem;
-  font-weight: 500;
-}
-
-/* Botón expandir elementos individuales (admin) */
-.btn-action-vip.btn-expand-items {
-  color: #C1FF4D;
-  border-color: rgba(193, 255, 77, 0.3);
-  background: rgba(193, 255, 77, 0.1);
-}
-
-.btn-action-vip.btn-expand-items:hover {
-  background: rgba(193, 255, 77, 0.2);
-  border-color: #C1FF4D;
-}
-
-/* Panel de elementos individuales (admin) */
-.vip-group-individual-items {
-  margin-top: 0;
+.vip-card-text-only .vip-content-body {
   padding: 1rem 1.25rem;
-  background: rgba(0, 0, 0, 0.3);
-  border-top: 1px solid rgba(193, 255, 77, 0.2);
 }
 
-.vip-individual-items-header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 0.75rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid rgba(64, 151, 154, 0.2);
-  color: #888;
-  font-size: 0.8rem;
-}
-
-.vip-individual-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  padding: 0.5rem 0.75rem;
-  margin-bottom: 0.5rem;
-  background: rgba(26, 43, 71, 0.5);
-  border: 1px solid rgba(64, 151, 154, 0.2);
-  border-radius: 8px;
-}
-
-.vip-individual-item:last-child {
-  margin-bottom: 0;
-}
-
-.vip-individual-content {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-}
-
-.vip-individual-type {
-  flex-shrink: 0;
-  padding: 0.2rem 0.5rem;
-  background: rgba(193, 255, 77, 0.1);
-  border-radius: 4px;
-  font-size: 0.75rem;
-}
-
-.vip-individual-content strong {
+.vip-card-text-only .vip-content-title {
   color: #C1FF4D;
-  font-size: 0.85rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
 }
 
-.vip-individual-text {
-  color: #888;
-  font-size: 0.8rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.vip-individual-item .btn-action-vip {
-  flex-shrink: 0;
-  width: 28px;
-  height: 28px;
-}
-
-/* Footer en tarjeta consolidada - mover padding al body */
-.vip-card-consolidated .vip-content-footer {
-  padding: 0.75rem 1.25rem;
-  margin-top: 0;
-  border-top: 1px solid rgba(64, 151, 154, 0.2);
-}
-
-/* Responsive para tarjetas consolidadas */
-@media (max-width: 768px) {
-  .vip-gallery-header {
-    padding: 0.6rem 1rem;
-    font-size: 0.8rem;
-  }
-
-  .btn-expand-gallery {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.7rem;
-  }
-
-  .vip-consolidated-badge {
-    margin-left: 0.5rem;
-    padding: 0.15rem 0.4rem;
-    font-size: 0.7rem;
-  }
-
-  .vip-group-individual-items {
-    padding: 0.75rem 1rem;
-  }
-
-  .vip-individual-item {
-    padding: 0.4rem 0.5rem;
-    gap: 0.5rem;
-  }
-
-  .vip-individual-content {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.25rem;
-  }
-
-  .vip-individual-text {
-    max-width: 100%;
-  }
+.vip-card-text-only .vip-content-source {
+  background: rgba(193, 255, 77, 0.1);
+  border: 1px solid rgba(193, 255, 77, 0.2);
+  color: #C1FF4D;
 }
