@@ -822,13 +822,15 @@ ${hashtagsStr}`
                       <div className="vip-content-footer">
                         <span className="vip-content-date">{formatDate(item.createdAt)}</span>
                         <div className="vip-content-actions">
-                          <button
-                            className="btn-action-vip"
-                            onClick={() => handleCopyContent(item)}
-                            title="Copiar contenido"
-                          >
-                            <FiCopy />
-                          </button>
+                          {(item.titulo || item.contenido || item.fuente) && (
+                            <button
+                              className="btn-action-vip"
+                              onClick={() => handleCopyContent(item)}
+                              title="Copiar contenido"
+                            >
+                              <FiCopy />
+                            </button>
+                          )}
                           <button
                             className={`btn-action-vip btn-save ${savedItems[item.id] ? 'saved' : ''}`}
                             onClick={() => handleSaveNews(item)}
@@ -922,13 +924,15 @@ ${hashtagsStr}`
                           <div className="vip-content-footer">
                             <span className="vip-content-date">{formatDate(group.createdAt)}</span>
                             <div className="vip-content-actions">
-                              <button
-                                className="btn-action-vip"
-                                onClick={() => handleCopyContent(consolidatedItem)}
-                                title="Copiar contenido"
-                              >
-                                <FiCopy />
-                              </button>
+                              {(consolidatedItem.titulo || consolidatedItem.contenido || consolidatedItem.fuente) && (
+                                <button
+                                  className="btn-action-vip"
+                                  onClick={() => handleCopyContent(consolidatedItem)}
+                                  title="Copiar contenido"
+                                >
+                                  <FiCopy />
+                                </button>
+                              )}
                               <button
                                 className={`btn-action-vip btn-save ${savedItems[group.textItem?.id] ? 'saved' : ''}`}
                                 onClick={() => handleSaveNews(group.textItem || consolidatedItem)}
