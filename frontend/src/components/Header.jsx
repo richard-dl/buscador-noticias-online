@@ -75,7 +75,7 @@ const Header = () => {
             <span className="admin-badge">
               👑 Administrador
             </span>
-          ) : daysRemaining !== undefined && daysRemaining <= 7 && (
+          ) : daysRemaining !== null && daysRemaining !== undefined && daysRemaining <= 7 && (
             <span className="days-warning">
               {daysRemaining} días restantes
             </span>
