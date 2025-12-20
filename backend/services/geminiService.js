@@ -26,7 +26,8 @@ const CATEGORIAS_DISPONIBLES = [
   'cultura',
   'ciencia',
   'medioambiente',
-  'internacional'
+  'internacional',
+  'juegos'
 ];
 
 /**
@@ -59,12 +60,14 @@ CATEGORÍAS DISPONIBLES:
 - ciencia: investigación científica, descubrimientos, CONICET, experimentos
 - medioambiente: ecología, clima, contaminación, sustentabilidad, cambio climático
 - internacional: noticias de otros países, geopolítica, conflictos internacionales, líderes mundiales
+- juegos: loterías, quinielas, sorteos, resultados de lotería, números ganadores, azar, apuestas
 
 REGLAS IMPORTANTES:
 - Si la noticia habla de SALARIOS, PARITARIAS o AUMENTOS de cualquier sector (docentes, médicos, etc), clasifica como "economia"
 - Si hay CRÍMENES o VIOLENCIA aunque involucre profesionales (profesor abusador, médico asesino), clasifica como "policiales"
 - Si hay CAUSAS JUDICIALES o TRIBUNALES, clasifica como "judiciales"
 - Si involucra PAÍSES EXTRANJEROS o líderes mundiales, clasifica como "internacional"
+- Si habla de QUINIELAS, LOTERÍAS, SORTEOS o RESULTADOS de azar, clasifica como "juegos" (NO deportes)
 
 NOTICIA:
 Título: ${title}
