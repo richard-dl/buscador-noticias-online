@@ -26,7 +26,8 @@ const CATEGORIAS_DISPONIBLES = [
   'cultura',
   'ciencia',
   'medioambiente',
-  'internacional'
+  'internacional',
+  'juegos'
 ];
 
 /**
@@ -59,12 +60,14 @@ CATEGORÍAS:
 - ciencia: investigación científica, descubrimientos, CONICET
 - medioambiente: ecología, clima, contaminación, sustentabilidad
 - internacional: noticias de otros países, geopolítica, líderes mundiales
+- juegos: loterías, quinielas, sorteos, resultados de lotería, números ganadores, azar
 
 REGLAS:
 - SALARIOS/PARITARIAS de cualquier sector = "economia"
 - CRÍMENES/VIOLENCIA = "policiales"
 - CAUSAS JUDICIALES = "judiciales"
 - PAÍSES EXTRANJEROS = "internacional"
+- QUINIELAS/LOTERÍAS/SORTEOS = "juegos" (NO deportes)
 
 NOTICIA:
 Título: ${title}
