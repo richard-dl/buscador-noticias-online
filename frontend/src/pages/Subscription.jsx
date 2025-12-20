@@ -105,55 +105,58 @@ const Subscription = () => {
       <Header />
 
       <main className="subscription-main container">
-        <div className="subscription-header">
-          <h1>Planes de Suscripción</h1>
-          <p className="subscription-subtitle">
-            Elige el plan que mejor se adapte a tus necesidades
-          </p>
-        </div>
-
-        {/* Estado actual */}
-        <section className="current-status-card">
-          <div className="status-info">
-            <h3>Tu plan actual</h3>
-            <div className="status-details">
-              <span className={`badge badge-lg ${getRoleBadgeClass(currentRole)}`}>
-                {getRoleName(currentRole)}
-              </span>
-
-              {subscriptionStatus?.daysRemaining !== undefined && !isAdmin && !subscriptionStatus?.isLifetime && (
-                <span className="days-remaining">
-                  <FiClock size={16} />
-                  {subscriptionStatus.daysRemaining} días restantes
-                </span>
-              )}
-
-              {subscriptionStatus?.isLifetime && (
-                <span className="lifetime-badge">
-                  <FiShield size={16} />
-                  Acceso vitalicio
-                </span>
-              )}
-
-              {isAdmin && (
-                <span className="admin-badge">
-                  <FiAward size={16} />
-                  Acceso ilimitado
-                </span>
-              )}
+        <div className="subscription-content">
+          {/* Columna izquierda: Status y Planes */}
+          <div className="subscription-left">
+            <div className="subscription-header">
+              <h1>Planes de Suscripción</h1>
+              <p className="subscription-subtitle">
+                Elige el plan que mejor se adapte a tus necesidades
+              </p>
             </div>
 
-            {subscriptionStatus?.hasVipAccess && (
-              <p className="vip-access-note">
-                <FiZap size={16} />
-                Tienes acceso a herramientas de IA
-              </p>
-            )}
-          </div>
-        </section>
+            {/* Estado actual */}
+            <section className="current-status-card">
+              <div className="status-info">
+                <h3>Tu plan actual</h3>
+                <div className="status-details">
+                  <span className={`badge badge-lg ${getRoleBadgeClass(currentRole)}`}>
+                    {getRoleName(currentRole)}
+                  </span>
 
-        {/* Planes */}
-        <div className="plans-grid">
+                  {subscriptionStatus?.daysRemaining !== undefined && !isAdmin && !subscriptionStatus?.isLifetime && (
+                    <span className="days-remaining">
+                      <FiClock size={16} />
+                      {subscriptionStatus.daysRemaining} días restantes
+                    </span>
+                  )}
+
+                  {subscriptionStatus?.isLifetime && (
+                    <span className="lifetime-badge">
+                      <FiShield size={16} />
+                      Acceso vitalicio
+                    </span>
+                  )}
+
+                  {isAdmin && (
+                    <span className="admin-badge">
+                      <FiAward size={16} />
+                      Acceso ilimitado
+                    </span>
+                  )}
+                </div>
+
+                {subscriptionStatus?.hasVipAccess && (
+                  <p className="vip-access-note">
+                    <FiZap size={16} />
+                    Tienes acceso a herramientas de IA
+                  </p>
+                )}
+              </div>
+            </section>
+
+            {/* Planes */}
+            <div className="plans-grid">
           {/* Plan Trial */}
           <div className={`plan-card ${currentRole === 'trial' ? 'current-plan' : ''}`}>
             <div className="plan-header">
@@ -321,46 +324,50 @@ const Subscription = () => {
               )}
             </div>
           </div>
-        </div>
-
-        {/* Información adicional */}
-        <section className="subscription-info">
-          <h3>Preguntas Frecuentes</h3>
-
-          <div className="faq-grid">
-            <div className="faq-item">
-              <h4>¿Qué incluye la suscripción vitalicia?</h4>
-              <p>
-                Por un único pago de $39 USD, obtienes acceso permanente a la plataforma
-                de búsqueda de noticias, sin límite de tiempo.
-              </p>
-            </div>
-
-            <div className="faq-item">
-              <h4>¿Qué son las herramientas de IA?</h4>
-              <p>
-                Los usuarios VIP tienen acceso a resúmenes automáticos de noticias,
-                análisis de contenido y contenido exclusivo generado con inteligencia artificial.
-              </p>
-            </div>
-
-            <div className="faq-item">
-              <h4>¿Puedo probar el plan VIP antes de pagar?</h4>
-              <p>
-                Sí. Los suscriptores pueden activar una prueba gratuita de 30 días
-                del plan VIP para probar todas las funciones de IA.
-              </p>
-            </div>
-
-            <div className="faq-item">
-              <h4>¿Qué pasa si no renuevo el VIP anual?</h4>
-              <p>
-                Si no renuevas, mantienes tu acceso como Suscriptor vitalicio,
-                pero pierdes las herramientas de IA hasta que renueves.
-              </p>
             </div>
           </div>
-        </section>
+
+          {/* Columna derecha: FAQ */}
+          <div className="subscription-right">
+            <section className="subscription-info">
+              <h3>Preguntas Frecuentes</h3>
+
+              <div className="faq-grid">
+                <div className="faq-item">
+                  <h4>¿Qué incluye la suscripción vitalicia?</h4>
+                  <p>
+                    Por un único pago de $39 USD, obtienes acceso permanente a la plataforma
+                    de búsqueda de noticias, sin límite de tiempo.
+                  </p>
+                </div>
+
+                <div className="faq-item">
+                  <h4>¿Qué son las herramientas de IA?</h4>
+                  <p>
+                    Los usuarios VIP tienen acceso a resúmenes automáticos de noticias,
+                    análisis de contenido y contenido exclusivo generado con inteligencia artificial.
+                  </p>
+                </div>
+
+                <div className="faq-item">
+                  <h4>¿Puedo probar el plan VIP antes de pagar?</h4>
+                  <p>
+                    Sí. Los suscriptores pueden activar una prueba gratuita de 30 días
+                    del plan VIP para probar todas las funciones de IA.
+                  </p>
+                </div>
+
+                <div className="faq-item">
+                  <h4>¿Qué pasa si no renuevo el VIP anual?</h4>
+                  <p>
+                    Si no renuevas, mantienes tu acceso como Suscriptor vitalicio,
+                    pero pierdes las herramientas de IA hasta que renueves.
+                  </p>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
       </main>
     </div>
   )
