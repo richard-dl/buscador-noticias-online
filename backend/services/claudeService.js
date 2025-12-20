@@ -27,6 +27,7 @@ const CATEGORIAS_DISPONIBLES = [
   'ciencia',
   'medioambiente',
   'internacional',
+  'turismo',
   'juegos',
   'agro',
   'empresas',
@@ -66,6 +67,7 @@ CATEGORÍAS:
 - ciencia: investigación científica, descubrimientos, CONICET
 - medioambiente: ecología, clima, contaminación, sustentabilidad
 - internacional: noticias de otros países, geopolítica, líderes mundiales
+- turismo: viajes, vacaciones, destinos turísticos, hoteles, playas, excursiones, aerolíneas, pasajes, turistas, ecoturismo, aventura, escapadas, feriados, fin de semana largo
 - juegos: loterías, quinielas, sorteos, resultados de lotería, números ganadores, azar
 - agro: agroindustria, agroproducción, campo, agricultura, ganadería, cosechas, siembra, commodities agrícolas, soja, trigo, maíz, agroquímicos, maquinaria agrícola
 - empresas: corporaciones, negocios, fusiones, adquisiciones, industria, comercio, retail, empresarios, compañías, bolsa, acciones corporativas
@@ -81,6 +83,7 @@ REGLAS:
 - PAÍSES EXTRANJEROS = "internacional"
 - QUINIELAS/LOTERÍAS/SORTEOS = "juegos" (NO deportes)
 - HORÓSCOPO/SIGNOS/ZODIACO = "espectaculos" (NO salud)
+- VIAJES/VACACIONES/DESTINOS/HOTELES = "turismo"
 - CAMPO/AGRICULTURA/GANADERÍA = "agro"
 - GRANDES EMPRESAS/CORPORACIONES = "empresas"
 - STARTUPS/PYMES/NUEVOS NEGOCIOS = "emprendimientos"
@@ -142,13 +145,14 @@ const classifyBatchWithAI = async (news) => {
 
   const prompt = `Clasifica cada noticia en categoría y detecta tipo de contenido multimedia.
 
-CATEGORÍAS: politica, economia, deportes, espectaculos, tecnologia, policiales, judiciales, salud, educacion, cultura, ciencia, medioambiente, internacional, juegos, agro, empresas, emprendimientos, vida_sana, gastronomia, paranormal
+CATEGORÍAS: politica, economia, deportes, espectaculos, tecnologia, policiales, judiciales, salud, educacion, cultura, ciencia, medioambiente, internacional, turismo, juegos, agro, empresas, emprendimientos, vida_sana, gastronomia, paranormal
 
 REGLAS CATEGORÍA:
 - SALARIOS/PARITARIAS = "economia"
 - CRÍMENES/VIOLENCIA = "policiales"
 - CAUSAS JUDICIALES = "judiciales"
 - PAÍSES EXTRANJEROS = "internacional"
+- VIAJES/VACACIONES/DESTINOS/HOTELES = "turismo"
 - CAMPO/AGRICULTURA/GANADERÍA = "agro"
 - CORPORACIONES/NEGOCIOS = "empresas"
 - STARTUPS/PYMES = "emprendimientos"
