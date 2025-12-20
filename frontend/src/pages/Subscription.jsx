@@ -89,7 +89,7 @@ const Subscription = () => {
     return (
       <div className="subscription-page">
         <Header />
-        <main className="subscription-main container">
+        <main className="subscription-main">
           <div className="subscription-loading">
             <LoadingSpinner size="large" />
             <p>Cargando planes...</p>
@@ -109,7 +109,7 @@ const Subscription = () => {
     <div className="subscription-page">
       <Header />
 
-      <main className="subscription-main container">
+      <main className="subscription-main">
         <div className="subscription-header">
           <h1>Planes de Suscripción</h1>
           <p className="subscription-subtitle">

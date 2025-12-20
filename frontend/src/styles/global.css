@@ -2977,6 +2977,76 @@ input, select, textarea {
   box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
 }
 
+/* ============================================
+   TABLET: News Card Actions - Solo iconos con tooltips
+   ============================================ */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .news-card-actions {
+    gap: 0;
+  }
+
+  .news-card-actions .btn-copy,
+  .news-card-actions .btn-save,
+  .news-card-actions .btn-delete,
+  .news-card-actions .btn-link,
+  .news-card-actions .btn-ai {
+    padding: var(--spacing-2) var(--spacing-3);
+    min-width: 44px;
+  }
+
+  /* Ocultar textos en tablet */
+  .news-card-actions .btn-copy span,
+  .news-card-actions .btn-save span,
+  .news-card-actions .btn-delete span,
+  .news-card-actions .btn-link span,
+  .news-card-actions .btn-ai span {
+    display: none;
+  }
+
+  /* Tooltips personalizados para tablet */
+  .news-card-actions .btn-copy,
+  .news-card-actions .btn-save,
+  .news-card-actions .btn-delete,
+  .news-card-actions .btn-link,
+  .news-card-actions .btn-ai {
+    position: relative;
+  }
+
+  .news-card-actions .btn-copy::after,
+  .news-card-actions .btn-save::after,
+  .news-card-actions .btn-delete::after,
+  .news-card-actions .btn-link::after,
+  .news-card-actions .btn-ai::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: var(--spacing-1) var(--spacing-2);
+    background: var(--color-bg-primary);
+    color: var(--color-text);
+    font-size: var(--font-size-xs);
+    white-space: nowrap;
+    border-radius: var(--radius-sm);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s, visibility 0.2s;
+    pointer-events: none;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    margin-bottom: 4px;
+  }
+
+  .news-card-actions .btn-copy:hover::after,
+  .news-card-actions .btn-save:hover::after,
+  .news-card-actions .btn-delete:hover::after,
+  .news-card-actions .btn-link:hover::after,
+  .news-card-actions .btn-ai:hover::after {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
 /* Overlay del modal */
 .ai-modal-overlay {
   position: fixed;
