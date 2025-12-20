@@ -577,6 +577,29 @@ input, select, textarea {
   padding: var(--spacing-2);
 }
 
+/* Tablet - reducir espaciado y ocultar texto en nav */
+@media (max-width: 1100px) {
+  .header-nav {
+    gap: var(--spacing-1);
+  }
+
+  .nav-link {
+    padding: var(--spacing-2);
+  }
+
+  .nav-link span {
+    display: none;
+  }
+
+  .header-user {
+    gap: var(--spacing-2);
+  }
+
+  .btn-logout span {
+    display: none;
+  }
+}
+
 /* Mobile menu */
 @media (max-width: 768px) {
   .menu-toggle {
@@ -610,6 +633,14 @@ input, select, textarea {
     padding: var(--spacing-3) var(--spacing-4);
     border-radius: var(--radius-md);
     margin-bottom: var(--spacing-1);
+  }
+
+  .header-nav .nav-link span {
+    display: inline;
+  }
+
+  .header-user .btn-logout span {
+    display: inline;
   }
 
   .header-user {
