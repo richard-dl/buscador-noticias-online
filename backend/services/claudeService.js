@@ -50,7 +50,7 @@ CATEGORÍAS:
 - politica: gobierno, congreso, elecciones, partidos políticos, legislación
 - economia: mercados, dólar, inflación, salarios, paritarias, impuestos, tarifas, precios
 - deportes: fútbol, básquet, tenis, competencias deportivas, atletas
-- espectaculos: farándula, televisión, cine, música, celebridades
+- espectaculos: farándula, televisión, cine, música, celebridades, horóscopo, signos del zodiaco, astrología
 - tecnologia: apps, dispositivos, internet, innovación, IA, software
 - policiales: crímenes, robos, asesinatos, policía, violencia, narcotráfico
 - judiciales: tribunales, jueces, causas judiciales, sentencias, fiscalía
@@ -68,6 +68,7 @@ REGLAS:
 - CAUSAS JUDICIALES = "judiciales"
 - PAÍSES EXTRANJEROS = "internacional"
 - QUINIELAS/LOTERÍAS/SORTEOS = "juegos" (NO deportes)
+- HORÓSCOPO/SIGNOS/ZODIACO = "espectaculos" (NO salud)
 
 NOTICIA:
 Título: ${title}
