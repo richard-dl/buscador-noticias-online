@@ -34,7 +34,8 @@ const CATEGORIAS_DISPONIBLES = [
   'emprendimientos',
   'vida_sana',
   'gastronomia',
-  'paranormal'
+  'paranormal',
+  'filosofia'
 ];
 
 /**
@@ -75,6 +76,7 @@ CATEGORÍAS:
 - vida_sana: dietas, ejercicios, fitness, nutrición, alimentación saludable, wellness, gimnasio, running, yoga, meditación, pérdida de peso (NO enfermedades ni hospitales)
 - gastronomia: cocina, recetas, restaurantes, chefs, comida, culinario, platos, ingredientes, vinos, maridaje, parrilla, asado, pastelería, repostería, comida gourmet
 - paranormal: experiencias cercanas a la muerte, testimonios sobrenaturales, milagros, apariciones, fenómenos inexplicables, ovnis, avistamientos, espiritualidad mística, resucitación, vida después de la muerte, ángeles, fantasmas, profecías
+- filosofia: reflexiones existenciales, propósito de vida, sentido de la existencia, enseñanzas de vida, parábolas, rabinos, filósofos, pensadores, sabiduría, ética, moral, estoicismo, budismo filosófico, autoconocimiento
 
 REGLAS:
 - SALARIOS/PARITARIAS de cualquier sector = "economia"
@@ -90,6 +92,7 @@ REGLAS:
 - DIETAS/EJERCICIOS/FITNESS = "vida_sana" (NO salud)
 - COCINA/RECETAS/RESTAURANTES/CHEFS = "gastronomia"
 - EXPERIENCIAS SOBRENATURALES/MILAGROS/OVNIS/FANTASMAS = "paranormal" (NO espectaculos)
+- REFLEXIONES/PROPÓSITO DE VIDA/ENSEÑANZAS/PARÁBOLAS/RABINOS = "filosofia" (NO religion ni vida_sana)
 
 NOTICIA:
 Título: ${title}
@@ -145,7 +148,7 @@ const classifyBatchWithAI = async (news) => {
 
   const prompt = `Clasifica cada noticia en categoría y detecta tipo de contenido multimedia.
 
-CATEGORÍAS: politica, economia, deportes, espectaculos, tecnologia, policiales, judiciales, salud, educacion, cultura, ciencia, medioambiente, internacional, turismo, juegos, agro, empresas, emprendimientos, vida_sana, gastronomia, paranormal
+CATEGORÍAS: politica, economia, deportes, espectaculos, tecnologia, policiales, judiciales, salud, educacion, cultura, ciencia, medioambiente, internacional, turismo, juegos, agro, empresas, emprendimientos, vida_sana, gastronomia, paranormal, filosofia
 
 REGLAS CATEGORÍA:
 - SALARIOS/PARITARIAS = "economia"
@@ -159,6 +162,7 @@ REGLAS CATEGORÍA:
 - DIETAS/EJERCICIOS/FITNESS = "vida_sana"
 - COCINA/RECETAS/RESTAURANTES/CHEFS = "gastronomia"
 - MILAGROS/OVNIS/FANTASMAS/EXPERIENCIAS SOBRENATURALES = "paranormal"
+- REFLEXIONES/PROPÓSITO DE VIDA/ENSEÑANZAS/PARÁBOLAS/RABINOS = "filosofia"
 
 TIPOS DE CONTENIDO (mediaType):
 - "video" = menciona video, mirá, YouTube, streaming, transmisión en vivo
@@ -319,7 +323,7 @@ INSTRUCCIONES:
 5. Escribe como periodista reportando el hecho, NO describas la noticia
 6. NO truncar ni acortar el contenido - incluye toda la información relevante
 
-CATEGORÍAS: politica, economia, deportes, espectaculos, tecnologia, policiales, judiciales, salud, educacion, cultura, ciencia, medioambiente, internacional, sociedad, turismo, juegos, agro, empresas, emprendimientos, vida_sana, gastronomia, paranormal
+CATEGORÍAS: politica, economia, deportes, espectaculos, tecnologia, policiales, judiciales, salud, educacion, cultura, ciencia, medioambiente, internacional, sociedad, turismo, juegos, agro, empresas, emprendimientos, vida_sana, gastronomia, paranormal, filosofia
 
 REGLAS DE CLASIFICACIÓN:
 - SALARIOS/PARITARIAS = "economia"
@@ -334,6 +338,7 @@ REGLAS DE CLASIFICACIÓN:
 - DIETAS/EJERCICIOS/FITNESS/WELLNESS = "vida_sana" (NO salud)
 - COCINA/RECETAS/RESTAURANTES/CHEFS/COMIDA = "gastronomia"
 - MILAGROS/OVNIS/FANTASMAS/EXPERIENCIAS SOBRENATURALES = "paranormal" (NO espectaculos)
+- REFLEXIONES/PROPÓSITO DE VIDA/ENSEÑANZAS/PARÁBOLAS/RABINOS = "filosofia" (NO religion ni vida_sana)
 
 NOTICIA ORIGINAL:
 Título: ${cleanTitle}

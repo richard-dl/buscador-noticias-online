@@ -149,7 +149,9 @@ const TEMATICAS = [
   { id: 'catolicismo', name: 'Catolicismo', icon: '✝️' },
   { id: 'judaismo', name: 'Judaísmo', icon: '✡️' },
   { id: 'islam', name: 'Islam', icon: '☪️' },
-  { id: 'evangelico', name: 'Evangélico', icon: '📖' }
+  { id: 'evangelico', name: 'Evangélico', icon: '📖' },
+  // Otras
+  { id: 'filosofia', name: 'Filosofía', icon: '🤔' }
 ];
 
 /**
