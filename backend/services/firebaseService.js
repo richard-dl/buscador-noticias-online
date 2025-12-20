@@ -727,12 +727,17 @@ const deleteVipContent = async (contentId) => {
  * Actualizar contenido VIP (solo admin)
  */
 const updateVipContent = async (contentId, updateData) => {
+  console.log('updateVipContent llamado con:', { contentId, updateData });
+
   const docRef = db.collection('vipContent').doc(contentId);
   const doc = await docRef.get();
 
   if (!doc.exists) {
+    console.error('Documento no encontrado:', contentId);
     throw new Error('Contenido no encontrado');
   }
+
+  console.log('Documento actual:', { id: doc.id, data: doc.data() });
 
   // Solo permitir actualizar campos específicos
   const allowedFields = ['titulo', 'fuente', 'contenido'];
@@ -744,6 +749,8 @@ const updateVipContent = async (contentId, updateData) => {
     }
   }
 
+  console.log('Datos filtrados a actualizar:', filteredData);
+
   if (Object.keys(filteredData).length === 0) {
     throw new Error('No hay campos válidos para actualizar');
   }
@@ -751,8 +758,11 @@ const updateVipContent = async (contentId, updateData) => {
   filteredData.updatedAt = admin.firestore.FieldValue.serverTimestamp();
 
   await docRef.update(filteredData);
+  console.log('Documento actualizado exitosamente');
 
   const updated = await docRef.get();
+  console.log('Documento después de actualizar:', { id: updated.id, data: updated.data() });
+
   return { id: updated.id, ...updated.data() };
 };
 

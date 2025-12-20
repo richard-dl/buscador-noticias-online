@@ -493,21 +493,35 @@ ${hashtagsStr}`
   const handleSaveEdit = async () => {
     if (!editingItem) return
 
+    console.log('handleSaveEdit - editingItem:', editingItem)
+    console.log('handleSaveEdit - editForm:', editForm)
+
     try {
       setSavingEdit(true)
-      await vipApi.updateContent(editingItem.id, editForm)
+      const response = await vipApi.updateContent(editingItem.id, editForm)
+
+      console.log('handleSaveEdit - response:', response)
+
+      if (!response.success) {
+        throw new Error(response.error || 'Error al actualizar contenido')
+      }
 
       // Actualizar el contenido local
-      setContent(prev => prev.map(item =>
-        item.id === editingItem.id
-          ? { ...item, ...editForm }
-          : item
-      ))
+      setContent(prev => {
+        const updated = prev.map(item =>
+          item.id === editingItem.id
+            ? { ...item, ...editForm }
+            : item
+        )
+        console.log('handleSaveEdit - content actualizado:', updated.find(i => i.id === editingItem.id))
+        return updated
+      })
 
       toast.success('Contenido actualizado correctamente')
       setShowEditModal(false)
       setEditingItem(null)
     } catch (error) {
+      console.error('Error guardando edición VIP:', error)
       toast.error(error.message || 'Error al actualizar contenido')
     } finally {
       setSavingEdit(false)
