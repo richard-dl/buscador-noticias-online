@@ -100,6 +100,15 @@ router.post('/login', async (req, res) => {
     const now = new Date();
     const role = user.role || 'trial';
 
+    // Helper para convertir timestamp de Firestore a Date
+    const toDate = (timestamp) => {
+      if (!timestamp) return null;
+      if (timestamp instanceof Date) return timestamp;
+      if (typeof timestamp.toDate === 'function') return timestamp.toDate();
+      if (timestamp._seconds) return new Date(timestamp._seconds * 1000);
+      return null;
+    };
+
     // Calcular días restantes y fecha de expiración según el rol
     let expiresAt = null;
     let daysRemaining = null;
@@ -112,7 +121,7 @@ router.post('/login', async (req, res) => {
       daysRemaining = null;
     } else if (role === 'trial') {
       // Trial de 30 días
-      expiresAt = user.trialExpiresAt?.toDate?.() || user.expiresAt?.toDate?.();
+      expiresAt = toDate(user.trialExpiresAt) || toDate(user.expiresAt);
       if (expiresAt) {
         daysRemaining = Math.max(0, Math.ceil((expiresAt - now) / (1000 * 60 * 60 * 24)));
         isExpired = now > expiresAt;
@@ -124,7 +133,7 @@ router.post('/login', async (req, res) => {
       daysRemaining = null;
     } else if (role === 'vip_trial') {
       // VIP trial de 30 días
-      expiresAt = user.vipTrialExpiresAt?.toDate?.();
+      expiresAt = toDate(user.vipTrialExpiresAt);
       if (expiresAt) {
         daysRemaining = Math.max(0, Math.ceil((expiresAt - now) / (1000 * 60 * 60 * 24)));
         isExpired = now > expiresAt;
@@ -132,7 +141,7 @@ router.post('/login', async (req, res) => {
       subscriptionType = 'vip_trial';
     } else if (role === 'vip') {
       // VIP anual
-      expiresAt = user.vipExpiresAt?.toDate?.();
+      expiresAt = toDate(user.vipExpiresAt);
       if (expiresAt) {
         daysRemaining = Math.max(0, Math.ceil((expiresAt - now) / (1000 * 60 * 60 * 24)));
         isExpired = now > expiresAt;

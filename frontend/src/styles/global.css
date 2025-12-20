@@ -385,18 +385,21 @@ input, select, textarea {
 }
 
 .badge-trial {
-  background-color: #ebf8ff;
-  color: var(--color-info);
+  background-color: #3b82f6;
+  color: white;
+  font-weight: 500;
 }
 
 .badge-active {
-  background-color: #f0fff4;
-  color: var(--color-success);
+  background-color: #10b981;
+  color: white;
+  font-weight: 500;
 }
 
 .badge-expired {
-  background-color: #fff5f5;
-  color: var(--color-danger);
+  background-color: #ef4444;
+  color: white;
+  font-weight: 500;
 }
 
 .badge-admin {
