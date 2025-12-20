@@ -5,6 +5,12 @@ import { toast } from 'react-toastify'
 import { userApi, newsApi } from '../services/api'
 import { useAuth } from '../context/AuthContext'
 
+// Formatear categoría para mostrar (reemplaza guiones bajos por espacios)
+const formatCategory = (category) => {
+  if (!category) return ''
+  return category.replace(/_/g, ' ')
+}
+
 // Limpiar entidades HTML del texto
 const cleanHtmlEntities = (text) => {
   if (!text) return ''
@@ -158,7 +164,7 @@ const NewsCard = ({ news, isSaved = false, onDelete = null, savedNewsId = null }
   const generateFormattedText = () => {
     let text = ''
     if (news.category) {
-      text += `🟦 ${news.category.toUpperCase()}\n\n`
+      text += `🟦 ${formatCategory(news.category).toUpperCase()}\n\n`
     }
     text += `📰 ${news.title}\n\n`
     if (news.summary || news.description) {
@@ -345,7 +351,7 @@ ${hashtagsStr}`
           </div>
         )}
         {news.category && news.category !== 'video' && (
-          <span className="news-category">{news.category}</span>
+          <span className="news-category">{formatCategory(news.category)}</span>
         )}
       </div>
 
@@ -469,7 +475,7 @@ ${hashtagsStr}`
                 <>
                   {/* Categoría detectada */}
                   <div className="ai-category">
-                    <span className="ai-category-badge">{aiSummary.category}</span>
+                    <span className="ai-category-badge">{formatCategory(aiSummary.category)}</span>
                     <span className="ai-confidence">
                       {Math.round(aiSummary.confidence * 100)}% confianza
                     </span>
