@@ -1834,6 +1834,12 @@ input, select, textarea {
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
   border: 1px solid rgba(64, 151, 154, 0.2);
+  /* Optimizaciones GPU para evitar glitches en móvil */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  isolation: isolate;
 }
 
 .profile-info h3 {
@@ -2692,6 +2698,43 @@ input, select, textarea {
   .tematica-chip {
     font-size: 0.7rem;
     padding: var(--spacing-1);
+  }
+
+  /* Profile items en móvil - evitar glitches de renderizado */
+  .profile-item {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-3);
+    background: #1A2B47;
+    padding: var(--spacing-3);
+  }
+
+  .profile-info {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .profile-info h3 {
+    font-size: var(--font-size-sm);
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .profile-details {
+    flex-direction: column;
+    gap: var(--spacing-1);
+    min-width: 0;
+  }
+
+  .profile-details span {
+    word-break: break-word;
+    overflow-wrap: break-word;
+    min-width: 0;
+  }
+
+  .profile-actions {
+    justify-content: flex-end;
+    width: 100%;
   }
 
   /* Scroll to top ajustado */
