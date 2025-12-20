@@ -62,6 +62,7 @@ const Header = () => {
               to={path}
               className={`nav-link ${isActive(path) ? 'active' : ''} ${isVip ? 'nav-link-vip' : ''}`}
               onClick={(e) => handleNavClick(e, path)}
+              title={label}
             >
               <Icon size={18} />
               <span>{label}</span>
