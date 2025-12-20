@@ -342,7 +342,26 @@ const ZonaVip = () => {
     return Array.from(groups.values()).filter(count => count > 1).length
   }, [content])
 
-  const toggleGroupExpand = (groupId) => {
+  const toggleGroupExpand = (groupId, group) => {
+    const isCurrentlyExpanded = expandedGroups[groupId]
+
+    // Si se está colapsando, también colapsar los textos expandidos del grupo
+    if (isCurrentlyExpanded && group?.items) {
+      const itemIds = group.items.map(item => item.id)
+      setExpandedTexts(prev => {
+        const newState = { ...prev }
+        itemIds.forEach(id => {
+          delete newState[id]
+        })
+        // También colapsar el texto del consolidatedItem si existe
+        if (group.consolidatedItem?.id) {
+          delete newState[group.consolidatedItem.id]
+        }
+        delete newState[groupId]
+        return newState
+      })
+    }
+
     setExpandedGroups(prev => ({
       ...prev,
       [groupId]: !prev[groupId]
@@ -851,7 +870,7 @@ ${hashtagsStr}`
                     <div className="vip-group-header">
                       <button
                         className="btn-group-toggle"
-                        onClick={() => toggleGroupExpand(group.groupId)}
+                        onClick={() => toggleGroupExpand(group.groupId, group)}
                       >
                         <FiLayers />
                         <span>{group.items.length} elementos relacionados</span>
@@ -961,7 +980,7 @@ ${hashtagsStr}`
                               <div
                                 key={item.id}
                                 className="vip-thumbnail"
-                                onClick={() => toggleGroupExpand(group.groupId)}
+                                onClick={() => toggleGroupExpand(group.groupId, group)}
                               >
                                 {item.imagen.type === 'video' ? (
                                   <div className="thumbnail-video">▶</div>
@@ -976,7 +995,7 @@ ${hashtagsStr}`
                             {group.items.filter(i => i.imagen).length > 4 && (
                               <div
                                 className="vip-thumbnail vip-thumbnail-more"
-                                onClick={() => toggleGroupExpand(group.groupId)}
+                                onClick={() => toggleGroupExpand(group.groupId, group)}
                               >
                                 +{group.items.filter(i => i.imagen).length - 4}
                               </div>
