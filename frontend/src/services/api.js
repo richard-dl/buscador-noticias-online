@@ -137,6 +137,7 @@ export const vipApi = {
   getContent: (limit = 150) => api.get(`/vip/content?limit=${limit}`),
   getStatus: () => api.get('/vip/status'),
   deleteContent: (id) => api.delete(`/vip/content/${id}`),
+  updateContent: (id, data) => api.put(`/vip/content/${id}`, data),
   upgradeUser: (uid, role, vipExpiresAt) => api.post(`/vip/upgrade/${uid}`, { role, vipExpiresAt }),
   // URL para archivos multimedia (usa el proxy del backend)
   getMediaUrl: (fileId) => `${API_URL}/vip/media/${fileId}`
