@@ -380,7 +380,7 @@ ${hashtagsStr}`
         <button
           className={`btn-copy ${copied ? 'copied' : ''}`}
           onClick={copyToClipboard}
-          title="Copiar texto formateado"
+          title="COPIAR"
         >
           {copied ? <FiCheck size={18} /> : <FiCopy size={18} />}
           <span>{copied ? 'Copiado' : 'Copiar'}</span>
@@ -390,7 +390,7 @@ ${hashtagsStr}`
           <button
             className="btn-delete"
             onClick={handleDeleteNews}
-            title="Eliminar noticia guardada"
+            title="ELIMINAR"
           >
             <FiTrash2 size={18} />
             <span>Eliminar</span>
@@ -400,7 +400,7 @@ ${hashtagsStr}`
             className={`btn-save ${saving ? 'saving' : ''} ${saved ? 'saved' : ''}`}
             onClick={handleSaveNews}
             disabled={saving || saved}
-            title={saved ? 'Noticia guardada' : 'Guardar noticia'}
+            title={saved ? 'GUARDADO' : 'GUARDAR'}
           >
             <FiBookmark size={18} style={saved ? { fill: 'currentColor' } : {}} />
             <span>{saving ? 'Guardando...' : saved ? 'Guardado' : 'Guardar'}</span>
@@ -412,7 +412,7 @@ ${hashtagsStr}`
             className="btn-ai"
             onClick={handleGenerateAISummary}
             disabled={loadingAI}
-            title="Generar resumen con IA"
+            title="RESUMEN IA"
           >
             <FiZap size={18} />
             <span>IA</span>
@@ -423,7 +423,7 @@ ${hashtagsStr}`
           <button
             className="btn-ai btn-ai-locked"
             onClick={() => toast.info('Actualiza a VIP para usar herramientas de IA')}
-            title="Requiere suscripción VIP"
+            title="RESUMEN IA (VIP)"
           >
             <FiLock size={16} />
             <span>IA</span>
@@ -436,7 +436,7 @@ ${hashtagsStr}`
             target="_blank"
             rel="noopener noreferrer"
             className="btn-link"
-            title="Abrir noticia"
+            title="VER"
           >
             <FiExternalLink size={18} />
             <span>Ver</span>
