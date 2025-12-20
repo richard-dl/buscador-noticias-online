@@ -28,6 +28,79 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true)
   const navigate = useNavigate()
 
+  // Mostrar alertas de suscripción según el estado
+  const showSubscriptionAlerts = (data) => {
+    const { role, subscriptionType, daysRemaining, isExpired, isNewUser } = data
+
+    // No mostrar alertas para admin
+    if (role === 'admin') return
+
+    // Usuario nuevo - solo bienvenida (ya se muestra en login/register)
+    if (isNewUser) return
+
+    // Suscripción expirada
+    if (isExpired) {
+      if (subscriptionType === 'trial') {
+        toast.error('Tu período de prueba ha terminado. Activa tu suscripción para continuar.', {
+          autoClose: 8000
+        })
+      } else if (subscriptionType === 'vip_trial') {
+        toast.warning('Tu prueba VIP ha terminado. Activa VIP anual para mantener acceso a IA.', {
+          autoClose: 8000
+        })
+      } else if (subscriptionType === 'vip') {
+        toast.warning('Tu suscripción VIP ha vencido. Renueva para mantener acceso a IA.', {
+          autoClose: 8000
+        })
+      }
+      return
+    }
+
+    // Alertas por días restantes (solo para roles con expiración)
+    if (daysRemaining !== null && daysRemaining !== undefined) {
+      if (daysRemaining === 0) {
+        // Último día
+        if (subscriptionType === 'trial') {
+          toast.error('Hoy es tu último día de prueba. Activa tu suscripción ahora.', {
+            autoClose: 10000
+          })
+        } else if (subscriptionType === 'vip_trial') {
+          toast.error('Hoy termina tu prueba VIP. Activa VIP anual para no perder acceso.', {
+            autoClose: 10000
+          })
+        } else if (subscriptionType === 'vip') {
+          toast.error('Tu VIP vence hoy. Renueva ahora para mantener el acceso.', {
+            autoClose: 10000
+          })
+        }
+      } else if (daysRemaining <= 3) {
+        // 1-3 días restantes
+        if (subscriptionType === 'trial') {
+          toast.warning(`Tu prueba vence en ${daysRemaining} día${daysRemaining > 1 ? 's' : ''}. Activa tu suscripción.`, {
+            autoClose: 7000
+          })
+        } else if (subscriptionType === 'vip_trial') {
+          toast.warning(`Tu prueba VIP vence en ${daysRemaining} día${daysRemaining > 1 ? 's' : ''}. Considera activar VIP.`, {
+            autoClose: 7000
+          })
+        } else if (subscriptionType === 'vip') {
+          toast.warning(`Tu VIP vence en ${daysRemaining} día${daysRemaining > 1 ? 's' : ''}. Renueva pronto.`, {
+            autoClose: 7000
+          })
+        }
+      } else if (daysRemaining <= 7) {
+        // 4-7 días restantes
+        if (subscriptionType === 'trial') {
+          toast.info(`Te quedan ${daysRemaining} días de prueba.`, { autoClose: 5000 })
+        } else if (subscriptionType === 'vip_trial') {
+          toast.info(`Te quedan ${daysRemaining} días de prueba VIP.`, { autoClose: 5000 })
+        } else if (subscriptionType === 'vip') {
+          toast.info(`Tu VIP vence en ${daysRemaining} días.`, { autoClose: 5000 })
+        }
+      }
+    }
+  }
+
   // Escuchar cambios de autenticación
   useEffect(() => {
     const unsubscribe = onAuthChange(async (firebaseUser) => {
@@ -38,8 +111,12 @@ export const AuthProvider = ({ children }) => {
           const response = await authApi.login()
           if (response.success) {
             setProfile(response.data)
-            // Verificar si está expirado
-            if (response.data.isExpired) {
+
+            // Mostrar alertas de suscripción
+            showSubscriptionAlerts(response.data)
+
+            // Verificar si está expirado (solo trial expirado bloquea acceso)
+            if (response.data.isExpired && response.data.subscriptionType === 'trial') {
               navigate('/expired')
             }
           }

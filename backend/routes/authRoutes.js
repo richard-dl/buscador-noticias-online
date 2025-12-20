@@ -82,6 +82,7 @@ router.post('/login', async (req, res) => {
 
     // Obtener o crear usuario en Firestore
     let user = await getUserFromFirestore(decodedToken.uid);
+    let isNewUser = false;
 
     if (!user) {
       // Usuario nuevo (login con Google por primera vez)
@@ -90,17 +91,59 @@ router.post('/login', async (req, res) => {
         displayName: decodedToken.name || '',
         authProvider: 'google'
       });
+      isNewUser = true;
     } else {
       // Actualizar último login y verificar suscripción
       user = await updateLastLogin(decodedToken.uid);
     }
 
-    // Calcular días restantes
     const now = new Date();
-    const expiresAt = user.expiresAt instanceof Date ? user.expiresAt : user.expiresAt?.toDate?.();
-    const daysRemaining = expiresAt
-      ? Math.max(0, Math.ceil((expiresAt - now) / (1000 * 60 * 60 * 24)))
-      : 0;
+    const role = user.role || 'trial';
+
+    // Calcular días restantes y fecha de expiración según el rol
+    let expiresAt = null;
+    let daysRemaining = null;
+    let isExpired = false;
+    let subscriptionType = null;
+
+    if (role === 'admin') {
+      // Admin no expira
+      subscriptionType = 'admin';
+      daysRemaining = null;
+    } else if (role === 'trial') {
+      // Trial de 30 días
+      expiresAt = user.trialExpiresAt?.toDate?.() || user.expiresAt?.toDate?.();
+      if (expiresAt) {
+        daysRemaining = Math.max(0, Math.ceil((expiresAt - now) / (1000 * 60 * 60 * 24)));
+        isExpired = now > expiresAt;
+      }
+      subscriptionType = 'trial';
+    } else if (role === 'suscriptor') {
+      // Suscriptor vitalicio - no expira
+      subscriptionType = 'suscriptor';
+      daysRemaining = null;
+    } else if (role === 'vip_trial') {
+      // VIP trial de 30 días
+      expiresAt = user.vipTrialExpiresAt?.toDate?.();
+      if (expiresAt) {
+        daysRemaining = Math.max(0, Math.ceil((expiresAt - now) / (1000 * 60 * 60 * 24)));
+        isExpired = now > expiresAt;
+      }
+      subscriptionType = 'vip_trial';
+    } else if (role === 'vip') {
+      // VIP anual
+      expiresAt = user.vipExpiresAt?.toDate?.();
+      if (expiresAt) {
+        daysRemaining = Math.max(0, Math.ceil((expiresAt - now) / (1000 * 60 * 60 * 24)));
+        isExpired = now > expiresAt;
+      }
+      subscriptionType = 'vip';
+    }
+
+    // También verificar el campo legacy status para compatibilidad
+    if (user.status === 'expired') {
+      isExpired = true;
+    }
 
     res.json({
       success: true,
@@ -109,10 +152,13 @@ router.post('/login', async (req, res) => {
         email: user.email,
         displayName: user.displayName,
         status: user.status,
-        role: user.role || 'user', // Agregar role
-        expiresAt: expiresAt?.toISOString(),
+        role: role,
+        subscriptionType: subscriptionType,
+        expiresAt: expiresAt?.toISOString() || null,
         daysRemaining: daysRemaining,
-        isExpired: user.status === 'expired'
+        isExpired: isExpired,
+        isNewUser: isNewUser,
+        hasVipAccess: ['vip', 'vip_trial', 'admin'].includes(role)
       }
     });
   } catch (error) {
