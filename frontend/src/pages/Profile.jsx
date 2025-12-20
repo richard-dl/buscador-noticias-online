@@ -101,13 +101,37 @@ const Profile = () => {
   }
 
   const getStatusBadge = () => {
-    const status = profile?.subscription?.status
+    const role = profile?.role || profile?.subscription?.status
     const badges = {
       trial: { text: 'Prueba Gratuita', class: 'badge-trial' },
+      suscriptor: { text: 'Suscriptor Vitalicio', class: 'badge-active' },
+      vip_trial: { text: 'VIP Trial', class: 'badge-vip-trial' },
+      vip: { text: 'VIP Anual', class: 'badge-vip' },
+      admin: { text: 'Administrador', class: 'badge-admin' },
       active: { text: 'Activo', class: 'badge-active' },
       expired: { text: 'Expirado', class: 'badge-expired' }
     }
-    return badges[status] || badges.trial
+    return badges[role] || badges.trial
+  }
+
+  const getRoleBadge = (role) => {
+    const badges = {
+      trial: { text: 'Trial', class: 'badge-trial' },
+      suscriptor: { text: 'Suscriptor', class: 'badge-active' },
+      vip_trial: { text: 'VIP Trial', class: 'badge-vip-trial' },
+      vip: { text: 'VIP', class: 'badge-vip' },
+      admin: { text: 'Admin', class: 'badge-admin' }
+    }
+    return badges[role] || badges.trial
+  }
+
+  const getSubscriptionDescription = () => {
+    const role = profile?.role
+    if (role === 'admin') return null
+    if (role === 'suscriptor') return 'Suscripción vitalicia - sin fecha de vencimiento'
+    if (role === 'vip_trial') return 'Período de prueba VIP con acceso a IA'
+    if (role === 'vip') return 'Suscripción VIP anual con acceso a IA'
+    return 'Período de prueba gratuito'
   }
 
   if (!profile) {
@@ -219,36 +243,66 @@ const Profile = () => {
               {profile?.role === 'admin' ? (
                 <div className="admin-subscription">
                   <p className="admin-message">
-                    🎉 Tienes acceso <strong>ilimitado</strong> a todas las funciones de la plataforma.
+                    Tienes acceso <strong>ilimitado</strong> a todas las funciones de la plataforma.
                   </p>
+                </div>
+              ) : profile?.role === 'suscriptor' ? (
+                <div className="subscription-main">
+                  <div className="days-circle days-circle-unlimited">
+                    <span className="days-number">∞</span>
+                    <span className="days-label">vitalicio</span>
+                  </div>
+                  <div className="subscription-details">
+                    <p>{getSubscriptionDescription()}</p>
+                    <p className="expiry-date success-text">
+                      <FiClock size={16} />
+                      Sin fecha de vencimiento
+                    </p>
+                  </div>
                 </div>
               ) : (
                 <div className="subscription-main">
-                  <div className="days-circle">
+                  <div className={`days-circle ${daysRemaining <= 7 ? 'days-circle-warning' : ''}`}>
                     <span className="days-number">{daysRemaining}</span>
                     <span className="days-label">días</span>
                   </div>
                   <div className="subscription-details">
-                    <p>Días restantes de tu suscripción</p>
-                    {profile.subscription?.expiresAt && (
+                    <p>{getSubscriptionDescription()}</p>
+                    {profile.expiresAt && (
                       <p className="expiry-date">
                         <FiClock size={16} />
-                        Vence: {formatDate(profile.subscription.expiresAt)}
+                        Vence: {formatDate(profile.expiresAt)}
                       </p>
                     )}
                   </div>
                 </div>
               )}
 
-              {!profile?.role || profile?.role !== 'admin' && daysRemaining <= 7 && (
-                <div className="renewal-notice">
-                  <p>Tu suscripción está por vencer. Contacta al administrador para renovar.</p>
-                  <a
-                    href="mailto:soporte@tuplay.top?subject=Renovación de suscripción"
-                    className="btn btn-primary"
-                  >
-                    Contactar para Renovar
-                  </a>
+              {/* Alerta de vencimiento para trial, vip_trial y vip */}
+              {profile?.role !== 'admin' && profile?.role !== 'suscriptor' && daysRemaining !== null && daysRemaining <= 7 && (
+                <div className={`renewal-notice ${daysRemaining <= 3 ? 'renewal-urgent' : ''}`}>
+                  {profile?.role === 'trial' ? (
+                    <>
+                      <p>Tu prueba gratuita está por vencer. Activa tu suscripción para continuar.</p>
+                      <a href="/subscription" className="btn btn-primary">
+                        Ver Planes
+                      </a>
+                    </>
+                  ) : profile?.role === 'vip_trial' ? (
+                    <>
+                      <p>Tu prueba VIP está por vencer. Activa VIP anual para mantener acceso a IA.</p>
+                      <a href="/subscription" className="btn btn-primary">
+                        Activar VIP
+                      </a>
+                    </>
+                  ) : profile?.role === 'vip' ? (
+                    <>
+                      <p>Tu suscripción VIP está por vencer. Renueva para mantener acceso a IA.</p>
+                      <a href="/subscription" className="btn btn-primary">
+                        Renovar VIP
+                      </a>
+                    </>
+                  ) : null}
                 </div>
               )}
             </div>
@@ -366,6 +420,13 @@ const Profile = () => {
 
                       <div className="user-card-body">
                         <div className="user-stat">
+                          <span className="stat-label">Rol</span>
+                          <span className={`badge ${getRoleBadge(user.role).class}`}>
+                            {getRoleBadge(user.role).text}
+                          </span>
+                        </div>
+
+                        <div className="user-stat">
                           <span className="stat-label">Estado</span>
                           <span className={`badge ${user.isExpired ? 'badge-danger' : 'badge-success'}`}>
                             {user.isExpired ? 'Expirado' : 'Activo'}
@@ -374,8 +435,8 @@ const Profile = () => {
 
                         <div className="user-stat">
                           <span className="stat-label">Días restantes</span>
-                          {user.role === 'admin' ? (
-                            <span className="text-success">∞ Ilimitado</span>
+                          {user.role === 'admin' || user.role === 'suscriptor' ? (
+                            <span className="text-success">∞ {user.role === 'admin' ? 'Admin' : 'Vitalicio'}</span>
                           ) : (
                             <span className={user.daysRemaining <= 7 ? 'text-danger' : ''}>
                               {user.daysRemaining} días

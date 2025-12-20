@@ -405,6 +405,28 @@ input, select, textarea {
   font-weight: 600;
 }
 
+.badge-vip-trial {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  color: white;
+  font-weight: 600;
+}
+
+.badge-vip {
+  background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+  color: white;
+  font-weight: 600;
+}
+
+.badge-success {
+  background-color: #f0fff4;
+  color: var(--color-success);
+}
+
+.badge-danger {
+  background-color: #fff5f5;
+  color: var(--color-danger);
+}
+
 /* Error message */
 .error-message {
   padding: var(--spacing-3);
@@ -2016,6 +2038,14 @@ input, select, textarea {
   flex-shrink: 0;
 }
 
+.days-circle-unlimited {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.days-circle-warning {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+
 .days-number {
   font-size: var(--font-size-3xl);
   font-weight: 700;
@@ -2116,12 +2146,34 @@ input, select, textarea {
   border: 1px solid rgba(251, 211, 141, 0.4);
   border-radius: var(--radius-md);
   padding: var(--spacing-4);
+  margin-top: var(--spacing-4);
 }
 
 .renewal-notice p {
   color: #fbd38d;
   font-size: var(--font-size-sm);
   margin-bottom: var(--spacing-3);
+}
+
+.renewal-notice.renewal-urgent {
+  background-color: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.renewal-notice.renewal-urgent p {
+  color: #fca5a5;
+}
+
+.success-text {
+  color: #10b981 !important;
+}
+
+.text-success {
+  color: var(--color-success);
+}
+
+.text-danger {
+  color: var(--color-danger);
 }
 
 /* Profiles card in profile page */

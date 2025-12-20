@@ -47,6 +47,26 @@ const ZonaVip = () => {
       if (response.data.hasAccess) {
         loadVipContent()
         loadSavedItems()
+
+        // Mostrar alertas según días restantes (solo para vip_trial y vip)
+        const { daysRemaining, isTrial } = response.data
+        if (daysRemaining !== null && daysRemaining !== undefined) {
+          const tipoSuscripcion = isTrial ? 'prueba VIP' : 'VIP'
+
+          if (daysRemaining === 0) {
+            toast.error(`Hoy es tu último día de ${tipoSuscripcion}. Activa VIP anual para mantener acceso.`, {
+              autoClose: 10000
+            })
+          } else if (daysRemaining <= 3) {
+            toast.warning(`Tu ${tipoSuscripcion} vence en ${daysRemaining} día${daysRemaining > 1 ? 's' : ''}. Considera renovar.`, {
+              autoClose: 7000
+            })
+          } else if (daysRemaining <= 7) {
+            toast.info(`Tu ${tipoSuscripcion} vence en ${daysRemaining} días.`, {
+              autoClose: 5000
+            })
+          }
+        }
       }
     } catch (error) {
       console.error('Error verificando acceso VIP:', error)
