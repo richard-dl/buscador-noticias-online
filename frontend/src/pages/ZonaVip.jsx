@@ -36,8 +36,6 @@ const ZonaVip = () => {
 
   // Estados para modal de edición
   const [showEditModal, setShowEditModal] = useState(false)
-  const [editingItem, setEditingItem] = useState(null)
-  const [editForm, setEditForm] = useState({ titulo: '', fuente: '', contenido: '' })
   const [savingEdit, setSavingEdit] = useState(false)
 
   useEffect(() => {
@@ -478,39 +476,61 @@ ${hashtagsStr}`
     }
   }
 
-  // Funciones para edición de contenido
-  // Siempre editar el item original (textItem), no el consolidado
-  const handleEditContent = (item) => {
-    setEditingItem(item)
-    setEditForm({
-      titulo: item.titulo ?? '',
-      fuente: item.fuente ?? '',
-      contenido: item.contenido ?? ''
+  // Funciones para edición de contenido del grupo
+  // Ahora editamos TODOS los items del grupo
+  const [editingGroup, setEditingGroup] = useState(null)
+  const [groupEditForms, setGroupEditForms] = useState({})
+
+  const handleEditContent = (group) => {
+    // Preparar formularios para cada item del grupo
+    const forms = {}
+    group.items.forEach(item => {
+      forms[item.id] = {
+        titulo: item.titulo ?? '',
+        fuente: item.fuente ?? '',
+        contenido: item.contenido ?? '',
+        hasImage: !!item.imagen
+      }
     })
+    setGroupEditForms(forms)
+    setEditingGroup(group)
     setShowEditModal(true)
   }
 
-  const handleSaveEdit = async () => {
-    if (!editingItem) return
+  const handleSaveGroupEdit = async () => {
+    if (!editingGroup) return
 
     try {
       setSavingEdit(true)
-      const response = await vipApi.updateContent(editingItem.id, editForm)
 
-      if (!response.success) {
-        throw new Error(response.error || 'Error al actualizar contenido')
-      }
+      // Guardar cada item modificado
+      const promises = Object.entries(groupEditForms).map(async ([itemId, form]) => {
+        const response = await vipApi.updateContent(itemId, {
+          titulo: form.titulo,
+          fuente: form.fuente,
+          contenido: form.contenido
+        })
+        if (!response.success) {
+          throw new Error(`Error actualizando item ${itemId}`)
+        }
+        return { itemId, ...form }
+      })
+
+      await Promise.all(promises)
 
       // Actualizar el contenido local
-      setContent(prev => prev.map(item =>
-        item.id === editingItem.id
-          ? { ...item, ...editForm }
-          : item
-      ))
+      setContent(prev => prev.map(item => {
+        if (groupEditForms[item.id]) {
+          const form = groupEditForms[item.id]
+          return { ...item, titulo: form.titulo, fuente: form.fuente, contenido: form.contenido }
+        }
+        return item
+      }))
 
       toast.success('Contenido actualizado correctamente')
       setShowEditModal(false)
-      setEditingItem(null)
+      setEditingGroup(null)
+      setGroupEditForms({})
     } catch (error) {
       console.error('Error guardando edición VIP:', error)
       toast.error(error.message || 'Error al actualizar contenido')
@@ -519,11 +539,40 @@ ${hashtagsStr}`
     }
   }
 
+  const handleDeleteItemFromGroup = async (itemId) => {
+    if (!window.confirm('¿Eliminar este item del grupo?')) return
+
+    try {
+      await vipApi.deleteContent(itemId)
+
+      // Remover del estado local
+      setContent(prev => prev.filter(item => item.id !== itemId))
+
+      // Remover del formulario de edición
+      setGroupEditForms(prev => {
+        const newForms = { ...prev }
+        delete newForms[itemId]
+        return newForms
+      })
+
+      // Si no quedan items, cerrar modal
+      if (Object.keys(groupEditForms).length <= 1) {
+        setShowEditModal(false)
+        setEditingGroup(null)
+        setGroupEditForms({})
+      }
+
+      toast.success('Item eliminado')
+    } catch (error) {
+      toast.error(error.message || 'Error al eliminar item')
+    }
+  }
+
   const closeEditModal = () => {
     if (!savingEdit) {
       setShowEditModal(false)
-      setEditingItem(null)
-      setEditForm({ titulo: '', fuente: '', contenido: '' })
+      setEditingGroup(null)
+      setGroupEditForms({})
     }
   }
 
@@ -878,22 +927,13 @@ ${hashtagsStr}`
                                   <FiZap />
                                 </button>
                               )}
-                              {(profile?.role === 'admin') && group.textItem && (
+                              {(profile?.role === 'admin') && (
                                 <button
                                   className="btn-action-vip btn-edit"
-                                  onClick={() => handleEditContent(group.textItem, consolidatedItem)}
-                                  title="Editar texto"
+                                  onClick={() => handleEditContent(group)}
+                                  title="Editar grupo"
                                 >
                                   <FiEdit2 />
-                                </button>
-                              )}
-                              {(profile?.role === 'admin') && group.textItem && (
-                                <button
-                                  className="btn-action-vip btn-delete"
-                                  onClick={() => handleDeleteContent(group.textItem.id)}
-                                  title="Eliminar texto"
-                                >
-                                  <FiTrash2 />
                                 </button>
                               )}
                             </div>
@@ -1106,12 +1146,12 @@ ${hashtagsStr}`
         document.body
       )}
 
-      {/* Modal de Edición */}
-      {showEditModal && createPortal(
+      {/* Modal de Edición de Grupo */}
+      {showEditModal && editingGroup && createPortal(
         <div className="edit-modal-overlay" onClick={closeEditModal}>
-          <div className="edit-modal" onClick={e => e.stopPropagation()}>
+          <div className="edit-modal edit-modal-group" onClick={e => e.stopPropagation()}>
             <div className="edit-modal-header">
-              <h3><FiEdit2 /> Editar contenido</h3>
+              <h3><FiEdit2 /> Editar grupo ({Object.keys(groupEditForms).length} items)</h3>
               <button
                 className="edit-modal-close"
                 onClick={closeEditModal}
@@ -1123,41 +1163,64 @@ ${hashtagsStr}`
             </div>
 
             <div className="edit-modal-content">
-              <div className="edit-form-group">
-                <label htmlFor="edit-titulo">Título</label>
-                <input
-                  id="edit-titulo"
-                  type="text"
-                  value={editForm.titulo}
-                  onChange={(e) => setEditForm(prev => ({ ...prev, titulo: e.target.value }))}
-                  placeholder="Título de la noticia"
-                  disabled={savingEdit}
-                />
-              </div>
+              {Object.entries(groupEditForms).map(([itemId, form], index) => (
+                <div key={itemId} className="edit-group-item">
+                  <div className="edit-group-item-header">
+                    <span className="edit-group-item-number">Item {index + 1}</span>
+                    {form.hasImage && <span className="edit-group-item-badge">Con imagen</span>}
+                    <button
+                      className="btn-delete-item"
+                      onClick={() => handleDeleteItemFromGroup(itemId)}
+                      disabled={savingEdit}
+                      title="Eliminar este item"
+                    >
+                      <FiTrash2 size={16} />
+                    </button>
+                  </div>
 
-              <div className="edit-form-group">
-                <label htmlFor="edit-fuente">Fuente</label>
-                <input
-                  id="edit-fuente"
-                  type="text"
-                  value={editForm.fuente}
-                  onChange={(e) => setEditForm(prev => ({ ...prev, fuente: e.target.value }))}
-                  placeholder="Fuente de la información"
-                  disabled={savingEdit}
-                />
-              </div>
+                  <div className="edit-form-group">
+                    <label>Título</label>
+                    <input
+                      type="text"
+                      value={form.titulo}
+                      onChange={(e) => setGroupEditForms(prev => ({
+                        ...prev,
+                        [itemId]: { ...prev[itemId], titulo: e.target.value }
+                      }))}
+                      placeholder="Título"
+                      disabled={savingEdit}
+                    />
+                  </div>
 
-              <div className="edit-form-group">
-                <label htmlFor="edit-contenido">Contenido</label>
-                <textarea
-                  id="edit-contenido"
-                  value={editForm.contenido}
-                  onChange={(e) => setEditForm(prev => ({ ...prev, contenido: e.target.value }))}
-                  placeholder="Contenido del texto"
-                  rows={8}
-                  disabled={savingEdit}
-                />
-              </div>
+                  <div className="edit-form-group">
+                    <label>Fuente</label>
+                    <input
+                      type="text"
+                      value={form.fuente}
+                      onChange={(e) => setGroupEditForms(prev => ({
+                        ...prev,
+                        [itemId]: { ...prev[itemId], fuente: e.target.value }
+                      }))}
+                      placeholder="Fuente"
+                      disabled={savingEdit}
+                    />
+                  </div>
+
+                  <div className="edit-form-group">
+                    <label>Contenido</label>
+                    <textarea
+                      value={form.contenido}
+                      onChange={(e) => setGroupEditForms(prev => ({
+                        ...prev,
+                        [itemId]: { ...prev[itemId], contenido: e.target.value }
+                      }))}
+                      placeholder="Contenido"
+                      rows={4}
+                      disabled={savingEdit}
+                    />
+                  </div>
+                </div>
+              ))}
 
               <div className="edit-modal-actions">
                 <button
@@ -1169,7 +1232,7 @@ ${hashtagsStr}`
                 </button>
                 <button
                   className="btn-save-edit"
-                  onClick={handleSaveEdit}
+                  onClick={handleSaveGroupEdit}
                   disabled={savingEdit}
                 >
                   {savingEdit ? (
@@ -1178,7 +1241,7 @@ ${hashtagsStr}`
                     </>
                   ) : (
                     <>
-                      <FiCheck /> Guardar cambios
+                      <FiCheck /> Guardar todo
                     </>
                   )}
                 </button>
