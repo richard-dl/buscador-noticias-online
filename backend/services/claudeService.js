@@ -35,7 +35,8 @@ const CATEGORIAS_DISPONIBLES = [
   'vida_sana',
   'gastronomia',
   'paranormal',
-  'filosofia'
+  'filosofia',
+  'mineria'
 ];
 
 /**
@@ -77,6 +78,7 @@ CATEGORÍAS:
 - gastronomia: cocina, recetas, restaurantes, chefs, comida, culinario, platos, ingredientes, vinos, maridaje, parrilla, asado, pastelería, repostería, comida gourmet
 - paranormal: experiencias cercanas a la muerte, testimonios sobrenaturales, milagros, apariciones, fenómenos inexplicables, ovnis, avistamientos, espiritualidad mística, resucitación, vida después de la muerte, ángeles, fantasmas, profecías
 - filosofia: reflexiones existenciales, propósito de vida, sentido de la existencia, enseñanzas de vida, parábolas, rabinos, filósofos, pensadores, sabiduría, ética, moral, estoicismo, budismo filosófico, autoconocimiento
+- mineria: minería, minas, extracción minera, litio, oro, plata, cobre, minerales, yacimientos, ley de glaciares, exploración minera, explotación minera, canon minero, empresas mineras
 
 REGLAS:
 - SALARIOS/PARITARIAS de cualquier sector = "economia"
@@ -93,6 +95,7 @@ REGLAS:
 - COCINA/RECETAS/RESTAURANTES/CHEFS = "gastronomia"
 - EXPERIENCIAS SOBRENATURALES/MILAGROS/OVNIS/FANTASMAS = "paranormal" (NO espectaculos)
 - REFLEXIONES/PROPÓSITO DE VIDA/ENSEÑANZAS/PARÁBOLAS/RABINOS = "filosofia" (NO religion ni vida_sana)
+- MINERÍA/MINAS/LITIO/MINERALES/LEY DE GLACIARES = "mineria" (NO politica ni economia)
 
 NOTICIA:
 Título: ${title}
@@ -148,7 +151,7 @@ const classifyBatchWithAI = async (news) => {
 
   const prompt = `Clasifica cada noticia en categoría y detecta tipo de contenido multimedia.
 
-CATEGORÍAS: politica, economia, deportes, espectaculos, tecnologia, policiales, judiciales, salud, educacion, cultura, ciencia, medioambiente, internacional, turismo, juegos, agro, empresas, emprendimientos, vida_sana, gastronomia, paranormal, filosofia
+CATEGORÍAS: politica, economia, deportes, espectaculos, tecnologia, policiales, judiciales, salud, educacion, cultura, ciencia, medioambiente, internacional, turismo, juegos, agro, empresas, emprendimientos, vida_sana, gastronomia, paranormal, filosofia, mineria
 
 REGLAS CATEGORÍA:
 - SALARIOS/PARITARIAS = "economia"
@@ -163,6 +166,7 @@ REGLAS CATEGORÍA:
 - COCINA/RECETAS/RESTAURANTES/CHEFS = "gastronomia"
 - MILAGROS/OVNIS/FANTASMAS/EXPERIENCIAS SOBRENATURALES = "paranormal"
 - REFLEXIONES/PROPÓSITO DE VIDA/ENSEÑANZAS/PARÁBOLAS/RABINOS = "filosofia"
+- MINERÍA/MINAS/LITIO/MINERALES = "mineria"
 
 TIPOS DE CONTENIDO (mediaType):
 - "video" = menciona video, mirá, YouTube, streaming, transmisión en vivo
@@ -323,7 +327,7 @@ INSTRUCCIONES:
 5. Escribe como periodista reportando el hecho, NO describas la noticia
 6. NO truncar ni acortar el contenido - incluye toda la información relevante
 
-CATEGORÍAS: politica, economia, deportes, espectaculos, tecnologia, policiales, judiciales, salud, educacion, cultura, ciencia, medioambiente, internacional, sociedad, turismo, juegos, agro, empresas, emprendimientos, vida_sana, gastronomia, paranormal, filosofia
+CATEGORÍAS: politica, economia, deportes, espectaculos, tecnologia, policiales, judiciales, salud, educacion, cultura, ciencia, medioambiente, internacional, sociedad, turismo, juegos, agro, empresas, emprendimientos, vida_sana, gastronomia, paranormal, filosofia, mineria
 
 REGLAS DE CLASIFICACIÓN:
 - SALARIOS/PARITARIAS = "economia"
@@ -339,6 +343,7 @@ REGLAS DE CLASIFICACIÓN:
 - COCINA/RECETAS/RESTAURANTES/CHEFS/COMIDA = "gastronomia"
 - MILAGROS/OVNIS/FANTASMAS/EXPERIENCIAS SOBRENATURALES = "paranormal" (NO espectaculos)
 - REFLEXIONES/PROPÓSITO DE VIDA/ENSEÑANZAS/PARÁBOLAS/RABINOS = "filosofia" (NO religion ni vida_sana)
+- MINERÍA/MINAS/LITIO/MINERALES/LEY DE GLACIARES = "mineria" (NO politica ni economia)
 
 NOTICIA ORIGINAL:
 Título: ${cleanTitle}

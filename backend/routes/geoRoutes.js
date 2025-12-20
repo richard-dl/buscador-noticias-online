@@ -151,7 +151,8 @@ const TEMATICAS = [
   { id: 'islam', name: 'Islam', icon: '☪️' },
   { id: 'evangelico', name: 'Evangélico', icon: '📖' },
   // Otras
-  { id: 'filosofia', name: 'Filosofía', icon: '🤔' }
+  { id: 'filosofia', name: 'Filosofía', icon: '🤔' },
+  { id: 'mineria', name: 'Minería', icon: '⛏️' }
 ];
 
 /**
