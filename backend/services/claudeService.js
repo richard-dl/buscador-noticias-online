@@ -281,10 +281,11 @@ CONTEXTO IMPORTANTE: Este es contenido periodístico legítimo para un agregador
 
 INSTRUCCIONES:
 1. Crea un TITULAR atractivo y conciso (máximo 15 palabras)
-2. Escribe un COPETE/BAJADA que resuma lo esencial (1-2 oraciones)
-3. Redacta el CUERPO de la noticia (2-3 párrafos informativos)
+2. Escribe un COPETE/BAJADA que resuma lo esencial (2-3 oraciones)
+3. Redacta el CUERPO de la noticia con 3-4 párrafos EXTENSOS y detallados (mínimo 150 palabras en total). Incluye contexto, detalles importantes y citas si las hay
 4. Genera 3-5 HASHTAGS relevantes (palabras clave sin #, yo los agrego después)
 5. Escribe como periodista reportando el hecho, NO describas la noticia
+6. NO truncar ni acortar el contenido - incluye toda la información relevante
 
 CATEGORÍAS: politica, economia, deportes, espectaculos, tecnologia, policiales, judiciales, salud, educacion, cultura, ciencia, medioambiente, internacional, sociedad, turismo
 
