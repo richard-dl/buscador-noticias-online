@@ -718,6 +718,12 @@ input, select, textarea {
 
 .form-links a {
   font-size: var(--font-size-sm);
+  color: var(--color-teal);
+  transition: color var(--transition-fast);
+}
+
+.form-links a:hover {
+  color: var(--color-accent);
 }
 
 .auth-footer {
@@ -729,6 +735,12 @@ input, select, textarea {
 
 .auth-footer a {
   font-weight: 500;
+  color: var(--color-teal);
+  transition: color var(--transition-fast);
+}
+
+.auth-footer a:hover {
+  color: var(--color-accent);
 }
 
 .success-icon {

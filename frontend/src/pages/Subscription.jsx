@@ -5,7 +5,7 @@ import Header from '../components/Header'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { toast } from 'react-toastify'
 import {
-  FiCheck, FiX, FiClock, FiStar, FiZap, FiShield, FiAward
+  FiCheck, FiX, FiClock, FiStar, FiZap, FiShield, FiAward, FiGift, FiCreditCard, FiTrendingUp
 } from 'react-icons/fi'
 
 const Subscription = () => {
@@ -59,7 +59,6 @@ const Subscription = () => {
   }
 
   const handlePayment = (planType) => {
-    // Aquí se integrará la pasarela de pagos
     toast.info('Próximamente: Integración con pasarela de pagos')
     console.log('Iniciar pago para:', planType)
   }
@@ -91,7 +90,10 @@ const Subscription = () => {
       <div className="subscription-page">
         <Header />
         <main className="subscription-main container">
-          <LoadingSpinner size="large" text="Cargando planes..." />
+          <div className="subscription-loading">
+            <LoadingSpinner size="large" />
+            <p>Cargando planes...</p>
+          </div>
         </main>
       </div>
     )
@@ -100,66 +102,67 @@ const Subscription = () => {
   const currentRole = subscriptionStatus?.role || profile?.role || 'trial'
   const isAdmin = currentRole === 'admin'
 
+  // Características de Zona VIP
+  const zonaVipFeature = 'Zona VIP: informes en tiempo real de PFA, PSA, GNA, policías provinciales, Ministerio de Seguridad y más'
+
   return (
     <div className="subscription-page">
       <Header />
 
       <main className="subscription-main container">
-        <div className="subscription-content">
-          {/* Columna izquierda: Status y Planes */}
-          <div className="subscription-left">
-            <div className="subscription-header">
-              <h1>Planes de Suscripción</h1>
-              <p className="subscription-subtitle">
-                Elige el plan que mejor se adapte a tus necesidades
-              </p>
+        <div className="subscription-header">
+          <h1>Planes de Suscripción</h1>
+          <p className="subscription-subtitle">
+            Elige el plan que mejor se adapte a tus necesidades
+          </p>
+        </div>
+
+        {/* Estado actual */}
+        <section className="current-status-card">
+          <div className="status-info">
+            <h3>Tu plan actual</h3>
+            <div className="status-details">
+              <span className={`badge badge-lg ${getRoleBadgeClass(currentRole)}`}>
+                {getRoleName(currentRole)}
+              </span>
+
+              {subscriptionStatus?.daysRemaining !== undefined && !isAdmin && !subscriptionStatus?.isLifetime && (
+                <span className="days-remaining">
+                  <FiClock size={16} />
+                  {subscriptionStatus.daysRemaining} días restantes
+                </span>
+              )}
+
+              {subscriptionStatus?.isLifetime && (
+                <span className="lifetime-badge">
+                  <FiShield size={16} />
+                  Acceso vitalicio
+                </span>
+              )}
+
+              {isAdmin && (
+                <span className="admin-badge-status">
+                  <FiAward size={16} />
+                  Acceso ilimitado
+                </span>
+              )}
             </div>
 
-            {/* Estado actual */}
-            <section className="current-status-card">
-              <div className="status-info">
-                <h3>Tu plan actual</h3>
-                <div className="status-details">
-                  <span className={`badge badge-lg ${getRoleBadgeClass(currentRole)}`}>
-                    {getRoleName(currentRole)}
-                  </span>
+            {subscriptionStatus?.hasVipAccess && (
+              <p className="vip-access-note">
+                <FiZap size={16} />
+                Tienes acceso a herramientas de IA
+              </p>
+            )}
+          </div>
+        </section>
 
-                  {subscriptionStatus?.daysRemaining !== undefined && !isAdmin && !subscriptionStatus?.isLifetime && (
-                    <span className="days-remaining">
-                      <FiClock size={16} />
-                      {subscriptionStatus.daysRemaining} días restantes
-                    </span>
-                  )}
-
-                  {subscriptionStatus?.isLifetime && (
-                    <span className="lifetime-badge">
-                      <FiShield size={16} />
-                      Acceso vitalicio
-                    </span>
-                  )}
-
-                  {isAdmin && (
-                    <span className="admin-badge">
-                      <FiAward size={16} />
-                      Acceso ilimitado
-                    </span>
-                  )}
-                </div>
-
-                {subscriptionStatus?.hasVipAccess && (
-                  <p className="vip-access-note">
-                    <FiZap size={16} />
-                    Tienes acceso a herramientas de IA
-                  </p>
-                )}
-              </div>
-            </section>
-
-            {/* Planes */}
-            <div className="plans-grid">
+        {/* Planes - Grid de 4 columnas */}
+        <div className="plans-grid">
           {/* Plan Trial */}
           <div className={`plan-card ${currentRole === 'trial' ? 'current-plan' : ''}`}>
             <div className="plan-header">
+              <span className="plan-icon"><FiGift /></span>
               <h2>Trial</h2>
               <div className="plan-price">
                 <span className="price">Gratis</span>
@@ -168,14 +171,12 @@ const Subscription = () => {
             </div>
 
             <ul className="plan-features">
-              {plans?.trial?.features?.map((feature, i) => (
-                <li key={i}><FiCheck className="check" /> {feature}</li>
-              ))}
-              {plans?.trial?.limitations?.map((limit, i) => (
-                <li key={`limit-${i}`} className="limitation">
-                  <FiX className="x" /> {limit}
-                </li>
-              ))}
+              <li><FiCheck className="check" /> Búsqueda de noticias</li>
+              <li><FiCheck className="check" /> Guardar noticias favoritas</li>
+              <li><FiCheck className="check" /> Perfiles de búsqueda</li>
+              <li className="limitation"><FiX className="x" /> Sin acceso a herramientas de IA</li>
+              <li className="limitation"><FiX className="x" /> Sin acceso a Zona VIP</li>
+              <li className="limitation"><FiX className="x" /> Período limitado a 30 días</li>
             </ul>
 
             <div className="plan-action">
@@ -191,6 +192,7 @@ const Subscription = () => {
           <div className={`plan-card plan-featured ${currentRole === 'suscriptor' ? 'current-plan' : ''}`}>
             <div className="plan-badge">Recomendado</div>
             <div className="plan-header">
+              <span className="plan-icon"><FiCreditCard /></span>
               <h2>Suscriptor</h2>
               <div className="plan-price">
                 <span className="price">$39</span>
@@ -199,14 +201,11 @@ const Subscription = () => {
             </div>
 
             <ul className="plan-features">
-              {plans?.suscriptor?.features?.map((feature, i) => (
-                <li key={i}><FiCheck className="check" /> {feature}</li>
-              ))}
-              {plans?.suscriptor?.limitations?.map((limit, i) => (
-                <li key={`limit-${i}`} className="limitation">
-                  <FiX className="x" /> {limit}
-                </li>
-              ))}
+              <li><FiCheck className="check" /> Todo lo incluido en Trial</li>
+              <li><FiCheck className="check" /> Acceso permanente sin vencimiento</li>
+              <li><FiCheck className="check" /> Soporte prioritario</li>
+              <li className="limitation"><FiX className="x" /> Sin acceso a herramientas de IA</li>
+              <li className="limitation"><FiX className="x" /> Sin acceso a Zona VIP</li>
             </ul>
 
             <div className="plan-action">
@@ -233,6 +232,7 @@ const Subscription = () => {
           {/* Plan VIP Trial */}
           <div className={`plan-card ${currentRole === 'vip_trial' ? 'current-plan' : ''}`}>
             <div className="plan-header">
+              <span className="plan-icon"><FiZap /></span>
               <h2>VIP Trial</h2>
               <div className="plan-price">
                 <span className="price">Gratis</span>
@@ -241,14 +241,13 @@ const Subscription = () => {
             </div>
 
             <ul className="plan-features">
-              {plans?.vip_trial?.features?.map((feature, i) => (
-                <li key={i}><FiCheck className="check" /> {feature}</li>
-              ))}
-              {plans?.vip_trial?.limitations?.map((limit, i) => (
-                <li key={`limit-${i}`} className="limitation">
-                  <FiX className="x" /> {limit}
-                </li>
-              ))}
+              <li><FiCheck className="check" /> Todo lo incluido en Suscriptor</li>
+              <li><FiCheck className="check" /> Acceso completo a herramientas de IA</li>
+              <li><FiCheck className="check" /> Resúmenes automáticos de noticias</li>
+              <li><FiCheck className="check" /> Análisis de contenido con IA</li>
+              <li><FiCheck className="check" /> {zonaVipFeature}</li>
+              <li className="limitation"><FiX className="x" /> Período limitado a 30 días</li>
+              <li className="limitation"><FiX className="x" /> Solo disponible una vez</li>
             </ul>
 
             <div className="plan-action">
@@ -285,6 +284,7 @@ const Subscription = () => {
           <div className={`plan-card plan-premium ${currentRole === 'vip' ? 'current-plan' : ''}`}>
             <div className="plan-badge premium">Premium</div>
             <div className="plan-header">
+              <span className="plan-icon"><FiTrendingUp /></span>
               <h2>VIP Anual</h2>
               <div className="plan-price">
                 <span className="price">$90</span>
@@ -293,9 +293,12 @@ const Subscription = () => {
             </div>
 
             <ul className="plan-features">
-              {plans?.vip?.features?.map((feature, i) => (
-                <li key={i}><FiCheck className="check" /> {feature}</li>
-              ))}
+              <li><FiCheck className="check" /> Todo lo incluido en Suscriptor</li>
+              <li><FiCheck className="check" /> Acceso completo a herramientas de IA</li>
+              <li><FiCheck className="check" /> Resúmenes automáticos de noticias</li>
+              <li><FiCheck className="check" /> Análisis de contenido con IA</li>
+              <li><FiCheck className="check" /> {zonaVipFeature}</li>
+              <li><FiCheck className="check" /> Soporte premium 24/7</li>
             </ul>
 
             <div className="plan-action">
@@ -305,7 +308,7 @@ const Subscription = () => {
                   onClick={() => handlePayment('vip')}
                 >
                   <FiAward size={18} />
-                  Activar VIP por $90/año
+                  Activar VIP $90/año
                 </button>
               ) : currentRole === 'vip' ? (
                 <>
@@ -324,50 +327,64 @@ const Subscription = () => {
               )}
             </div>
           </div>
+        </div>
+
+        {/* Información adicional */}
+        <section className="subscription-info">
+          <h3>Preguntas Frecuentes</h3>
+
+          <div className="faq-grid">
+            <div className="faq-item">
+              <h4>¿Qué incluye la suscripción vitalicia?</h4>
+              <p>
+                Por un único pago de $39 USD, obtienes acceso permanente a la plataforma
+                de búsqueda de noticias, sin límite de tiempo.
+              </p>
+            </div>
+
+            <div className="faq-item">
+              <h4>¿Qué son las herramientas de IA?</h4>
+              <p>
+                Los usuarios VIP tienen acceso a resúmenes automáticos de noticias,
+                análisis de contenido y contenido exclusivo generado con inteligencia artificial.
+              </p>
+            </div>
+
+            <div className="faq-item">
+              <h4>¿Puedo probar el plan VIP antes de pagar?</h4>
+              <p>
+                Sí. Los suscriptores pueden activar una prueba gratuita de 30 días
+                del plan VIP para probar todas las funciones de IA.
+              </p>
+            </div>
+
+            <div className="faq-item">
+              <h4>¿Qué pasa si no renuevo el VIP anual?</h4>
+              <p>
+                Si no renuevas, mantienes tu acceso como Suscriptor vitalicio,
+                pero pierdes las herramientas de IA hasta que renueves.
+              </p>
+            </div>
+
+            <div className="faq-item">
+              <h4>¿Qué es la Zona VIP?</h4>
+              <p>
+                En la Zona VIP se publican en tiempo real informes directos de instituciones
+                como Policía Federal (PFA), Policía de Seguridad Aeroportuaria (PSA),
+                Gendarmería Nacional (GNA), policías provinciales, Ministerio de Seguridad,
+                Policía de la Ciudad de Buenos Aires, municipios y otras fuentes oficiales.
+              </p>
+            </div>
+
+            <div className="faq-item">
+              <h4>¿Cómo puedo pagar?</h4>
+              <p>
+                Aceptamos pagos con tarjeta de crédito, débito y transferencia bancaria.
+                Próximamente habilitaremos más métodos de pago.
+              </p>
             </div>
           </div>
-
-          {/* Columna derecha: FAQ */}
-          <div className="subscription-right">
-            <section className="subscription-info">
-              <h3>Preguntas Frecuentes</h3>
-
-              <div className="faq-grid">
-                <div className="faq-item">
-                  <h4>¿Qué incluye la suscripción vitalicia?</h4>
-                  <p>
-                    Por un único pago de $39 USD, obtienes acceso permanente a la plataforma
-                    de búsqueda de noticias, sin límite de tiempo.
-                  </p>
-                </div>
-
-                <div className="faq-item">
-                  <h4>¿Qué son las herramientas de IA?</h4>
-                  <p>
-                    Los usuarios VIP tienen acceso a resúmenes automáticos de noticias,
-                    análisis de contenido y contenido exclusivo generado con inteligencia artificial.
-                  </p>
-                </div>
-
-                <div className="faq-item">
-                  <h4>¿Puedo probar el plan VIP antes de pagar?</h4>
-                  <p>
-                    Sí. Los suscriptores pueden activar una prueba gratuita de 30 días
-                    del plan VIP para probar todas las funciones de IA.
-                  </p>
-                </div>
-
-                <div className="faq-item">
-                  <h4>¿Qué pasa si no renuevo el VIP anual?</h4>
-                  <p>
-                    Si no renuevas, mantienes tu acceso como Suscriptor vitalicio,
-                    pero pierdes las herramientas de IA hasta que renueves.
-                  </p>
-                </div>
-              </div>
-            </section>
-          </div>
-        </div>
+        </section>
       </main>
     </div>
   )
