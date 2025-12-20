@@ -1,5 +1,10 @@
 /* ============================================
    SUBSCRIPTION PAGE STYLES
+   Layout: VERTICAL (columna)
+   - Fila 1: Titulo
+   - Fila 2: Estado actual
+   - Fila 3: Grid de planes (4 columnas)
+   - Fila 4: FAQ (3 columnas)
    ============================================ */
 
 .subscription-page {
@@ -7,16 +12,33 @@
   background-color: var(--color-bg);
 }
 
-.subscription-main {
+/* MAIN CONTAINER - LAYOUT VERTICAL FORZADO */
+.subscription-page .subscription-main {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: var(--spacing-6);
   padding: var(--spacing-8) var(--spacing-4);
   max-width: 1400px;
   margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-/* Header */
+/* Asegurar que TODOS los hijos directos ocupen el ancho completo */
+.subscription-page .subscription-main > * {
+  width: 100% !important;
+  max-width: 100% !important;
+  flex-shrink: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* ============================================
+   FILA 1: HEADER / TITULO
+   ============================================ */
 .subscription-header {
   text-align: center;
-  margin-bottom: var(--spacing-8);
+  display: block;
 }
 
 .subscription-header h1 {
@@ -30,16 +52,22 @@
   font-size: var(--font-size-lg);
 }
 
-/* Current Status Card */
+/* ============================================
+   FILA 2: ESTADO ACTUAL / TU PLAN
+   ============================================ */
 .current-status-card {
   background: linear-gradient(135deg, var(--color-bg-tertiary), var(--color-bg-secondary));
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
-  padding: var(--spacing-6);
-  margin-bottom: var(--spacing-8);
-  max-width: 600px;
+  padding: var(--spacing-4);
+  max-width: 500px;
   margin-left: auto;
   margin-right: auto;
+  display: block;
+}
+
+.status-info {
+  text-align: center;
 }
 
 .status-info h3 {
@@ -67,12 +95,12 @@
   font-size: var(--font-size-sm);
 }
 
-/* Admin badge - naranja con texto oscuro */
+/* Admin badge en status - naranja con texto oscuro */
 .admin-badge-status {
   display: flex;
   align-items: center;
   gap: var(--spacing-2);
-  background: rgba(255, 170, 0, 0.3);
+  background: linear-gradient(135deg, #ffaa00, #ff8800);
   color: #1a1a2e;
   padding: var(--spacing-1) var(--spacing-3);
   border-radius: var(--radius-lg);
@@ -90,7 +118,7 @@
   font-size: var(--font-size-sm);
 }
 
-/* Badges - usar selectores más específicos para sobrescribir global.css */
+/* Badges de rol en pagina suscripcion */
 .subscription-page .badge.badge-lg {
   padding: var(--spacing-2) var(--spacing-4);
   font-size: var(--font-size-base);
@@ -125,12 +153,14 @@
   color: #1a1a2e !important;
 }
 
-/* Plans Grid - 4 columnas en desktop */
-.plans-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+/* ============================================
+   FILA 3: GRID DE PLANES (4 columnas)
+   ============================================ */
+.subscription-page .plans-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
   gap: var(--spacing-4);
-  margin-bottom: var(--spacing-8);
+  width: 100% !important;
 }
 
 /* Plan Card */
@@ -144,7 +174,7 @@
   transition: all var(--transition-base);
   display: flex;
   flex-direction: column;
-  min-height: 420px;
+  min-height: 400px;
 }
 
 .plan-card:hover {
@@ -199,23 +229,16 @@
 }
 
 .plan-icon {
-  font-size: 2.5rem;
+  font-size: 2rem;
   margin-bottom: var(--spacing-2);
   display: block;
+  color: var(--color-teal);
 }
 
 .plan-header h2 {
   color: var(--color-text);
   font-size: var(--font-size-lg);
   margin-bottom: var(--spacing-2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-2);
-}
-
-.plan-header h2 svg {
-  color: var(--color-teal);
 }
 
 .plan-price {
@@ -346,12 +369,16 @@
   margin-top: var(--spacing-2);
 }
 
-/* FAQ Section */
+/* ============================================
+   FILA 4: FAQ SECTION (SEPARADA)
+   ============================================ */
 .subscription-info {
   background: var(--color-bg-secondary);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
   padding: var(--spacing-6);
+  margin-top: var(--spacing-4);
+  display: block;
 }
 
 .subscription-info h3 {
@@ -361,10 +388,11 @@
   text-align: center;
 }
 
-.faq-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+.subscription-page .faq-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
   gap: var(--spacing-4);
+  width: 100% !important;
 }
 
 .faq-item {
@@ -399,45 +427,46 @@
   color: var(--color-text-muted);
 }
 
-/* Responsive - Tablet: 2 columnas */
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+/* Tablet: 2 columnas planes, 2 columnas FAQ */
 @media (max-width: 1200px) {
-  .plans-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .subscription-page .plans-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
   }
 
-  .faq-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .subscription-page .faq-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
   }
 }
 
-/* Responsive - Móvil: 1 columna */
+/* Movil: 1 columna */
 @media (max-width: 768px) {
-  .subscription-main {
+  .subscription-page .subscription-main {
     padding: var(--spacing-4);
+    gap: var(--spacing-4);
   }
 
   .subscription-header h1 {
     font-size: var(--font-size-2xl);
   }
 
-  .plans-grid {
-    grid-template-columns: 1fr;
+  .subscription-page .plans-grid {
+    grid-template-columns: 1fr !important;
   }
 
   .plan-card {
     min-height: auto;
   }
 
-  .faq-grid {
-    grid-template-columns: 1fr;
+  .subscription-page .faq-grid {
+    grid-template-columns: 1fr !important;
   }
 
   .status-details {
     flex-direction: column;
     align-items: center;
-  }
-
-  .current-status-card {
-    margin-bottom: var(--spacing-6);
   }
 }
