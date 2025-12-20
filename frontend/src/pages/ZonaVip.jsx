@@ -620,282 +620,257 @@ ${hashtagsStr}`
             {paginatedGroups.map((group) => {
               const isGroupExpanded = expandedGroups[group.groupId]
               const hasMultipleItems = group.items.length > 1
-              const item = group.consolidatedItem
-              const allMedia = group.allMedia || []
+              const consolidatedItem = group.consolidatedItem
 
-              // Función para renderizar un elemento multimedia individual
-              const renderMediaItem = (media, index) => {
-                if (media.type === 'video') {
-                  return (
-                    <video
-                      key={media.fileId || index}
-                      controls
-                      preload="auto"
-                      crossOrigin="anonymous"
-                      playsInline
-                      src={vipApi.getMediaUrl(media.fileId)}
-                      onError={(e) => {
-                        console.error('Error cargando video:', media.fileId, e)
-                        e.target.parentElement.innerHTML = '<p class="media-error">Error al cargar video</p>'
-                      }}
-                    />
-                  )
-                }
+              // Función para renderizar una tarjeta individual completa
+              const renderCard = (item, isSecondary = false) => {
+                const { text: displayText, isTruncated } = truncateText(item.contenido)
+                const isTextExpanded = expandedTexts[item.id]
+
                 return (
-                  <img
-                    key={media.fileId || index}
-                    src={vipApi.getMediaUrl(media.fileId)}
-                    alt={item.titulo || 'Imagen VIP'}
-                    onError={(e) => {
-                      console.error('Error cargando imagen:', media.fileId)
-                      e.target.parentElement.innerHTML = '<p class="media-error">Error al cargar imagen</p>'
-                    }}
-                  />
-                )
-              }
-
-              const { text: displayText, isTruncated } = truncateText(item.contenido)
-              const isTextExpanded = expandedTexts[item.id || group.groupId]
-
-              return (
-                <div
-                  key={group.groupId}
-                  className={`vip-content-card ${hasMultipleItems ? 'vip-card-consolidated' : ''}`}
-                >
-                  {/* PRIMERO: Título y Fuente (si existen) */}
-                  <div className="vip-content-body">
-                    {item.titulo && (
-                      <h3 className="vip-content-title">{item.titulo}</h3>
-                    )}
-                    {item.fuente && (
-                      <span className="vip-content-source">Fuente: {item.fuente}</span>
-                    )}
-                    {item.contenido && (
-                      <>
-                        <div className="vip-content-text">
-                          {isTextExpanded ? item.contenido : displayText}
-                        </div>
-                        {isTruncated && (
-                          <button
-                            className="btn-expand-text"
-                            onClick={() => toggleExpandText(item.id || group.groupId)}
-                          >
-                            {isTextExpanded ? (
-                              <>
-                                <FiChevronUp size={14} />
-                                <span>Ver menos</span>
-                              </>
-                            ) : (
-                              <>
-                                <FiChevronDown size={14} />
-                                <span>Ver todo</span>
-                              </>
-                            )}
-                          </button>
+                  <div
+                    key={item.id}
+                    className={`vip-content-card ${isSecondary ? 'vip-card-secondary' : ''}`}
+                  >
+                    {item.imagen && (
+                      <div className="vip-content-image">
+                        {item.imagen.type === 'video' ? (
+                          <video
+                            controls
+                            preload="auto"
+                            crossOrigin="anonymous"
+                            playsInline
+                            src={vipApi.getMediaUrl(item.imagen.fileId)}
+                            onError={(e) => {
+                              console.error('Error cargando video:', item.imagen.fileId, e)
+                              e.target.parentElement.innerHTML = '<p class="media-error">Error al cargar video</p>'
+                            }}
+                          />
+                        ) : (
+                          <img
+                            src={vipApi.getMediaUrl(item.imagen.fileId)}
+                            alt={item.titulo || 'Imagen VIP'}
+                            onError={(e) => {
+                              console.error('Error cargando imagen:', item.imagen.fileId)
+                              e.target.parentElement.innerHTML = '<p class="media-error">Error al cargar imagen</p>'
+                            }}
+                          />
                         )}
-                      </>
-                    )}
-                    {item.sensible && item.sensible.length > 0 && (
-                      <div className="vip-content-sensitive">
-                        <FiAlertTriangle />
-                        <span>Contiene {item.sensible.length} dato(s) sensible(s) protegido(s)</span>
                       </div>
                     )}
-                  </div>
-
-                  {/* SEGUNDO: Toda la multimedia del grupo */}
-                  {allMedia.length > 0 && (
-                    <div className={`vip-content-media ${allMedia.length > 1 ? 'vip-media-gallery' : ''}`}>
-                      {allMedia.length === 1 ? (
-                        // Una sola imagen/video: mostrar normal
-                        <div className="vip-content-image">
-                          {renderMediaItem(allMedia[0], 0)}
-                        </div>
-                      ) : (
-                        // Múltiples: mostrar como galería
+                    <div className="vip-content-body">
+                      {item.titulo && (
+                        <h3 className="vip-content-title">{item.titulo}</h3>
+                      )}
+                      {item.fuente && (
+                        <span className="vip-content-source">Fuente: {item.fuente}</span>
+                      )}
+                      {item.contenido && (
                         <>
-                          <div className="vip-gallery-header">
-                            <FiImage size={14} />
-                            <span>{allMedia.length} archivos multimedia</span>
-                            {!isGroupExpanded && (
-                              <button
-                                className="btn-expand-gallery"
-                                onClick={() => toggleGroupExpand(group.groupId)}
-                              >
-                                Ver todos <FiChevronDown size={14} />
-                              </button>
-                            )}
+                          <div className="vip-content-text">
+                            {isTextExpanded ? item.contenido : displayText}
                           </div>
-                          {/* Mostrar primera imagen siempre */}
-                          <div className="vip-content-image vip-main-media">
-                            {renderMediaItem(allMedia[0], 0)}
-                          </div>
-                          {/* Miniaturas o galería expandida */}
-                          {isGroupExpanded ? (
-                            <div className="vip-gallery-expanded">
-                              {allMedia.slice(1).map((media, idx) => (
-                                <div key={media.fileId || idx} className="vip-content-image">
-                                  {renderMediaItem(media, idx + 1)}
-                                </div>
-                              ))}
-                              <button
-                                className="btn-collapse-gallery"
-                                onClick={() => toggleGroupExpand(group.groupId)}
-                              >
-                                <FiChevronUp size={14} /> Colapsar galería
-                              </button>
-                            </div>
-                          ) : (
-                            <div className="vip-group-thumbnails">
-                              {allMedia.slice(1, 4).map((media, idx) => (
-                                <div
-                                  key={media.fileId || idx}
-                                  className="vip-thumbnail"
-                                  onClick={() => toggleGroupExpand(group.groupId)}
-                                >
-                                  {media.type === 'video' ? (
-                                    <div className="thumbnail-video">▶</div>
-                                  ) : (
-                                    <img
-                                      src={vipApi.getMediaUrl(media.fileId)}
-                                      alt=""
-                                    />
-                                  )}
-                                </div>
-                              ))}
-                              {allMedia.length > 4 && (
-                                <div
-                                  className="vip-thumbnail vip-thumbnail-more"
-                                  onClick={() => toggleGroupExpand(group.groupId)}
-                                >
-                                  +{allMedia.length - 4}
-                                </div>
+                          {isTruncated && (
+                            <button
+                              className="btn-expand-text"
+                              onClick={() => toggleExpandText(item.id)}
+                            >
+                              {isTextExpanded ? (
+                                <>
+                                  <FiChevronUp size={14} />
+                                  <span>Ver menos</span>
+                                </>
+                              ) : (
+                                <>
+                                  <FiChevronDown size={14} />
+                                  <span>Ver todo</span>
+                                </>
                               )}
-                            </div>
+                            </button>
                           )}
                         </>
                       )}
-                    </div>
-                  )}
-
-                  {/* Si es item sin imagen pero el item original sí tenía */}
-                  {allMedia.length === 0 && item.imagen && (
-                    <div className="vip-content-image">
-                      {item.imagen.type === 'video' ? (
-                        <video
-                          controls
-                          preload="auto"
-                          crossOrigin="anonymous"
-                          playsInline
-                          src={vipApi.getMediaUrl(item.imagen.fileId)}
-                          onError={(e) => {
-                            console.error('Error cargando video:', item.imagen.fileId, e)
-                            e.target.parentElement.innerHTML = '<p class="media-error">Error al cargar video</p>'
-                          }}
-                        />
-                      ) : (
-                        <img
-                          src={vipApi.getMediaUrl(item.imagen.fileId)}
-                          alt={item.titulo || 'Imagen VIP'}
-                          onError={(e) => {
-                            console.error('Error cargando imagen:', item.imagen.fileId)
-                            e.target.parentElement.innerHTML = '<p class="media-error">Error al cargar imagen</p>'
-                          }}
-                        />
+                      {item.sensible && item.sensible.length > 0 && (
+                        <div className="vip-content-sensitive">
+                          <FiAlertTriangle />
+                          <span>Contiene {item.sensible.length} dato(s) sensible(s) protegido(s)</span>
+                        </div>
                       )}
-                    </div>
-                  )}
-
-                  {/* Footer con acciones */}
-                  <div className="vip-content-footer">
-                    <span className="vip-content-date">
-                      {formatDate(item.createdAt || group.createdAt)}
-                      {hasMultipleItems && (
-                        <span className="vip-consolidated-badge">
-                          <FiLayers size={12} /> {group.items.length} elementos
-                        </span>
-                      )}
-                    </span>
-                    <div className="vip-content-actions">
-                      <button
-                        className="btn-action-vip"
-                        onClick={() => handleCopyContent(item)}
-                        title="Copiar contenido"
-                      >
-                        <FiCopy />
-                      </button>
-                      <button
-                        className={`btn-action-vip btn-save ${savedItems[item.id] ? 'saved' : ''}`}
-                        onClick={() => handleSaveNews(item)}
-                        title={savedItems[item.id] ? 'Guardado' : 'Guardar noticia'}
-                      >
-                        <FiBookmark />
-                      </button>
-                      {item.contenido && (
-                        <button
-                          className="btn-action-vip btn-ai"
-                          onClick={() => handleGenerateAISummary(item)}
-                          disabled={loadingAI}
-                          title="Generar resumen con IA"
-                        >
-                          <FiZap />
-                        </button>
-                      )}
-                      {(profile?.role === 'admin') && hasMultipleItems && (
-                        <button
-                          className="btn-action-vip btn-expand-items"
-                          onClick={() => toggleGroupExpand(group.groupId)}
-                          title={isGroupExpanded ? 'Colapsar elementos' : 'Ver elementos individuales'}
-                        >
-                          {isGroupExpanded ? <FiChevronUp /> : <FiChevronDown />}
-                        </button>
-                      )}
-                      {(profile?.role === 'admin') && !hasMultipleItems && (
-                        <button
-                          className="btn-action-vip btn-delete"
-                          onClick={() => handleDeleteContent(item.id)}
-                          title="Eliminar contenido"
-                        >
-                          <FiTrash2 />
-                        </button>
-                      )}
+                      <div className="vip-content-footer">
+                        <span className="vip-content-date">{formatDate(item.createdAt)}</span>
+                        <div className="vip-content-actions">
+                          <button
+                            className="btn-action-vip"
+                            onClick={() => handleCopyContent(item)}
+                            title="Copiar contenido"
+                          >
+                            <FiCopy />
+                          </button>
+                          <button
+                            className={`btn-action-vip btn-save ${savedItems[item.id] ? 'saved' : ''}`}
+                            onClick={() => handleSaveNews(item)}
+                            title={savedItems[item.id] ? 'Guardado' : 'Guardar noticia'}
+                          >
+                            <FiBookmark />
+                          </button>
+                          {item.contenido && (
+                            <button
+                              className="btn-action-vip btn-ai"
+                              onClick={() => handleGenerateAISummary(item)}
+                              disabled={loadingAI}
+                              title="Generar resumen con IA"
+                            >
+                              <FiZap />
+                            </button>
+                          )}
+                          {(profile?.role === 'admin') && (
+                            <button
+                              className="btn-action-vip btn-delete"
+                              onClick={() => handleDeleteContent(item.id)}
+                              title="Eliminar contenido"
+                            >
+                              <FiTrash2 />
+                            </button>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   </div>
+                )
+              }
 
-                  {/* Para admin: mostrar elementos individuales del grupo si está expandido */}
-                  {(profile?.role === 'admin') && hasMultipleItems && isGroupExpanded && (
-                    <div className="vip-group-individual-items">
-                      <div className="vip-individual-items-header">
-                        <span>Elementos individuales del grupo:</span>
+              // Si es un grupo con múltiples items
+              if (hasMultipleItems) {
+                return (
+                  <div key={group.groupId} className="vip-content-group">
+                    {/* Header del grupo con botón expandir */}
+                    <div className="vip-group-header">
+                      <button
+                        className="btn-group-toggle"
+                        onClick={() => toggleGroupExpand(group.groupId)}
+                      >
+                        <FiLayers />
+                        <span>{group.items.length} elementos relacionados</span>
+                        {isGroupExpanded ? <FiChevronUp /> : <FiChevronDown />}
+                      </button>
+                    </div>
+
+                    {/* Tarjeta consolidada: texto principal del grupo */}
+                    {(consolidatedItem.titulo || consolidatedItem.fuente || consolidatedItem.contenido) && (
+                      <div className="vip-content-card vip-card-text-only">
+                        <div className="vip-content-body">
+                          {consolidatedItem.titulo && (
+                            <h3 className="vip-content-title">{consolidatedItem.titulo}</h3>
+                          )}
+                          {consolidatedItem.fuente && (
+                            <span className="vip-content-source">Fuente: {consolidatedItem.fuente}</span>
+                          )}
+                          {consolidatedItem.contenido && (
+                            <>
+                              <div className="vip-content-text">
+                                {expandedTexts[group.groupId] ? consolidatedItem.contenido : truncateText(consolidatedItem.contenido).text}
+                              </div>
+                              {truncateText(consolidatedItem.contenido).isTruncated && (
+                                <button
+                                  className="btn-expand-text"
+                                  onClick={() => toggleExpandText(group.groupId)}
+                                >
+                                  {expandedTexts[group.groupId] ? (
+                                    <>
+                                      <FiChevronUp size={14} />
+                                      <span>Ver menos</span>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <FiChevronDown size={14} />
+                                      <span>Ver todo</span>
+                                    </>
+                                  )}
+                                </button>
+                              )}
+                            </>
+                          )}
+                          {consolidatedItem.sensible && consolidatedItem.sensible.length > 0 && (
+                            <div className="vip-content-sensitive">
+                              <FiAlertTriangle />
+                              <span>Contiene {consolidatedItem.sensible.length} dato(s) sensible(s) protegido(s)</span>
+                            </div>
+                          )}
+                          <div className="vip-content-footer">
+                            <span className="vip-content-date">{formatDate(group.createdAt)}</span>
+                            <div className="vip-content-actions">
+                              <button
+                                className="btn-action-vip"
+                                onClick={() => handleCopyContent(consolidatedItem)}
+                                title="Copiar contenido"
+                              >
+                                <FiCopy />
+                              </button>
+                              {consolidatedItem.contenido && (
+                                <button
+                                  className="btn-action-vip btn-ai"
+                                  onClick={() => handleGenerateAISummary(consolidatedItem)}
+                                  disabled={loadingAI}
+                                  title="Generar resumen con IA"
+                                >
+                                  <FiZap />
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      {group.items.map(originalItem => (
-                        <div key={originalItem.id} className="vip-individual-item">
-                          <div className="vip-individual-content">
-                            {originalItem.imagen && (
-                              <span className="vip-individual-type">
-                                {originalItem.imagen.type === 'video' ? '🎬 Video' : '📷 Foto'}
-                              </span>
-                            )}
-                            {originalItem.titulo && <strong>{originalItem.titulo}</strong>}
-                            {originalItem.contenido && (
-                              <span className="vip-individual-text">
-                                {originalItem.contenido.substring(0, 50)}...
-                              </span>
+                    )}
+
+                    {/* Mostrar primer item con multimedia siempre (si existe) */}
+                    {group.items.filter(i => i.imagen).length > 0 && (
+                      <>
+                        {renderCard(group.items.find(i => i.imagen), false)}
+
+                        {/* Mostrar resto de items con multimedia si está expandido */}
+                        {isGroupExpanded && (
+                          <div className="vip-group-items">
+                            {group.items.filter(i => i.imagen).slice(1).map(item => renderCard(item, true))}
+                          </div>
+                        )}
+
+                        {/* Miniaturas de los demás items cuando está colapsado */}
+                        {!isGroupExpanded && group.items.filter(i => i.imagen).length > 1 && (
+                          <div className="vip-group-thumbnails">
+                            {group.items.filter(i => i.imagen).slice(1, 4).map(item => (
+                              <div
+                                key={item.id}
+                                className="vip-thumbnail"
+                                onClick={() => toggleGroupExpand(group.groupId)}
+                              >
+                                {item.imagen.type === 'video' ? (
+                                  <div className="thumbnail-video">▶</div>
+                                ) : (
+                                  <img
+                                    src={vipApi.getMediaUrl(item.imagen.fileId)}
+                                    alt=""
+                                  />
+                                )}
+                              </div>
+                            ))}
+                            {group.items.filter(i => i.imagen).length > 4 && (
+                              <div
+                                className="vip-thumbnail vip-thumbnail-more"
+                                onClick={() => toggleGroupExpand(group.groupId)}
+                              >
+                                +{group.items.filter(i => i.imagen).length - 4}
+                              </div>
                             )}
                           </div>
-                          <button
-                            className="btn-action-vip btn-delete"
-                            onClick={() => handleDeleteContent(originalItem.id)}
-                            title="Eliminar este elemento"
-                          >
-                            <FiTrash2 size={14} />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )
+                        )}
+                      </>
+                    )}
+                  </div>
+                )
+              }
+
+              // Item individual (sin grupo)
+              return renderCard(group.mainItem, false)
             })}
           </div>
 
