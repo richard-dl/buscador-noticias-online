@@ -27,7 +27,11 @@ const CATEGORIAS_DISPONIBLES = [
   'ciencia',
   'medioambiente',
   'internacional',
-  'juegos'
+  'juegos',
+  'agro',
+  'empresas',
+  'emprendimientos',
+  'vida_sana'
 ];
 
 /**
@@ -54,13 +58,17 @@ CATEGORÍAS:
 - tecnologia: apps, dispositivos, internet, innovación, IA, software
 - policiales: crímenes, robos, asesinatos, policía, violencia, narcotráfico
 - judiciales: tribunales, jueces, causas judiciales, sentencias, fiscalía
-- salud: medicina, hospitales, enfermedades, tratamientos, bienestar
+- salud: medicina, hospitales, enfermedades, tratamientos, bienestar general
 - educacion: escuelas, universidades, docentes, estudiantes (NO temas salariales)
 - cultura: arte, teatro, literatura, exposiciones, patrimonio
 - ciencia: investigación científica, descubrimientos, CONICET
 - medioambiente: ecología, clima, contaminación, sustentabilidad
 - internacional: noticias de otros países, geopolítica, líderes mundiales
 - juegos: loterías, quinielas, sorteos, resultados de lotería, números ganadores, azar
+- agro: agroindustria, agroproducción, campo, agricultura, ganadería, cosechas, siembra, commodities agrícolas, soja, trigo, maíz, agroquímicos, maquinaria agrícola
+- empresas: corporaciones, negocios, fusiones, adquisiciones, industria, comercio, retail, empresarios, compañías, bolsa, acciones corporativas
+- emprendimientos: startups, emprendedores, pymes, nuevos negocios, innovación empresarial, incubadoras, inversores, capital semilla, unicornios
+- vida_sana: dietas, ejercicios, fitness, nutrición, alimentación saludable, wellness, gimnasio, running, yoga, meditación, pérdida de peso (NO enfermedades ni hospitales)
 
 REGLAS:
 - SALARIOS/PARITARIAS de cualquier sector = "economia"
@@ -69,6 +77,10 @@ REGLAS:
 - PAÍSES EXTRANJEROS = "internacional"
 - QUINIELAS/LOTERÍAS/SORTEOS = "juegos" (NO deportes)
 - HORÓSCOPO/SIGNOS/ZODIACO = "espectaculos" (NO salud)
+- CAMPO/AGRICULTURA/GANADERÍA = "agro"
+- GRANDES EMPRESAS/CORPORACIONES = "empresas"
+- STARTUPS/PYMES/NUEVOS NEGOCIOS = "emprendimientos"
+- DIETAS/EJERCICIOS/FITNESS = "vida_sana" (NO salud)
 
 NOTICIA:
 Título: ${title}
@@ -124,13 +136,17 @@ const classifyBatchWithAI = async (news) => {
 
   const prompt = `Clasifica cada noticia en categoría y detecta tipo de contenido multimedia.
 
-CATEGORÍAS: politica, economia, deportes, espectaculos, tecnologia, policiales, judiciales, salud, educacion, cultura, ciencia, medioambiente, internacional
+CATEGORÍAS: politica, economia, deportes, espectaculos, tecnologia, policiales, judiciales, salud, educacion, cultura, ciencia, medioambiente, internacional, juegos, agro, empresas, emprendimientos, vida_sana
 
 REGLAS CATEGORÍA:
 - SALARIOS/PARITARIAS = "economia"
 - CRÍMENES/VIOLENCIA = "policiales"
 - CAUSAS JUDICIALES = "judiciales"
 - PAÍSES EXTRANJEROS = "internacional"
+- CAMPO/AGRICULTURA/GANADERÍA = "agro"
+- CORPORACIONES/NEGOCIOS = "empresas"
+- STARTUPS/PYMES = "emprendimientos"
+- DIETAS/EJERCICIOS/FITNESS = "vida_sana"
 
 TIPOS DE CONTENIDO (mediaType):
 - "video" = menciona video, mirá, YouTube, streaming, transmisión en vivo
@@ -291,7 +307,7 @@ INSTRUCCIONES:
 5. Escribe como periodista reportando el hecho, NO describas la noticia
 6. NO truncar ni acortar el contenido - incluye toda la información relevante
 
-CATEGORÍAS: politica, economia, deportes, espectaculos, tecnologia, policiales, judiciales, salud, educacion, cultura, ciencia, medioambiente, internacional, sociedad, turismo
+CATEGORÍAS: politica, economia, deportes, espectaculos, tecnologia, policiales, judiciales, salud, educacion, cultura, ciencia, medioambiente, internacional, sociedad, turismo, juegos, agro, empresas, emprendimientos, vida_sana
 
 REGLAS DE CLASIFICACIÓN:
 - SALARIOS/PARITARIAS = "economia"
@@ -300,6 +316,10 @@ REGLAS DE CLASIFICACIÓN:
 - PAÍSES EXTRANJEROS = "internacional"
 - VIAJES/VACACIONES/DESTINOS = "turismo"
 - TEMAS SOCIALES GENERALES = "sociedad"
+- CAMPO/AGRICULTURA/GANADERÍA/COSECHAS = "agro"
+- CORPORACIONES/NEGOCIOS/FUSIONES = "empresas"
+- STARTUPS/PYMES/EMPRENDEDORES = "emprendimientos"
+- DIETAS/EJERCICIOS/FITNESS/WELLNESS = "vida_sana" (NO salud)
 
 NOTICIA ORIGINAL:
 Título: ${cleanTitle}
