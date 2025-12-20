@@ -479,12 +479,13 @@ ${hashtagsStr}`
   }
 
   // Funciones para edición de contenido
-  const handleEditContent = (item) => {
+  // Si se pasa consolidatedContent, usa ese contenido para mostrar en el form (para grupos consolidados)
+  const handleEditContent = (item, consolidatedContent = null) => {
     setEditingItem(item)
     setEditForm({
-      titulo: item.titulo || '',
-      fuente: item.fuente || '',
-      contenido: item.contenido || ''
+      titulo: consolidatedContent?.titulo ?? item.titulo ?? '',
+      fuente: consolidatedContent?.fuente ?? item.fuente ?? '',
+      contenido: consolidatedContent?.contenido ?? item.contenido ?? ''
     })
     setShowEditModal(true)
   }
@@ -875,7 +876,7 @@ ${hashtagsStr}`
                               {(profile?.role === 'admin') && group.textItem && (
                                 <button
                                   className="btn-action-vip btn-edit"
-                                  onClick={() => handleEditContent(group.textItem)}
+                                  onClick={() => handleEditContent(group.textItem, consolidatedItem)}
                                   title="Editar texto"
                                 >
                                   <FiEdit2 />
