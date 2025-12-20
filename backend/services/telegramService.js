@@ -370,6 +370,15 @@ const processTelegramUpdate = async (update) => {
 
   console.log('[Webhook] Guardando contenido en Firestore...');
 
+  // Deduplicación: Verificar si el mensaje ya fue procesado
+  if (contentData.telegramMessageId) {
+    const existing = await getVipContentByTelegramMessageId(contentData.telegramMessageId, message.chat?.id);
+    if (existing) {
+      console.log('[Webhook] Mensaje ya procesado anteriormente, ignorando duplicado:', contentData.telegramMessageId);
+      return { processed: false, reason: 'Duplicate message', existingId: existing.id };
+    }
+  }
+
   // Guardar en Firestore
   const saved = await saveVipContent(contentData);
 

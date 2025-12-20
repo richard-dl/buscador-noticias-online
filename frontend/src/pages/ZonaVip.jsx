@@ -479,13 +479,13 @@ ${hashtagsStr}`
   }
 
   // Funciones para edición de contenido
-  // Si se pasa consolidatedContent, usa ese contenido para mostrar en el form (para grupos consolidados)
-  const handleEditContent = (item, consolidatedContent = null) => {
+  // Siempre editar el item original (textItem), no el consolidado
+  const handleEditContent = (item) => {
     setEditingItem(item)
     setEditForm({
-      titulo: consolidatedContent?.titulo ?? item.titulo ?? '',
-      fuente: consolidatedContent?.fuente ?? item.fuente ?? '',
-      contenido: consolidatedContent?.contenido ?? item.contenido ?? ''
+      titulo: item.titulo ?? '',
+      fuente: item.fuente ?? '',
+      contenido: item.contenido ?? ''
     })
     setShowEditModal(true)
   }
@@ -493,29 +493,20 @@ ${hashtagsStr}`
   const handleSaveEdit = async () => {
     if (!editingItem) return
 
-    console.log('handleSaveEdit - editingItem:', editingItem)
-    console.log('handleSaveEdit - editForm:', editForm)
-
     try {
       setSavingEdit(true)
       const response = await vipApi.updateContent(editingItem.id, editForm)
-
-      console.log('handleSaveEdit - response:', response)
 
       if (!response.success) {
         throw new Error(response.error || 'Error al actualizar contenido')
       }
 
       // Actualizar el contenido local
-      setContent(prev => {
-        const updated = prev.map(item =>
-          item.id === editingItem.id
-            ? { ...item, ...editForm }
-            : item
-        )
-        console.log('handleSaveEdit - content actualizado:', updated.find(i => i.id === editingItem.id))
-        return updated
-      })
+      setContent(prev => prev.map(item =>
+        item.id === editingItem.id
+          ? { ...item, ...editForm }
+          : item
+      ))
 
       toast.success('Contenido actualizado correctamente')
       setShowEditModal(false)
