@@ -255,13 +255,16 @@ export const AuthProvider = ({ children }) => {
   // Verificar si el usuario tiene acceso VIP (vip_trial, vip, admin)
   const hasVipAccess = ['vip_trial', 'vip', 'admin'].includes(profile?.role)
 
+  // daysRemaining: null para admin/suscriptor (sin expiración), número para trial/vip_trial/vip
+  const daysRemaining = profile?.daysRemaining
+
   const value = {
     user,
     profile,
     loading,
     isAuthenticated: !!user,
-    isExpired: profile?.subscription?.status === 'expired',
-    daysRemaining: profile?.subscription?.daysRemaining || 0,
+    isExpired: profile?.isExpired || false,
+    daysRemaining,
     hasVipAccess,
     register,
     login,

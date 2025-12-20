@@ -262,8 +262,8 @@ const Profile = () => {
                 </div>
               ) : (
                 <div className="subscription-main">
-                  <div className={`days-circle ${daysRemaining <= 7 ? 'days-circle-warning' : ''}`}>
-                    <span className="days-number">{daysRemaining}</span>
+                  <div className={`days-circle ${daysRemaining !== null && daysRemaining <= 7 ? 'days-circle-warning' : ''}`}>
+                    <span className="days-number">{daysRemaining ?? 0}</span>
                     <span className="days-label">días</span>
                   </div>
                   <div className="subscription-details">
@@ -279,7 +279,7 @@ const Profile = () => {
               )}
 
               {/* Alerta de vencimiento para trial, vip_trial y vip */}
-              {profile?.role !== 'admin' && profile?.role !== 'suscriptor' && daysRemaining !== null && daysRemaining <= 7 && (
+              {profile?.role !== 'admin' && profile?.role !== 'suscriptor' && daysRemaining !== null && daysRemaining !== undefined && daysRemaining <= 7 && (
                 <div className={`renewal-notice ${daysRemaining <= 3 ? 'renewal-urgent' : ''}`}>
                   {profile?.role === 'trial' ? (
                     <>
