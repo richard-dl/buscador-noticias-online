@@ -31,7 +31,8 @@ const CATEGORIAS_DISPONIBLES = [
   'agro',
   'empresas',
   'emprendimientos',
-  'vida_sana'
+  'vida_sana',
+  'gastronomia'
 ];
 
 /**
@@ -69,6 +70,7 @@ CATEGORÍAS:
 - empresas: corporaciones, negocios, fusiones, adquisiciones, industria, comercio, retail, empresarios, compañías, bolsa, acciones corporativas
 - emprendimientos: startups, emprendedores, pymes, nuevos negocios, innovación empresarial, incubadoras, inversores, capital semilla, unicornios
 - vida_sana: dietas, ejercicios, fitness, nutrición, alimentación saludable, wellness, gimnasio, running, yoga, meditación, pérdida de peso (NO enfermedades ni hospitales)
+- gastronomia: cocina, recetas, restaurantes, chefs, comida, culinario, platos, ingredientes, vinos, maridaje, parrilla, asado, pastelería, repostería, comida gourmet
 
 REGLAS:
 - SALARIOS/PARITARIAS de cualquier sector = "economia"
@@ -81,6 +83,7 @@ REGLAS:
 - GRANDES EMPRESAS/CORPORACIONES = "empresas"
 - STARTUPS/PYMES/NUEVOS NEGOCIOS = "emprendimientos"
 - DIETAS/EJERCICIOS/FITNESS = "vida_sana" (NO salud)
+- COCINA/RECETAS/RESTAURANTES/CHEFS = "gastronomia"
 
 NOTICIA:
 Título: ${title}
@@ -136,7 +139,7 @@ const classifyBatchWithAI = async (news) => {
 
   const prompt = `Clasifica cada noticia en categoría y detecta tipo de contenido multimedia.
 
-CATEGORÍAS: politica, economia, deportes, espectaculos, tecnologia, policiales, judiciales, salud, educacion, cultura, ciencia, medioambiente, internacional, juegos, agro, empresas, emprendimientos, vida_sana
+CATEGORÍAS: politica, economia, deportes, espectaculos, tecnologia, policiales, judiciales, salud, educacion, cultura, ciencia, medioambiente, internacional, juegos, agro, empresas, emprendimientos, vida_sana, gastronomia
 
 REGLAS CATEGORÍA:
 - SALARIOS/PARITARIAS = "economia"
@@ -147,6 +150,7 @@ REGLAS CATEGORÍA:
 - CORPORACIONES/NEGOCIOS = "empresas"
 - STARTUPS/PYMES = "emprendimientos"
 - DIETAS/EJERCICIOS/FITNESS = "vida_sana"
+- COCINA/RECETAS/RESTAURANTES/CHEFS = "gastronomia"
 
 TIPOS DE CONTENIDO (mediaType):
 - "video" = menciona video, mirá, YouTube, streaming, transmisión en vivo
@@ -307,7 +311,7 @@ INSTRUCCIONES:
 5. Escribe como periodista reportando el hecho, NO describas la noticia
 6. NO truncar ni acortar el contenido - incluye toda la información relevante
 
-CATEGORÍAS: politica, economia, deportes, espectaculos, tecnologia, policiales, judiciales, salud, educacion, cultura, ciencia, medioambiente, internacional, sociedad, turismo, juegos, agro, empresas, emprendimientos, vida_sana
+CATEGORÍAS: politica, economia, deportes, espectaculos, tecnologia, policiales, judiciales, salud, educacion, cultura, ciencia, medioambiente, internacional, sociedad, turismo, juegos, agro, empresas, emprendimientos, vida_sana, gastronomia
 
 REGLAS DE CLASIFICACIÓN:
 - SALARIOS/PARITARIAS = "economia"
@@ -320,6 +324,7 @@ REGLAS DE CLASIFICACIÓN:
 - CORPORACIONES/NEGOCIOS/FUSIONES = "empresas"
 - STARTUPS/PYMES/EMPRENDEDORES = "emprendimientos"
 - DIETAS/EJERCICIOS/FITNESS/WELLNESS = "vida_sana" (NO salud)
+- COCINA/RECETAS/RESTAURANTES/CHEFS/COMIDA = "gastronomia"
 
 NOTICIA ORIGINAL:
 Título: ${cleanTitle}
