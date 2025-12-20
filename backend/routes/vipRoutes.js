@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { authenticateAndRequireVip, authenticate } = require('../middleware/authMiddleware');
-const { getVipContent, deleteVipContent, checkVipAccess, updateUserRole } = require('../services/firebaseService');
+const { getVipContent, deleteVipContent, updateVipContent, checkVipAccess, updateUserRole } = require('../services/firebaseService');
 const { processTelegramUpdate, verifyWebhookToken, downloadFile } = require('../services/telegramService');
 
 /**
@@ -73,6 +73,37 @@ router.delete('/content/:id', authenticateAndRequireVip, async (req, res) => {
     res.status(500).json({
       success: false,
       error: 'Error al eliminar contenido VIP'
+    });
+  }
+});
+
+/**
+ * PUT /api/vip/content/:id
+ * Actualizar contenido VIP (solo admin)
+ */
+router.put('/content/:id', authenticateAndRequireVip, async (req, res) => {
+  try {
+    // Solo admin puede editar contenido
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({
+        success: false,
+        error: 'Solo administradores pueden editar contenido'
+      });
+    }
+
+    const { titulo, fuente, contenido } = req.body;
+    const updated = await updateVipContent(req.params.id, { titulo, fuente, contenido });
+
+    res.json({
+      success: true,
+      data: updated,
+      message: 'Contenido actualizado correctamente'
+    });
+  } catch (error) {
+    console.error('Error actualizando contenido VIP:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Error al actualizar contenido VIP'
     });
   }
 });

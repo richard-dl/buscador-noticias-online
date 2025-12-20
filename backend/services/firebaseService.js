@@ -724,6 +724,39 @@ const deleteVipContent = async (contentId) => {
 };
 
 /**
+ * Actualizar contenido VIP (solo admin)
+ */
+const updateVipContent = async (contentId, updateData) => {
+  const docRef = db.collection('vipContent').doc(contentId);
+  const doc = await docRef.get();
+
+  if (!doc.exists) {
+    throw new Error('Contenido no encontrado');
+  }
+
+  // Solo permitir actualizar campos específicos
+  const allowedFields = ['titulo', 'fuente', 'contenido'];
+  const filteredData = {};
+
+  for (const field of allowedFields) {
+    if (updateData[field] !== undefined) {
+      filteredData[field] = updateData[field];
+    }
+  }
+
+  if (Object.keys(filteredData).length === 0) {
+    throw new Error('No hay campos válidos para actualizar');
+  }
+
+  filteredData.updatedAt = admin.firestore.FieldValue.serverTimestamp();
+
+  await docRef.update(filteredData);
+
+  const updated = await docRef.get();
+  return { id: updated.id, ...updated.data() };
+};
+
+/**
  * Obtener contenido VIP por telegramMessageId
  * Útil para encontrar el groupId cuando se responde a un mensaje
  */
@@ -811,6 +844,7 @@ module.exports = {
   saveVipContent,
   getVipContent,
   deleteVipContent,
+  updateVipContent,
   getVipContentByTelegramMessageId,
   // Nuevas funciones de suscripción
   SUBSCRIPTION_CONFIG,

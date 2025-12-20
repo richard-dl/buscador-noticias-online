@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { vipApi, userApi, newsApi } from '../services/api'
 import { toast } from 'react-toastify'
-import { FiStar, FiLock, FiClock, FiTrash2, FiImage, FiAlertTriangle, FiRefreshCw, FiCopy, FiBookmark, FiFilter, FiCalendar, FiChevronLeft, FiChevronRight, FiChevronDown, FiChevronUp, FiLayers, FiZap, FiX, FiLoader, FiCode, FiFileText, FiHash, FiCheck } from 'react-icons/fi'
+import { FiStar, FiLock, FiClock, FiTrash2, FiImage, FiAlertTriangle, FiRefreshCw, FiCopy, FiBookmark, FiFilter, FiCalendar, FiChevronLeft, FiChevronRight, FiChevronDown, FiChevronUp, FiLayers, FiZap, FiX, FiLoader, FiCode, FiFileText, FiHash, FiCheck, FiEdit2 } from 'react-icons/fi'
 import Header from '../components/Header'
 import LoadingSpinner from '../components/LoadingSpinner'
 import '../styles/zonavip.css'
@@ -33,6 +33,12 @@ const ZonaVip = () => {
   const [outputFormat, setOutputFormat] = useState('markdown') // markdown, html, text
   const [copiedFormat, setCopiedFormat] = useState(null)
   const [currentAIItem, setCurrentAIItem] = useState(null) // Item actual para IA
+
+  // Estados para modal de edición
+  const [showEditModal, setShowEditModal] = useState(false)
+  const [editingItem, setEditingItem] = useState(null)
+  const [editForm, setEditForm] = useState({ titulo: '', fuente: '', contenido: '' })
+  const [savingEdit, setSavingEdit] = useState(false)
 
   useEffect(() => {
     checkVipAccess()
@@ -472,6 +478,49 @@ ${hashtagsStr}`
     }
   }
 
+  // Funciones para edición de contenido
+  const handleEditContent = (item) => {
+    setEditingItem(item)
+    setEditForm({
+      titulo: item.titulo || '',
+      fuente: item.fuente || '',
+      contenido: item.contenido || ''
+    })
+    setShowEditModal(true)
+  }
+
+  const handleSaveEdit = async () => {
+    if (!editingItem) return
+
+    try {
+      setSavingEdit(true)
+      await vipApi.updateContent(editingItem.id, editForm)
+
+      // Actualizar el contenido local
+      setContent(prev => prev.map(item =>
+        item.id === editingItem.id
+          ? { ...item, ...editForm }
+          : item
+      ))
+
+      toast.success('Contenido actualizado correctamente')
+      setShowEditModal(false)
+      setEditingItem(null)
+    } catch (error) {
+      toast.error(error.message || 'Error al actualizar contenido')
+    } finally {
+      setSavingEdit(false)
+    }
+  }
+
+  const closeEditModal = () => {
+    if (!savingEdit) {
+      setShowEditModal(false)
+      setEditingItem(null)
+      setEditForm({ titulo: '', fuente: '', contenido: '' })
+    }
+  }
+
   if (loading) {
     return (
       <div className="zona-vip-page">
@@ -825,6 +874,15 @@ ${hashtagsStr}`
                               )}
                               {(profile?.role === 'admin') && group.textItem && (
                                 <button
+                                  className="btn-action-vip btn-edit"
+                                  onClick={() => handleEditContent(group.textItem)}
+                                  title="Editar texto"
+                                >
+                                  <FiEdit2 />
+                                </button>
+                              )}
+                              {(profile?.role === 'admin') && group.textItem && (
+                                <button
                                   className="btn-action-vip btn-delete"
                                   onClick={() => handleDeleteContent(group.textItem.id)}
                                   title="Eliminar texto"
@@ -1036,6 +1094,89 @@ ${hashtagsStr}`
                   </button>
                 </>
               ) : null}
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+
+      {/* Modal de Edición */}
+      {showEditModal && createPortal(
+        <div className="edit-modal-overlay" onClick={closeEditModal}>
+          <div className="edit-modal" onClick={e => e.stopPropagation()}>
+            <div className="edit-modal-header">
+              <h3><FiEdit2 /> Editar contenido</h3>
+              <button
+                className="edit-modal-close"
+                onClick={closeEditModal}
+                disabled={savingEdit}
+                title="Cerrar"
+              >
+                <FiX size={20} />
+              </button>
+            </div>
+
+            <div className="edit-modal-content">
+              <div className="edit-form-group">
+                <label htmlFor="edit-titulo">Título</label>
+                <input
+                  id="edit-titulo"
+                  type="text"
+                  value={editForm.titulo}
+                  onChange={(e) => setEditForm(prev => ({ ...prev, titulo: e.target.value }))}
+                  placeholder="Título de la noticia"
+                  disabled={savingEdit}
+                />
+              </div>
+
+              <div className="edit-form-group">
+                <label htmlFor="edit-fuente">Fuente</label>
+                <input
+                  id="edit-fuente"
+                  type="text"
+                  value={editForm.fuente}
+                  onChange={(e) => setEditForm(prev => ({ ...prev, fuente: e.target.value }))}
+                  placeholder="Fuente de la información"
+                  disabled={savingEdit}
+                />
+              </div>
+
+              <div className="edit-form-group">
+                <label htmlFor="edit-contenido">Contenido</label>
+                <textarea
+                  id="edit-contenido"
+                  value={editForm.contenido}
+                  onChange={(e) => setEditForm(prev => ({ ...prev, contenido: e.target.value }))}
+                  placeholder="Contenido del texto"
+                  rows={8}
+                  disabled={savingEdit}
+                />
+              </div>
+
+              <div className="edit-modal-actions">
+                <button
+                  className="btn-cancel-edit"
+                  onClick={closeEditModal}
+                  disabled={savingEdit}
+                >
+                  Cancelar
+                </button>
+                <button
+                  className="btn-save-edit"
+                  onClick={handleSaveEdit}
+                  disabled={savingEdit}
+                >
+                  {savingEdit ? (
+                    <>
+                      <FiLoader className="spinner" /> Guardando...
+                    </>
+                  ) : (
+                    <>
+                      <FiCheck /> Guardar cambios
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
         </div>,
