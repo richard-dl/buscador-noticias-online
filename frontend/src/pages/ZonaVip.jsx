@@ -806,6 +806,13 @@ ${hashtagsStr}`
                               >
                                 <FiCopy />
                               </button>
+                              <button
+                                className={`btn-action-vip btn-save ${savedItems[group.textItem?.id] ? 'saved' : ''}`}
+                                onClick={() => handleSaveNews(group.textItem || consolidatedItem)}
+                                title={savedItems[group.textItem?.id] ? 'Guardado' : 'Guardar noticia'}
+                              >
+                                <FiBookmark />
+                              </button>
                               {consolidatedItem.contenido && (
                                 <button
                                   className="btn-action-vip btn-ai"
@@ -814,6 +821,15 @@ ${hashtagsStr}`
                                   title="Generar resumen con IA"
                                 >
                                   <FiZap />
+                                </button>
+                              )}
+                              {(profile?.role === 'admin') && group.textItem && (
+                                <button
+                                  className="btn-action-vip btn-delete"
+                                  onClick={() => handleDeleteContent(group.textItem.id)}
+                                  title="Eliminar texto"
+                                >
+                                  <FiTrash2 />
                                 </button>
                               )}
                             </div>
