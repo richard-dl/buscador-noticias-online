@@ -92,37 +92,38 @@
   font-size: var(--font-size-sm);
 }
 
-/* Badges */
-.badge-lg {
+/* Badges - usar selectores más específicos para sobrescribir global.css */
+.subscription-page .badge.badge-lg {
   padding: var(--spacing-2) var(--spacing-4);
   font-size: var(--font-size-base);
   font-weight: 600;
+  border-radius: var(--radius-lg);
 }
 
-.badge-trial {
-  background: rgba(255, 170, 0, 0.2);
-  color: #ffaa00;
+.subscription-page .badge.badge-trial {
+  background: rgba(255, 170, 0, 0.2) !important;
+  color: #ffaa00 !important;
 }
 
-.badge-suscriptor {
-  background: rgba(64, 151, 154, 0.2);
-  color: var(--color-teal);
+.subscription-page .badge.badge-suscriptor {
+  background: rgba(64, 151, 154, 0.2) !important;
+  color: var(--color-teal) !important;
 }
 
-.badge-vip-trial {
-  background: rgba(193, 255, 77, 0.2);
-  color: var(--color-accent);
+.subscription-page .badge.badge-vip-trial {
+  background: rgba(193, 255, 77, 0.2) !important;
+  color: #7cb342 !important;
 }
 
-.badge-vip {
-  background: linear-gradient(135deg, rgba(193, 255, 77, 0.3), rgba(64, 151, 154, 0.3));
-  color: var(--color-accent);
+.subscription-page .badge.badge-vip {
+  background: linear-gradient(135deg, rgba(193, 255, 77, 0.3), rgba(64, 151, 154, 0.3)) !important;
+  color: #7cb342 !important;
   border: 1px solid var(--color-accent);
 }
 
-.badge-admin {
-  background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(255, 170, 0, 0.3));
-  color: #ffd700;
+.subscription-page .badge.badge-admin {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(255, 170, 0, 0.3)) !important;
+  color: #ffd700 !important;
 }
 
 /* Plans Grid */
