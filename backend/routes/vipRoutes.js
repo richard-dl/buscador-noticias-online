@@ -10,6 +10,12 @@ const { processTelegramUpdate, verifyWebhookToken, downloadFile } = require('../
  */
 router.get('/content', authenticateAndRequireVip, async (req, res) => {
   try {
+    // Deshabilitar caché de Vercel y navegador
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.set('Pragma', 'no-cache');
+    res.set('Expires', '0');
+    res.set('Surrogate-Control', 'no-store');
+
     const limit = parseInt(req.query.limit) || 150;
     const content = await getVipContent(limit);
 
