@@ -428,9 +428,19 @@ const Profile = () => {
 
                         <div className="user-stat">
                           <span className="stat-label">Estado</span>
-                          <span className={`badge ${user.isExpired ? 'badge-danger' : 'badge-success'}`}>
-                            {user.isExpired ? 'Expirado' : 'Activo'}
-                          </span>
+                          <div className="status-bar-container">
+                            <div
+                              className={`status-bar ${user.isExpired ? 'status-expired' : 'status-active'}`}
+                              style={{
+                                '--status-percent': user.isExpired ? '0%' :
+                                  user.role === 'admin' || user.role === 'suscriptor' ? '100%' :
+                                  `${Math.min(100, Math.max(0, (user.daysRemaining / 30) * 100))}%`
+                              }}
+                            />
+                            <span className="status-bar-label">
+                              {user.isExpired ? 'Expirado' : 'Activo'}
+                            </span>
+                          </div>
                         </div>
 
                         <div className="user-stat">
