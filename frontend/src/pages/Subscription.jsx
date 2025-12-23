@@ -131,12 +131,8 @@ const Subscription = () => {
             {isGuest ? (
               <div className="status-details">
                 <p className="guest-message">
-                  Regístrate o inicia sesión para acceder a todas las funciones
+                  <a href="/register" className="guest-link">Regístrate</a> o <a href="/login" className="guest-link">inicia sesión</a> para acceder a todas las funciones
                 </p>
-                <a href="/register" className="btn btn-primary">
-                  <FiStar size={16} />
-                  Registrarme gratis
-                </a>
               </div>
             ) : (
               <>
