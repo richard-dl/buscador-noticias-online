@@ -450,10 +450,22 @@ const Generator = () => {
         <div className="generator-header">
           <h1>Generador de Noticias</h1>
           <div className="tabs">
-            {/* Botón Buscar Noticias - en la misma línea que los tabs */}
+            {/* Selector de cantidad (solo desktop) y Botón Buscar Noticias */}
             {activeTab === 'search' && (
-              <button
-                className="btn btn-primary btn-search-main"
+              <>
+                <div className="count-selector count-selector-desktop">
+                  <select
+                    value={searchCount}
+                    onChange={(e) => setSearchCount(Number(e.target.value))}
+                  >
+                    <option value={5}>5 noticias</option>
+                    <option value={10}>10 noticias</option>
+                    <option value={15}>15 noticias</option>
+                    <option value={20}>20 noticias</option>
+                  </select>
+                </div>
+                <button
+                  className="btn btn-primary btn-search-main"
                 onClick={() => {
                   if (!isAuthenticated) {
                     navigate('/subscription')
@@ -471,7 +483,8 @@ const Generator = () => {
                     <span className="tab-text">Buscar Noticias</span>
                   </>
                 )}
-              </button>
+                </button>
+              </>
             )}
             {activeTab !== 'search' && (
               <button
@@ -543,8 +556,8 @@ const Generator = () => {
 
               {/* Área de resultados */}
               <div className="results-area">
-                <div className="search-controls">
-                  <div className="count-selector">
+                <div className="search-controls search-controls-mobile">
+                  <div className="count-selector count-selector-mobile">
                     <label>Cantidad:</label>
                     <select
                       value={searchCount}

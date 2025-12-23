@@ -1876,6 +1876,46 @@ input, select, textarea {
   border-radius: var(--radius-md);
 }
 
+/* Selector de cantidad en header - solo desktop */
+.count-selector-desktop {
+  display: flex;
+  margin-right: var(--spacing-2);
+}
+
+.count-selector-desktop select {
+  background: linear-gradient(135deg, #1A2B47 0%, #0d2440 100%);
+  border: 1px solid rgba(64, 151, 154, 0.3);
+  color: white;
+  padding: var(--spacing-2) var(--spacing-4);
+  padding-right: var(--spacing-6);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.count-selector-desktop select:hover {
+  border-color: var(--color-teal);
+  background: linear-gradient(135deg, #1f3352 0%, #0f2a4a 100%);
+}
+
+.count-selector-desktop select:focus {
+  outline: none;
+  border-color: var(--color-teal);
+  box-shadow: 0 0 0 2px rgba(64, 151, 154, 0.2);
+}
+
+.count-selector-desktop select option {
+  background: #1A2B47;
+  color: white;
+  padding: var(--spacing-2);
+}
+
+/* Controles de búsqueda en móvil - ocultos en desktop */
+.search-controls-mobile {
+  display: none;
+}
+
 .loading-results {
   display: flex;
   justify-content: center;
@@ -2685,13 +2725,19 @@ input, select, textarea {
     font-size: var(--font-size-xs);
   }
 
-  /* Controles de búsqueda */
-  .search-controls {
-    flex-direction: column;
-    gap: var(--spacing-3);
+  /* En móvil: ocultar selector desktop, mostrar selector móvil */
+  .count-selector-desktop {
+    display: none;
   }
 
-  .count-selector {
+  .search-controls-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+    margin-bottom: var(--spacing-4);
+  }
+
+  .count-selector-mobile {
     width: 100%;
     justify-content: space-between;
   }
