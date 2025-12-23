@@ -1144,6 +1144,10 @@ input, select, textarea {
   font-weight: 600;
 }
 
+.btn-cta-small.btn-secondary:hover {
+  color: var(--color-accent-glow);
+}
+
 /* Móvil: CTA más compacto */
 @media (max-width: 768px) {
   .guest-cta-section {
