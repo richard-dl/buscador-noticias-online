@@ -600,6 +600,17 @@ input, select, textarea {
   background: rgba(255, 255, 255, 0.2);
 }
 
+.btn-login {
+  background: transparent;
+  border: 1px solid var(--color-teal);
+  color: var(--color-teal);
+}
+
+.btn-login:hover {
+  background: rgba(64, 151, 154, 0.15);
+  color: white;
+}
+
 .btn-register {
   background: var(--color-teal);
 }
@@ -2909,6 +2920,9 @@ input, select, textarea {
    ============================================ */
 .vip-admin-card {
   grid-column: 1 / -1;
+  /* Fix Android rendering glitch */
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .vip-admin-card .card-header h2 {
@@ -2927,6 +2941,8 @@ input, select, textarea {
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: var(--spacing-3);
   margin-bottom: var(--spacing-4);
+  /* Fix Android rendering glitch */
+  transform: translateZ(0);
 }
 
 .vip-stat-item {
@@ -2937,6 +2953,9 @@ input, select, textarea {
   background: rgba(10, 30, 59, 0.5);
   border-radius: var(--radius-md);
   border: 1px solid rgba(64, 151, 154, 0.2);
+  /* Fix Android rendering glitch */
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .vip-stat-item svg {
@@ -2975,6 +2994,8 @@ input, select, textarea {
 
 .vip-limit-bar {
   margin-bottom: var(--spacing-4);
+  /* Fix Android rendering glitch */
+  transform: translateZ(0);
 }
 
 .vip-limit-info {
@@ -2997,6 +3018,8 @@ input, select, textarea {
   background: rgba(64, 151, 154, 0.2);
   border-radius: var(--radius-full);
   overflow: hidden;
+  /* Fix Android rendering glitch */
+  transform: translateZ(0);
 }
 
 .vip-progress-fill {
@@ -3059,19 +3082,24 @@ input, select, textarea {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: var(--spacing-4);
+  /* Fix Android rendering glitch */
+  transform: translateZ(0);
 }
 
 .user-card-expanded {
-  background: linear-gradient(135deg, #1A2B47 0%, #0d2440 100%);
+  background: #1A2B47;
   border-radius: var(--radius-lg);
   overflow: hidden;
   transition: all var(--transition-normal);
   border: 1px solid rgba(64, 151, 154, 0.3);
+  /* Fix Android rendering glitch */
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .user-card-expanded:hover {
   box-shadow: 0 4px 12px rgba(64, 151, 154, 0.2);
-  transform: translateY(-2px);
+  transform: translateY(-2px) translateZ(0);
   border-color: var(--color-teal);
 }
 
@@ -3088,7 +3116,7 @@ input, select, textarea {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  background: var(--color-primary);
   color: white;
   display: flex;
   align-items: center;
@@ -3156,7 +3184,7 @@ input, select, textarea {
   color: var(--color-error);
 }
 
-/* Barra de estado con gradiente */
+/* Barra de estado */
 .status-bar-container {
   position: relative;
   width: 100%;
@@ -3164,6 +3192,8 @@ input, select, textarea {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   overflow: hidden;
+  /* Fix Android rendering glitch */
+  transform: translateZ(0);
 }
 
 .status-bar {
