@@ -60,10 +60,10 @@ const Dashboard = () => {
       setLoading(true)
       setError('')
 
-      // Noticias siempre se cargan (públicas)
+      // Noticias siempre se cargan (endpoint público)
       // Perfiles solo si está autenticado
       const promises = [
-        newsApi.getRssNews({ categories: 'nacionales', maxItems: 6 })
+        newsApi.getRecentNews(6)
       ]
 
       if (isAuthenticated) {

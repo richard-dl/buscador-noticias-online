@@ -77,6 +77,9 @@ export const userApi = {
 export const newsApi = {
   getFeeds: () => api.get('/news/feeds'),
 
+  // Noticias recientes para dashboard (público, sin auth)
+  getRecentNews: (maxItems = 6) => api.get(`/news/recent?maxItems=${maxItems}`),
+
   getRssNews: (params = {}) => {
     const queryString = new URLSearchParams(params).toString()
     return api.get(`/news/rss?${queryString}`)
