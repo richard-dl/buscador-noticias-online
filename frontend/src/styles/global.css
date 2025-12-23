@@ -709,6 +709,8 @@ input, select, textarea {
     padding: var(--spacing-4);
     gap: var(--spacing-3);
     align-items: center;
+    flex-wrap: wrap;
+    flex-direction: row;
   }
 
   .header-user .admin-badge {
@@ -722,12 +724,19 @@ input, select, textarea {
   }
 
   .header-user .btn-account,
-  .header-user .btn-logout,
-  .header-user .btn-login,
-  .header-user .btn-register {
+  .header-user .btn-logout {
     width: 100%;
     justify-content: center;
     padding: var(--spacing-3);
+  }
+
+  /* Botones login/register en fila para invitados */
+  .header-user .btn-login,
+  .header-user .btn-register {
+    flex: 1;
+    justify-content: center;
+    padding: var(--spacing-2) var(--spacing-3);
+    font-size: var(--font-size-sm);
   }
 }
 
