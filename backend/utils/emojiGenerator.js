@@ -241,8 +241,6 @@ const generateEmojis = (text, options = {}) => {
     const detectedCategory = normalizedCategory || detectCategory(text || '');
     const categoryEmojis = CATEGORY_EMOJIS[detectedCategory] || CATEGORY_EMOJIS.general;
 
-    console.log(`[generateEmojis] category: "${category}" -> normalized: "${normalizedCategory}" -> detected: "${detectedCategory}" -> emojis: ${categoryEmojis?.slice(0, 3).join(' ')}`);
-
     for (const emoji of categoryEmojis) {
       emojis.add(emoji);
       if (emojis.size >= maxEmojis) break;
@@ -258,9 +256,6 @@ const generateEmojis = (text, options = {}) => {
 const generateNewsEmojis = (news, options = {}) => {
   const text = `${news.title || ''} ${news.description || ''}`;
   const category = news.category || null;
-
-  // Debug log
-  console.log(`[generateNewsEmojis] category recibida: "${category}", CATEGORY_EMOJIS tiene: ${Object.keys(CATEGORY_EMOJIS).join(', ')}`);
 
   return generateEmojis(text, { ...options, category });
 };
