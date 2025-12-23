@@ -244,29 +244,36 @@ const detectSensitiveData = (text) => {
 
 /**
  * Procesar mensaje de Telegram (texto)
+ *
+ * NOTA: La detección automática de datos sensibles fue desactivada porque generaba
+ * falsos positivos (direcciones de noticias, números de expediente, etc.)
+ * Solo se procesan los hashtags #sensible marcados manualmente por el usuario.
  */
 const processTextMessage = async (message) => {
   const text = message.text || message.caption || '';
   const parsed = parseMessageWithHashtags(text);
 
-  // Auto-detectar datos sensibles adicionales
-  const autoDetected = detectSensitiveData(text);
-  const autoSensible = autoDetected.map(d => d.value);
+  // DESACTIVADO: Auto-detección de datos sensibles
+  // Genera muchos falsos positivos con direcciones y números que son parte de la noticia
+  // Solo usar hashtag #sensible manual para marcar datos realmente sensibles
+  //
+  // const autoDetected = detectSensitiveData(text);
+  // const autoSensible = autoDetected.map(d => d.value);
+  // parsed.sensible = [...new Set([...parsed.sensible, ...autoSensible])];
 
-  // Combinar sensibles manuales y auto-detectados
-  parsed.sensible = [...new Set([...parsed.sensible, ...autoSensible])];
+  // Solo procesar datos sensibles marcados manualmente con #sensible
+  if (parsed.sensible.length > 0) {
+    let contenido = text
+      .replace(/#titulo\s+[^\n#]+/gi, '')
+      .replace(/#fuente\s+[^\n#]+/gi, '')
+      .replace(/#sensible\s+[^\n#]+/gi, '')
+      .trim();
 
-  // Volver a procesar contenido con todos los sensibles
-  let contenido = text
-    .replace(/#titulo\s+[^\n#]+/gi, '')
-    .replace(/#fuente\s+[^\n#]+/gi, '')
-    .replace(/#sensible\s+[^\n#]+/gi, '')
-    .trim();
-
-  for (const dato of parsed.sensible) {
-    contenido = contenido.replace(new RegExp(escapeRegExp(dato), 'gi'), `[DATO SENSIBLE]`);
+    for (const dato of parsed.sensible) {
+      contenido = contenido.replace(new RegExp(escapeRegExp(dato), 'gi'), `[DATO SENSIBLE]`);
+    }
+    parsed.contenido = contenido;
   }
-  parsed.contenido = contenido;
 
   return {
     ...parsed,
