@@ -7,8 +7,6 @@ import {
   sendPasswordResetEmail,
   GoogleAuthProvider,
   signInWithPopup,
-  signInWithRedirect,
-  getRedirectResult,
   onAuthStateChanged
 } from 'firebase/auth'
 
@@ -49,43 +47,11 @@ export const loginWithEmail = async (email, password) => {
 }
 
 /**
- * Detectar si es dispositivo móvil
- */
-const isMobile = () => {
-  return /iPhone|iPad|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
-}
-
-/**
  * Iniciar sesión con Google
- * Usa redirect en móviles (más confiable) y popup en desktop
  */
 export const loginWithGoogle = async () => {
-  if (isMobile()) {
-    // En móviles usar redirect (el resultado se maneja en checkRedirectResult)
-    await signInWithRedirect(auth, googleProvider)
-    return null // El usuario será retornado después del redirect
-  } else {
-    // En desktop usar popup
-    const result = await signInWithPopup(auth, googleProvider)
-    return result.user
-  }
-}
-
-/**
- * Verificar resultado de redirect (para móviles)
- * Llamar esto al iniciar la app
- */
-export const checkRedirectResult = async () => {
-  try {
-    const result = await getRedirectResult(auth)
-    if (result) {
-      return result.user
-    }
-    return null
-  } catch (error) {
-    console.error('Error en redirect result:', error)
-    throw error
-  }
+  const result = await signInWithPopup(auth, googleProvider)
+  return result.user
 }
 
 /**
