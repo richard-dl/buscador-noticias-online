@@ -599,6 +599,7 @@ input, select, textarea {
 .btn-login:hover,
 .btn-register:hover {
   background: rgba(255, 255, 255, 0.2);
+  color: white;
 }
 
 .btn-login {

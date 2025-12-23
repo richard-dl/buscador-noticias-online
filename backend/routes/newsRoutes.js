@@ -151,10 +151,23 @@ router.get('/recent', async (req, res) => {
     news = await classifyNewsWithAIOrFallback(news);
 
     // Procesar cada noticia (versión simplificada para público)
-    news = news.map(item => ({
-      ...item,
-      summary: summarize(item.description, { maxSentences: 2 }),
-      emojis: generateNewsEmojis(item)
+    news = await Promise.all(news.map(async (item) => {
+      // Generar resumen
+      item.summary = summarize(item.description, { maxSentences: 2 });
+
+      // Generar emojis
+      item.emojis = generateNewsEmojis(item);
+
+      // Acortar URL (igual que en /rss y /search)
+      if (item.link) {
+        try {
+          item.shortUrl = await shortenUrl(item.link);
+        } catch (err) {
+          item.shortUrl = item.link;
+        }
+      }
+
+      return item;
     }));
 
     res.json({
