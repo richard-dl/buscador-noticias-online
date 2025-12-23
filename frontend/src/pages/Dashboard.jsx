@@ -181,6 +181,18 @@ const Dashboard = () => {
             <span className="vip-badge-small">VIP</span>
           </Link>
         </div>
+
+        {/* CTA para usuarios no autenticados */}
+        {!isAuthenticated && (
+          <div className="guest-cta-section">
+            <p className="guest-cta-message">
+              <a href="/register" className="guest-link">Regístrate</a> o <a href="/login" className="guest-link">inicia sesión</a> para acceder a todas las funciones
+            </p>
+            <Link to="/register" className="btn btn-primary btn-register-cta">
+              Registrarse Gratis
+            </Link>
+          </div>
+        )}
       </section>
 
       {/* Recent News */}
