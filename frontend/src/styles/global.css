@@ -1100,6 +1100,44 @@ input, select, textarea {
   letter-spacing: 0.5px;
 }
 
+/* Guest CTA Section - Registro para no autenticados */
+.guest-cta-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-4);
+  margin-top: var(--spacing-6);
+  padding: var(--spacing-6);
+  background: linear-gradient(135deg, var(--color-bg-tertiary), var(--color-bg-secondary));
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  text-align: center;
+}
+
+.guest-cta-message {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-base);
+  margin: 0;
+}
+
+.guest-cta-section .guest-link {
+  color: var(--color-teal);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color var(--transition-fast);
+}
+
+.guest-cta-section .guest-link:hover {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+.btn-register-cta {
+  padding: var(--spacing-3) var(--spacing-6);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+}
+
 /* Sections */
 .section-header {
   display: flex;
