@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParams, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { useAuth } from '../context/AuthContext'
 import { newsApi, userApi } from '../services/api'
@@ -15,6 +15,7 @@ import {
 const Generator = () => {
   const { requireAuth, isAuthenticated } = useAuth()
   const [searchParams] = useSearchParams()
+  const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState('search') // search, profiles, breaking
   const [filters, setFilters] = useState({
     tematicas: [],
@@ -453,7 +454,13 @@ const Generator = () => {
             {activeTab === 'search' && (
               <button
                 className="btn btn-primary btn-search-main"
-                onClick={handleSearch}
+                onClick={() => {
+                  if (!isAuthenticated) {
+                    navigate('/subscription')
+                    return
+                  }
+                  handleSearch()
+                }}
                 disabled={loading}
               >
                 {loading ? (
@@ -478,6 +485,10 @@ const Generator = () => {
             <button
               className={`tab tab-breaking ${activeTab === 'breaking' ? 'active' : ''}`}
               onClick={() => {
+                if (!isAuthenticated) {
+                  navigate('/subscription')
+                  return
+                }
                 setActiveTab('breaking')
                 loadBreakingNews()
               }}
@@ -487,7 +498,13 @@ const Generator = () => {
             </button>
             <button
               className={`tab ${activeTab === 'profiles' ? 'active' : ''}`}
-              onClick={() => setActiveTab('profiles')}
+              onClick={() => {
+                if (!isAuthenticated) {
+                  navigate('/subscription')
+                  return
+                }
+                setActiveTab('profiles')
+              }}
             >
               <FiSave size={18} />
               <span className="tab-text">Perfiles</span>
