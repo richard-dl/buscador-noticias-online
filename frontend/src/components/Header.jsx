@@ -19,8 +19,16 @@ const Header = () => {
   const isActive = (path) => location.pathname === path
 
   // Manejar clic en navegación - forzar recarga si ya estamos en la misma ruta
-  const handleNavClick = (e, path) => {
+  const handleNavClick = (e, path, isVip) => {
     setMenuOpen(false)
+
+    // Redirigir a planes si usuario no autenticado hace clic en Zona VIP
+    if (isVip && !isAuthenticated) {
+      e.preventDefault()
+      navigate('/subscription')
+      return
+    }
+
     if (location.pathname === path) {
       e.preventDefault()
       // Forzar recarga de la página para resetear el estado (tabs, etc.)
@@ -60,7 +68,7 @@ const Header = () => {
               key={path}
               to={path}
               className={`nav-link ${isActive(path) ? 'active' : ''} ${isVip ? 'nav-link-vip' : ''}`}
-              onClick={(e) => handleNavClick(e, path)}
+              onClick={(e) => handleNavClick(e, path, isVip)}
               title={label}
             >
               <Icon size={18} />
