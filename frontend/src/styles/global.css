@@ -577,6 +577,7 @@ input, select, textarea {
 
 .btn-account,
 .btn-logout,
+.btn-login,
 .btn-register {
   display: flex;
   align-items: center;
@@ -594,6 +595,7 @@ input, select, textarea {
 
 .btn-account:hover,
 .btn-logout:hover,
+.btn-login:hover,
 .btn-register:hover {
   background: rgba(255, 255, 255, 0.2);
 }
@@ -635,6 +637,7 @@ input, select, textarea {
 
   .btn-account span,
   .btn-logout span,
+  .btn-login span,
   .btn-register span {
     display: none;
   }
@@ -681,6 +684,7 @@ input, select, textarea {
 
   .header-user .btn-account span,
   .header-user .btn-logout span,
+  .header-user .btn-login span,
   .header-user .btn-register span {
     display: inline;
   }
@@ -708,6 +712,7 @@ input, select, textarea {
 
   .header-user .btn-account,
   .header-user .btn-logout,
+  .header-user .btn-login,
   .header-user .btn-register {
     width: 100%;
     justify-content: center;
