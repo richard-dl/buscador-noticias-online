@@ -15,15 +15,19 @@ const TEMATICAS = {
   politica: ['política', 'gobierno', 'congreso', 'diputados', 'senadores', 'presidente', 'ministerio', 'ley', 'elecciones', 'partido', 'peronismo', 'kirchner', 'milei', 'reforma', 'minoría', 'oficialismo', 'oposición', 'votación', 'sesión', 'senado', 'legislador', 'mandato', 'gobernador', 'intendente', 'golpe de estado', 'dictadura', 'militar', 'junta', 'perón', 'derrocar'],
   economia: ['economía', 'dólar', 'inflación', 'banco central', 'mercados', 'peso', 'inversión', 'bolsa', 'finanzas', 'comercio', 'bcra', 'deuda', 'presupuesto', 'déficit', 'pbi', 'tipo de cambio', 'cepo', 'reservas', 'bonos', 'acciones', 'salario', 'sueldo', 'aumento', 'incremento salarial', 'paritaria', 'remuneración', 'aguinaldo', 'bono salarial', 'ajuste salarial', 'tarifas', 'precios', 'costo de vida', 'canasta básica', 'ganancias', 'impuesto', 'recaudación', 'subsidio', 'jubilación', 'pensión', 'haber'],
   deportes: ['fútbol', 'deportes', 'selección argentina', 'liga profesional', 'mundial', 'copa', 'jugador', 'equipo', 'torneo', 'gol', 'pelea', 'boxeo', 'mma', 'básquet', 'tenis', 'rugby', 'natación', 'atletismo', 'carrera', 'maratón', 'dt', 'técnico deportivo', 'entrenador', 'scaloni', 'finalissima', 'partido', 'cancha', 'estadio', 'hincha', 'arquero'],
-  espectaculos: ['espectáculos', 'famosos', 'televisión', 'cine', 'actor', 'actriz', 'película', 'serie', 'streaming', 'festival', 'show', 'artista', 'estreno', 'celebridad', 'cantante', 'música', 'premio', 'gala', 'alfombra roja', 'hollywood', 'horóscopo', 'signo', 'zodiaco', 'aries', 'tauro', 'géminis', 'cáncer', 'leo', 'virgo', 'libra', 'escorpio', 'sagitario', 'capricornio', 'acuario', 'piscis', 'astrología', 'predicciones'],
-  tecnologia: ['tecnología', 'inteligencia artificial', 'apps', 'internet', 'celular', 'software', 'digital', 'innovación', 'startup', 'ciberseguridad', 'samsung', 'iphone', 'android', 'smartphone', 'tablet', 'función', 'activar', 'configuración', 'dispositivo', 'móvil'],
-  policiales: ['policiales', 'seguridad', 'crimen', 'robo', 'asesinato', 'delito', 'policía', 'detención', 'homicidio', 'violencia', 'sospechoso', 'arresto', 'víctima', 'allanamiento', 'cayó', 'operativo', 'red criminal', 'abuso', 'pedofilia', 'secuestro', 'banda', 'captura', 'procedimiento', 'baleado', 'apuñalado', 'asalto', 'tiroteo', 'narcotráfico', 'droga'],
-  judiciales: ['judiciales', 'justicia', 'tribunal', 'juez', 'jueza', 'corte suprema', 'fiscal', 'fiscalía', 'causa', 'expediente', 'sentencia', 'condena', 'absolución', 'imputado', 'procesado', 'acusado', 'demanda', 'querella', 'apelación', 'recurso', 'fallo', 'magistrado', 'juzgado', 'cámara federal', 'comodoro py', 'casación', 'oral', 'penal', 'civil', 'amparo'],
+  espectaculos: ['espectáculos', 'famosos', 'televisión', 'cine', 'actor', 'actriz', 'película', 'serie', 'streaming', 'festival', 'show', 'artista', 'celebridad', 'cantante', 'música', 'premio', 'gala', 'alfombra roja', 'hollywood', 'horóscopo', 'signo', 'zodiaco', 'aries', 'tauro', 'géminis', 'cáncer', 'leo', 'virgo', 'libra', 'escorpio', 'sagitario', 'capricornio', 'acuario', 'piscis', 'astrología', 'predicciones', 'farándula', 'reality', 'gran hermano', 'pareja', 'romance', 'separación', 'divorcio', 'boda', 'casamiento'],
+  estrenos: ['estreno', 'estrena', 'lanzamiento', 'nueva temporada', 'temporada 2', 'temporada 3', 'temporada 4', 'temporada 5', 'volumen 2', 'parte 2', 'netflix', 'disney+', 'amazon prime', 'hbo max', 'max', 'paramount+', 'star+', 'apple tv', 'plataforma', 'disponible', 'llega a', 'fecha de estreno', 'trailer', 'tráiler', 'precuela', 'secuela', 'spin-off', 'remake', 'reboot', 'premier', 'premiere', 'stranger things', 'capítulos', 'episodios'],
+  tecnologia: ['tecnología', 'inteligencia artificial', 'apps', 'internet', 'celular', 'software', 'digital', 'innovación', 'startup', 'ciberseguridad', 'samsung', 'iphone', 'android', 'smartphone', 'tablet', 'función', 'activar', 'configuración', 'dispositivo', 'móvil', 'whatsapp', 'instagram', 'tiktok', 'facebook', 'google', 'microsoft', 'apple', 'tesla', 'elon musk', 'chatgpt', 'openai', 'robot', 'computadora', 'laptop', 'notebook'],
+  policiales: ['policiales', 'seguridad', 'crimen', 'robo', 'asesinato', 'delito', 'policía', 'detención', 'homicidio', 'violencia', 'arresto', 'víctima', 'allanamiento', 'cayó', 'operativo', 'red criminal', 'abuso', 'pedofilia', 'secuestro', 'banda', 'captura', 'procedimiento', 'baleado', 'apuñalado', 'asalto', 'tiroteo', 'narcotráfico', 'droga', 'femicidio', 'feminicidio', 'atacante', 'agresor'],
+  investigacion: ['investigación judicial', 'investigado', 'sospechoso', 'sospechosos', 'sospecha', 'indagado', 'indagatoria', 'peritaje', 'pericia', 'pruebas', 'evidencia', 'escena del crimen', 'autopsia', 'forense', 'testigo', 'declaración', 'interrogatorio', 'allanamiento', 'requisitoria', 'expediente', 'carátula', 'elevación a juicio', 'prisión preventiva', 'excarcelación', 'detención domiciliaria', 'tobillera', 'imputación', 'presunto', 'presunta'],
+  accidentes: ['accidente', 'accidente vial', 'accidente de tránsito', 'choque', 'colisión', 'volcó', 'vuelco', 'despiste', 'siniestro vial', 'ruta', 'autopista', 'tragedia vial', 'víctimas fatales', 'heridos', 'fallecidos', 'muertos en ruta', 'motociclista', 'ciclista', 'peatón', 'atropellado', 'atropello', 'conductor', 'alcoholemia', 'exceso de velocidad', 'imprudencia', 'ambulancia', 'emergencia', 'bomberos', 'rescate', 'accidente de tren', 'descarrilamiento', 'avión', 'avioneta', 'helicóptero', 'naufragio', 'embarcación'],
+  naturaleza: ['temporal', 'tormenta', 'inundación', 'inundaciones', 'crecida', 'desborde', 'evacuados', 'evacuación', 'terremoto', 'sismo', 'temblor', 'huracán', 'ciclón', 'tornado', 'granizo', 'granizada', 'alerta meteorológica', 'alerta roja', 'alerta naranja', 'alerta amarilla', 'emergencia climática', 'desastre natural', 'catástrofe', 'incendio forestal', 'incendios', 'sequía', 'ola de calor', 'ola de frío', 'nevada', 'alud', 'avalancha', 'deslizamiento', 'derrumbe', 'volcán', 'erupción', 'ceniza volcánica', 'tsunami', 'maremoto', 'rayos', 'vientos fuertes', 'sudestada', 'zonda'],
+  judiciales: ['judiciales', 'justicia', 'tribunal', 'juez', 'jueza', 'corte suprema', 'fiscal', 'fiscalía', 'causa', 'sentencia', 'condena', 'absolución', 'imputado', 'procesado', 'acusado', 'demanda', 'querella', 'apelación', 'recurso', 'fallo', 'magistrado', 'juzgado', 'cámara federal', 'comodoro py', 'casación', 'oral', 'penal', 'civil', 'amparo'],
   salud: ['salud', 'medicina', 'hospitales', 'pandemia', 'vacuna', 'enfermedad', 'médico', 'tratamiento', 'paciente', 'síntoma', 'sueño', 'descanso', 'dormir', 'niños', 'bienestar', 'alimentación', 'ejercicio físico', 'prevención', 'cuidados', 'hábitos saludables'],
   educacion: ['educación', 'universidades', 'escuelas', 'docentes', 'estudiantes', 'clases', 'profesor', 'maestro', 'campus', 'cursada'],
   cultura: ['cultura', 'arte', 'música', 'teatro', 'literatura', 'artista', 'exposición', 'concierto', 'libro', 'escritor'],
-  ciencia: ['ciencia', 'investigación', 'conicet', 'descubrimiento', 'estudio', 'científico', 'experimento', 'universidad', 'laboratorio', 'avance'],
-  medioambiente: ['medio ambiente', 'clima', 'ecología', 'contaminación', 'ambiental', 'naturaleza', 'sustentable', 'cambio climático', 'biodiversidad', 'emisiones'],
+  ciencia: ['ciencia', 'investigación científica', 'conicet', 'descubrimiento', 'estudio científico', 'científico', 'experimento', 'universidad', 'laboratorio', 'avance científico'],
+  medioambiente: ['medio ambiente', 'ecología', 'contaminación', 'ambiental', 'sustentable', 'cambio climático', 'biodiversidad', 'emisiones', 'reciclaje', 'reserva natural', 'fauna', 'flora', 'especies', 'animales', 'deforestación'],
   internacional: ['internacional', 'estados unidos', 'eeuu', 'trump', 'biden', 'casa blanca', 'venezuela', 'maduro', 'brasil', 'lula', 'chile', 'boric', 'uruguay', 'colombia', 'petro', 'méxico', 'guerra', 'ucrania', 'rusia', 'putin', 'china', 'xi jinping', 'europa', 'onu', 'otan', 'g20', 'cumbre', 'embajada', 'diplomacia', 'relaciones exteriores', 'cancillería', 'tratado', 'frontera', 'migrantes', 'refugiados', 'conflicto', 'sanciones', 'petróleo', 'crudo', 'geopolítica', 'potencia', 'invasión', 'israel', 'gaza', 'palestina', 'medio oriente', 'corea del norte', 'irán'],
   juegos: ['quiniela', 'lotería', 'loto', 'sorteo', 'números ganadores', 'premio mayor', 'pozo', 'bingo', 'casino', 'azar', 'apuestas', 'telekino', 'loto plus', 'quini 6', 'la grande', 'tombola', 'raspadita', 'tragamonedas', 'ruleta', 'resultado sorteo', 'número premiado', 'lotería nacional', 'lotería provincial']
 };
@@ -78,6 +82,48 @@ const REGLAS_CONTEXTO = [
     contexto: ['tribunal', 'juez', 'causa', 'sentencia', 'procesado', 'imputado', 'comodoro py'],
     conflicto: 'politica',
     destino: 'judiciales',
+    bonus: 4
+  },
+  // Si hay palabras de accidentes junto con policiales -> accidentes (el accidente es la noticia principal)
+  {
+    contexto: ['accidente', 'choque', 'volcó', 'vuelco', 'despiste', 'colisión', 'atropellado', 'siniestro vial'],
+    conflicto: 'policiales',
+    destino: 'accidentes',
+    bonus: 5
+  },
+  // Si hay palabras de naturaleza/clima junto con policiales (rescates, evacuados) -> naturaleza
+  {
+    contexto: ['temporal', 'tormenta', 'inundación', 'evacuados', 'terremoto', 'tornado', 'huracán', 'incendio forestal'],
+    conflicto: 'policiales',
+    destino: 'naturaleza',
+    bonus: 5
+  },
+  // Si hay palabras de estrenos junto con espectáculos -> estrenos (más específico)
+  {
+    contexto: ['estreno', 'estrena', 'netflix', 'nueva temporada', 'volumen 2', 'disney+', 'amazon prime', 'plataforma'],
+    conflicto: 'espectaculos',
+    destino: 'estrenos',
+    bonus: 4
+  },
+  // Si hay palabras de investigación junto con policiales -> investigación (proceso judicial, no el crimen)
+  {
+    contexto: ['sospechoso', 'investigado', 'peritaje', 'autopsia', 'forense', 'indagatoria', 'testigo', 'pruebas'],
+    conflicto: 'policiales',
+    destino: 'investigacion',
+    bonus: 3
+  },
+  // Si hay palabras de accidentes junto con deportes (accidente de deportista) -> accidentes
+  {
+    contexto: ['accidente', 'choque', 'volcó', 'herido', 'fallecido', 'hospital'],
+    conflicto: 'deportes',
+    destino: 'accidentes',
+    bonus: 5
+  },
+  // Si hay palabras de naturaleza junto con internacional (desastres en otros países) -> naturaleza
+  {
+    contexto: ['terremoto', 'huracán', 'tsunami', 'inundación', 'tornado', 'ciclón', 'desastre natural'],
+    conflicto: 'internacional',
+    destino: 'naturaleza',
     bonus: 4
   }
 ];
