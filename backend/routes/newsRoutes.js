@@ -154,7 +154,7 @@ router.get('/recent', async (req, res) => {
     news = news.map(item => ({
       ...item,
       summary: summarize(item.description, { maxSentences: 2 }),
-      emojis: generateNewsEmojis(item.title, item.description, item.category)
+      emojis: generateNewsEmojis(item)
     }));
 
     res.json({
