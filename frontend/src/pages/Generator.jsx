@@ -450,28 +450,41 @@ const Generator = () => {
         <div className="generator-header">
           <h1>Generador de Noticias</h1>
           <div className="tabs">
-            {/* Botón Buscar Noticias - en la misma línea que los tabs */}
+            {/* Selector de cantidad y Botón Buscar Noticias - en la misma línea que los tabs */}
             {activeTab === 'search' && (
-              <button
-                className="btn btn-primary btn-search-main"
-                onClick={() => {
-                  if (!isAuthenticated) {
-                    navigate('/subscription')
-                    return
-                  }
-                  handleSearch()
-                }}
-                disabled={loading}
-              >
-                {loading ? (
-                  <LoadingSpinner size="small" />
-                ) : (
-                  <>
-                    <FiSearch size={18} />
-                    <span className="tab-text">Buscar Noticias</span>
-                  </>
-                )}
-              </button>
+              <>
+                <div className="count-selector count-selector-header">
+                  <select
+                    value={searchCount}
+                    onChange={(e) => setSearchCount(Number(e.target.value))}
+                  >
+                    <option value={5}>5 noticias</option>
+                    <option value={10}>10 noticias</option>
+                    <option value={15}>15 noticias</option>
+                    <option value={20}>20 noticias</option>
+                  </select>
+                </div>
+                <button
+                  className="btn btn-primary btn-search-main"
+                  onClick={() => {
+                    if (!isAuthenticated) {
+                      navigate('/subscription')
+                      return
+                    }
+                    handleSearch()
+                  }}
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <LoadingSpinner size="small" />
+                  ) : (
+                    <>
+                      <FiSearch size={18} />
+                      <span className="tab-text">Buscar Noticias</span>
+                    </>
+                  )}
+                </button>
+              </>
             )}
             {activeTab !== 'search' && (
               <button
@@ -543,36 +556,6 @@ const Generator = () => {
 
               {/* Área de resultados */}
               <div className="results-area">
-                <div className="search-controls">
-                  <div className="count-selector">
-                    <label>Cantidad:</label>
-                    <select
-                      value={searchCount}
-                      onChange={(e) => setSearchCount(Number(e.target.value))}
-                    >
-                      <option value={5}>5 noticias</option>
-                      <option value={10}>10 noticias</option>
-                      <option value={15}>15 noticias</option>
-                      <option value={20}>20 noticias</option>
-                    </select>
-                  </div>
-
-                  {/* Botón secundario de búsqueda solo visible en móvil */}
-                  <button
-                    className="btn btn-primary btn-search-mobile"
-                    onClick={handleSearch}
-                    disabled={loading}
-                  >
-                    {loading ? (
-                      <LoadingSpinner size="small" />
-                    ) : (
-                      <>
-                        <FiSearch size={18} />
-                        Buscar
-                      </>
-                    )}
-                  </button>
-                </div>
 
                 {/* Resultados */}
                 {loading ? (
