@@ -217,7 +217,7 @@ export const AuthProvider = ({ children }) => {
       setUser(null)
       setProfile(null)
       toast.info('Sesión cerrada')
-      navigate('/login')
+      navigate('/dashboard')
     } catch (error) {
       console.error('Error en logout:', error)
       toast.error('Error al cerrar sesión')
