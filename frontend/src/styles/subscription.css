@@ -118,6 +118,17 @@
   font-size: var(--font-size-sm);
 }
 
+/* Guest message - invitados no logueados */
+.guest-message {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-base);
+  margin-bottom: var(--spacing-3);
+}
+
+.status-details .btn {
+  margin-top: var(--spacing-2);
+}
+
 /* Badges de rol en pagina suscripcion */
 .subscription-page .badge.badge-lg {
   padding: var(--spacing-2) var(--spacing-4);

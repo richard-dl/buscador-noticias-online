@@ -57,14 +57,8 @@ function App() {
           </ProtectedRoute>
         }
       />
-      <Route
-        path="/subscription"
-        element={
-          <ProtectedRoute>
-            <Subscription />
-          </ProtectedRoute>
-        }
-      />
+      {/* Subscription es público para ver planes, acciones requieren login */}
+      <Route path="/subscription" element={<Subscription />} />
 
       {/* Redirección por defecto */}
       <Route path="/" element={<Navigate to="/dashboard" replace />} />
