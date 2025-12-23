@@ -5,6 +5,7 @@ import {
   registerWithEmail,
   loginWithEmail,
   loginWithGoogle,
+  checkRedirectResult,
   logout as firebaseLogout,
   resetPassword as firebaseResetPassword,
   onAuthChange,
@@ -101,6 +102,28 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  // Manejar resultado de redirect de Google (para móviles)
+  useEffect(() => {
+    const handleRedirectResult = async () => {
+      try {
+        const redirectUser = await checkRedirectResult()
+        if (redirectUser) {
+          // Usuario autenticado via redirect, sincronizar con backend
+          await authApi.login()
+          const name = redirectUser.displayName || redirectUser.email?.split('@')[0] || 'Usuario'
+          toast.success(`¡Bienvenido, ${name}!`)
+          navigate('/dashboard')
+        }
+      } catch (error) {
+        console.error('Error en redirect result:', error)
+        if (error.code !== 'auth/popup-closed-by-user') {
+          toast.error('Error al iniciar sesión con Google')
+        }
+      }
+    }
+    handleRedirectResult()
+  }, [navigate])
+
   // Escuchar cambios de autenticación
   useEffect(() => {
     const unsubscribe = onAuthChange(async (firebaseUser) => {
@@ -193,10 +216,17 @@ export const AuthProvider = ({ children }) => {
       setLoading(true)
       const firebaseUser = await loginWithGoogle()
 
-      // Verificar/crear en backend
+      // En móviles, loginWithGoogle hace redirect y retorna null
+      // El resultado se maneja en el useEffect de checkRedirectResult
+      if (!firebaseUser) {
+        // Es redirect (móvil), no hacer nada aquí
+        return
+      }
+
+      // Desktop: popup completado exitosamente
       await authApi.login()
 
-      const name = firebaseUser?.displayName || firebaseUser?.email?.split('@')[0] || 'Usuario'
+      const name = firebaseUser.displayName || firebaseUser.email?.split('@')[0] || 'Usuario'
       toast.success(`¡Bienvenido, ${name}!`)
       navigate('/dashboard')
     } catch (error) {
