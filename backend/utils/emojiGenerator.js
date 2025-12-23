@@ -255,6 +255,9 @@ const generateNewsEmojis = (news, options = {}) => {
   const text = `${news.title || ''} ${news.description || ''}`;
   const category = news.category || null;
 
+  // Debug log
+  console.log(`[generateNewsEmojis] category recibida: "${category}", CATEGORY_EMOJIS tiene: ${Object.keys(CATEGORY_EMOJIS).join(', ')}`);
+
   return generateEmojis(text, { ...options, category });
 };
 
