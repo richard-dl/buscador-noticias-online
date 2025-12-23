@@ -1,10 +1,10 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { FiHome, FiFileText, FiUser, FiLogOut, FiMenu, FiX, FiStar, FiCreditCard } from 'react-icons/fi'
+import { FiHome, FiFileText, FiUser, FiLogOut, FiMenu, FiX, FiStar, FiCreditCard, FiUserPlus } from 'react-icons/fi'
 import { useState } from 'react'
 
 const Header = () => {
-  const { user, profile, logout, daysRemaining } = useAuth()
+  const { user, profile, logout, daysRemaining, isAuthenticated } = useAuth()
   const location = useLocation()
   const navigate = useNavigate()
   const [menuOpen, setMenuOpen] = useState(false)
@@ -13,8 +13,7 @@ const Header = () => {
     { path: '/dashboard', label: 'Inicio', icon: FiHome },
     { path: '/generator', label: 'Generador', icon: FiFileText },
     { path: '/zona-vip', label: 'Zona VIP', icon: FiStar, isVip: true },
-    { path: '/subscription', label: 'Planes', icon: FiCreditCard },
-    { path: '/profile', label: 'Perfil', icon: FiUser }
+    { path: '/subscription', label: 'Planes', icon: FiCreditCard }
   ]
 
   const isActive = (path) => location.pathname === path
@@ -71,19 +70,42 @@ const Header = () => {
         </nav>
 
         <div className={`header-user ${menuOpen ? 'open' : ''}`}>
-          {profile?.role === 'admin' ? (
-            <span className="admin-badge">
-              👑 Administrador
-            </span>
-          ) : daysRemaining !== null && daysRemaining !== undefined && daysRemaining <= 7 && (
-            <span className="days-warning">
-              {daysRemaining} días restantes
-            </span>
+          {isAuthenticated ? (
+            <>
+              {profile?.role === 'admin' ? (
+                <span className="admin-badge">
+                  👑 Administrador
+                </span>
+              ) : daysRemaining !== null && daysRemaining !== undefined && daysRemaining <= 7 && (
+                <span className="days-warning">
+                  {daysRemaining} días restantes
+                </span>
+              )}
+              <Link
+                to="/profile"
+                className="btn-account"
+                onClick={() => setMenuOpen(false)}
+                title="Mi Cuenta"
+              >
+                <FiUser size={18} />
+                <span>Mi Cuenta</span>
+              </Link>
+              <button className="btn-logout" onClick={logout} title="Cerrar sesión">
+                <FiLogOut size={18} />
+                <span>Salir</span>
+              </button>
+            </>
+          ) : (
+            <Link
+              to="/subscription"
+              className="btn-register"
+              onClick={() => setMenuOpen(false)}
+              title="Registrarse"
+            >
+              <FiUserPlus size={18} />
+              <span>Registrarse</span>
+            </Link>
           )}
-          <button className="btn-logout" onClick={logout} title="Cerrar sesión">
-            <FiLogOut size={18} />
-            <span>Salir</span>
-          </button>
         </div>
       </div>
     </header>

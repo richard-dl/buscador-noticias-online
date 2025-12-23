@@ -125,6 +125,18 @@
   margin-bottom: var(--spacing-3);
 }
 
+.guest-link {
+  color: var(--color-teal);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color var(--transition-fast);
+}
+
+.guest-link:hover {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
 .status-details .btn {
   margin-top: var(--spacing-2);
 }

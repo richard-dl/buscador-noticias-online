@@ -575,7 +575,9 @@ input, select, textarea {
   opacity: 0.9;
 }
 
-.btn-logout {
+.btn-account,
+.btn-logout,
+.btn-register {
   display: flex;
   align-items: center;
   gap: var(--spacing-1);
@@ -587,10 +589,21 @@ input, select, textarea {
   cursor: pointer;
   font-size: var(--font-size-sm);
   transition: background var(--transition-fast);
+  text-decoration: none;
 }
 
-.btn-logout:hover {
+.btn-account:hover,
+.btn-logout:hover,
+.btn-register:hover {
   background: rgba(255, 255, 255, 0.2);
+}
+
+.btn-register {
+  background: var(--color-teal);
+}
+
+.btn-register:hover {
+  background: var(--color-teal-dark, #2d8a8c);
 }
 
 .menu-toggle {
@@ -620,7 +633,9 @@ input, select, textarea {
     gap: var(--spacing-2);
   }
 
-  .btn-logout span {
+  .btn-account span,
+  .btn-logout span,
+  .btn-register span {
     display: none;
   }
 }
@@ -664,7 +679,9 @@ input, select, textarea {
     display: inline;
   }
 
-  .header-user .btn-logout span {
+  .header-user .btn-account span,
+  .header-user .btn-logout span,
+  .header-user .btn-register span {
     display: inline;
   }
 
@@ -689,7 +706,9 @@ input, select, textarea {
     font-size: var(--font-size-sm);
   }
 
-  .header-user .btn-logout {
+  .header-user .btn-account,
+  .header-user .btn-logout,
+  .header-user .btn-register {
     width: 100%;
     justify-content: center;
     padding: var(--spacing-3);
@@ -2977,13 +2996,13 @@ input, select, textarea {
 
 .vip-progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--color-teal) 0%, var(--color-primary) 100%);
+  background: var(--color-teal);
   border-radius: var(--radius-full);
   transition: width 0.3s ease;
 }
 
 .vip-progress-exceeded {
-  background: linear-gradient(90deg, #FFC107 0%, #FF5722 100%);
+  background: #FFC107;
 }
 
 .vip-admin-actions {
@@ -2993,7 +3012,7 @@ input, select, textarea {
 }
 
 .vip-admin-actions .btn-danger {
-  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  background: #dc3545;
   color: white;
   display: flex;
   align-items: center;
@@ -3001,7 +3020,7 @@ input, select, textarea {
 }
 
 .vip-admin-actions .btn-danger:hover:not(:disabled) {
-  background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
+  background: #c82333;
 }
 
 .vip-admin-actions .btn-danger:disabled {
@@ -3153,16 +3172,7 @@ input, select, textarea {
 }
 
 .status-bar.status-active {
-  background: linear-gradient(
-    90deg,
-    #ef4444 0%,
-    #f97316 25%,
-    #eab308 50%,
-    #84cc16 75%,
-    #22c55e 100%
-  );
-  background-size: 200% 100%;
-  background-position: calc(100% - var(--status-percent, 100%)) 0;
+  background: var(--color-teal);
 }
 
 .status-bar.status-expired {
