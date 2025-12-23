@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { FiHome, FiFileText, FiUser, FiLogOut, FiMenu, FiX, FiStar, FiCreditCard, FiUserPlus } from 'react-icons/fi'
+import { FiHome, FiFileText, FiUser, FiLogOut, FiMenu, FiX, FiStar, FiCreditCard, FiUserPlus, FiLogIn } from 'react-icons/fi'
 import { useState } from 'react'
 
 const Header = () => {
@@ -96,15 +96,26 @@ const Header = () => {
               </button>
             </>
           ) : (
-            <Link
-              to="/subscription"
-              className="btn-register"
-              onClick={() => setMenuOpen(false)}
-              title="Registrarse"
-            >
-              <FiUserPlus size={18} />
-              <span>Registrarse</span>
-            </Link>
+            <>
+              <Link
+                to="/login"
+                className="btn-login"
+                onClick={() => setMenuOpen(false)}
+                title="Iniciar sesión"
+              >
+                <FiLogIn size={18} />
+                <span>Iniciar sesión</span>
+              </Link>
+              <Link
+                to="/register"
+                className="btn-register"
+                onClick={() => setMenuOpen(false)}
+                title="Registrarse"
+              >
+                <FiUserPlus size={18} />
+                <span>Registrarse</span>
+              </Link>
+            </>
           )}
         </div>
       </div>
