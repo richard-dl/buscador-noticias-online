@@ -151,11 +151,15 @@ router.get('/recent', async (req, res) => {
     news = await classifyNewsWithAIOrFallback(news);
 
     // Procesar cada noticia (versión simplificada para público)
-    news = news.map(item => ({
-      ...item,
-      summary: summarize(item.description, { maxSentences: 2 }),
-      emojis: generateNewsEmojis(item)
-    }));
+    news = news.map(item => {
+      const emojis = generateNewsEmojis(item);
+      console.log(`[Emojis] "${item.title?.substring(0, 40)}..." -> cat: ${item.category}, emojis: ${emojis.join(' ')}`);
+      return {
+        ...item,
+        summary: summarize(item.description, { maxSentences: 2 }),
+        emojis
+      };
+    });
 
     res.json({
       success: true,
