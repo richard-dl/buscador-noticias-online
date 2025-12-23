@@ -223,7 +223,7 @@ const detectCategory = (text) => {
 const generateEmojis = (text, options = {}) => {
   const { maxEmojis = 3, category = null } = options;
 
-  const lowerText = text.toLowerCase();
+  const lowerText = (text || '').toLowerCase();
   const emojis = new Set();
 
   // 1. Buscar keywords específicas
@@ -236,8 +236,12 @@ const generateEmojis = (text, options = {}) => {
 
   // 2. Si no hay suficientes, usar emojis de categoría
   if (emojis.size < maxEmojis) {
-    const detectedCategory = category || detectCategory(text);
+    // Normalizar categoría a minúsculas
+    const normalizedCategory = category ? category.toLowerCase() : null;
+    const detectedCategory = normalizedCategory || detectCategory(text || '');
     const categoryEmojis = CATEGORY_EMOJIS[detectedCategory] || CATEGORY_EMOJIS.general;
+
+    console.log(`[generateEmojis] category: "${category}" -> normalized: "${normalizedCategory}" -> detected: "${detectedCategory}" -> emojis: ${categoryEmojis?.slice(0, 3).join(' ')}`);
 
     for (const emoji of categoryEmojis) {
       emojis.add(emoji);
