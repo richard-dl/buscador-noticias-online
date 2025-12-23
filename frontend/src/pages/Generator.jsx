@@ -508,6 +508,7 @@ const Generator = () => {
             >
               <FiZap size={18} />
               <span className="tab-text">ÚLTIMO</span>
+              <span className="tab-text-desktop">ÚLTIMO MOMENTO</span>
             </button>
             <button
               className={`tab ${activeTab === 'profiles' ? 'active' : ''}`}

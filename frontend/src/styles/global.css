@@ -1602,6 +1602,15 @@ input, select, textarea {
   color: white;
 }
 
+/* En desktop: mostrar texto completo, ocultar versión corta */
+.tab-text-desktop {
+  display: inline;
+}
+
+.tab-breaking .tab-text {
+  display: none;
+}
+
 .generator-content {
   display: grid;
   grid-template-columns: 320px 1fr;
@@ -2711,6 +2720,15 @@ input, select, textarea {
 
   /* En móvil pequeño, solo iconos en tabs */
   .tabs .tab-text {
+    display: none;
+  }
+
+  /* Ocultar texto desktop en móvil, mantener versión corta */
+  .tab-text-desktop {
+    display: none !important;
+  }
+
+  .tab-breaking .tab-text {
     display: none;
   }
 
