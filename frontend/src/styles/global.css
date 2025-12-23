@@ -190,6 +190,7 @@ a:hover {
 .btn-secondary:hover:not(:disabled) {
   background-color: rgba(64, 151, 154, 0.25);
   border-color: var(--color-teal);
+  color: var(--color-accent-glow);
 }
 
 .btn-danger {
