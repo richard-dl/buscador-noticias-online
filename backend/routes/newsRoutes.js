@@ -157,6 +157,7 @@ router.get('/recent', async (req, res) => {
 
       // Generar emojis
       item.emojis = generateNewsEmojis(item);
+      item.emojisString = emojisToString(item.emojis);
 
       // Acortar URL (igual que en /rss y /search)
       if (item.link) {
