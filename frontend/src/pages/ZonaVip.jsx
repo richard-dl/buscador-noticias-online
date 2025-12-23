@@ -634,7 +634,7 @@ ${hashtagsStr}`
                 <li><FiStar /> Alertas de última hora</li>
               </ul>
             </div>
-            <button className="btn-upgrade-vip" onClick={() => navigate('/subscriptions')}>
+            <button className="btn-upgrade-vip" onClick={() => navigate('/subscription')}>
               Obtener Suscripción VIP
             </button>
           </div>
