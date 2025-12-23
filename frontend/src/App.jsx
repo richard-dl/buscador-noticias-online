@@ -15,6 +15,7 @@ import Subscription from './pages/Subscription'
 // Components
 import ProtectedRoute from './components/ProtectedRoute'
 import LoadingSpinner from './components/LoadingSpinner'
+import ScrollToTop from './components/ScrollToTop'
 
 function App() {
   const { loading } = useAuth()
@@ -29,6 +30,7 @@ function App() {
   }
 
   return (
+    <>
     <Routes>
       {/* Rutas públicas */}
       <Route path="/login" element={<Login />} />
@@ -36,23 +38,9 @@ function App() {
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/expired" element={<Expired />} />
 
-      {/* Rutas protegidas */}
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/generator"
-        element={
-          <ProtectedRoute>
-            <Generator />
-          </ProtectedRoute>
-        }
-      />
+      {/* Rutas semi-públicas (ver sin login, acciones requieren login) */}
+      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/generator" element={<Generator />} />
       <Route
         path="/profile"
         element={
@@ -82,6 +70,8 @@ function App() {
       <Route path="/" element={<Navigate to="/dashboard" replace />} />
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
+    <ScrollToTop />
+    </>
   )
 }
 

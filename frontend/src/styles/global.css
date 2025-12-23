@@ -1129,8 +1129,8 @@ input, select, textarea {
 }
 
 .column-selector .col-btn:hover {
-  background: var(--color-gray-200);
-  color: var(--color-gray-700);
+  background: var(--color-gray-100);
+  color: var(--color-primary);
 }
 
 .column-selector .col-btn.active {
