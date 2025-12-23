@@ -1120,22 +1120,35 @@ input, select, textarea {
   margin: 0;
 }
 
-.guest-cta-section .guest-link {
-  color: var(--color-teal);
-  text-decoration: none;
-  font-weight: 600;
-  transition: color var(--transition-fast);
+.guest-cta-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
-.guest-cta-section .guest-link:hover {
-  color: var(--color-accent);
-  text-decoration: underline;
+.btn-cta-small {
+  padding: var(--spacing-2) var(--spacing-4);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
 }
 
-.btn-register-cta {
-  padding: var(--spacing-3) var(--spacing-6);
-  font-size: var(--font-size-base);
-  font-weight: 600;
+/* Móvil: CTA más compacto */
+@media (max-width: 768px) {
+  .guest-cta-section {
+    padding: var(--spacing-4);
+    gap: 8px;
+  }
+
+  .guest-cta-message {
+    font-size: var(--font-size-sm);
+  }
+
+  .btn-cta-small {
+    padding: var(--spacing-2) var(--spacing-3);
+    font-size: var(--font-size-xs);
+  }
 }
 
 /* Sections */

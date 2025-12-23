@@ -235,11 +235,16 @@ const Dashboard = () => {
         {!isAuthenticated && (
           <div className="guest-cta-section">
             <p className="guest-cta-message">
-              <a href="/register" className="guest-link">Regístrate</a> o <a href="/login" className="guest-link">inicia sesión</a> para acceder a todas las funciones
+              Regístrate o inicia sesión para acceder a todas las funciones
             </p>
-            <Link to="/register" className="btn btn-primary btn-register-cta">
-              Registrarse Gratis
-            </Link>
+            <div className="guest-cta-buttons">
+              <Link to="/register" className="btn btn-primary btn-cta-small">
+                Registrarse Gratis
+              </Link>
+              <Link to="/login" className="btn btn-secondary btn-cta-small">
+                Iniciar Sesión
+              </Link>
+            </div>
           </div>
         )}
       </section>
