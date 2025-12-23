@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
-import { userApi, authApi } from '../services/api'
+import { userApi, authApi, vipApi } from '../services/api'
 import Header from '../components/Header'
 import LoadingSpinner from '../components/LoadingSpinner'
 import NewsCard from '../components/NewsCard'
 import { toast } from 'react-toastify'
 import {
-  FiUser, FiMail, FiCalendar, FiClock, FiEdit2, FiSave, FiX, FiUsers, FiBookmark
+  FiUser, FiMail, FiCalendar, FiClock, FiEdit2, FiSave, FiX, FiUsers, FiBookmark,
+  FiStar, FiTrash2, FiRefreshCw, FiDatabase, FiImage, FiVideo, FiFileText, FiLayers
 } from 'react-icons/fi'
 
 const Profile = () => {
@@ -20,13 +21,18 @@ const Profile = () => {
   const [loadingUsers, setLoadingUsers] = useState(true)
   const [savedNews, setSavedNews] = useState([])
   const [loadingSavedNews, setLoadingSavedNews] = useState(true)
+  // Estados para admin VIP
+  const [vipStats, setVipStats] = useState(null)
+  const [loadingVipStats, setLoadingVipStats] = useState(false)
+  const [runningCleanup, setRunningCleanup] = useState(false)
 
   useEffect(() => {
     if (profile) {
       setDisplayName(profile.displayName || '')
-      // Cargar usuarios solo si es admin
+      // Cargar usuarios y stats VIP solo si es admin
       if (profile.role === 'admin') {
         loadUsers()
+        loadVipStats()
       }
     }
     loadSearchProfiles()
@@ -74,6 +80,41 @@ const Profile = () => {
       toast.error('Error al cargar usuarios')
     } finally {
       setLoadingUsers(false)
+    }
+  }
+
+  const loadVipStats = async () => {
+    try {
+      setLoadingVipStats(true)
+      const response = await vipApi.getAdminStats()
+      if (response.success) {
+        setVipStats(response.data)
+      }
+    } catch (error) {
+      console.error('Error cargando estadísticas VIP:', error)
+    } finally {
+      setLoadingVipStats(false)
+    }
+  }
+
+  const handleVipCleanup = async () => {
+    if (!window.confirm('¿Ejecutar limpieza de contenido VIP antiguo? Esto eliminará los elementos que excedan el límite de 150.')) {
+      return
+    }
+
+    try {
+      setRunningCleanup(true)
+      const response = await vipApi.runCleanup()
+      if (response.success) {
+        toast.success(response.message)
+        // Recargar estadísticas
+        loadVipStats()
+      }
+    } catch (error) {
+      console.error('Error ejecutando limpieza VIP:', error)
+      toast.error('Error al ejecutar limpieza')
+    } finally {
+      setRunningCleanup(false)
     }
   }
 
@@ -385,6 +426,124 @@ const Profile = () => {
               </div>
             )}
           </section>
+
+          {/* Sección de Zona VIP - Solo Admin */}
+          {profile?.role === 'admin' && (
+            <section className="profile-card vip-admin-card">
+              <div className="card-header">
+                <h2>
+                  <FiStar size={24} />
+                  Administración Zona VIP
+                </h2>
+                <button
+                  className="btn btn-text"
+                  onClick={loadVipStats}
+                  disabled={loadingVipStats}
+                  title="Actualizar estadísticas"
+                >
+                  <FiRefreshCw size={16} className={loadingVipStats ? 'spinning' : ''} />
+                </button>
+              </div>
+
+              {loadingVipStats && !vipStats ? (
+                <LoadingSpinner size="small" text="Cargando estadísticas..." />
+              ) : vipStats ? (
+                <>
+                  <div className="vip-stats-grid">
+                    <div className="vip-stat-item">
+                      <FiDatabase size={20} />
+                      <div className="vip-stat-content">
+                        <span className="vip-stat-value">{vipStats.totalItems}</span>
+                        <span className="vip-stat-label">Total elementos</span>
+                      </div>
+                    </div>
+
+                    <div className="vip-stat-item">
+                      <FiLayers size={20} />
+                      <div className="vip-stat-content">
+                        <span className="vip-stat-value">{vipStats.uniqueGroups}</span>
+                        <span className="vip-stat-label">Grupos únicos</span>
+                      </div>
+                    </div>
+
+                    <div className="vip-stat-item">
+                      <FiImage size={20} />
+                      <div className="vip-stat-content">
+                        <span className="vip-stat-value">{vipStats.itemsWithImages}</span>
+                        <span className="vip-stat-label">Con imágenes</span>
+                      </div>
+                    </div>
+
+                    <div className="vip-stat-item">
+                      <FiVideo size={20} />
+                      <div className="vip-stat-content">
+                        <span className="vip-stat-value">{vipStats.itemsWithVideos}</span>
+                        <span className="vip-stat-label">Con videos</span>
+                      </div>
+                    </div>
+
+                    <div className="vip-stat-item">
+                      <FiFileText size={20} />
+                      <div className="vip-stat-content">
+                        <span className="vip-stat-value">{vipStats.itemsWithText}</span>
+                        <span className="vip-stat-label">Con texto</span>
+                      </div>
+                    </div>
+
+                    <div className={`vip-stat-item ${vipStats.exceedingLimit > 0 ? 'vip-stat-warning' : ''}`}>
+                      <FiTrash2 size={20} />
+                      <div className="vip-stat-content">
+                        <span className="vip-stat-value">{vipStats.exceedingLimit}</span>
+                        <span className="vip-stat-label">Exceden límite</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="vip-limit-bar">
+                    <div className="vip-limit-info">
+                      <span>Uso: {vipStats.totalItems} / {vipStats.limit}</span>
+                      <span className={vipStats.exceedingLimit > 0 ? 'text-warning' : 'text-success'}>
+                        {vipStats.exceedingLimit > 0
+                          ? `${vipStats.exceedingLimit} elementos para limpiar`
+                          : 'Dentro del límite'}
+                      </span>
+                    </div>
+                    <div className="vip-progress-bar">
+                      <div
+                        className={`vip-progress-fill ${vipStats.totalItems > vipStats.limit ? 'vip-progress-exceeded' : ''}`}
+                        style={{ width: `${Math.min(100, (vipStats.totalItems / vipStats.limit) * 100)}%` }}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="vip-admin-actions">
+                    <button
+                      className="btn btn-danger"
+                      onClick={handleVipCleanup}
+                      disabled={runningCleanup || vipStats.exceedingLimit === 0}
+                    >
+                      {runningCleanup ? (
+                        <>
+                          <FiRefreshCw size={16} className="spinning" />
+                          Limpiando...
+                        </>
+                      ) : (
+                        <>
+                          <FiTrash2 size={16} />
+                          Limpiar contenido antiguo
+                        </>
+                      )}
+                    </button>
+                    {vipStats.exceedingLimit === 0 && (
+                      <span className="vip-cleanup-hint">No hay elementos para limpiar</span>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <p className="empty-message">No se pudieron cargar las estadísticas</p>
+              )}
+            </section>
+          )}
 
           {/* Sección de usuarios - Solo Admin */}
           {profile?.role === 'admin' && (

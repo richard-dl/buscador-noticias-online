@@ -848,6 +848,15 @@ ${hashtagsStr}`
                               <FiZap />
                             </button>
                           )}
+                          {(profile?.role === 'admin') && !item.imagen && (item.titulo || item.contenido || item.fuente) && (
+                            <button
+                              className="btn-action-vip btn-edit"
+                              onClick={() => handleEditContent({ groupId: item.id, items: [item], consolidatedItem: item })}
+                              title="Editar contenido"
+                            >
+                              <FiEdit2 />
+                            </button>
+                          )}
                           {(profile?.role === 'admin') && (
                             <button
                               className="btn-action-vip btn-delete"
@@ -1012,8 +1021,20 @@ ${hashtagsStr}`
                 )
               }
 
-              // Item individual (sin grupo)
-              return renderCard(group.mainItem, false)
+              // Item individual (sin grupo) - mostrar con cabecera consistente
+              const singleItem = group.mainItem
+              return (
+                <div key={group.groupId} className="vip-content-group">
+                  {/* Header del grupo (1 elemento) */}
+                  <div className="vip-group-header vip-group-header-single">
+                    <div className="group-info-single">
+                      <FiLayers />
+                      <span>1 elemento</span>
+                    </div>
+                  </div>
+                  {renderCard(singleItem, false)}
+                </div>
+              )
             })}
           </div>
 

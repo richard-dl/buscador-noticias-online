@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { authenticateAndRequireVip, authenticate } = require('../middleware/authMiddleware');
-const { getVipContent, deleteVipContent, updateVipContent, checkVipAccess, updateUserRole } = require('../services/firebaseService');
+const { getVipContent, deleteVipContent, updateVipContent, checkVipAccess, updateUserRole, cleanupOldVipContent, VIP_CONTENT_LIMIT } = require('../services/firebaseService');
 const { processTelegramUpdate, verifyWebhookToken, downloadFile } = require('../services/telegramService');
 
 /**
@@ -339,6 +339,82 @@ router.get('/media/:fileId', async (req, res) => {
     res.status(404).json({
       success: false,
       error: 'Archivo no encontrado o no disponible'
+    });
+  }
+});
+
+/**
+ * GET /api/vip/admin/stats
+ * Obtener estadísticas del contenido VIP (solo admin)
+ */
+router.get('/admin/stats', authenticate, async (req, res) => {
+  try {
+    // Solo admin puede ver estadísticas
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({
+        success: false,
+        error: 'Solo administradores pueden ver estadísticas'
+      });
+    }
+
+    // Obtener todo el contenido para contar
+    const allContent = await getVipContent(1000); // Límite alto para contar todo
+
+    // Calcular estadísticas
+    const stats = {
+      totalItems: allContent.length,
+      limit: VIP_CONTENT_LIMIT,
+      exceedingLimit: Math.max(0, allContent.length - VIP_CONTENT_LIMIT),
+      itemsWithImages: allContent.filter(item => item.imagen).length,
+      itemsWithVideos: allContent.filter(item => item.imagen?.type === 'video').length,
+      itemsWithText: allContent.filter(item => item.contenido || item.titulo).length,
+      uniqueGroups: new Set(allContent.map(item => item.groupId || item.id)).size,
+      oldestItem: allContent.length > 0 ? allContent[allContent.length - 1].createdAt : null,
+      newestItem: allContent.length > 0 ? allContent[0].createdAt : null
+    };
+
+    res.json({
+      success: true,
+      data: stats
+    });
+  } catch (error) {
+    console.error('Error obteniendo estadísticas VIP:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Error al obtener estadísticas'
+    });
+  }
+});
+
+/**
+ * POST /api/vip/admin/cleanup
+ * Ejecutar limpieza manual de contenido antiguo (solo admin)
+ */
+router.post('/admin/cleanup', authenticate, async (req, res) => {
+  try {
+    // Solo admin puede ejecutar limpieza
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({
+        success: false,
+        error: 'Solo administradores pueden ejecutar limpieza'
+      });
+    }
+
+    console.log('[Admin] Ejecutando limpieza manual de contenido VIP...');
+    const result = await cleanupOldVipContent();
+
+    res.json({
+      success: true,
+      data: result,
+      message: result.deleted > 0
+        ? `Se eliminaron ${result.deleted} elementos antiguos`
+        : 'No hay elementos para eliminar'
+    });
+  } catch (error) {
+    console.error('Error ejecutando limpieza VIP:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Error al ejecutar limpieza'
     });
   }
 });

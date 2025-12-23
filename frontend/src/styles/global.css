@@ -2881,6 +2881,150 @@ input, select, textarea {
 }
 
 /* ============================================
+   VIP ADMIN SECTION (Admin Panel)
+   ============================================ */
+.vip-admin-card {
+  grid-column: 1 / -1;
+}
+
+.vip-admin-card .card-header h2 {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  color: #FFD700;
+}
+
+.vip-admin-card .card-header h2 svg {
+  color: #FFD700;
+}
+
+.vip-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--spacing-3);
+  margin-bottom: var(--spacing-4);
+}
+
+.vip-stat-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-3);
+  background: rgba(10, 30, 59, 0.5);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(64, 151, 154, 0.2);
+}
+
+.vip-stat-item svg {
+  color: var(--color-teal);
+  flex-shrink: 0;
+}
+
+.vip-stat-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.vip-stat-value {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--color-white);
+}
+
+.vip-stat-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.vip-stat-warning {
+  border-color: rgba(255, 193, 7, 0.5);
+  background: rgba(255, 193, 7, 0.1);
+}
+
+.vip-stat-warning svg {
+  color: #FFC107;
+}
+
+.vip-stat-warning .vip-stat-value {
+  color: #FFC107;
+}
+
+.vip-limit-bar {
+  margin-bottom: var(--spacing-4);
+}
+
+.vip-limit-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-2);
+  font-size: var(--font-size-sm);
+}
+
+.vip-limit-info .text-warning {
+  color: #FFC107;
+}
+
+.vip-limit-info .text-success {
+  color: var(--color-success);
+}
+
+.vip-progress-bar {
+  height: 8px;
+  background: rgba(64, 151, 154, 0.2);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.vip-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-teal) 0%, var(--color-primary) 100%);
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease;
+}
+
+.vip-progress-exceeded {
+  background: linear-gradient(90deg, #FFC107 0%, #FF5722 100%);
+}
+
+.vip-admin-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+
+.vip-admin-actions .btn-danger {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.vip-admin-actions .btn-danger:hover:not(:disabled) {
+  background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
+}
+
+.vip-admin-actions .btn-danger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.vip-cleanup-hint {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+/* Spinning animation */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+/* ============================================
    EXPANDED USER CARDS (Admin Panel)
    ============================================ */
 .users-card-expanded {

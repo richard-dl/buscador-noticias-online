@@ -673,6 +673,24 @@
   border-bottom: 1px solid rgba(193, 255, 77, 0.2);
 }
 
+/* Cabecera para elementos únicos (sin botón expandir) */
+.vip-group-header-single {
+  padding: 0.5rem 1rem;
+}
+
+.vip-group-header-single .group-info-single {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #9ca3af;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.vip-group-header-single .group-info-single svg {
+  color: #9ca3af;
+}
+
 .btn-group-toggle {
   display: flex;
   align-items: center;

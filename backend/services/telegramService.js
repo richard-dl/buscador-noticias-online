@@ -3,7 +3,7 @@
  * Procesa mensajes del grupo VIP y extrae contenido con hashtags
  */
 
-const { saveVipContent, getVipContentByTelegramMessageId } = require('./firebaseService');
+const { saveVipContent, getVipContentByTelegramMessageId, getRecentVipContentByTelegramUser } = require('./firebaseService');
 const axios = require('axios');
 
 const TELEGRAM_API_URL = `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}`;
@@ -142,13 +142,13 @@ const determineGroupId = async (message, chatId) => {
     console.log('[Grouping] Reply no encontrado en cache ni Firestore, creando nuevo grupo con referencia');
   }
 
-  // 2. Verificar si hay un batch activo para este usuario (ventana de 5 minutos)
+  // 2. Verificar si hay un batch activo para este usuario en cache de memoria
   const existingBatch = activeBatches.get(batchKey);
   if (existingBatch) {
     const timeDiff = (now - existingBatch.lastMessageTime) / 1000 / 60; // en minutos
 
     if (timeDiff < BATCH_WINDOW_MINUTES) {
-      console.log(`[Grouping] Batch activo encontrado (${timeDiff.toFixed(1)} min), groupId:`, existingBatch.groupId);
+      console.log(`[Grouping] Batch activo encontrado en cache (${timeDiff.toFixed(1)} min), groupId:`, existingBatch.groupId);
       // Actualizar tiempo del batch y agregar este mensaje
       const updatedBatch = {
         ...existingBatch,
@@ -162,11 +162,34 @@ const determineGroupId = async (message, chatId) => {
         isReply: !!message.reply_to_message
       };
     } else {
-      console.log(`[Grouping] Batch expirado (${timeDiff.toFixed(1)} min > ${BATCH_WINDOW_MINUTES} min)`);
+      console.log(`[Grouping] Batch en cache expirado (${timeDiff.toFixed(1)} min > ${BATCH_WINDOW_MINUTES} min)`);
     }
   }
 
-  // 3. Crear nuevo groupId
+  // 2b. Fallback: buscar en Firestore si hay contenido reciente del usuario (para serverless/cold starts)
+  console.log('[Grouping] Cache vacío, buscando en Firestore contenido reciente del usuario...');
+  const recentContent = await getRecentVipContentByTelegramUser(userId, chatId, BATCH_WINDOW_MINUTES);
+
+  if (recentContent && recentContent.groupId) {
+    console.log(`[Grouping] Encontrado contenido reciente en Firestore, groupId:`, recentContent.groupId);
+
+    // Actualizar cache con este grupo
+    activeBatches.set(batchKey, {
+      groupId: recentContent.groupId,
+      lastMessageTime: now,
+      userId,
+      telegramMessageId: recentContent.telegramMessageId,
+      messageIds: [recentContent.telegramMessageId, message.message_id]
+    });
+
+    return {
+      groupId: recentContent.groupId,
+      replyToMessageId: message.reply_to_message?.message_id || null,
+      isReply: !!message.reply_to_message
+    };
+  }
+
+  // 3. Crear nuevo groupId (no hay batch activo ni contenido reciente)
   const newGroupId = uuidv4();
   console.log('[Grouping] Creando nuevo groupId:', newGroupId);
 
