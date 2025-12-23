@@ -13,7 +13,7 @@ const FilterPanel = ({
   collapsed = false  // Permite colapsar todos los filtros desde afuera
 }) => {
   const [expanded, setExpanded] = useState({
-    tematicas: !collapsed,
+    tematicas: false,  // Colapsado por defecto igual que el resto
     geografia: false,
     keywords: false
   })

@@ -1,17 +1,19 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { useAuth } from '../context/AuthContext'
 import { newsApi, userApi } from '../services/api'
 import Header from '../components/Header'
 import FilterPanel from '../components/FilterPanel'
 import NewsCard from '../components/NewsCard'
 import LoadingSpinner from '../components/LoadingSpinner'
 import {
-  FiSearch, FiCopy, FiCheck, FiRefreshCw, FiSave, FiTrash2, FiX, FiArrowUp, FiZap,
+  FiSearch, FiCopy, FiCheck, FiRefreshCw, FiSave, FiTrash2, FiX, FiZap,
   FiGrid, FiPlus, FiAlertCircle
 } from 'react-icons/fi'
 
 const Generator = () => {
+  const { requireAuth, isAuthenticated } = useAuth()
   const [searchParams] = useSearchParams()
   const [activeTab, setActiveTab] = useState('search') // search, profiles, breaking
   const [filters, setFilters] = useState({
@@ -31,7 +33,6 @@ const Generator = () => {
   const [showSaveModal, setShowSaveModal] = useState(false)
   const [profileName, setProfileName] = useState('')
   const [searchCount, setSearchCount] = useState(10)
-  const [showScrollTop, setShowScrollTop] = useState(false)
   const [breakingNews, setBreakingNews] = useState([])
   const [loadingBreaking, setLoadingBreaking] = useState(false)
   const [breakingLoadCount, setBreakingLoadCount] = useState(0) // Contador de cargas (máx 8 - todos los grupos)
@@ -48,16 +49,6 @@ const Generator = () => {
   // Cargar perfiles al inicio
   useEffect(() => {
     loadProfiles()
-  }, [])
-
-  // Detectar scroll para mostrar botón "volver arriba"
-  useEffect(() => {
-    const handleScroll = () => {
-      setShowScrollTop(window.scrollY > 300)
-    }
-
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   // Detectar viewport para ajustar máximo de columnas
@@ -149,6 +140,9 @@ const Generator = () => {
   const isMobile = () => window.innerWidth < 768
 
   const handleSearchWithFilters = async (searchFilters) => {
+    // Verificar autenticación antes de buscar
+    if (!requireAuth('buscar noticias')) return
+
     try {
       setLoading(true)
       setNews([])
@@ -203,6 +197,9 @@ const Generator = () => {
   }
 
   const handleSearch = async () => {
+    // Verificar autenticación antes de buscar
+    if (!requireAuth('buscar noticias')) return
+
     try {
       setLoading(true)
       setNews([])
@@ -266,6 +263,9 @@ const Generator = () => {
   }
 
   const handleSaveProfile = async () => {
+    // Verificar autenticación antes de guardar
+    if (!requireAuth('guardar perfiles')) return
+
     if (!profileName.trim()) {
       toast.error('Ingresa un nombre para el perfil')
       return
@@ -319,10 +319,6 @@ const Generator = () => {
       filters.provincia ||
       filters.localidad ||
       filters.keywords.length > 0
-  }
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const handleColumnChange = (cols) => {
@@ -797,17 +793,7 @@ const Generator = () => {
         </div>
       )}
 
-      {/* Botón Scroll to Top */}
-      {showScrollTop && (
-        <button
-          className="scroll-to-top"
-          onClick={scrollToTop}
-          aria-label="Volver arriba"
-        >
-          <FiArrowUp size={24} />
-        </button>
-      )}
-    </div>
+      </div>
   )
 }
 

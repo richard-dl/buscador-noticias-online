@@ -8,7 +8,7 @@ import LoadingSpinner from '../components/LoadingSpinner'
 import { FiSearch, FiFileText, FiTrendingUp, FiClock, FiGrid, FiStar } from 'react-icons/fi'
 
 const Dashboard = () => {
-  const { profile, daysRemaining } = useAuth()
+  const { profile, daysRemaining, isAuthenticated } = useAuth()
   const [recentNews, setRecentNews] = useState([])
   const [searchProfiles, setSearchProfiles] = useState([])
   const [loading, setLoading] = useState(true)
@@ -60,18 +60,24 @@ const Dashboard = () => {
       setLoading(true)
       setError('')
 
-      // Cargar noticias recientes y perfiles en paralelo
-      const [newsResponse, profilesResponse] = await Promise.allSettled([
-        newsApi.getRssNews({ categories: 'nacionales', maxItems: 6 }),
-        userApi.getSearchProfiles()
-      ])
+      // Noticias siempre se cargan (públicas)
+      // Perfiles solo si está autenticado
+      const promises = [
+        newsApi.getRssNews({ categories: 'nacionales', maxItems: 6 })
+      ]
 
-      if (newsResponse.status === 'fulfilled' && newsResponse.value.success) {
-        setRecentNews(newsResponse.value.data)
+      if (isAuthenticated) {
+        promises.push(userApi.getSearchProfiles())
       }
 
-      if (profilesResponse.status === 'fulfilled' && profilesResponse.value.success) {
-        setSearchProfiles(profilesResponse.value.data)
+      const results = await Promise.allSettled(promises)
+
+      if (results[0].status === 'fulfilled' && results[0].value.success) {
+        setRecentNews(results[0].value.data)
+      }
+
+      if (isAuthenticated && results[1]?.status === 'fulfilled' && results[1].value.success) {
+        setSearchProfiles(results[1].value.data)
       }
     } catch (err) {
       console.error('Error cargando dashboard:', err)
@@ -93,16 +99,18 @@ const Dashboard = () => {
             <p className="hero-subtitle">
               Busca, traduce, crea emojis y da formato listo para publicar
             </p>
-            <div className="hero-stats">
-              <div className="stat">
-                <FiClock size={20} />
-                <span><strong>{daysRemaining}</strong> días restantes</span>
+            {isAuthenticated && (
+              <div className="hero-stats">
+                <div className="stat">
+                  <FiClock size={20} />
+                  <span><strong>{daysRemaining ?? '∞'}</strong> días restantes</span>
+                </div>
+                <div className="stat">
+                  <FiFileText size={20} />
+                  <span><strong>{searchProfiles.length}</strong> perfiles guardados</span>
+                </div>
               </div>
-              <div className="stat">
-                <FiFileText size={20} />
-                <span><strong>{searchProfiles.length}</strong> perfiles guardados</span>
-              </div>
-            </div>
+            )}
             <Link to="/generator" className="btn btn-primary btn-large">
               <FiSearch size={20} />
               Comenzar a Buscar

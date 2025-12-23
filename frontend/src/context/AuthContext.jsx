@@ -258,6 +258,22 @@ export const AuthProvider = ({ children }) => {
   // daysRemaining: null para admin/suscriptor (sin expiración), número para trial/vip_trial/vip
   const daysRemaining = profile?.daysRemaining
 
+  // Función para verificar autenticación antes de una acción
+  // Redirige a login si no está autenticado
+  const requireAuth = (actionName = 'realizar esta acción') => {
+    if (!user) {
+      toast.info(`Debes iniciar sesión para ${actionName}`, { autoClose: 4000 })
+      navigate('/login')
+      return false
+    }
+    // Verificar si trial expirado
+    if (profile?.isExpired && profile?.subscriptionType === 'trial') {
+      navigate('/expired')
+      return false
+    }
+    return true
+  }
+
   const value = {
     user,
     profile,
@@ -272,6 +288,7 @@ export const AuthProvider = ({ children }) => {
     logout,
     resetPassword,
     refreshProfile,
+    requireAuth,
     getIdToken
   }
 
