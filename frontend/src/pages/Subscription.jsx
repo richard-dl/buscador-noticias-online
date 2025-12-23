@@ -9,7 +9,7 @@ import {
 } from 'react-icons/fi'
 
 const Subscription = () => {
-  const { profile, refreshProfile } = useAuth()
+  const { profile, refreshProfile, isAuthenticated, requireAuth } = useAuth()
   const [plans, setPlans] = useState(null)
   const [subscriptionStatus, setSubscriptionStatus] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -17,31 +17,36 @@ const Subscription = () => {
 
   useEffect(() => {
     loadData()
-  }, [])
+  }, [isAuthenticated])
 
   const loadData = async () => {
     try {
-      const [plansRes, statusRes] = await Promise.all([
-        subscriptionApi.getPlans(),
-        subscriptionApi.getStatus()
-      ])
-
+      // Planes siempre se cargan (públicos)
+      const plansRes = await subscriptionApi.getPlans()
       if (plansRes.success) {
         setPlans(plansRes.data)
       }
 
-      if (statusRes.success) {
-        setSubscriptionStatus(statusRes.data)
+      // Status solo si está autenticado
+      if (isAuthenticated) {
+        const statusRes = await subscriptionApi.getStatus()
+        if (statusRes.success) {
+          setSubscriptionStatus(statusRes.data)
+        }
       }
     } catch (error) {
       console.error('Error cargando datos:', error)
-      toast.error('Error al cargar información de suscripción')
+      // Solo mostrar error si está autenticado (los planes públicos no deberían fallar)
+      if (isAuthenticated) {
+        toast.error('Error al cargar información de suscripción')
+      }
     } finally {
       setLoading(false)
     }
   }
 
   const handleActivateVipTrial = async () => {
+    if (!requireAuth('activar la prueba VIP')) return
     try {
       setActivating('vip_trial')
       const response = await subscriptionApi.activateVipTrial()
@@ -59,6 +64,7 @@ const Subscription = () => {
   }
 
   const handlePayment = (planType) => {
+    if (!requireAuth('suscribirte')) return
     toast.info('Próximamente: Integración con pasarela de pagos')
     console.log('Iniciar pago para:', planType)
   }
@@ -99,8 +105,9 @@ const Subscription = () => {
     )
   }
 
-  const currentRole = subscriptionStatus?.role || profile?.role || 'trial'
+  const currentRole = isAuthenticated ? (subscriptionStatus?.role || profile?.role || 'trial') : null
   const isAdmin = currentRole === 'admin'
+  const isGuest = !isAuthenticated
 
   // Características de Zona VIP
   const zonaVipFeature = 'Zona VIP: informes en tiempo real de PFA, PSA, GNA, policías provinciales, Ministerio de Seguridad y más'
@@ -120,39 +127,53 @@ const Subscription = () => {
         {/* Estado actual */}
         <section className="current-status-card">
           <div className="status-info">
-            <h3>Tu plan actual</h3>
-            <div className="status-details">
-              <span className={`badge badge-lg ${getRoleBadgeClass(currentRole)}`}>
-                {getRoleName(currentRole)}
-              </span>
+            <h3>{isGuest ? 'Bienvenido' : 'Tu plan actual'}</h3>
+            {isGuest ? (
+              <div className="status-details">
+                <p className="guest-message">
+                  Regístrate o inicia sesión para acceder a todas las funciones
+                </p>
+                <a href="/register" className="btn btn-primary">
+                  <FiStar size={16} />
+                  Registrarme gratis
+                </a>
+              </div>
+            ) : (
+              <>
+                <div className="status-details">
+                  <span className={`badge badge-lg ${getRoleBadgeClass(currentRole)}`}>
+                    {getRoleName(currentRole)}
+                  </span>
 
-              {subscriptionStatus?.daysRemaining !== undefined && !isAdmin && !subscriptionStatus?.isLifetime && (
-                <span className="days-remaining">
-                  <FiClock size={16} />
-                  {subscriptionStatus.daysRemaining} días restantes
-                </span>
-              )}
+                  {subscriptionStatus?.daysRemaining !== undefined && !isAdmin && !subscriptionStatus?.isLifetime && (
+                    <span className="days-remaining">
+                      <FiClock size={16} />
+                      {subscriptionStatus.daysRemaining} días restantes
+                    </span>
+                  )}
 
-              {subscriptionStatus?.isLifetime && (
-                <span className="lifetime-badge">
-                  <FiShield size={16} />
-                  Acceso vitalicio
-                </span>
-              )}
+                  {subscriptionStatus?.isLifetime && (
+                    <span className="lifetime-badge">
+                      <FiShield size={16} />
+                      Acceso vitalicio
+                    </span>
+                  )}
 
-              {isAdmin && (
-                <span className="admin-badge-status">
-                  <FiAward size={16} />
-                  Acceso ilimitado
-                </span>
-              )}
-            </div>
+                  {isAdmin && (
+                    <span className="admin-badge-status">
+                      <FiAward size={16} />
+                      Acceso ilimitado
+                    </span>
+                  )}
+                </div>
 
-            {subscriptionStatus?.hasVipAccess && (
-              <p className="vip-access-note">
-                <FiZap size={16} />
-                Tienes acceso a herramientas de IA
-              </p>
+                {subscriptionStatus?.hasVipAccess && (
+                  <p className="vip-access-note">
+                    <FiZap size={16} />
+                    Tienes acceso a herramientas de IA
+                  </p>
+                )}
+              </>
             )}
           </div>
         </section>
@@ -180,7 +201,12 @@ const Subscription = () => {
             </ul>
 
             <div className="plan-action">
-              {currentRole === 'trial' ? (
+              {isGuest ? (
+                <a href="/register" className="btn btn-secondary btn-block">
+                  <FiGift size={18} />
+                  Registrarme gratis
+                </a>
+              ) : currentRole === 'trial' ? (
                 <span className="current-label">Plan actual</span>
               ) : (
                 <span className="not-available">Solo para nuevos usuarios</span>
@@ -209,7 +235,15 @@ const Subscription = () => {
             </ul>
 
             <div className="plan-action">
-              {currentRole === 'trial' ? (
+              {isGuest ? (
+                <button
+                  className="btn btn-primary btn-block"
+                  onClick={() => handlePayment('suscriptor')}
+                >
+                  <FiStar size={18} />
+                  Suscribirme por $39
+                </button>
+              ) : currentRole === 'trial' ? (
                 <button
                   className="btn btn-primary btn-block"
                   onClick={() => handlePayment('suscriptor')}
@@ -251,7 +285,9 @@ const Subscription = () => {
             </ul>
 
             <div className="plan-action">
-              {currentRole === 'suscriptor' && subscriptionStatus?.canActivateVipTrial ? (
+              {isGuest ? (
+                <span className="not-available">Requiere ser Suscriptor</span>
+              ) : currentRole === 'suscriptor' && subscriptionStatus?.canActivateVipTrial ? (
                 <button
                   className="btn btn-secondary btn-block"
                   onClick={handleActivateVipTrial}
@@ -302,7 +338,15 @@ const Subscription = () => {
             </ul>
 
             <div className="plan-action">
-              {(currentRole === 'suscriptor' || currentRole === 'vip_trial') ? (
+              {isGuest ? (
+                <button
+                  className="btn btn-vip btn-block"
+                  onClick={() => handlePayment('vip')}
+                >
+                  <FiAward size={18} />
+                  Activar VIP $90/año
+                </button>
+              ) : (currentRole === 'suscriptor' || currentRole === 'vip_trial') ? (
                 <button
                   className="btn btn-vip btn-block"
                   onClick={() => handlePayment('vip')}
