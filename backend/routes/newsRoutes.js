@@ -131,6 +131,47 @@ router.get('/feeds', (req, res) => {
 });
 
 /**
+ * GET /api/news/recent
+ * Obtener noticias recientes para el dashboard (público, sin autenticación)
+ * Limitado a 6 noticias nacionales para preview
+ */
+router.get('/recent', async (req, res) => {
+  try {
+    const maxItems = Math.min(parseInt(req.query.maxItems) || 6, 10); // Máximo 10 para público
+
+    // Obtener noticias nacionales recientes
+    let news = await getNewsFromFeeds(['nacionales'], {
+      maxItems,
+      hoursAgo: 48,
+      keywords: [],
+      excludeTerms: []
+    });
+
+    // Clasificar con IA o fallback
+    news = await classifyNewsWithAIOrFallback(news);
+
+    // Procesar cada noticia (versión simplificada para público)
+    news = news.map(item => ({
+      ...item,
+      summary: summarize(item.description, { maxSentences: 2 }),
+      emojis: generateNewsEmojis(item.title, item.description, item.category)
+    }));
+
+    res.json({
+      success: true,
+      data: news,
+      count: news.length
+    });
+  } catch (error) {
+    console.error('Error obteniendo noticias recientes:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Error al obtener noticias recientes'
+    });
+  }
+});
+
+/**
  * GET /api/news/rss
  * Obtener noticias de feeds RSS
  */
