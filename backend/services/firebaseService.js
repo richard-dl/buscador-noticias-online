@@ -696,6 +696,12 @@ const saveVipContent = async (contentData) => {
   };
 
   await contentRef.set(content);
+
+  // Limpiar contenido antiguo de forma asíncrona (no bloquea el guardado)
+  cleanupOldVipContent().catch(err => {
+    console.error('[VIP Cleanup] Error en limpieza automática:', err);
+  });
+
   return { id: contentRef.id, ...content };
 };
 
@@ -721,6 +727,55 @@ const getVipContent = async (limit = 150) => {
 const deleteVipContent = async (contentId) => {
   await db.collection('vipContent').doc(contentId).delete();
   return true;
+};
+
+/**
+ * Limpiar contenido VIP antiguo que excede el límite
+ * Mantiene solo los N elementos más recientes
+ */
+const VIP_CONTENT_LIMIT = 150;
+
+const cleanupOldVipContent = async () => {
+  try {
+    // Contar total de documentos
+    const countSnapshot = await db.collection('vipContent').count().get();
+    const totalCount = countSnapshot.data().count;
+
+    if (totalCount <= VIP_CONTENT_LIMIT) {
+      return { deleted: 0, remaining: totalCount };
+    }
+
+    const toDelete = totalCount - VIP_CONTENT_LIMIT;
+    console.log(`[VIP Cleanup] Total: ${totalCount}, Límite: ${VIP_CONTENT_LIMIT}, A eliminar: ${toDelete}`);
+
+    // Obtener los documentos más antiguos que exceden el límite
+    const oldDocsSnapshot = await db
+      .collection('vipContent')
+      .orderBy('createdAt', 'asc')
+      .limit(toDelete)
+      .get();
+
+    if (oldDocsSnapshot.empty) {
+      return { deleted: 0, remaining: totalCount };
+    }
+
+    // Eliminar en batch (máximo 500 por batch en Firestore)
+    const batch = db.batch();
+    let deletedCount = 0;
+
+    oldDocsSnapshot.docs.forEach(doc => {
+      batch.delete(doc.ref);
+      deletedCount++;
+    });
+
+    await batch.commit();
+    console.log(`[VIP Cleanup] Eliminados ${deletedCount} documentos antiguos`);
+
+    return { deleted: deletedCount, remaining: totalCount - deletedCount };
+  } catch (error) {
+    console.error('[VIP Cleanup] Error limpiando contenido antiguo:', error);
+    return { deleted: 0, error: error.message };
+  }
 };
 
 /**
@@ -776,6 +831,34 @@ const getVipContentByTelegramMessageId = async (telegramMessageId, chatId) => {
     return { id: doc.id, ...doc.data() };
   } catch (error) {
     console.error('Error buscando contenido por telegramMessageId:', error);
+    return null;
+  }
+};
+
+/**
+ * Buscar el contenido VIP más reciente de un usuario de Telegram dentro de una ventana de tiempo
+ * Usado para agrupar mensajes consecutivos del mismo usuario
+ */
+const getRecentVipContentByTelegramUser = async (telegramUserId, chatId, windowMinutes = 10) => {
+  try {
+    const windowStart = new Date(Date.now() - windowMinutes * 60 * 1000);
+
+    const snapshot = await db
+      .collection('vipContent')
+      .where('telegramUserId', '==', telegramUserId)
+      .where('createdAt', '>=', windowStart)
+      .orderBy('createdAt', 'desc')
+      .limit(1)
+      .get();
+
+    if (snapshot.empty) {
+      return null;
+    }
+
+    const doc = snapshot.docs[0];
+    return { id: doc.id, ...doc.data() };
+  } catch (error) {
+    console.error('Error buscando contenido reciente por telegramUserId:', error);
     return null;
   }
 };
@@ -846,6 +929,9 @@ module.exports = {
   deleteVipContent,
   updateVipContent,
   getVipContentByTelegramMessageId,
+  getRecentVipContentByTelegramUser,
+  cleanupOldVipContent,
+  VIP_CONTENT_LIMIT,
   // Nuevas funciones de suscripción
   SUBSCRIPTION_CONFIG,
   activateSuscriptor,

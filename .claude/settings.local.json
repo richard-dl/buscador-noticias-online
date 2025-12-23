@@ -25,7 +25,8 @@
       "Bash(move:*)",
       "Bash(scp:*)",
       "Bash(sshpass:*)",
-      "Bash(gzip:*)"
+      "Bash(gzip:*)",
+      "Bash(wc:*)"
     ]
   }
 }

@@ -140,7 +140,10 @@ export const vipApi = {
   updateContent: (id, data) => api.put(`/vip/content/${id}`, data),
   upgradeUser: (uid, role, vipExpiresAt) => api.post(`/vip/upgrade/${uid}`, { role, vipExpiresAt }),
   // URL para archivos multimedia (usa el proxy del backend)
-  getMediaUrl: (fileId) => `${API_URL}/vip/media/${fileId}`
+  getMediaUrl: (fileId) => `${API_URL}/vip/media/${fileId}`,
+  // Admin: estadísticas y limpieza
+  getAdminStats: () => api.get('/vip/admin/stats'),
+  runCleanup: () => api.post('/vip/admin/cleanup')
 }
 
 // ============ SUBSCRIPTION ============
