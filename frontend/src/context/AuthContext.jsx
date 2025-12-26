@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react'
+import { createContext, useContext, useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import {
@@ -10,7 +10,8 @@ import {
   onAuthChange,
   getIdToken
 } from '../services/firebase'
-import { authApi, userApi } from '../services/api'
+import { authApi, userApi, sessionsApi } from '../services/api'
+import { getDeviceId, getDeviceInfo, getSessionId, setSessionId, clearSessionId } from '../services/deviceService'
 
 const AuthContext = createContext(null)
 
@@ -133,6 +134,34 @@ export const AuthProvider = ({ children }) => {
     return () => unsubscribe()
   }, [navigate])
 
+  // Escuchar evento de sesión inválida (disparado desde el interceptor de API)
+  useEffect(() => {
+    const handleSessionInvalid = (event) => {
+      const message = event.detail?.message || 'Tu sesión ha sido cerrada'
+      toast.error(message, { autoClose: 6000 })
+      // Hacer logout sin mostrar el mensaje de "sesión cerrada"
+      logout(false)
+    }
+
+    window.addEventListener('session-invalid', handleSessionInvalid)
+    return () => window.removeEventListener('session-invalid', handleSessionInvalid)
+  }, [logout])
+
+  // Crear sesión en el backend
+  const createSessionInBackend = async () => {
+    try {
+      const deviceId = getDeviceId()
+      const deviceInfo = getDeviceInfo()
+      const response = await sessionsApi.create(deviceId, deviceInfo)
+      if (response.success && response.data.sessionId) {
+        setSessionId(response.data.sessionId)
+      }
+    } catch (error) {
+      console.error('Error creando sesión:', error)
+      // No bloqueamos el login si falla la sesión
+    }
+  }
+
   // Registro con email
   const register = async (email, password, displayName = '') => {
     try {
@@ -146,6 +175,9 @@ export const AuthProvider = ({ children }) => {
         displayName,
         authProvider: 'email'
       })
+
+      // Crear sesión
+      await createSessionInBackend()
 
       toast.success('¡Registro exitoso! Tienes 30 días de prueba gratis.')
       navigate('/dashboard')
@@ -169,6 +201,10 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoading(true)
       const firebaseUser = await loginWithEmail(email, password)
+
+      // Crear sesión en backend
+      await createSessionInBackend()
+
       const name = firebaseUser?.displayName || email.split('@')[0]
       toast.success(`¡Bienvenido, ${name}!`)
       navigate('/dashboard')
@@ -196,6 +232,9 @@ export const AuthProvider = ({ children }) => {
       // Verificar/crear en backend
       await authApi.login()
 
+      // Crear sesión en backend
+      await createSessionInBackend()
+
       const name = firebaseUser?.displayName || firebaseUser?.email?.split('@')[0] || 'Usuario'
       toast.success(`¡Bienvenido, ${name}!`)
       navigate('/dashboard')
@@ -211,18 +250,31 @@ export const AuthProvider = ({ children }) => {
   }
 
   // Logout
-  const logout = async () => {
+  const logout = useCallback(async (showMessage = true) => {
     try {
+      // Revocar sesión en backend
+      const sessionId = getSessionId()
+      if (sessionId) {
+        try {
+          await sessionsApi.revoke(sessionId)
+        } catch (error) {
+          console.error('Error revocando sesión:', error)
+        }
+      }
+
       await firebaseLogout()
+      clearSessionId()
       setUser(null)
       setProfile(null)
-      toast.info('Sesión cerrada')
+      if (showMessage) {
+        toast.info('Sesión cerrada')
+      }
       navigate('/dashboard')
     } catch (error) {
       console.error('Error en logout:', error)
       toast.error('Error al cerrar sesión')
     }
-  }
+  }, [navigate])
 
   // Reset password
   const resetPassword = async (email) => {

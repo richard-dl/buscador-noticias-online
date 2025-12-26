@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { getIdToken } from './firebase'
+import { getSessionId, clearSessionId } from './deviceService'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api'
 
@@ -12,13 +13,19 @@ const api = axios.create({
   }
 })
 
-// Interceptor para agregar token de autenticación
+// Interceptor para agregar token de autenticación y sessionId
 api.interceptors.request.use(
   async (config) => {
     try {
       const token = await getIdToken()
       if (token) {
         config.headers.Authorization = `Bearer ${token}`
+      }
+
+      // Agregar sessionId a los headers
+      const sessionId = getSessionId()
+      if (sessionId) {
+        config.headers['X-Session-Id'] = sessionId
       }
     } catch (error) {
       console.error('Error obteniendo token:', error)
@@ -35,13 +42,22 @@ api.interceptors.response.use(
   (response) => response.data,
   (error) => {
     const message = error.response?.data?.error || error.message || 'Error de conexión'
+    const code = error.response?.data?.code
+
+    // Si la sesión es inválida, limpiar y disparar evento
+    if (code === 'SESSION_INVALID') {
+      clearSessionId()
+      window.dispatchEvent(new CustomEvent('session-invalid', {
+        detail: { message }
+      }))
+    }
 
     // Si es error de suscripción expirada, redirigir
-    if (error.response?.data?.code === 'SUBSCRIPTION_EXPIRED') {
+    if (code === 'SUBSCRIPTION_EXPIRED') {
       window.location.href = '/expired'
     }
 
-    return Promise.reject({ message, status: error.response?.status })
+    return Promise.reject({ message, status: error.response?.status, code })
   }
 )
 
@@ -185,6 +201,31 @@ export const paypalApi = {
 
   // Obtener detalles de una orden
   getOrderDetails: (orderId) => api.get(`/paypal/order/${orderId}`)
+}
+
+// ============ SESSIONS ============
+
+export const sessionsApi = {
+  // Crear nueva sesión al login
+  create: (deviceId, deviceInfo) => api.post('/sessions/create', { deviceId, deviceInfo }),
+
+  // Obtener todas las sesiones activas
+  getAll: () => api.get('/sessions'),
+
+  // Validar sesión actual
+  validate: (sessionId) => api.post('/sessions/validate', { sessionId }),
+
+  // Cerrar/revocar una sesión específica
+  revoke: (sessionId) => api.delete(`/sessions/${sessionId}`),
+
+  // Cerrar todas las sesiones excepto la actual
+  revokeAll: () => api.delete('/sessions'),
+
+  // Actualizar configuración de sesiones
+  updateSettings: (settings) => api.put('/sessions/settings', settings),
+
+  // Obtener configuración de sesiones
+  getSettings: () => api.get('/sessions/settings')
 }
 
 export default api

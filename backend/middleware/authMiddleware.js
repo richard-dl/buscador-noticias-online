@@ -3,12 +3,22 @@ const {
   checkSubscriptionStatus,
   getUserFromFirestore,
   checkVipAccess,
-  getSubscriptionStatus
+  getSubscriptionStatus,
+  validateSession
 } = require('../services/firebaseService');
 
+// Rutas que no requieren validación de sesión
+const SESSION_SKIP_PATHS = [
+  '/api/sessions/create',
+  '/api/auth/login',
+  '/api/auth/register',
+  '/api/auth/verify'
+];
+
 /**
- * Middleware para verificar autenticación
+ * Middleware para verificar autenticación y sesión
  * Extrae el token del header Authorization y lo valida
+ * También valida la sesión si está presente
  */
 const authenticate = async (req, res, next) => {
   try {
@@ -49,6 +59,30 @@ const authenticate = async (req, res, next) => {
       email: decodedToken.email,
       ...user
     };
+
+    // ========== Validar sesión activa ==========
+    const sessionId = req.headers['x-session-id'];
+    const fullPath = req.originalUrl || req.path;
+
+    // Solo validar sesión si:
+    // 1. Hay sessionId en el header
+    // 2. No es una ruta excluida
+    const shouldValidateSession = sessionId &&
+      !SESSION_SKIP_PATHS.some(path => fullPath.startsWith(path));
+
+    if (shouldValidateSession) {
+      const sessionResult = await validateSession(decodedToken.uid, sessionId);
+
+      if (!sessionResult.valid) {
+        return res.status(401).json({
+          success: false,
+          error: sessionResult.reason,
+          code: 'SESSION_INVALID',
+          requireReauth: true
+        });
+      }
+    }
+    // ===========================================
 
     next();
   } catch (error) {

@@ -577,6 +577,7 @@ input, select, textarea {
 }
 
 .btn-account,
+.btn-sessions,
 .btn-logout,
 .btn-login,
 .btn-register {
@@ -595,6 +596,7 @@ input, select, textarea {
 }
 
 .btn-account:hover,
+.btn-sessions:hover,
 .btn-logout:hover,
 .btn-login:hover,
 .btn-register:hover {
@@ -649,6 +651,7 @@ input, select, textarea {
   }
 
   .btn-account span,
+  .btn-sessions span,
   .btn-logout span,
   .btn-login span,
   .btn-register span {
@@ -696,6 +699,7 @@ input, select, textarea {
   }
 
   .header-user .btn-account span,
+  .header-user .btn-sessions span,
   .header-user .btn-logout span,
   .header-user .btn-login span,
   .header-user .btn-register span {
@@ -726,6 +730,7 @@ input, select, textarea {
   }
 
   .header-user .btn-account,
+  .header-user .btn-sessions,
   .header-user .btn-logout {
     width: 100%;
     justify-content: center;
