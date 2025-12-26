@@ -678,16 +678,31 @@
 
 /* Responsive Modal */
 @media (max-width: 520px) {
+  .payment-modal-overlay {
+    padding: var(--spacing-2);
+  }
+
   .payment-modal {
-    margin: var(--spacing-2);
+    margin: 0;
+    max-width: 100%;
     max-height: calc(100vh - var(--spacing-4));
+    border-radius: var(--radius-lg);
   }
 
   .payment-modal-content {
     padding: var(--spacing-4);
+    margin: var(--spacing-3);
   }
 
   .payment-modal-features {
     padding: 0 var(--spacing-4) var(--spacing-4);
+  }
+
+  .paypal-container {
+    padding: var(--spacing-3);
+  }
+
+  .paypal-buttons-wrapper {
+    min-height: 140px;
   }
 }
