@@ -225,7 +225,22 @@ export const sessionsApi = {
   updateSettings: (settings) => api.put('/sessions/settings', settings),
 
   // Obtener configuración de sesiones
-  getSettings: () => api.get('/sessions/settings')
+  getSettings: () => api.get('/sessions/settings'),
+
+  // ========== ADMIN ==========
+  admin: {
+    // Obtener todos los usuarios con sus sesiones
+    getAllUsers: () => api.get('/sessions/admin/users'),
+
+    // Cerrar sesión específica de un usuario
+    revokeUserSession: (uid, sessionId) => api.delete(`/sessions/admin/users/${uid}/sessions/${sessionId}`),
+
+    // Cerrar todas las sesiones de un usuario
+    revokeAllUserSessions: (uid) => api.delete(`/sessions/admin/users/${uid}/sessions`),
+
+    // Actualizar configuración de sesiones de un usuario
+    updateUserSettings: (uid, settings) => api.put(`/sessions/admin/users/${uid}/settings`, settings)
+  }
 }
 
 export default api

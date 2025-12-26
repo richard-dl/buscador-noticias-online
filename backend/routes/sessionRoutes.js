@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { authenticate } = require('../middleware/authMiddleware');
+const { authenticate, isAdmin } = require('../middleware/authMiddleware');
 const { getClientIp, getIpInfo } = require('../utils/ipUtils');
 const {
   createSession,
@@ -10,7 +10,11 @@ const {
   revokeAllSessions,
   updateSessionSettings,
   getSessionSettings,
-  SESSION_CONFIG
+  SESSION_CONFIG,
+  getAllUsersWithSessions,
+  adminRevokeSession,
+  adminRevokeAllUserSessions,
+  adminUpdateUserSessionSettings
 } = require('../services/firebaseService');
 
 /**
@@ -227,6 +231,104 @@ router.get('/settings', authenticate, async (req, res) => {
     res.status(500).json({
       success: false,
       error: 'Error al obtener configuración'
+    });
+  }
+});
+
+// ==================== ENDPOINTS DE ADMIN ====================
+
+/**
+ * GET /api/sessions/admin/users
+ * Obtener todos los usuarios con sus sesiones (solo admin)
+ */
+router.get('/admin/users', authenticate, isAdmin, async (req, res) => {
+  try {
+    const users = await getAllUsersWithSessions();
+
+    res.json({
+      success: true,
+      data: users
+    });
+  } catch (error) {
+    console.error('Error obteniendo usuarios con sesiones:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Error al obtener usuarios'
+    });
+  }
+});
+
+/**
+ * DELETE /api/sessions/admin/users/:uid/sessions/:sessionId
+ * Cerrar sesión específica de un usuario (solo admin)
+ */
+router.delete('/admin/users/:uid/sessions/:sessionId', authenticate, isAdmin, async (req, res) => {
+  try {
+    const { uid, sessionId } = req.params;
+
+    await adminRevokeSession(uid, sessionId);
+
+    res.json({
+      success: true,
+      message: 'Sesión cerrada correctamente'
+    });
+  } catch (error) {
+    console.error('Error cerrando sesión:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Error al cerrar sesión'
+    });
+  }
+});
+
+/**
+ * DELETE /api/sessions/admin/users/:uid/sessions
+ * Cerrar todas las sesiones de un usuario (solo admin)
+ */
+router.delete('/admin/users/:uid/sessions', authenticate, isAdmin, async (req, res) => {
+  try {
+    const { uid } = req.params;
+
+    const count = await adminRevokeAllUserSessions(uid);
+
+    res.json({
+      success: true,
+      message: `${count} sesión(es) cerrada(s)`,
+      revokedCount: count
+    });
+  } catch (error) {
+    console.error('Error cerrando sesiones:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Error al cerrar sesiones'
+    });
+  }
+});
+
+/**
+ * PUT /api/sessions/admin/users/:uid/settings
+ * Actualizar configuración de sesiones de un usuario (solo admin)
+ */
+router.put('/admin/users/:uid/settings', authenticate, isAdmin, async (req, res) => {
+  try {
+    const { uid } = req.params;
+    const { singleSessionMode, maxSessions } = req.body;
+
+    const settings = await adminUpdateUserSessionSettings(uid, {
+      singleSessionMode,
+      maxSessions
+    });
+
+    res.json({
+      success: true,
+      message: 'Configuración actualizada',
+      data: settings
+    });
+  } catch (error) {
+    console.error('Error actualizando configuración:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Error al actualizar configuración'
     });
   }
 });

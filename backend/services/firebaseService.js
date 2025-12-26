@@ -1259,6 +1259,112 @@ const getSessionSettings = async (uid) => {
   };
 };
 
+// ==================== FUNCIONES DE ADMIN PARA SESIONES ====================
+
+/**
+ * Obtener todos los usuarios con sus sesiones activas (para admin)
+ */
+const getAllUsersWithSessions = async () => {
+  const usersSnapshot = await db.collection('users').get();
+  const usersWithSessions = [];
+
+  for (const userDoc of usersSnapshot.docs) {
+    const userData = userDoc.data();
+    const uid = userDoc.id;
+
+    // Obtener sesiones activas
+    const sessionsSnapshot = await db.collection('users').doc(uid)
+      .collection('sessions')
+      .where('isActive', '==', true)
+      .get();
+
+    const sessions = [];
+    for (const sessionDoc of sessionsSnapshot.docs) {
+      const sessionData = sessionDoc.data();
+      sessions.push({
+        id: sessionDoc.id,
+        ...sessionData,
+        createdAt: sessionData.createdAt?.toDate?.()?.toISOString() || null,
+        lastActivity: sessionData.lastActivity?.toDate?.()?.toISOString() || null,
+        expiresAt: sessionData.expiresAt?.toDate?.()?.toISOString() || null
+      });
+    }
+
+    usersWithSessions.push({
+      uid,
+      email: userData.email,
+      displayName: userData.displayName || userData.email?.split('@')[0],
+      role: userData.role || 'trial',
+      singleSessionMode: userData.singleSessionMode || false,
+      maxSessions: userData.maxSessions ||
+        SESSION_CONFIG.MAX_SESSIONS_BY_ROLE[userData.role] ||
+        SESSION_CONFIG.MAX_SESSIONS_DEFAULT,
+      activeSessions: sessions.length,
+      sessions
+    });
+  }
+
+  // Ordenar por cantidad de sesiones activas (mayor primero)
+  return usersWithSessions.sort((a, b) => b.activeSessions - a.activeSessions);
+};
+
+/**
+ * Revocar sesión de cualquier usuario (admin)
+ */
+const adminRevokeSession = async (targetUid, sessionId, reason = 'admin_revoked') => {
+  const sessionRef = db.collection('users').doc(targetUid)
+    .collection('sessions').doc(sessionId);
+
+  await sessionRef.update({
+    isActive: false,
+    revokedAt: admin.firestore.FieldValue.serverTimestamp(),
+    revokedReason: reason
+  });
+};
+
+/**
+ * Revocar todas las sesiones de un usuario (admin)
+ */
+const adminRevokeAllUserSessions = async (targetUid) => {
+  const sessions = await getActiveSessions(targetUid);
+  let count = 0;
+
+  for (const session of sessions) {
+    await adminRevokeSession(targetUid, session.id, 'admin_revoked_all');
+    count++;
+  }
+
+  return count;
+};
+
+/**
+ * Actualizar configuración de sesiones de un usuario (admin)
+ */
+const adminUpdateUserSessionSettings = async (targetUid, settings) => {
+  const { singleSessionMode, maxSessions } = settings;
+  const updateData = {};
+
+  if (singleSessionMode !== undefined) {
+    updateData.singleSessionMode = Boolean(singleSessionMode);
+  }
+
+  if (maxSessions !== undefined && maxSessions >= 1 && maxSessions <= 10) {
+    updateData.maxSessions = maxSessions;
+  }
+
+  if (Object.keys(updateData).length > 0) {
+    await db.collection('users').doc(targetUid).update(updateData);
+  }
+
+  const user = await getUserFromFirestore(targetUid);
+  return {
+    maxSessions: user.maxSessions ||
+      SESSION_CONFIG.MAX_SESSIONS_BY_ROLE[user.role] ||
+      SESSION_CONFIG.MAX_SESSIONS_DEFAULT,
+    singleSessionMode: user.singleSessionMode || false
+  };
+};
+
 module.exports = {
   admin,
   db,
@@ -1305,5 +1411,10 @@ module.exports = {
   revokeAllSessions,
   updateSessionActivity,
   updateSessionSettings,
-  getSessionSettings
+  getSessionSettings,
+  // Funciones de admin para sesiones
+  getAllUsersWithSessions,
+  adminRevokeSession,
+  adminRevokeAllUserSessions,
+  adminUpdateUserSessionSettings
 };
