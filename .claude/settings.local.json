@@ -26,7 +26,8 @@
       "Bash(scp:*)",
       "Bash(sshpass:*)",
       "Bash(gzip:*)",
-      "Bash(wc:*)"
+      "Bash(wc:*)",
+      "Bash(xargs:*)"
     ]
   }
 }

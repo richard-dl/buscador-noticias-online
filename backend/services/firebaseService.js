@@ -904,6 +904,47 @@ const getAllUsersFromFirestore = async () => {
   }
 };
 
+/**
+ * Guardar registro de pago en Firestore
+ * @param {object} paymentData - Datos del pago
+ */
+const savePaymentRecord = async (paymentData) => {
+  try {
+    const paymentDoc = {
+      ...paymentData,
+      createdAt: admin.firestore.FieldValue.serverTimestamp()
+    };
+
+    const docRef = await db.collection('payments').add(paymentDoc);
+    console.log(`Registro de pago guardado: ${docRef.id}`);
+    return docRef.id;
+  } catch (error) {
+    console.error('Error guardando registro de pago:', error);
+    throw error;
+  }
+};
+
+/**
+ * Obtener historial de pagos de un usuario
+ * @param {string} userId - ID del usuario
+ */
+const getPaymentHistory = async (userId) => {
+  try {
+    const snapshot = await db.collection('payments')
+      .where('userId', '==', userId)
+      .orderBy('createdAt', 'desc')
+      .get();
+
+    return snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+  } catch (error) {
+    console.error('Error obteniendo historial de pagos:', error);
+    throw error;
+  }
+};
+
 module.exports = {
   admin,
   db,
@@ -932,10 +973,13 @@ module.exports = {
   getRecentVipContentByTelegramUser,
   cleanupOldVipContent,
   VIP_CONTENT_LIMIT,
-  // Nuevas funciones de suscripción
+  // Funciones de suscripción
   SUBSCRIPTION_CONFIG,
   activateSuscriptor,
   activateVipTrial,
   activateVipAnnual,
-  getSubscriptionStatus
+  getSubscriptionStatus,
+  // Funciones de pagos
+  savePaymentRecord,
+  getPaymentHistory
 };

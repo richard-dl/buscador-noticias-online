@@ -3,9 +3,10 @@ import { useAuth } from '../context/AuthContext'
 import { subscriptionApi } from '../services/api'
 import Header from '../components/Header'
 import LoadingSpinner from '../components/LoadingSpinner'
+import PayPalButton from '../components/PayPalButton'
 import { toast } from 'react-toastify'
 import {
-  FiCheck, FiX, FiClock, FiStar, FiZap, FiShield, FiAward, FiGift, FiCreditCard, FiTrendingUp
+  FiCheck, FiX, FiClock, FiStar, FiZap, FiShield, FiAward, FiGift, FiCreditCard, FiTrendingUp, FiArrowLeft
 } from 'react-icons/fi'
 
 const Subscription = () => {
@@ -14,6 +15,7 @@ const Subscription = () => {
   const [subscriptionStatus, setSubscriptionStatus] = useState(null)
   const [loading, setLoading] = useState(true)
   const [activating, setActivating] = useState(null)
+  const [showPayment, setShowPayment] = useState(null) // 'suscriptor' | 'vip' | null
 
   useEffect(() => {
     loadData()
@@ -65,8 +67,22 @@ const Subscription = () => {
 
   const handlePayment = (planType) => {
     if (!requireAuth('suscribirte')) return
-    toast.info('Próximamente: Integración con pasarela de pagos')
-    console.log('Iniciar pago para:', planType)
+    setShowPayment(planType)
+  }
+
+  const handlePaymentSuccess = async (paymentData) => {
+    console.log('Pago exitoso:', paymentData)
+    setShowPayment(null)
+    await refreshProfile()
+    await loadData()
+  }
+
+  const handlePaymentError = (error) => {
+    console.error('Error en pago:', error)
+  }
+
+  const handlePaymentCancel = () => {
+    setShowPayment(null)
   }
 
   const getRoleName = (role) => {
@@ -419,13 +435,67 @@ const Subscription = () => {
             <div className="faq-item">
               <h4>¿Cómo puedo pagar?</h4>
               <p>
-                Aceptamos pagos con tarjeta de crédito, débito y transferencia bancaria.
-                Próximamente habilitaremos más métodos de pago.
+                Aceptamos pagos con PayPal, tarjeta de crédito y tarjeta de débito.
+                Todos los pagos son procesados de forma segura por PayPal.
               </p>
             </div>
           </div>
         </section>
       </main>
+
+      {/* Modal de Pago con PayPal */}
+      {showPayment && (
+        <div className="payment-modal-overlay" onClick={handlePaymentCancel}>
+          <div className="payment-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="payment-modal-close" onClick={handlePaymentCancel}>
+              <FiArrowLeft size={20} />
+              Volver
+            </button>
+
+            <div className="payment-modal-header">
+              <h2>
+                {showPayment === 'suscriptor' && 'Plan Suscriptor'}
+                {showPayment === 'vip' && 'Plan VIP Anual'}
+                {showPayment === 'vip_renew' && 'Renovar VIP'}
+              </h2>
+              <p className="payment-modal-price">
+                {showPayment === 'suscriptor' && '$39 USD - Pago único vitalicio'}
+                {(showPayment === 'vip' || showPayment === 'vip_renew') && '$90 USD - Suscripción anual'}
+              </p>
+            </div>
+
+            <div className="payment-modal-content">
+              <PayPalButton
+                planType={showPayment === 'vip_renew' ? 'vip' : showPayment}
+                onSuccess={handlePaymentSuccess}
+                onError={handlePaymentError}
+                onCancel={handlePaymentCancel}
+              />
+            </div>
+
+            <div className="payment-modal-features">
+              <h4>Incluye:</h4>
+              {showPayment === 'suscriptor' && (
+                <ul>
+                  <li><FiCheck /> Acceso permanente sin vencimiento</li>
+                  <li><FiCheck /> Búsqueda ilimitada de noticias</li>
+                  <li><FiCheck /> Perfiles de búsqueda personalizados</li>
+                  <li><FiCheck /> Soporte prioritario</li>
+                </ul>
+              )}
+              {(showPayment === 'vip' || showPayment === 'vip_renew') && (
+                <ul>
+                  <li><FiCheck /> Todo lo incluido en Suscriptor</li>
+                  <li><FiCheck /> Herramientas de IA completas</li>
+                  <li><FiCheck /> Acceso a Zona VIP</li>
+                  <li><FiCheck /> Resúmenes automáticos</li>
+                  <li><FiCheck /> Soporte premium 24/7</li>
+                </ul>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
