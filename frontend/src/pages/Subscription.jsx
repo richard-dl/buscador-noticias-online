@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { subscriptionApi } from '../services/api'
 import Header from '../components/Header'
@@ -11,6 +12,7 @@ import {
 
 const Subscription = () => {
   const { profile, refreshProfile, isAuthenticated, requireAuth } = useAuth()
+  const navigate = useNavigate()
   const [plans, setPlans] = useState(null)
   const [subscriptionStatus, setSubscriptionStatus] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -66,6 +68,11 @@ const Subscription = () => {
   }
 
   const handlePayment = (planType) => {
+    // Si no está autenticado, redirigir directamente a registro
+    if (!isAuthenticated) {
+      navigate('/register')
+      return
+    }
     if (!requireAuth('suscribirte')) return
     setShowPayment(planType)
   }
