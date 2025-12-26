@@ -493,3 +493,293 @@
     align-items: center;
   }
 }
+
+/* ============================================
+   PAYPAL PAYMENT MODAL
+   ============================================ */
+
+/* Modal Overlay */
+.payment-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: var(--spacing-4);
+}
+
+/* Modal Container */
+.payment-modal {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  animation: modalFadeIn 0.3s ease;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Modal Close Button */
+.payment-modal-close {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  background: transparent;
+  border: none;
+  color: var(--color-text-muted);
+  padding: var(--spacing-3) var(--spacing-4);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  transition: color var(--transition-fast);
+}
+
+.payment-modal-close:hover {
+  color: var(--color-text);
+}
+
+/* Modal Header */
+.payment-modal-header {
+  text-align: center;
+  padding: 0 var(--spacing-6) var(--spacing-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.payment-modal-header h2 {
+  color: var(--color-text);
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--spacing-2);
+}
+
+.payment-modal-price {
+  color: var(--color-teal);
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+}
+
+/* Modal Content */
+.payment-modal-content {
+  padding: var(--spacing-6);
+}
+
+/* Modal Features */
+.payment-modal-features {
+  padding: 0 var(--spacing-6) var(--spacing-6);
+  border-top: 1px solid var(--color-border);
+}
+
+.payment-modal-features h4 {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--spacing-3);
+  padding-top: var(--spacing-4);
+}
+
+.payment-modal-features ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.payment-modal-features li {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  color: var(--color-text-light);
+  font-size: var(--font-size-sm);
+  padding: var(--spacing-1) 0;
+}
+
+.payment-modal-features li svg {
+  color: var(--color-success);
+  flex-shrink: 0;
+}
+
+/* ============================================
+   PAYPAL BUTTON COMPONENT STYLES
+   ============================================ */
+
+/* PayPal Container */
+.paypal-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+/* Payment Method Selector */
+.payment-method-selector {
+  display: flex;
+  gap: var(--spacing-2);
+  background: var(--color-bg-tertiary);
+  padding: var(--spacing-1);
+  border-radius: var(--radius-lg);
+}
+
+.method-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.method-btn:hover {
+  color: var(--color-text);
+  background: var(--color-bg-secondary);
+}
+
+.method-btn.active {
+  background: var(--color-bg-secondary);
+  color: var(--color-text);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.method-btn .paypal-logo {
+  height: 18px;
+  width: auto;
+}
+
+/* PayPal Buttons Wrapper */
+.paypal-buttons-wrapper {
+  min-height: 100px;
+}
+
+/* Card Fields Container */
+.card-fields-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.card-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.card-field label {
+  color: var(--color-text-light);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+}
+
+.card-field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-3);
+}
+
+/* PayPal Card Input Fields */
+.card-input {
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  min-height: 48px;
+  transition: border-color var(--transition-fast);
+}
+
+.card-input:hover {
+  border-color: var(--color-border-dark);
+}
+
+.card-input.braintree-hosted-fields-focused {
+  border-color: var(--color-teal);
+  box-shadow: 0 0 0 2px rgba(64, 151, 154, 0.2);
+}
+
+.card-input.braintree-hosted-fields-invalid {
+  border-color: var(--color-danger);
+}
+
+/* Card Submit Button */
+.card-submit-btn {
+  margin-top: var(--spacing-2);
+  padding: var(--spacing-4) !important;
+  font-size: var(--font-size-base) !important;
+}
+
+/* PayPal Loading State */
+.paypal-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-6);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+/* PayPal Error State */
+.paypal-error {
+  text-align: center;
+  padding: var(--spacing-6);
+  color: var(--color-danger);
+}
+
+.paypal-error p {
+  margin-bottom: var(--spacing-3);
+}
+
+/* PayPal Secure Badge */
+.paypal-secure-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3);
+  background: var(--color-bg-tertiary);
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+}
+
+.paypal-secure-badge svg {
+  color: var(--color-success);
+}
+
+/* Responsive Modal */
+@media (max-width: 520px) {
+  .payment-modal {
+    margin: var(--spacing-2);
+    max-height: calc(100vh - var(--spacing-4));
+  }
+
+  .payment-modal-content {
+    padding: var(--spacing-4);
+  }
+
+  .payment-modal-features {
+    padding: 0 var(--spacing-4) var(--spacing-4);
+  }
+
+  .card-field-row {
+    grid-template-columns: 1fr;
+  }
+}

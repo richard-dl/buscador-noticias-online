@@ -171,4 +171,20 @@ export const subscriptionApi = {
   renewVip: (paymentData) => api.post('/subscription/renew-vip', paymentData)
 }
 
+// ============ PAYPAL ============
+
+export const paypalApi = {
+  // Obtener configuración de PayPal (Client ID)
+  getConfig: () => api.get('/paypal/config'),
+
+  // Crear orden de PayPal
+  createOrder: (planType) => api.post('/paypal/create-order', { planType }),
+
+  // Capturar pago de una orden aprobada
+  captureOrder: (orderId, planType) => api.post('/paypal/capture-order', { orderId, planType }),
+
+  // Obtener detalles de una orden
+  getOrderDetails: (orderId) => api.get(`/paypal/order/${orderId}`)
+}
+
 export default api
