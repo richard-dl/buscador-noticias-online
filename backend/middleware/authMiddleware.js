@@ -46,6 +46,10 @@ const authenticate = async (req, res, next) => {
     // Obtener datos del usuario de Firestore
     const user = await getUserFromFirestore(decodedToken.uid);
 
+    // DEBUG: Log completo del usuario
+    console.log(`[Auth] UID: ${decodedToken.uid}, Email: ${decodedToken.email}`);
+    console.log(`[Auth] User from Firestore:`, JSON.stringify(user, null, 2));
+
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -59,6 +63,9 @@ const authenticate = async (req, res, next) => {
       email: decodedToken.email,
       ...user
     };
+
+    // DEBUG: Log del req.user final
+    console.log(`[Auth] req.user.role: ${req.user.role}`);
 
     // ========== Validar sesión activa ==========
     const sessionId = req.headers['x-session-id'];
