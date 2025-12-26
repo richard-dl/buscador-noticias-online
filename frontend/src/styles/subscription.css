@@ -575,9 +575,12 @@
   font-weight: 600;
 }
 
-/* Modal Content */
+/* Modal Content - Fondo claro para que PayPal use tema claro */
 .payment-modal-content {
   padding: var(--spacing-6);
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  margin: var(--spacing-4);
 }
 
 /* Modal Features */
@@ -617,16 +620,130 @@
    PAYPAL BUTTON COMPONENT STYLES
    ============================================ */
 
-/* PayPal Container */
+/* PayPal Container - Fondo blanco completo para tema claro */
 .paypal-container {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-4);
+  background: #ffffff;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-4);
 }
 
-/* PayPal Buttons Wrapper */
+/* Payment Method Selector - Tabs para PayPal/Tarjeta */
+.payment-method-selector {
+  display: flex;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-4);
+  background: #f3f4f6;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-1);
+}
+
+.payment-method-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3) var(--spacing-4);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-md);
+  color: #6b7280;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.payment-method-btn:hover {
+  color: #374151;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.payment-method-btn.active {
+  background: #ffffff;
+  color: #1a1a2e;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.payment-method-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+/* PayPal Buttons Wrapper - Fondo blanco para tema claro de PayPal */
 .paypal-buttons-wrapper {
-  min-height: 150px;
+  min-height: 120px;
+  background: #ffffff;
+  border-radius: var(--radius-md);
+}
+
+/* Card Fields Wrapper */
+.card-fields-wrapper {
+  background: #ffffff;
+  border-radius: var(--radius-md);
+}
+
+/* PayPal Card Fields Form - Estilos para campos de tarjeta */
+.card-fields-wrapper .paypal-card-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+/* Labels de Card Fields */
+.card-fields-wrapper label {
+  display: block;
+  color: #374151;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  margin-bottom: var(--spacing-1);
+}
+
+/* Contenedor de cada campo */
+.card-fields-wrapper .card-field {
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-3);
+  min-height: 48px;
+}
+
+.card-fields-wrapper .card-field:focus-within {
+  border-color: #40979a;
+  box-shadow: 0 0 0 2px rgba(64, 151, 154, 0.2);
+}
+
+/* Botón de pagar con tarjeta */
+.card-submit-btn {
+  margin-top: var(--spacing-4);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3) var(--spacing-4);
+  background: #40979a;
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.card-submit-btn:hover:not(:disabled) {
+  background: #357f82;
+  transform: translateY(-1px);
+}
+
+.card-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 /* PayPal Loading State */
@@ -636,7 +753,7 @@
   justify-content: center;
   gap: var(--spacing-3);
   padding: var(--spacing-6);
-  color: var(--color-text-muted);
+  color: #6b7280;
   font-size: var(--font-size-sm);
 }
 
@@ -651,21 +768,21 @@
   margin-bottom: var(--spacing-3);
 }
 
-/* PayPal Secure Badge */
+/* PayPal Secure Badge - Adaptado para fondo blanco */
 .paypal-secure-badge {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: var(--spacing-2);
   padding: var(--spacing-3);
-  background: var(--color-bg-tertiary);
+  background: #f5f5f5;
   border-radius: var(--radius-md);
-  color: var(--color-text-muted);
+  color: #666666;
   font-size: var(--font-size-xs);
 }
 
 .paypal-secure-badge svg {
-  color: var(--color-success);
+  color: #22c55e;
 }
 
 /* Responsive Modal */
