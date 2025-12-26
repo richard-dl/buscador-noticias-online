@@ -1019,16 +1019,23 @@ const createSession = async (uid, sessionData) => {
     SESSION_CONFIG.MAX_SESSIONS_BY_ROLE[user.role] ||
     SESSION_CONFIG.MAX_SESSIONS_DEFAULT;
 
-  const singleSessionMode = user.singleSessionMode || false;
+  const singleSessionMode = user.singleSessionMode === true;
 
   // Obtener sesiones activas actuales
   const activeSessions = await getActiveSessions(uid);
 
+  console.log(`[Session] Creando sesión para: ${user.email}`);
+  console.log(`[Session] - singleSessionMode: ${singleSessionMode} (tipo: ${typeof user.singleSessionMode}, valor raw: ${user.singleSessionMode})`);
+  console.log(`[Session] - Sesiones activas antes: ${activeSessions.length}`);
+
   // Modo sesión única: revocar todas las anteriores
   if (singleSessionMode && activeSessions.length > 0) {
+    console.log(`[Session] ⚠️ Modo sesión única - revocando ${activeSessions.length} sesiones anteriores`);
     for (const session of activeSessions) {
+      console.log(`[Session]   - Revocando sesión: ${session.id}`);
       await revokeSession(uid, session.id, 'new_login');
     }
+    console.log(`[Session] ✅ Sesiones anteriores revocadas`);
   }
   // Límite de dispositivos: verificar si ya existe sesión del dispositivo o revocar la más antigua
   else if (activeSessions.length >= maxSessions) {
