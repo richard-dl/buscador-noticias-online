@@ -96,3 +96,4 @@ if (process.env.VERCEL !== '1') {
 }
 
 module.exports = app;
+// Force redeploy vi., 26 de dic. de 2025 17:10:18
