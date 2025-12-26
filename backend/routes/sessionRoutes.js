@@ -18,6 +18,22 @@ const {
 } = require('../services/firebaseService');
 
 /**
+ * GET /api/sessions/debug
+ * DEBUG: Ver información del usuario autenticado
+ */
+router.get('/debug', authenticate, async (req, res) => {
+  res.json({
+    success: true,
+    debug: {
+      uid: req.user.uid,
+      email: req.user.email,
+      role: req.user.role,
+      allUserData: req.user
+    }
+  });
+});
+
+/**
  * POST /api/sessions/create
  * Crear nueva sesión al hacer login
  */
