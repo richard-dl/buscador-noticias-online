@@ -496,8 +496,8 @@ const checkVipAccess = async (uid) => {
     return { hasAccess: false, reason: 'Usuario no encontrado' };
   }
 
-  // Admin siempre tiene acceso
-  if (user.role === 'admin') {
+  // Admin y superadmin siempre tienen acceso
+  if (user.role === 'admin' || user.role === 'superadmin') {
     return { hasAccess: true, isAdmin: true };
   }
 
@@ -561,11 +561,11 @@ const getSubscriptionStatus = async (uid) => {
   const now = new Date();
   const role = user.role;
 
-  // Admin
-  if (role === 'admin') {
+  // Admin y superadmin
+  if (role === 'admin' || role === 'superadmin') {
     return {
       valid: true,
-      role: 'admin',
+      role: role,
       hasVipAccess: true,
       isAdmin: true
     };
