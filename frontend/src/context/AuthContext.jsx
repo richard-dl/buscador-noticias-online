@@ -111,9 +111,7 @@ export const AuthProvider = ({ children }) => {
         // Cargar perfil desde el backend
         try {
           const response = await authApi.login()
-          console.log('=== AUTH LOGIN RESPONSE ===', response)
           if (response.success) {
-            console.log('=== PROFILE DATA ===', response.data)
             setProfile(response.data)
 
             // Mostrar alertas de suscripción
