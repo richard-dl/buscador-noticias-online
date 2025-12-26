@@ -232,11 +232,15 @@ const requireSuperAdmin = async (req, res, next) => {
       });
     }
 
+    // DEBUG: Log para verificar rol
+    console.log(`[SuperAdmin Check] User: ${req.user.email}, Role: ${req.user.role}, UID: ${req.user.uid}`);
+
     if (req.user.role !== 'superadmin') {
       return res.status(403).json({
         success: false,
         error: 'Acceso denegado. Se requiere rol de superadministrador.',
-        code: 'SUPERADMIN_REQUIRED'
+        code: 'SUPERADMIN_REQUIRED',
+        debug: { receivedRole: req.user.role, email: req.user.email }
       });
     }
 
