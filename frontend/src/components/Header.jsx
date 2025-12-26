@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { FiHome, FiFileText, FiUser, FiLogOut, FiMenu, FiX, FiStar, FiCreditCard, FiUserPlus, FiLogIn, FiShield } from 'react-icons/fi'
+import { FiHome, FiFileText, FiUser, FiLogOut, FiMenu, FiX, FiStar, FiCreditCard, FiUserPlus, FiLogIn } from 'react-icons/fi'
 import { useState } from 'react'
 
 const Header = () => {
@@ -98,17 +98,6 @@ const Header = () => {
                 <FiUser size={18} />
                 <span>Mi Cuenta</span>
               </Link>
-              {profile?.role === 'admin' && (
-                <Link
-                  to="/sessions"
-                  className="btn-sessions"
-                  onClick={() => setMenuOpen(false)}
-                  title="Gestión de sesiones"
-                >
-                  <FiShield size={18} />
-                  <span>Sesiones</span>
-                </Link>
-              )}
               <button className="btn-logout" onClick={logout} title="Cerrar sesión">
                 <FiLogOut size={18} />
                 <span>Salir</span>

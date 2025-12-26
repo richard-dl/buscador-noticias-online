@@ -3849,3 +3849,229 @@ input, select, textarea {
     justify-content: center;
   }
 }
+
+/* ============================================
+   SESIONES EMBEBIDAS EN PROFILE
+   ============================================ */
+
+.sessions-admin-card {
+  grid-column: 1 / -1;
+}
+
+.sessions-stats-mini {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-3);
+  margin-bottom: var(--spacing-4);
+}
+
+.stat-mini {
+  background: var(--color-bg-tertiary);
+  padding: var(--spacing-3);
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+
+.stat-mini .stat-value {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.stat-mini .stat-label {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.sessions-filter-tabs {
+  display: flex;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-4);
+  flex-wrap: wrap;
+}
+
+.sessions-filter-tabs .filter-tab {
+  padding: var(--spacing-2) var(--spacing-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.sessions-filter-tabs .filter-tab:hover {
+  border-color: var(--color-primary-light);
+}
+
+.sessions-filter-tabs .filter-tab.active {
+  background: var(--color-primary-light);
+  border-color: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.sessions-users-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.session-user-card {
+  background: var(--color-bg-tertiary);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.session-user-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-3);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.session-user-header:hover {
+  background: rgba(64, 151, 154, 0.1);
+}
+
+.session-user-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.session-user-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.session-user-email {
+  font-size: 0.9rem;
+  color: var(--color-text);
+}
+
+.session-user-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  flex-wrap: wrap;
+}
+
+.sessions-count-badge {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.session-user-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.session-user-sessions {
+  border-top: 1px solid var(--color-border);
+  padding: var(--spacing-3);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.session-item-mini {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-2);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-secondary);
+  margin-bottom: var(--spacing-2);
+}
+
+.session-item-mini:last-child {
+  margin-bottom: 0;
+}
+
+.session-item-mini .session-device-icon {
+  color: var(--color-primary-light);
+}
+
+.session-item-details {
+  flex: 1;
+}
+
+.session-item-details .session-browser {
+  font-size: 0.85rem;
+  color: var(--color-text);
+}
+
+.session-item-meta {
+  display: flex;
+  gap: var(--spacing-3);
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.session-item-meta span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.no-sessions-mini {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  padding: var(--spacing-2);
+}
+
+.sessions-info-mini {
+  margin-top: var(--spacing-4);
+  padding: var(--spacing-3);
+  background: rgba(64, 151, 154, 0.1);
+  border-radius: var(--radius-md);
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.sessions-info-mini p {
+  margin: 0;
+}
+
+/* Botones pequeños para sesiones */
+.btn-xs {
+  padding: 4px 8px;
+  font-size: 0.75rem;
+  min-height: auto;
+}
+
+.btn-icon-sm {
+  padding: 6px;
+  min-width: 28px;
+  min-height: 28px;
+}
+
+.badge-sm {
+  padding: 2px 6px;
+  font-size: 0.7rem;
+}
+
+/* Responsive para sesiones */
+@media (max-width: 768px) {
+  .sessions-stats-mini {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .session-user-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-2);
+  }
+
+  .session-user-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
