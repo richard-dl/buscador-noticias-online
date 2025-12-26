@@ -98,15 +98,17 @@ const Header = () => {
                 <FiUser size={18} />
                 <span>Mi Cuenta</span>
               </Link>
-              <Link
-                to="/sessions"
-                className="btn-sessions"
-                onClick={() => setMenuOpen(false)}
-                title="Sesiones activas"
-              >
-                <FiShield size={18} />
-                <span>Sesiones</span>
-              </Link>
+              {profile?.role === 'admin' && (
+                <Link
+                  to="/sessions"
+                  className="btn-sessions"
+                  onClick={() => setMenuOpen(false)}
+                  title="Gestión de sesiones"
+                >
+                  <FiShield size={18} />
+                  <span>Sesiones</span>
+                </Link>
+              )}
               <button className="btn-logout" onClick={logout} title="Cerrar sesión">
                 <FiLogOut size={18} />
                 <span>Salir</span>

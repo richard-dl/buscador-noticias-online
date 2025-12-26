@@ -1,61 +1,72 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { sessionsApi } from '../services/api'
-import { getSessionId } from '../services/deviceService'
 import Header from '../components/Header'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { toast } from 'react-toastify'
 import {
   FiMonitor, FiSmartphone, FiTablet, FiClock, FiMapPin,
-  FiTrash2, FiLogOut, FiSettings, FiShield, FiRefreshCw
+  FiTrash2, FiLogOut, FiSettings, FiShield, FiRefreshCw,
+  FiUser, FiChevronDown, FiChevronUp, FiUsers
 } from 'react-icons/fi'
 import '../styles/sessions.css'
 
 const Sessions = () => {
   const { profile } = useAuth()
-  const [sessions, setSessions] = useState([])
-  const [settings, setSettings] = useState({ maxSessions: 3, singleSessionMode: false })
+  const navigate = useNavigate()
+  const [users, setUsers] = useState([])
   const [loading, setLoading] = useState(true)
   const [actionLoading, setActionLoading] = useState(null)
-  const currentSessionId = getSessionId()
+  const [expandedUsers, setExpandedUsers] = useState({})
+  const [filter, setFilter] = useState('all') // all, active, inactive
+
+  // Verificar que es admin
+  useEffect(() => {
+    if (profile && profile.role !== 'admin') {
+      toast.error('Acceso denegado')
+      navigate('/dashboard')
+    }
+  }, [profile, navigate])
 
   useEffect(() => {
-    loadSessions()
-  }, [])
+    if (profile?.role === 'admin') {
+      loadUsers()
+    }
+  }, [profile])
 
-  const loadSessions = async () => {
+  const loadUsers = async () => {
     try {
       setLoading(true)
-      const response = await sessionsApi.getAll()
+      const response = await sessionsApi.admin.getAllUsers()
       if (response.success) {
-        setSessions(response.data.sessions || [])
-        setSettings(response.data.settings || { maxSessions: 3, singleSessionMode: false })
+        setUsers(response.data || [])
       }
     } catch (error) {
-      console.error('Error cargando sesiones:', error)
-      toast.error('Error al cargar sesiones')
+      console.error('Error cargando usuarios:', error)
+      toast.error('Error al cargar usuarios')
     } finally {
       setLoading(false)
     }
   }
 
-  const handleRevokeSession = async (sessionId) => {
-    if (sessionId === currentSessionId) {
-      if (!window.confirm('Esta es tu sesión actual. Se cerrará tu sesión. ¿Continuar?')) {
-        return
-      }
+  const toggleUserExpand = (uid) => {
+    setExpandedUsers(prev => ({
+      ...prev,
+      [uid]: !prev[uid]
+    }))
+  }
+
+  const handleRevokeSession = async (uid, sessionId, userEmail) => {
+    if (!window.confirm(`¿Cerrar esta sesión de ${userEmail}?`)) {
+      return
     }
 
     try {
-      setActionLoading(sessionId)
-      await sessionsApi.revoke(sessionId)
+      setActionLoading(`${uid}-${sessionId}`)
+      await sessionsApi.admin.revokeUserSession(uid, sessionId)
       toast.success('Sesión cerrada')
-
-      if (sessionId === currentSessionId) {
-        window.location.href = '/login'
-      } else {
-        loadSessions()
-      }
+      loadUsers()
     } catch (error) {
       console.error('Error cerrando sesión:', error)
       toast.error('Error al cerrar sesión')
@@ -64,22 +75,16 @@ const Sessions = () => {
     }
   }
 
-  const handleRevokeAll = async () => {
-    const otherSessions = sessions.filter(s => s.id !== currentSessionId)
-    if (otherSessions.length === 0) {
-      toast.info('No hay otras sesiones activas')
-      return
-    }
-
-    if (!window.confirm(`¿Cerrar ${otherSessions.length} sesión(es) en otros dispositivos?`)) {
+  const handleRevokeAllUserSessions = async (uid, userEmail, sessionCount) => {
+    if (!window.confirm(`¿Cerrar las ${sessionCount} sesiones activas de ${userEmail}?`)) {
       return
     }
 
     try {
-      setActionLoading('all')
-      const response = await sessionsApi.revokeAll()
+      setActionLoading(`${uid}-all`)
+      const response = await sessionsApi.admin.revokeAllUserSessions(uid)
       toast.success(response.message || 'Sesiones cerradas')
-      loadSessions()
+      loadUsers()
     } catch (error) {
       console.error('Error cerrando sesiones:', error)
       toast.error('Error al cerrar sesiones')
@@ -88,16 +93,13 @@ const Sessions = () => {
     }
   }
 
-  const handleToggleSingleSession = async () => {
+  const handleToggleSingleSession = async (uid, currentValue, userEmail) => {
     try {
-      setActionLoading('settings')
-      const newValue = !settings.singleSessionMode
-      await sessionsApi.updateSettings({ singleSessionMode: newValue })
-      setSettings(prev => ({ ...prev, singleSessionMode: newValue }))
-      toast.success(newValue
-        ? 'Modo sesión única activado'
-        : 'Modo sesión única desactivado'
-      )
+      setActionLoading(`${uid}-settings`)
+      const newValue = !currentValue
+      await sessionsApi.admin.updateUserSettings(uid, { singleSessionMode: newValue })
+      toast.success(`Modo sesión única ${newValue ? 'activado' : 'desactivado'} para ${userEmail}`)
+      loadUsers()
     } catch (error) {
       console.error('Error actualizando configuración:', error)
       toast.error('Error al actualizar configuración')
@@ -108,9 +110,9 @@ const Sessions = () => {
 
   const getDeviceIcon = (deviceType) => {
     switch (deviceType) {
-      case 'mobile': return <FiSmartphone size={24} />
-      case 'tablet': return <FiTablet size={24} />
-      default: return <FiMonitor size={24} />
+      case 'mobile': return <FiSmartphone size={18} />
+      case 'tablet': return <FiTablet size={18} />
+      default: return <FiMonitor size={18} />
     }
   }
 
@@ -134,10 +136,51 @@ const Sessions = () => {
     const diffHours = Math.floor(diffMs / 3600000)
     const diffDays = Math.floor(diffMs / 86400000)
 
-    if (diffMins < 1) return 'Ahora mismo'
-    if (diffMins < 60) return `Hace ${diffMins} min`
-    if (diffHours < 24) return `Hace ${diffHours}h`
-    return `Hace ${diffDays}d`
+    if (diffMins < 1) return 'Ahora'
+    if (diffMins < 60) return `${diffMins}m`
+    if (diffHours < 24) return `${diffHours}h`
+    return `${diffDays}d`
+  }
+
+  const getRoleBadge = (role) => {
+    const badges = {
+      admin: 'badge-admin',
+      vip: 'badge-vip',
+      vip_trial: 'badge-vip-trial',
+      suscriptor: 'badge-suscriptor',
+      trial: 'badge-trial'
+    }
+    return badges[role] || 'badge-trial'
+  }
+
+  const getRoleLabel = (role) => {
+    const labels = {
+      admin: 'Admin',
+      vip: 'VIP',
+      vip_trial: 'VIP Trial',
+      suscriptor: 'Suscriptor',
+      trial: 'Trial'
+    }
+    return labels[role] || role
+  }
+
+  // Filtrar usuarios
+  const filteredUsers = users.filter(user => {
+    if (filter === 'active') return user.activeSessions > 0
+    if (filter === 'inactive') return user.activeSessions === 0
+    return true
+  })
+
+  // Estadísticas
+  const stats = {
+    totalUsers: users.length,
+    usersWithSessions: users.filter(u => u.activeSessions > 0).length,
+    totalSessions: users.reduce((acc, u) => acc + u.activeSessions, 0),
+    singleSessionUsers: users.filter(u => u.singleSessionMode).length
+  }
+
+  if (!profile || profile.role !== 'admin') {
+    return null
   }
 
   if (loading) {
@@ -145,7 +188,7 @@ const Sessions = () => {
       <div className="sessions-page">
         <Header />
         <main className="sessions-main container">
-          <LoadingSpinner size="large" text="Cargando sesiones..." />
+          <LoadingSpinner size="large" text="Cargando usuarios..." />
         </main>
       </div>
     )
@@ -159,153 +202,217 @@ const Sessions = () => {
         <div className="sessions-header">
           <h1>
             <FiShield size={28} />
-            Sesiones Activas
+            Panel de Sesiones
           </h1>
           <p className="sessions-subtitle">
-            Administra los dispositivos donde has iniciado sesión
+            Administra las sesiones activas de todos los usuarios
           </p>
         </div>
 
-        {/* Configuración */}
-        <section className="sessions-card">
-          <div className="card-header">
-            <h2>
-              <FiSettings size={20} />
-              Configuración de Seguridad
-            </h2>
-          </div>
-
-          <div className="settings-content">
-            <div className="setting-item">
-              <div className="setting-info">
-                <span className="setting-label">Modo sesión única</span>
-                <span className="setting-description">
-                  Al activar, cada nuevo inicio de sesión cerrará las sesiones anteriores automáticamente
-                </span>
-              </div>
-              <label className="toggle-switch">
-                <input
-                  type="checkbox"
-                  checked={settings.singleSessionMode}
-                  onChange={handleToggleSingleSession}
-                  disabled={actionLoading === 'settings'}
-                />
-                <span className="toggle-slider"></span>
-              </label>
+        {/* Estadísticas */}
+        <section className="sessions-stats">
+          <div className="stat-card">
+            <FiUsers size={24} />
+            <div className="stat-info">
+              <span className="stat-value">{stats.totalUsers}</span>
+              <span className="stat-label">Usuarios totales</span>
             </div>
-
-            <div className="setting-item">
-              <div className="setting-info">
-                <span className="setting-label">Dispositivos máximos</span>
-                <span className="setting-description">
-                  Puedes tener hasta {settings.maxSessions} dispositivos activos simultáneamente
-                </span>
-              </div>
-              <span className="setting-value">{sessions.length} / {settings.maxSessions}</span>
+          </div>
+          <div className="stat-card">
+            <FiUser size={24} />
+            <div className="stat-info">
+              <span className="stat-value">{stats.usersWithSessions}</span>
+              <span className="stat-label">Con sesiones activas</span>
+            </div>
+          </div>
+          <div className="stat-card">
+            <FiMonitor size={24} />
+            <div className="stat-info">
+              <span className="stat-value">{stats.totalSessions}</span>
+              <span className="stat-label">Sesiones totales</span>
+            </div>
+          </div>
+          <div className="stat-card">
+            <FiShield size={24} />
+            <div className="stat-info">
+              <span className="stat-value">{stats.singleSessionUsers}</span>
+              <span className="stat-label">Modo sesión única</span>
             </div>
           </div>
         </section>
 
-        {/* Lista de sesiones */}
+        {/* Filtros y acciones */}
         <section className="sessions-card">
           <div className="card-header sessions-list-header">
-            <h2>Dispositivos conectados ({sessions.length})</h2>
-            <div className="header-actions">
+            <div className="filter-tabs">
               <button
-                className="btn btn-ghost"
-                onClick={loadSessions}
-                disabled={loading}
-                title="Actualizar lista"
+                className={`filter-tab ${filter === 'all' ? 'active' : ''}`}
+                onClick={() => setFilter('all')}
               >
-                <FiRefreshCw size={18} />
+                Todos ({users.length})
               </button>
-              {sessions.length > 1 && (
-                <button
-                  className="btn btn-outline-danger"
-                  onClick={handleRevokeAll}
-                  disabled={actionLoading === 'all'}
-                >
-                  {actionLoading === 'all' ? (
-                    <LoadingSpinner size="small" />
-                  ) : (
-                    <>
-                      <FiLogOut size={16} />
-                      Cerrar otras
-                    </>
-                  )}
-                </button>
-              )}
+              <button
+                className={`filter-tab ${filter === 'active' ? 'active' : ''}`}
+                onClick={() => setFilter('active')}
+              >
+                Con sesiones ({stats.usersWithSessions})
+              </button>
+              <button
+                className={`filter-tab ${filter === 'inactive' ? 'active' : ''}`}
+                onClick={() => setFilter('inactive')}
+              >
+                Sin sesiones ({users.length - stats.usersWithSessions})
+              </button>
             </div>
+            <button
+              className="btn btn-ghost"
+              onClick={loadUsers}
+              disabled={loading}
+              title="Actualizar lista"
+            >
+              <FiRefreshCw size={18} />
+            </button>
           </div>
 
-          {sessions.length === 0 ? (
-            <p className="empty-message">No hay sesiones activas</p>
+          {/* Lista de usuarios */}
+          {filteredUsers.length === 0 ? (
+            <p className="empty-message">No hay usuarios que mostrar</p>
           ) : (
-            <div className="sessions-grid">
-              {sessions.map(session => (
-                <div
-                  key={session.id}
-                  className={`session-card ${session.isCurrent ? 'session-current' : ''}`}
-                >
-                  <div className="session-icon">
-                    {getDeviceIcon(session.deviceInfo?.deviceType)}
-                  </div>
-
-                  <div className="session-info">
-                    <div className="session-device">
-                      <span className="device-name">
-                        {session.deviceInfo?.browser || 'Navegador desconocido'}
-                        {' en '}
-                        {session.deviceInfo?.os || 'Sistema desconocido'}
-                      </span>
-                      {session.isCurrent && (
-                        <span className="badge badge-success">Este dispositivo</span>
+            <div className="users-list">
+              {filteredUsers.map(user => (
+                <div key={user.uid} className="user-card">
+                  <div
+                    className="user-header"
+                    onClick={() => toggleUserExpand(user.uid)}
+                  >
+                    <div className="user-info">
+                      <FiUser size={20} />
+                      <div className="user-details">
+                        <span className="user-email">{user.email}</span>
+                        <div className="user-meta">
+                          <span className={`badge ${getRoleBadge(user.role)}`}>
+                            {getRoleLabel(user.role)}
+                          </span>
+                          <span className="sessions-count">
+                            {user.activeSessions} sesión(es) activa(s)
+                          </span>
+                          {user.singleSessionMode && (
+                            <span className="badge badge-info">Sesión única</span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="user-actions">
+                      {user.activeSessions > 0 && (
+                        <button
+                          className="btn btn-sm btn-outline-danger"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            handleRevokeAllUserSessions(user.uid, user.email, user.activeSessions)
+                          }}
+                          disabled={actionLoading === `${user.uid}-all`}
+                          title="Cerrar todas las sesiones"
+                        >
+                          {actionLoading === `${user.uid}-all` ? (
+                            <LoadingSpinner size="small" />
+                          ) : (
+                            <>
+                              <FiLogOut size={14} />
+                              Cerrar todas
+                            </>
+                          )}
+                        </button>
+                      )}
+                      <button
+                        className={`btn btn-sm ${user.singleSessionMode ? 'btn-success' : 'btn-outline'}`}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleToggleSingleSession(user.uid, user.singleSessionMode, user.email)
+                        }}
+                        disabled={actionLoading === `${user.uid}-settings`}
+                        title={user.singleSessionMode ? 'Desactivar sesión única' : 'Activar sesión única'}
+                      >
+                        {actionLoading === `${user.uid}-settings` ? (
+                          <LoadingSpinner size="small" />
+                        ) : (
+                          <>
+                            <FiSettings size={14} />
+                            {user.singleSessionMode ? 'Única ON' : 'Única OFF'}
+                          </>
+                        )}
+                      </button>
+                      {expandedUsers[user.uid] ? (
+                        <FiChevronUp size={20} />
+                      ) : (
+                        <FiChevronDown size={20} />
                       )}
                     </div>
-
-                    <div className="session-meta">
-                      <span className="meta-item">
-                        <FiMapPin size={14} />
-                        {session.ipInfo?.city || 'Ubicación desconocida'}
-                        {session.ipInfo?.country && session.ipInfo.country !== 'Desconocido' && `, ${session.ipInfo.country}`}
-                      </span>
-                      <span className="meta-item">
-                        <FiClock size={14} />
-                        {getRelativeTime(session.lastActivity)}
-                      </span>
-                    </div>
-
-                    <div className="session-dates">
-                      <span>Inicio: {formatDate(session.createdAt)}</span>
-                    </div>
                   </div>
 
-                  <button
-                    className="btn btn-icon btn-danger-ghost"
-                    onClick={() => handleRevokeSession(session.id)}
-                    disabled={actionLoading === session.id}
-                    title={session.isCurrent ? 'Cerrar esta sesión (te desconectará)' : 'Cerrar sesión'}
-                  >
-                    {actionLoading === session.id ? (
-                      <LoadingSpinner size="small" />
-                    ) : (
-                      <FiTrash2 size={18} />
-                    )}
-                  </button>
+                  {/* Sesiones expandidas */}
+                  {expandedUsers[user.uid] && user.sessions.length > 0 && (
+                    <div className="user-sessions">
+                      {user.sessions.map(session => (
+                        <div key={session.id} className="session-item">
+                          <div className="session-device-icon">
+                            {getDeviceIcon(session.deviceInfo?.deviceType)}
+                          </div>
+                          <div className="session-details">
+                            <span className="session-browser">
+                              {session.deviceInfo?.browser || 'Navegador'} en {session.deviceInfo?.os || 'Sistema'}
+                            </span>
+                            <div className="session-meta">
+                              <span>
+                                <FiMapPin size={12} />
+                                {session.ipInfo?.city || 'Ubicación desconocida'}
+                                {session.ipInfo?.country && `, ${session.ipInfo.country}`}
+                              </span>
+                              <span>
+                                <FiClock size={12} />
+                                {getRelativeTime(session.lastActivity)}
+                              </span>
+                              <span className="session-ip">IP: {session.ip || 'N/A'}</span>
+                            </div>
+                            <span className="session-date">
+                              Inicio: {formatDate(session.createdAt)}
+                            </span>
+                          </div>
+                          <button
+                            className="btn btn-icon btn-danger-ghost"
+                            onClick={() => handleRevokeSession(user.uid, session.id, user.email)}
+                            disabled={actionLoading === `${user.uid}-${session.id}`}
+                            title="Cerrar sesión"
+                          >
+                            {actionLoading === `${user.uid}-${session.id}` ? (
+                              <LoadingSpinner size="small" />
+                            ) : (
+                              <FiTrash2 size={16} />
+                            )}
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {expandedUsers[user.uid] && user.sessions.length === 0 && (
+                    <div className="user-sessions">
+                      <p className="no-sessions">Este usuario no tiene sesiones activas</p>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
           )}
         </section>
 
-        {/* Información adicional */}
+        {/* Información */}
         <section className="sessions-card sessions-info">
-          <h3>Información de seguridad</h3>
+          <h3>Información del sistema</h3>
           <ul>
             <li>Las sesiones expiran automáticamente después de 30 días de inactividad</li>
-            <li>Si no reconoces algún dispositivo, cierra esa sesión inmediatamente</li>
-            <li>Considera activar el modo sesión única para mayor seguridad</li>
-            <li>Cambia tu contraseña si detectas actividad sospechosa</li>
+            <li>El modo "sesión única" cierra las sesiones anteriores al iniciar una nueva</li>
+            <li>Usuarios trial: máximo 2 dispositivos / Suscriptor y VIP: máximo 3 / Admin: máximo 10</li>
+            <li>Al cerrar una sesión, el usuario deberá iniciar sesión nuevamente en ese dispositivo</li>
           </ul>
         </section>
       </main>

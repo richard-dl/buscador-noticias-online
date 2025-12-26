@@ -271,6 +271,7 @@ module.exports = {
   requireVipAccess,
   authenticateAndRequireVip,
   requireAdmin,
+  isAdmin: requireAdmin, // Alias para mayor claridad
   requireSuscriptor,
   authenticateAndRequireAdmin,
   authenticateAndRequireSuscriptor
