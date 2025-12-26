@@ -496,8 +496,8 @@ const checkVipAccess = async (uid) => {
     return { hasAccess: false, reason: 'Usuario no encontrado' };
   }
 
-  // Admin y superadmin siempre tienen acceso
-  if (user.role === 'admin' || user.role === 'superadmin') {
+  // Admin siempre tiene acceso
+  if (user.role === 'admin') {
     return { hasAccess: true, isAdmin: true };
   }
 
@@ -561,11 +561,11 @@ const getSubscriptionStatus = async (uid) => {
   const now = new Date();
   const role = user.role;
 
-  // Admin y superadmin
-  if (role === 'admin' || role === 'superadmin') {
+  // Admin
+  if (role === 'admin') {
     return {
       valid: true,
-      role: role,
+      role: 'admin',
       hasVipAccess: true,
       isAdmin: true
     };
@@ -1002,8 +1002,7 @@ const SESSION_CONFIG = {
     suscriptor: 3,
     vip_trial: 3,
     vip: 3,
-    admin: 3,
-    superadmin: 10
+    admin: 10
   }
 };
 
@@ -1263,21 +1262,15 @@ const getSessionSettings = async (uid) => {
 // ==================== FUNCIONES DE ADMIN PARA SESIONES ====================
 
 /**
- * Obtener todos los usuarios con sus sesiones activas (para admin/superadmin)
- * @param {string} requestingUserRole - Rol del usuario que solicita (para filtrar superadmin si es admin)
+ * Obtener todos los usuarios con sus sesiones activas (para admin)
  */
-const getAllUsersWithSessions = async (requestingUserRole = 'superadmin') => {
+const getAllUsersWithSessions = async () => {
   const usersSnapshot = await db.collection('users').get();
   const usersWithSessions = [];
 
   for (const userDoc of usersSnapshot.docs) {
     const userData = userDoc.data();
     const uid = userDoc.id;
-
-    // Si el solicitante es admin (no superadmin), ocultar superadmins
-    if (requestingUserRole === 'admin' && userData.role === 'superadmin') {
-      continue;
-    }
 
     // Obtener sesiones activas
     const sessionsSnapshot = await db.collection('users').doc(uid)

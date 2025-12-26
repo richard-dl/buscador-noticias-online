@@ -21,16 +21,16 @@ const Sessions = () => {
   const [expandedUsers, setExpandedUsers] = useState({})
   const [filter, setFilter] = useState('all') // all, active, inactive
 
-  // Verificar que es superadmin
+  // Verificar que es admin
   useEffect(() => {
-    if (profile && profile.role !== 'superadmin') {
+    if (profile && profile.role !== 'admin') {
       toast.error('Acceso denegado')
       navigate('/dashboard')
     }
   }, [profile, navigate])
 
   useEffect(() => {
-    if (profile?.role === 'superadmin') {
+    if (profile?.role === 'admin') {
       loadUsers()
     }
   }, [profile])
@@ -144,7 +144,6 @@ const Sessions = () => {
 
   const getRoleBadge = (role) => {
     const badges = {
-      superadmin: 'badge-superadmin',
       admin: 'badge-admin',
       vip: 'badge-vip',
       vip_trial: 'badge-vip-trial',
@@ -156,7 +155,6 @@ const Sessions = () => {
 
   const getRoleLabel = (role) => {
     const labels = {
-      superadmin: 'Super Admin',
       admin: 'Admin',
       vip: 'VIP',
       vip_trial: 'VIP Trial',
@@ -181,7 +179,7 @@ const Sessions = () => {
     singleSessionUsers: users.filter(u => u.singleSessionMode).length
   }
 
-  if (!profile || profile.role !== 'superadmin') {
+  if (!profile || profile.role !== 'admin') {
     return null
   }
 
@@ -413,7 +411,7 @@ const Sessions = () => {
           <ul>
             <li>Las sesiones expiran automáticamente después de 30 días de inactividad</li>
             <li>El modo "sesión única" cierra las sesiones anteriores al iniciar una nueva</li>
-            <li>Usuarios trial: máximo 2 dispositivos / Suscriptor, VIP y Admin: máximo 3 / Super Admin: máximo 10</li>
+            <li>Usuarios trial: máximo 2 dispositivos / Suscriptor y VIP: máximo 3 / Admin: máximo 10</li>
             <li>Al cerrar una sesión, el usuario deberá iniciar sesión nuevamente en ese dispositivo</li>
           </ul>
         </section>

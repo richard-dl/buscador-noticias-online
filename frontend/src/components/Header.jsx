@@ -80,13 +80,9 @@ const Header = () => {
         <div className={`header-user ${menuOpen ? 'open' : ''}`}>
           {isAuthenticated ? (
             <>
-              {profile?.role === 'superadmin' ? (
+              {profile?.role === 'admin' ? (
                 <span className="admin-badge">
-                  👑 Super Admin
-                </span>
-              ) : profile?.role === 'admin' ? (
-                <span className="admin-badge">
-                  🛡️ Administrador
+                  👑 Administrador
                 </span>
               ) : daysRemaining !== null && daysRemaining !== undefined && daysRemaining <= 7 && (
                 <span className="days-warning">
@@ -102,7 +98,7 @@ const Header = () => {
                 <FiUser size={18} />
                 <span>Mi Cuenta</span>
               </Link>
-              {profile?.role === 'superadmin' && (
+              {profile?.role === 'admin' && (
                 <Link
                   to="/sessions"
                   className="btn-sessions"

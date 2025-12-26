@@ -189,7 +189,7 @@ const requireVipAccess = async (req, res, next) => {
 const authenticateAndRequireVip = [authenticate, requireVipAccess];
 
 /**
- * Middleware para verificar rol de administrador (admin o superadmin)
+ * Middleware para verificar rol de administrador
  * Debe usarse después del middleware authenticate
  */
 const requireAdmin = async (req, res, next) => {
@@ -201,7 +201,7 @@ const requireAdmin = async (req, res, next) => {
       });
     }
 
-    if (req.user.role !== 'admin' && req.user.role !== 'superadmin') {
+    if (req.user.role !== 'admin') {
       return res.status(403).json({
         success: false,
         error: 'Acceso denegado. Se requiere rol de administrador.',
@@ -212,41 +212,6 @@ const requireAdmin = async (req, res, next) => {
     next();
   } catch (error) {
     console.error('Error verificando rol admin:', error.message);
-    return res.status(500).json({
-      success: false,
-      error: 'Error verificando permisos'
-    });
-  }
-};
-
-/**
- * Middleware para verificar rol de superadmin exclusivamente
- * Debe usarse después del middleware authenticate
- */
-const requireSuperAdmin = async (req, res, next) => {
-  try {
-    if (!req.user || !req.user.uid) {
-      return res.status(401).json({
-        success: false,
-        error: 'Usuario no autenticado'
-      });
-    }
-
-    // DEBUG: Log para verificar rol
-    console.log(`[SuperAdmin Check] User: ${req.user.email}, Role: ${req.user.role}, UID: ${req.user.uid}`);
-
-    if (req.user.role !== 'superadmin') {
-      return res.status(403).json({
-        success: false,
-        error: 'Acceso denegado. Se requiere rol de superadministrador.',
-        code: 'SUPERADMIN_REQUIRED',
-        debug: { receivedRole: req.user.role, email: req.user.email }
-      });
-    }
-
-    next();
-  } catch (error) {
-    console.error('Error verificando rol superadmin:', error.message);
     return res.status(500).json({
       success: false,
       error: 'Error verificando permisos'
@@ -268,7 +233,7 @@ const requireSuscriptor = async (req, res, next) => {
       });
     }
 
-    const allowedRoles = ['suscriptor', 'vip_trial', 'vip', 'admin', 'superadmin'];
+    const allowedRoles = ['suscriptor', 'vip_trial', 'vip', 'admin'];
 
     if (!allowedRoles.includes(req.user.role)) {
       return res.status(403).json({
@@ -299,11 +264,6 @@ const authenticateAndRequireAdmin = [authenticate, requireAdmin];
  */
 const authenticateAndRequireSuscriptor = [authenticate, requireSuscriptor];
 
-/**
- * Middleware combinado: autenticación + rol superadmin
- */
-const authenticateAndRequireSuperAdmin = [authenticate, requireSuperAdmin];
-
 module.exports = {
   authenticate,
   requireActiveSubscription,
@@ -311,11 +271,8 @@ module.exports = {
   requireVipAccess,
   authenticateAndRequireVip,
   requireAdmin,
-  isAdmin: requireAdmin,
-  requireSuperAdmin,
-  isSuperAdmin: requireSuperAdmin,
+  isAdmin: requireAdmin, // Alias para mayor claridad
   requireSuscriptor,
   authenticateAndRequireAdmin,
-  authenticateAndRequireSuscriptor,
-  authenticateAndRequireSuperAdmin
+  authenticateAndRequireSuscriptor
 };

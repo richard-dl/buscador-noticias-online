@@ -512,11 +512,6 @@
 }
 
 /* Badges de roles */
-.badge-superadmin {
-  background: rgba(255, 215, 0, 0.3);
-  color: #ffd700;
-}
-
 .badge-admin {
   background: rgba(255, 193, 7, 0.2);
   color: #ffc107;

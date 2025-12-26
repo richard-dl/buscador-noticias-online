@@ -34,8 +34,8 @@ export const AuthProvider = ({ children }) => {
   const showSubscriptionAlerts = (data) => {
     const { role, subscriptionType, daysRemaining, isExpired, isNewUser } = data
 
-    // No mostrar alertas para admin/superadmin
-    if (role === 'admin' || role === 'superadmin') return
+    // No mostrar alertas para admin
+    if (role === 'admin') return
 
     // Usuario nuevo - solo bienvenida (ya se muestra en login/register)
     if (isNewUser) return
@@ -312,8 +312,8 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  // Verificar si el usuario tiene acceso VIP (vip_trial, vip, admin, superadmin)
-  const hasVipAccess = ['vip_trial', 'vip', 'admin', 'superadmin'].includes(profile?.role)
+  // Verificar si el usuario tiene acceso VIP (vip_trial, vip, admin)
+  const hasVipAccess = ['vip_trial', 'vip', 'admin'].includes(profile?.role)
 
   // daysRemaining: null para admin/suscriptor (sin expiración), número para trial/vip_trial/vip
   const daysRemaining = profile?.daysRemaining
