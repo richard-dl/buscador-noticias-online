@@ -11,6 +11,7 @@ import Profile from './pages/Profile'
 import Expired from './pages/Expired'
 import ZonaVip from './pages/ZonaVip'
 import Subscription from './pages/Subscription'
+import Sessions from './pages/Sessions'
 
 // Components
 import ProtectedRoute from './components/ProtectedRoute'
@@ -54,6 +55,14 @@ function App() {
         element={
           <ProtectedRoute>
             <ZonaVip />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/sessions"
+        element={
+          <ProtectedRoute>
+            <Sessions />
           </ProtectedRoute>
         }
       />

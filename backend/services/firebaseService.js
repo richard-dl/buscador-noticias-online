@@ -992,6 +992,273 @@ const getPaymentHistory = async (userId) => {
   }
 };
 
+// ============ SESIONES ============
+
+const SESSION_CONFIG = {
+  MAX_SESSIONS_DEFAULT: 3,
+  SESSION_DURATION_DAYS: 30,
+  MAX_SESSIONS_BY_ROLE: {
+    trial: 2,
+    suscriptor: 3,
+    vip_trial: 3,
+    vip: 3,
+    admin: 10
+  }
+};
+
+/**
+ * Crear nueva sesión para usuario
+ */
+const createSession = async (uid, sessionData) => {
+  const { deviceId, deviceInfo, ip, ipInfo } = sessionData;
+
+  const user = await getUserFromFirestore(uid);
+  if (!user) throw new Error('Usuario no encontrado');
+
+  const maxSessions = user.maxSessions ||
+    SESSION_CONFIG.MAX_SESSIONS_BY_ROLE[user.role] ||
+    SESSION_CONFIG.MAX_SESSIONS_DEFAULT;
+
+  const singleSessionMode = user.singleSessionMode || false;
+
+  // Obtener sesiones activas actuales
+  const activeSessions = await getActiveSessions(uid);
+
+  // Modo sesión única: revocar todas las anteriores
+  if (singleSessionMode && activeSessions.length > 0) {
+    for (const session of activeSessions) {
+      await revokeSession(uid, session.id, 'new_login');
+    }
+  }
+  // Límite de dispositivos: verificar si ya existe sesión del dispositivo o revocar la más antigua
+  else if (activeSessions.length >= maxSessions) {
+    // Verificar si este dispositivo ya tiene sesión activa
+    const existingSession = activeSessions.find(s => s.deviceId === deviceId);
+
+    if (existingSession) {
+      // Actualizar sesión existente en lugar de crear nueva
+      await updateSessionActivity(uid, existingSession.id, ip);
+      return { sessionId: existingSession.id, updated: true };
+    }
+
+    // Revocar la sesión más antigua
+    const oldestSession = activeSessions.sort(
+      (a, b) => (a.createdAt?.toMillis?.() || 0) - (b.createdAt?.toMillis?.() || 0)
+    )[0];
+    await revokeSession(uid, oldestSession.id, 'max_sessions');
+  } else {
+    // Verificar si el dispositivo ya tiene sesión (sin exceder límite)
+    const existingSession = activeSessions.find(s => s.deviceId === deviceId);
+    if (existingSession) {
+      await updateSessionActivity(uid, existingSession.id, ip);
+      return { sessionId: existingSession.id, updated: true };
+    }
+  }
+
+  // Crear nueva sesión
+  const crypto = require('crypto');
+  const sessionId = crypto.randomUUID();
+
+  const now = new Date();
+  const expiresAt = new Date(now.getTime() +
+    SESSION_CONFIG.SESSION_DURATION_DAYS * 24 * 60 * 60 * 1000);
+
+  const sessionDoc = {
+    sessionId,
+    deviceId: deviceId || 'unknown',
+    deviceInfo: deviceInfo || {},
+    ip: ip || 'unknown',
+    ipInfo: ipInfo || {},
+    createdAt: admin.firestore.FieldValue.serverTimestamp(),
+    lastActivity: admin.firestore.FieldValue.serverTimestamp(),
+    expiresAt: admin.firestore.Timestamp.fromDate(expiresAt),
+    isActive: true,
+    revokedAt: null,
+    revokedReason: null
+  };
+
+  await db.collection('users').doc(uid)
+    .collection('sessions').doc(sessionId)
+    .set(sessionDoc);
+
+  return { sessionId, expiresAt: expiresAt.toISOString() };
+};
+
+/**
+ * Obtener sesiones activas del usuario
+ */
+const getActiveSessions = async (uid) => {
+  const now = new Date();
+
+  const snapshot = await db.collection('users').doc(uid)
+    .collection('sessions')
+    .where('isActive', '==', true)
+    .get();
+
+  const sessions = [];
+
+  for (const doc of snapshot.docs) {
+    const data = doc.data();
+    const expiresAt = data.expiresAt?.toDate?.();
+
+    // Verificar si expiró
+    if (expiresAt && now > expiresAt) {
+      // Marcar como expirada (no await para no bloquear)
+      revokeSession(uid, doc.id, 'expired').catch(console.error);
+      continue;
+    }
+
+    sessions.push({
+      id: doc.id,
+      ...data
+    });
+  }
+
+  return sessions;
+};
+
+/**
+ * Validar sesión activa
+ */
+const validateSession = async (uid, sessionId) => {
+  if (!sessionId) {
+    return { valid: false, reason: 'No hay sesión' };
+  }
+
+  const sessionRef = db.collection('users').doc(uid)
+    .collection('sessions').doc(sessionId);
+
+  const sessionDoc = await sessionRef.get();
+
+  if (!sessionDoc.exists) {
+    return { valid: false, reason: 'Sesión no encontrada' };
+  }
+
+  const session = sessionDoc.data();
+
+  if (!session.isActive) {
+    let reason = 'Sesión revocada';
+    if (session.revokedReason === 'new_login') {
+      reason = 'Sesión cerrada por nuevo inicio de sesión en otro dispositivo';
+    } else if (session.revokedReason === 'max_sessions') {
+      reason = 'Sesión cerrada por límite de dispositivos alcanzado';
+    } else if (session.revokedReason === 'expired') {
+      reason = 'Sesión expirada';
+    }
+    return { valid: false, reason };
+  }
+
+  const now = new Date();
+  const expiresAt = session.expiresAt?.toDate?.();
+
+  if (expiresAt && now > expiresAt) {
+    await revokeSession(uid, sessionId, 'expired');
+    return { valid: false, reason: 'Sesión expirada' };
+  }
+
+  // Actualizar última actividad (throttled - máximo cada 5 minutos)
+  const lastActivity = session.lastActivity?.toDate?.();
+  const fiveMinutesAgo = new Date(now.getTime() - 5 * 60 * 1000);
+
+  if (!lastActivity || lastActivity < fiveMinutesAgo) {
+    sessionRef.update({
+      lastActivity: admin.firestore.FieldValue.serverTimestamp()
+    }).catch(console.error);
+  }
+
+  return { valid: true, session };
+};
+
+/**
+ * Revocar sesión
+ */
+const revokeSession = async (uid, sessionId, reason = 'manual') => {
+  const sessionRef = db.collection('users').doc(uid)
+    .collection('sessions').doc(sessionId);
+
+  await sessionRef.update({
+    isActive: false,
+    revokedAt: admin.firestore.FieldValue.serverTimestamp(),
+    revokedReason: reason
+  });
+
+  return true;
+};
+
+/**
+ * Revocar todas las sesiones del usuario
+ */
+const revokeAllSessions = async (uid, exceptSessionId = null) => {
+  const sessions = await getActiveSessions(uid);
+  let revokedCount = 0;
+
+  for (const session of sessions) {
+    if (session.id !== exceptSessionId) {
+      await revokeSession(uid, session.id, 'logout_all');
+      revokedCount++;
+    }
+  }
+
+  return revokedCount;
+};
+
+/**
+ * Actualizar actividad de sesión
+ */
+const updateSessionActivity = async (uid, sessionId, ip = null) => {
+  const updateData = {
+    lastActivity: admin.firestore.FieldValue.serverTimestamp()
+  };
+
+  if (ip) {
+    updateData.ip = ip;
+  }
+
+  await db.collection('users').doc(uid)
+    .collection('sessions').doc(sessionId)
+    .update(updateData);
+
+  return true;
+};
+
+/**
+ * Actualizar configuración de sesiones del usuario
+ */
+const updateSessionSettings = async (uid, settings) => {
+  const { singleSessionMode, maxSessions } = settings;
+
+  const updateData = {};
+
+  if (singleSessionMode !== undefined) {
+    updateData.singleSessionMode = Boolean(singleSessionMode);
+  }
+
+  if (maxSessions !== undefined && maxSessions >= 1 && maxSessions <= 10) {
+    updateData.maxSessions = maxSessions;
+  }
+
+  if (Object.keys(updateData).length > 0) {
+    await db.collection('users').doc(uid).update(updateData);
+  }
+
+  return getUserFromFirestore(uid);
+};
+
+/**
+ * Obtener configuración de sesiones del usuario
+ */
+const getSessionSettings = async (uid) => {
+  const user = await getUserFromFirestore(uid);
+  if (!user) throw new Error('Usuario no encontrado');
+
+  return {
+    maxSessions: user.maxSessions ||
+      SESSION_CONFIG.MAX_SESSIONS_BY_ROLE[user.role] ||
+      SESSION_CONFIG.MAX_SESSIONS_DEFAULT,
+    singleSessionMode: user.singleSessionMode || false
+  };
+};
+
 module.exports = {
   admin,
   db,
@@ -1028,5 +1295,15 @@ module.exports = {
   getSubscriptionStatus,
   // Funciones de pagos
   savePaymentRecord,
-  getPaymentHistory
+  getPaymentHistory,
+  // Funciones de sesiones
+  SESSION_CONFIG,
+  createSession,
+  getActiveSessions,
+  validateSession,
+  revokeSession,
+  revokeAllSessions,
+  updateSessionActivity,
+  updateSessionSettings,
+  getSessionSettings
 };
