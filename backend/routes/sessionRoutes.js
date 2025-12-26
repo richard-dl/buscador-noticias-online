@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { authenticate, isAdmin } = require('../middleware/authMiddleware');
+const { authenticate, isSuperAdmin } = require('../middleware/authMiddleware');
 const { getClientIp, getIpInfo } = require('../utils/ipUtils');
 const {
   createSession,
@@ -235,15 +235,15 @@ router.get('/settings', authenticate, async (req, res) => {
   }
 });
 
-// ==================== ENDPOINTS DE ADMIN ====================
+// ==================== ENDPOINTS DE SUPERADMIN ====================
 
 /**
  * GET /api/sessions/admin/users
- * Obtener todos los usuarios con sus sesiones (solo admin)
+ * Obtener todos los usuarios con sus sesiones (solo superadmin)
  */
-router.get('/admin/users', authenticate, isAdmin, async (req, res) => {
+router.get('/admin/users', authenticate, isSuperAdmin, async (req, res) => {
   try {
-    const users = await getAllUsersWithSessions();
+    const users = await getAllUsersWithSessions(req.user.role);
 
     res.json({
       success: true,
@@ -260,9 +260,9 @@ router.get('/admin/users', authenticate, isAdmin, async (req, res) => {
 
 /**
  * DELETE /api/sessions/admin/users/:uid/sessions/:sessionId
- * Cerrar sesión específica de un usuario (solo admin)
+ * Cerrar sesión específica de un usuario (solo superadmin)
  */
-router.delete('/admin/users/:uid/sessions/:sessionId', authenticate, isAdmin, async (req, res) => {
+router.delete('/admin/users/:uid/sessions/:sessionId', authenticate, isSuperAdmin, async (req, res) => {
   try {
     const { uid, sessionId } = req.params;
 
@@ -283,9 +283,9 @@ router.delete('/admin/users/:uid/sessions/:sessionId', authenticate, isAdmin, as
 
 /**
  * DELETE /api/sessions/admin/users/:uid/sessions
- * Cerrar todas las sesiones de un usuario (solo admin)
+ * Cerrar todas las sesiones de un usuario (solo superadmin)
  */
-router.delete('/admin/users/:uid/sessions', authenticate, isAdmin, async (req, res) => {
+router.delete('/admin/users/:uid/sessions', authenticate, isSuperAdmin, async (req, res) => {
   try {
     const { uid } = req.params;
 
@@ -307,9 +307,9 @@ router.delete('/admin/users/:uid/sessions', authenticate, isAdmin, async (req, r
 
 /**
  * PUT /api/sessions/admin/users/:uid/settings
- * Actualizar configuración de sesiones de un usuario (solo admin)
+ * Actualizar configuración de sesiones de un usuario (solo superadmin)
  */
-router.put('/admin/users/:uid/settings', authenticate, isAdmin, async (req, res) => {
+router.put('/admin/users/:uid/settings', authenticate, isSuperAdmin, async (req, res) => {
   try {
     const { uid } = req.params;
     const { singleSessionMode, maxSessions } = req.body;

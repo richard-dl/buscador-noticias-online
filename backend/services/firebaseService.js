@@ -1002,7 +1002,8 @@ const SESSION_CONFIG = {
     suscriptor: 3,
     vip_trial: 3,
     vip: 3,
-    admin: 10
+    admin: 3,
+    superadmin: 10
   }
 };
 
@@ -1262,15 +1263,21 @@ const getSessionSettings = async (uid) => {
 // ==================== FUNCIONES DE ADMIN PARA SESIONES ====================
 
 /**
- * Obtener todos los usuarios con sus sesiones activas (para admin)
+ * Obtener todos los usuarios con sus sesiones activas (para admin/superadmin)
+ * @param {string} requestingUserRole - Rol del usuario que solicita (para filtrar superadmin si es admin)
  */
-const getAllUsersWithSessions = async () => {
+const getAllUsersWithSessions = async (requestingUserRole = 'superadmin') => {
   const usersSnapshot = await db.collection('users').get();
   const usersWithSessions = [];
 
   for (const userDoc of usersSnapshot.docs) {
     const userData = userDoc.data();
     const uid = userDoc.id;
+
+    // Si el solicitante es admin (no superadmin), ocultar superadmins
+    if (requestingUserRole === 'admin' && userData.role === 'superadmin') {
+      continue;
+    }
 
     // Obtener sesiones activas
     const sessionsSnapshot = await db.collection('users').doc(uid)
