@@ -115,9 +115,9 @@ router.post('/login', async (req, res) => {
     let isExpired = false;
     let subscriptionType = null;
 
-    if (role === 'admin') {
-      // Admin no expira
-      subscriptionType = 'admin';
+    if (role === 'admin' || role === 'superadmin') {
+      // Admin y superadmin no expiran
+      subscriptionType = role;
       daysRemaining = null;
     } else if (role === 'trial') {
       // Trial de 30 días
@@ -167,7 +167,7 @@ router.post('/login', async (req, res) => {
         daysRemaining: daysRemaining,
         isExpired: isExpired,
         isNewUser: isNewUser,
-        hasVipAccess: ['vip', 'vip_trial', 'admin'].includes(role)
+        hasVipAccess: ['vip', 'vip_trial', 'admin', 'superadmin'].includes(role)
       }
     });
   } catch (error) {
