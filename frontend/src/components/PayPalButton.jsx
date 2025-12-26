@@ -1,19 +1,18 @@
 import { useState, useEffect } from 'react'
-import { PayPalScriptProvider, PayPalButtons, PayPalCardFieldsProvider, PayPalNumberField, PayPalExpiryField, PayPalCVVField, usePayPalCardFields } from '@paypal/react-paypal-js'
+import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
 import { paypalApi } from '../services/api'
 import { toast } from 'react-toastify'
 import LoadingSpinner from './LoadingSpinner'
-import { FiCreditCard, FiLock } from 'react-icons/fi'
+import { FiLock } from 'react-icons/fi'
 
 /**
  * Componente de botón de pago con PayPal
- * Soporta: PayPal Wallet + Tarjeta de crédito/débito
+ * El SDK de PayPal incluye automáticamente las opciones de PayPal y Tarjeta
  */
 const PayPalButton = ({ planType, onSuccess, onError, onCancel, disabled }) => {
   const [clientId, setClientId] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const [paymentMethod, setPaymentMethod] = useState('paypal') // 'paypal' o 'card'
 
   // Cargar configuración de PayPal
   useEffect(() => {
@@ -118,79 +117,32 @@ const PayPalButton = ({ planType, onSuccess, onError, onCancel, disabled }) => {
     )
   }
 
-  const planPrices = {
-    suscriptor: '$39 USD',
-    vip: '$90 USD'
-  }
-
   return (
     <PayPalScriptProvider
       options={{
         clientId: clientId,
         currency: 'USD',
         intent: 'capture',
-        components: 'buttons,card-fields',
         locale: 'es_AR'
       }}
     >
       <div className="paypal-container">
-        {/* Selector de método de pago */}
-        <div className="payment-method-selector">
-          <button
-            type="button"
-            className={`method-btn ${paymentMethod === 'paypal' ? 'active' : ''}`}
-            onClick={() => setPaymentMethod('paypal')}
+        <div className="paypal-buttons-wrapper">
+          <PayPalButtons
+            style={{
+              layout: 'vertical',
+              color: 'blue',
+              shape: 'rect',
+              label: 'pay',
+              height: 50
+            }}
             disabled={disabled}
-          >
-            <img
-              src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-100px.png"
-              alt="PayPal"
-              className="paypal-logo"
-            />
-            PayPal
-          </button>
-          <button
-            type="button"
-            className={`method-btn ${paymentMethod === 'card' ? 'active' : ''}`}
-            onClick={() => setPaymentMethod('card')}
-            disabled={disabled}
-          >
-            <FiCreditCard size={20} />
-            Tarjeta
-          </button>
-        </div>
-
-        {/* Botón de PayPal */}
-        {paymentMethod === 'paypal' && (
-          <div className="paypal-buttons-wrapper">
-            <PayPalButtons
-              style={{
-                layout: 'vertical',
-                color: 'blue',
-                shape: 'rect',
-                label: 'pay',
-                height: 45
-              }}
-              disabled={disabled}
-              createOrder={createOrder}
-              onApprove={onApprove}
-              onError={handleError}
-              onCancel={handleCancel}
-            />
-          </div>
-        )}
-
-        {/* Campos de tarjeta */}
-        {paymentMethod === 'card' && (
-          <CardFieldsForm
-            planType={planType}
-            planPrice={planPrices[planType]}
             createOrder={createOrder}
             onApprove={onApprove}
             onError={handleError}
-            disabled={disabled}
+            onCancel={handleCancel}
           />
-        )}
+        </div>
 
         <div className="paypal-secure-badge">
           <FiLock size={14} />
@@ -198,109 +150,6 @@ const PayPalButton = ({ planType, onSuccess, onError, onCancel, disabled }) => {
         </div>
       </div>
     </PayPalScriptProvider>
-  )
-}
-
-/**
- * Formulario de campos de tarjeta
- */
-const CardFieldsForm = ({ planType, planPrice, createOrder, onApprove, onError, disabled }) => {
-  const [paying, setPaying] = useState(false)
-
-  return (
-    <PayPalCardFieldsProvider
-      createOrder={createOrder}
-      onApprove={onApprove}
-      onError={onError}
-      style={{
-        input: {
-          'font-size': '16px',
-          'font-family': 'inherit',
-          'font-weight': '400',
-          'color': '#333',
-          'padding': '12px'
-        },
-        '.invalid': {
-          'color': '#dc3545'
-        }
-      }}
-    >
-      <CardFields
-        planPrice={planPrice}
-        paying={paying}
-        setPaying={setPaying}
-        disabled={disabled}
-      />
-    </PayPalCardFieldsProvider>
-  )
-}
-
-/**
- * Componente interno para los campos de tarjeta
- */
-const CardFields = ({ planPrice, paying, setPaying, disabled }) => {
-  const { cardFieldsForm } = usePayPalCardFields()
-
-  const handleSubmit = async () => {
-    if (!cardFieldsForm) {
-      toast.error('Error: formulario no disponible')
-      return
-    }
-
-    const formState = await cardFieldsForm.getState()
-
-    if (!formState.isFormValid) {
-      toast.warning('Por favor, completa todos los campos de la tarjeta')
-      return
-    }
-
-    setPaying(true)
-    try {
-      await cardFieldsForm.submit()
-    } catch (err) {
-      console.error('Error enviando formulario:', err)
-    } finally {
-      setPaying(false)
-    }
-  }
-
-  return (
-    <div className="card-fields-container">
-      <div className="card-field">
-        <label>Número de tarjeta</label>
-        <PayPalNumberField className="card-input" />
-      </div>
-
-      <div className="card-field-row">
-        <div className="card-field">
-          <label>Vencimiento</label>
-          <PayPalExpiryField className="card-input" />
-        </div>
-        <div className="card-field">
-          <label>CVV</label>
-          <PayPalCVVField className="card-input" />
-        </div>
-      </div>
-
-      <button
-        type="button"
-        className="btn btn-primary btn-block card-submit-btn"
-        onClick={handleSubmit}
-        disabled={disabled || paying}
-      >
-        {paying ? (
-          <>
-            <LoadingSpinner size="small" />
-            Procesando...
-          </>
-        ) : (
-          <>
-            <FiLock size={18} />
-            Pagar {planPrice}
-          </>
-        )}
-      </button>
-    </div>
   )
 }
 
