@@ -671,11 +671,14 @@
   min-height: 100px;
 }
 
-/* Card Fields Container */
+/* Card Fields Container - Fondo claro para PayPal */
 .card-fields-container {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-4);
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-4);
 }
 
 .card-field {
@@ -685,7 +688,7 @@
 }
 
 .card-field label {
-  color: var(--color-text-light);
+  color: #333333;
   font-size: var(--font-size-sm);
   font-weight: 500;
 }
@@ -696,17 +699,17 @@
   gap: var(--spacing-3);
 }
 
-/* PayPal Card Input Fields */
+/* PayPal Card Input Fields - Fondo claro */
 .card-input {
-  background: var(--color-bg-tertiary);
-  border: 1px solid var(--color-border);
+  background: #ffffff;
+  border: 1px solid #d9d9d9;
   border-radius: var(--radius-md);
   min-height: 48px;
   transition: border-color var(--transition-fast);
 }
 
 .card-input:hover {
-  border-color: var(--color-border-dark);
+  border-color: #b3b3b3;
 }
 
 .card-input.braintree-hosted-fields-focused {
@@ -723,6 +726,13 @@
   margin-top: var(--spacing-2);
   padding: var(--spacing-4) !important;
   font-size: var(--font-size-base) !important;
+  background: var(--color-teal) !important;
+  color: #ffffff !important;
+  border: none !important;
+}
+
+.card-submit-btn:hover {
+  background: #357a7d !important;
 }
 
 /* PayPal Loading State */
