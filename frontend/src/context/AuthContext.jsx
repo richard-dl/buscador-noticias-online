@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useCallback } from 'react'
+import { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import {
@@ -28,6 +28,7 @@ export const AuthProvider = ({ children }) => {
   const [profile, setProfile] = useState(null)
   const [loading, setLoading] = useState(true)
   const navigate = useNavigate()
+  const logoutRef = useRef(null)
 
   // Mostrar alertas de suscripción según el estado
   const showSubscriptionAlerts = (data) => {
@@ -140,12 +141,14 @@ export const AuthProvider = ({ children }) => {
       const message = event.detail?.message || 'Tu sesión ha sido cerrada'
       toast.error(message, { autoClose: 6000 })
       // Hacer logout sin mostrar el mensaje de "sesión cerrada"
-      logout(false)
+      if (logoutRef.current) {
+        logoutRef.current(false)
+      }
     }
 
     window.addEventListener('session-invalid', handleSessionInvalid)
     return () => window.removeEventListener('session-invalid', handleSessionInvalid)
-  }, [logout])
+  }, [])
 
   // Crear sesión en el backend
   const createSessionInBackend = async () => {
@@ -275,6 +278,11 @@ export const AuthProvider = ({ children }) => {
       toast.error('Error al cerrar sesión')
     }
   }, [navigate])
+
+  // Mantener logoutRef actualizado
+  useEffect(() => {
+    logoutRef.current = logout
+  }, [logout])
 
   // Reset password
   const resetPassword = async (email) => {
