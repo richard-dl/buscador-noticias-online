@@ -870,23 +870,70 @@ const getAllUsersFromFirestore = async () => {
   try {
     const usersSnapshot = await db.collection('users').get();
     const users = [];
+    const now = new Date();
+
+    // Helper para convertir timestamp de Firestore a Date
+    const toDate = (timestamp) => {
+      if (!timestamp) return null;
+      if (timestamp instanceof Date) return timestamp;
+      if (typeof timestamp.toDate === 'function') return timestamp.toDate();
+      if (timestamp._seconds) return new Date(timestamp._seconds * 1000);
+      return null;
+    };
 
     for (const doc of usersSnapshot.docs) {
       const userData = doc.data();
-      const subscriptionStatus = await checkSubscriptionStatus(doc.id);
+      const role = userData.role || 'trial';
+
+      // Calcular días restantes según el rol
+      let daysRemaining = null;
+      let isExpired = false;
+      let expiresAt = null;
+
+      if (role === 'admin' || role === 'suscriptor') {
+        // Admin y suscriptor no expiran
+        daysRemaining = null;
+        isExpired = false;
+      } else if (role === 'trial') {
+        // Trial usa trialExpiresAt o expiresAt (legacy)
+        expiresAt = toDate(userData.trialExpiresAt) || toDate(userData.expiresAt);
+        if (expiresAt) {
+          daysRemaining = Math.max(0, Math.ceil((expiresAt - now) / (1000 * 60 * 60 * 24)));
+          isExpired = now > expiresAt;
+        }
+      } else if (role === 'vip_trial') {
+        // VIP Trial usa vipTrialExpiresAt
+        expiresAt = toDate(userData.vipTrialExpiresAt);
+        if (expiresAt) {
+          daysRemaining = Math.max(0, Math.ceil((expiresAt - now) / (1000 * 60 * 60 * 24)));
+          isExpired = now > expiresAt;
+        }
+      } else if (role === 'vip') {
+        // VIP anual usa vipExpiresAt
+        expiresAt = toDate(userData.vipExpiresAt);
+        if (expiresAt) {
+          daysRemaining = Math.max(0, Math.ceil((expiresAt - now) / (1000 * 60 * 60 * 24)));
+          isExpired = now > expiresAt;
+        }
+      }
+
+      // Verificar campo legacy status para compatibilidad
+      if (userData.status === 'expired') {
+        isExpired = true;
+      }
 
       users.push({
         uid: doc.id,
         email: userData.email,
         displayName: userData.displayName || 'Sin nombre',
-        role: userData.role || 'user',
+        role: role,
         status: userData.status,
         createdAt: userData.createdAt,
         lastLogin: userData.lastLogin,
         authProvider: userData.authProvider,
-        subscriptionExpiresAt: userData.subscriptionExpiresAt,
-        daysRemaining: subscriptionStatus.daysRemaining,
-        isExpired: subscriptionStatus.isExpired
+        expiresAt: expiresAt?.toISOString() || null,
+        daysRemaining: daysRemaining,
+        isExpired: isExpired
       });
     }
 
