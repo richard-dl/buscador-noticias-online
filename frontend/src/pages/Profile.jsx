@@ -856,12 +856,15 @@ const Profile = () => {
                                 handleRevokeAllUserSessions(user.uid, user.email, user.activeSessions)
                               }}
                               disabled={sessionActionLoading === `${user.uid}-all`}
-                              title="Cerrar todas"
+                              title="Cerrar todas las sesiones"
                             >
                               {sessionActionLoading === `${user.uid}-all` ? (
                                 <LoadingSpinner size="small" />
                               ) : (
-                                <FiLogOut size={12} />
+                                <>
+                                  <FiLogOut size={12} />
+                                  <span>Cerrar todas</span>
+                                </>
                               )}
                             </button>
                           )}
@@ -872,12 +875,15 @@ const Profile = () => {
                               handleToggleSingleSession(user.uid, user.singleSessionMode, user.email)
                             }}
                             disabled={sessionActionLoading === `${user.uid}-settings`}
-                            title={user.singleSessionMode ? 'Desactivar única' : 'Activar única'}
+                            title={user.singleSessionMode ? 'Desactivar modo sesión única' : 'Activar modo sesión única'}
                           >
                             {sessionActionLoading === `${user.uid}-settings` ? (
                               <LoadingSpinner size="small" />
                             ) : (
-                              <FiSettings size={12} />
+                              <>
+                                <FiSettings size={12} />
+                                <span>{user.singleSessionMode ? 'Única ON' : 'Única OFF'}</span>
+                              </>
                             )}
                           </button>
                           {expandedUsers[user.uid] ? <FiChevronUp size={16} /> : <FiChevronDown size={16} />}
