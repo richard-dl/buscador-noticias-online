@@ -62,12 +62,19 @@ const TVPlayer = ({ channel, onError, playerNumber }) => {
   const [isAudio, setIsAudio] = useState(false);
 
   useEffect(() => {
-    const streamType = getStreamType(channel?.url, channel?.isAudio);
+    // Verificar primero si hay canal y URL
+    if (!channel?.url) {
+      setIsAudio(false);
+      setIsLoading(false);
+      return;
+    }
+
+    const streamType = getStreamType(channel.url, channel.isAudio);
     const isAudioType = streamType === 'audio';
     setIsAudio(isAudioType);
 
     const mediaElement = isAudioType ? audioRef.current : videoRef.current;
-    if (!mediaElement || !channel?.url) return;
+    if (!mediaElement) return;
 
     setIsLoading(true);
     setError(null);
