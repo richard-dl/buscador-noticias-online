@@ -6,6 +6,7 @@ import Header from '../components/Header'
 import NewsCard from '../components/NewsCard'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { FiSearch, FiFileText, FiTrendingUp, FiClock, FiGrid, FiStar } from 'react-icons/fi'
+import MediaCarousel from '../components/MediaCarousel'
 
 const Dashboard = () => {
   const { profile, daysRemaining, isAuthenticated } = useAuth()
@@ -144,6 +145,9 @@ const Dashboard = () => {
           </div>
         </div>
       </section>
+
+      {/* Media Carousel */}
+      <MediaCarousel />
 
       {/* Quick Actions */}
       <section className="quick-actions container">
