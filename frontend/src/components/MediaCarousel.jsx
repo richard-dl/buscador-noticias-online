@@ -1,37 +1,26 @@
 import { useRef, useEffect, useState } from 'react'
 
 const mediaLogos = [
-  // Principales diarios nacionales
-  { name: 'Clarín', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Clar%C3%ADn_logo.svg/200px-Clar%C3%ADn_logo.svg.png', url: 'https://www.clarin.com' },
-  { name: 'La Nación', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/La-nacion-argentina-logo.svg/200px-La-nacion-argentina-logo.svg.png', url: 'https://www.lanacion.com.ar' },
-  { name: 'Infobae', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Infobae_logo.svg/200px-Infobae_logo.svg.png', url: 'https://www.infobae.com' },
-  { name: 'Perfil', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Logo-perfil.svg/200px-Logo-perfil.svg.png', url: 'https://www.perfil.com' },
-  { name: 'Ámbito', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/%C3%81mbito_Financiero_logo.svg/200px-%C3%81mbito_Financiero_logo.svg.png', url: 'https://www.ambito.com' },
-  { name: 'Crónica', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Diario_Cr%C3%B3nica_logo.svg/200px-Diario_Cr%C3%B3nica_logo.svg.png', url: 'https://www.cronica.com.ar' },
-  { name: 'Página 12', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Pagina12_logo.svg/200px-Pagina12_logo.svg.png', url: 'https://www.pagina12.com.ar' },
+  // Principales diarios nacionales (logos locales)
+  { name: 'Clarín', logo: '/logos/clarin.jpg', url: 'https://www.clarin.com' },
+  { name: 'La Nación', logo: '/logos/lanacion.png', url: 'https://www.lanacion.com.ar' },
+  { name: 'Infobae', logo: '/logos/infobae.png', url: 'https://www.infobae.com' },
+  { name: 'Perfil', logo: '/logos/perfil.png', url: 'https://www.perfil.com' },
+  { name: 'Ámbito', logo: '/logos/ambito.png', url: 'https://www.ambito.com' },
+  { name: 'Crónica', logo: '/logos/cronica.png', url: 'https://www.cronica.com.ar' },
+  { name: 'Página 12', logo: '/logos/pagina12.jpg', url: 'https://www.pagina12.com.ar' },
   // Canales de TV
-  { name: 'TN', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/TN_Todo_Noticias_Logo_2024.svg/200px-TN_Todo_Noticias_Logo_2024.svg.png', url: 'https://tn.com.ar' },
-  { name: 'C5N', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Logo_C5N.svg/200px-Logo_C5N.svg.png', url: 'https://www.c5n.com' },
-  { name: 'LN+', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/LN%2B_logo.svg/200px-LN%2B_logo.svg.png', url: 'https://www.lanacion.com.ar/ln-mas' },
-  { name: 'A24', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/A24_%28canal_de_TV%29_Logo.svg/200px-A24_%28canal_de_TV%29_Logo.svg.png', url: 'https://www.a24.com' },
-  { name: 'Crónica TV', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Cronica_TV_logo.svg/200px-Cronica_TV_logo.svg.png', url: 'https://www.cronicatv.com.ar' },
+  { name: 'TN', logo: '/logos/tn.jpg', url: 'https://tn.com.ar' },
+  { name: 'C5N', logo: '/logos/c5n.jpg', url: 'https://www.c5n.com' },
+  { name: 'LN+', logo: '/logos/lnmas.jpg', url: 'https://www.lanacion.com.ar/ln-mas' },
   // Diarios provinciales
-  { name: 'La Voz', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/La_Voz_del_Interior_logo.svg/200px-La_Voz_del_Interior_logo.svg.png', url: 'https://www.lavoz.com.ar' },
-  { name: 'El Día', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Logo_Diario_El_D%C3%ADa.svg/200px-Logo_Diario_El_D%C3%ADa.svg.png', url: 'https://www.eldia.com' },
-  { name: 'Los Andes', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Diario_Los_Andes_logo.svg/200px-Diario_Los_Andes_logo.svg.png', url: 'https://www.losandes.com.ar' },
-  { name: 'La Capital', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/La_Capital_logo.svg/200px-La_Capital_logo.svg.png', url: 'https://www.lacapital.com.ar' },
+  { name: 'La Voz', logo: '/logos/lavoz.jpg', url: 'https://www.lavoz.com.ar' },
+  { name: 'El Día', logo: '/logos/eldia.png', url: 'https://www.eldia.com' },
+  // Portales digitales
+  { name: 'MDZ Online', logo: '/logos/mdz.png', url: 'https://www.mdzol.com' },
   // Deportes
-  { name: 'TyC Sports', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/TyC_Sports_logo_%282018%29.svg/200px-TyC_Sports_logo_%282018%29.svg.png', url: 'https://www.tycsports.com' },
-  { name: 'Olé', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Diario_Ole_logo.svg/200px-Diario_Ole_logo.svg.png', url: 'https://www.ole.com.ar' },
-  { name: 'ESPN', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/ESPN_wordmark.svg/200px-ESPN_wordmark.svg.png', url: 'https://www.espn.com.ar' },
-  // Portales digitales y económicos
-  { name: 'El Cronista', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/El_Cronista_logo.svg/200px-El_Cronista_logo.svg.png', url: 'https://www.cronista.com' },
-  { name: 'El Destape', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/El_Destape_logo.svg/200px-El_Destape_logo.svg.png', url: 'https://www.eldestapeweb.com' },
-  { name: 'Minuto Uno', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Minutouno_logo.svg/200px-Minutouno_logo.svg.png', url: 'https://www.minutouno.com' },
-  { name: 'MDZ Online', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/MDZ_Online_logo.svg/200px-MDZ_Online_logo.svg.png', url: 'https://www.mdzol.com' },
-  // Agencias
-  { name: 'Télam', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Tel%C3%A1m_2018.svg/200px-Tel%C3%A1m_2018.svg.png', url: 'https://www.telam.com.ar' },
-  { name: 'Popular', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Diario_Popular_logo.svg/200px-Diario_Popular_logo.svg.png', url: 'https://www.diariopopular.com.ar' },
+  { name: 'Olé', logo: '/logos/ole.png', url: 'https://www.ole.com.ar' },
+  { name: 'ESPN', logo: '/logos/espn.png', url: 'https://www.espn.com.ar' },
 ]
 
 const MediaCarousel = () => {
