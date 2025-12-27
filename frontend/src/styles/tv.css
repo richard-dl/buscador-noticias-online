@@ -794,6 +794,7 @@
 
 .tv-mobile-categories {
   display: flex;
+  align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1rem;
   overflow-x: auto;
@@ -808,6 +809,10 @@
 .tv-category-chip {
   flex-shrink: 0;
   padding: 0.6rem 1rem;
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid var(--color-border, rgba(255, 255, 255, 0.15));
   border-radius: 20px;
@@ -815,7 +820,8 @@
   font-size: 0.85rem;
   white-space: nowrap;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  box-sizing: border-box;
 }
 
 .tv-category-chip.active {
@@ -965,6 +971,7 @@
   .tv-category-chip,
   .tv-category-chip.active {
     padding: 0.55rem 0.9rem;
+    min-height: 34px;
     font-size: 0.8rem;
   }
 
