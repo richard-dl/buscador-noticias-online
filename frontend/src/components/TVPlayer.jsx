@@ -38,7 +38,7 @@ const getStreamType = (url) => {
   return 'direct';
 };
 
-const TVPlayer = ({ channel, onError }) => {
+const TVPlayer = ({ channel, onError, playerNumber }) => {
   const videoRef = useRef(null);
   const playerRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -308,6 +308,9 @@ const TVPlayer = ({ channel, onError }) => {
     <div className="tv-player-container">
       {/* Header del reproductor */}
       <div className="tv-player-header">
+        {playerNumber && (
+          <span className="tv-player-number-badge">{playerNumber}</span>
+        )}
         {channel?.logo && (
           <img
             src={channel.logo}
