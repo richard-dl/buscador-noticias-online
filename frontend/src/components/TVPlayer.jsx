@@ -8,8 +8,17 @@ const API_URL = import.meta.env.VITE_API_URL || 'https://buscador-noticias-onlin
 // Detectar si es un canal público que no necesita proxy
 const isPublicChannel = (url) => {
   if (!url) return false;
-  // Los canales públicos son HTTPS y no necesitan proxy
-  return url.startsWith('https://') && url.includes('.m3u8');
+  // Los canales públicos son HTTPS y no necesitan proxy (HLS o audio directo)
+  return url.startsWith('https://');
+};
+
+// Detectar si es un stream de audio
+const isAudioStream = (url, isAudioFlag) => {
+  if (isAudioFlag) return true;
+  if (!url) return false;
+  // Detectar por extensión de archivo
+  return url.includes('.mp3') || url.includes('.aac') || url.includes('.ogg') ||
+         url.includes('livestream-redirect') || url.includes('streamtheworld');
 };
 
 // Función para obtener la URL del proxy (solo para canales privados)
@@ -24,9 +33,13 @@ const getProxyUrl = (originalUrl) => {
 };
 
 // Detectar tipo de stream
-const getStreamType = (url) => {
-  // Los canales públicos siempre son HLS
-  if (isPublicChannel(url)) {
+const getStreamType = (url, isAudioFlag) => {
+  // Primero verificar si es audio
+  if (isAudioStream(url, isAudioFlag)) {
+    return 'audio';
+  }
+  // Los canales públicos HLS
+  if (isPublicChannel(url) && url.includes('.m3u8')) {
     return 'hls';
   }
   if (url.includes('.ts') || url.includes('/live/')) {
@@ -40,15 +53,21 @@ const getStreamType = (url) => {
 
 const TVPlayer = ({ channel, onError, playerNumber }) => {
   const videoRef = useRef(null);
+  const audioRef = useRef(null);
   const playerRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
+  const [isAudio, setIsAudio] = useState(false);
 
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video || !channel?.url) return;
+    const streamType = getStreamType(channel?.url, channel?.isAudio);
+    const isAudioType = streamType === 'audio';
+    setIsAudio(isAudioType);
+
+    const mediaElement = isAudioType ? audioRef.current : videoRef.current;
+    if (!mediaElement || !channel?.url) return;
 
     setIsLoading(true);
     setError(null);
@@ -61,17 +80,48 @@ const TVPlayer = ({ channel, onError, playerNumber }) => {
       playerRef.current = null;
     }
 
-    const playVideo = async () => {
+    // Si es audio, detener video y viceversa
+    if (isAudioType && videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.src = '';
+    } else if (!isAudioType && audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.src = '';
+    }
+
+    const playMedia = async () => {
       try {
-        const streamType = getStreamType(channel.url);
         const streamUrl = getProxyUrl(channel.url);
 
         console.log('TVPlayer: Stream type:', streamType);
         console.log('TVPlayer: Using proxy URL:', streamUrl);
 
-        if (streamType === 'mpegts' && mpegts.isSupported()) {
+        if (streamType === 'audio') {
+          // Stream de audio directo (MP3, AAC, etc.)
+          console.log('TVPlayer: Using audio element for audio stream');
+          const audio = audioRef.current;
+          audio.src = streamUrl;
+
+          audio.addEventListener('loadeddata', () => {
+            setIsLoading(false);
+            audio.play().catch((e) => {
+              console.log('Audio: Autoplay blocked:', e.message);
+              setIsPlaying(false);
+            });
+          }, { once: true });
+
+          audio.addEventListener('error', (e) => {
+            console.error('Audio error:', e);
+            setError('Error al cargar la radio. Intenta con otra estación.');
+            setIsLoading(false);
+          }, { once: true });
+
+          audio.load();
+
+        } else if (streamType === 'mpegts' && mpegts.isSupported()) {
           // MPEG-TS stream con mpegts.js
           console.log('TVPlayer: Using mpegts.js for MPEG-TS stream');
+          const video = videoRef.current;
 
           const player = mpegts.createPlayer({
             type: 'mpegts',
@@ -154,6 +204,7 @@ const TVPlayer = ({ channel, onError, playerNumber }) => {
         } else if (streamType === 'hls' && Hls.isSupported()) {
           // HLS stream con hls.js
           console.log('TVPlayer: Using hls.js for HLS stream');
+          const video = videoRef.current;
 
           const hls = new Hls({
             enableWorker: true,
@@ -213,22 +264,25 @@ const TVPlayer = ({ channel, onError, playerNumber }) => {
 
           hls.attachMedia(video);
 
-        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-          // Safari nativo HLS
-          console.log('TVPlayer: Using native HLS support');
-          video.src = streamUrl;
-          video.addEventListener('loadedmetadata', () => {
-            setIsLoading(false);
-            video.play().catch(() => setIsPlaying(false));
-          });
         } else {
-          // Fallback para otros formatos
-          console.log('TVPlayer: Using direct video source');
-          video.src = streamUrl;
-          video.addEventListener('loadeddata', () => {
-            setIsLoading(false);
-            video.play().catch(() => setIsPlaying(false));
-          });
+          const video = videoRef.current;
+          if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            // Safari nativo HLS
+            console.log('TVPlayer: Using native HLS support');
+            video.src = streamUrl;
+            video.addEventListener('loadedmetadata', () => {
+              setIsLoading(false);
+              video.play().catch(() => setIsPlaying(false));
+            });
+          } else {
+            // Fallback para otros formatos
+            console.log('TVPlayer: Using direct video source');
+            video.src = streamUrl;
+            video.addEventListener('loadeddata', () => {
+              setIsLoading(false);
+              video.play().catch(() => setIsPlaying(false));
+            });
+          }
         }
       } catch (err) {
         setError('Error al cargar el stream');
@@ -237,31 +291,32 @@ const TVPlayer = ({ channel, onError, playerNumber }) => {
       }
     };
 
-    playVideo();
+    playMedia();
 
-    // Eventos del video
+    // Eventos del media (video o audio)
     const handlePlay = () => setIsPlaying(true);
     const handlePause = () => setIsPlaying(false);
     const handleError = (e) => {
-      console.error('Video error:', e);
-      setError('Error de reproducción. Intenta con otra opción del canal.');
+      console.error('Media error:', e);
+      setError(isAudioType ? 'Error de radio. Intenta con otra estación.' : 'Error de reproducción. Intenta con otra opción del canal.');
       setIsLoading(false);
     };
     const handleWaiting = () => setIsLoading(true);
     const handleCanPlay = () => setIsLoading(false);
 
-    video.addEventListener('play', handlePlay);
-    video.addEventListener('pause', handlePause);
-    video.addEventListener('error', handleError);
-    video.addEventListener('waiting', handleWaiting);
-    video.addEventListener('canplay', handleCanPlay);
+    // Agregar eventos al elemento correcto (video o audio)
+    mediaElement.addEventListener('play', handlePlay);
+    mediaElement.addEventListener('pause', handlePause);
+    mediaElement.addEventListener('error', handleError);
+    mediaElement.addEventListener('waiting', handleWaiting);
+    mediaElement.addEventListener('canplay', handleCanPlay);
 
     return () => {
-      video.removeEventListener('play', handlePlay);
-      video.removeEventListener('pause', handlePause);
-      video.removeEventListener('error', handleError);
-      video.removeEventListener('waiting', handleWaiting);
-      video.removeEventListener('canplay', handleCanPlay);
+      mediaElement.removeEventListener('play', handlePlay);
+      mediaElement.removeEventListener('pause', handlePause);
+      mediaElement.removeEventListener('error', handleError);
+      mediaElement.removeEventListener('waiting', handleWaiting);
+      mediaElement.removeEventListener('canplay', handleCanPlay);
 
       if (playerRef.current) {
         if (playerRef.current.destroy) {
@@ -273,19 +328,20 @@ const TVPlayer = ({ channel, onError, playerNumber }) => {
   }, [channel, onError]);
 
   const handlePlayClick = () => {
-    const video = videoRef.current;
-    if (video) {
-      if (video.paused) {
-        video.play().catch(console.error);
+    const media = isAudio ? audioRef.current : videoRef.current;
+    if (media) {
+      if (media.paused) {
+        media.play().catch(console.error);
       } else {
-        video.pause();
+        media.pause();
       }
     }
   };
 
   const handleFullscreen = () => {
     const video = videoRef.current;
-    if (video) {
+    // Solo aplica para video, no para audio
+    if (video && !isAudio) {
       if (video.requestFullscreen) {
         video.requestFullscreen();
       } else if (video.webkitRequestFullscreen) {
@@ -297,10 +353,10 @@ const TVPlayer = ({ channel, onError, playerNumber }) => {
   };
 
   const handleMuteClick = () => {
-    const video = videoRef.current;
-    if (video) {
-      video.muted = !video.muted;
-      setIsMuted(video.muted);
+    const media = isAudio ? audioRef.current : videoRef.current;
+    if (media) {
+      media.muted = !media.muted;
+      setIsMuted(media.muted);
     }
   };
 
@@ -328,21 +384,60 @@ const TVPlayer = ({ channel, onError, playerNumber }) => {
         {isPlaying && <span className="tv-live-badge">EN VIVO</span>}
       </div>
 
-      {/* Video */}
-      <div className="tv-video-wrapper">
+      {/* Video o Audio */}
+      <div className={`tv-video-wrapper ${isAudio ? 'tv-audio-mode' : ''}`}>
+        {/* Elemento de video (oculto cuando es audio) */}
         <video
           ref={videoRef}
           className="tv-video"
           playsInline
           controls
           poster=""
+          style={{ display: isAudio ? 'none' : 'block' }}
         />
+
+        {/* Elemento de audio (oculto cuando es video) */}
+        <audio
+          ref={audioRef}
+          style={{ display: 'none' }}
+        />
+
+        {/* Visualización de radio cuando es audio */}
+        {isAudio && channel && !error && (
+          <div className="tv-radio-visual">
+            <div className="tv-radio-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="80" height="80">
+                <path d="M3.24 6.15C2.51 6.43 2 7.17 2 8v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2H8.3l8.26-3.34-.37-.92L3.24 6.15zM7 20c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm13-8h-2v-2h-2v2H4V10h16v2z"/>
+              </svg>
+            </div>
+            {channel.logo && (
+              <img
+                src={channel.logo}
+                alt={channel.name}
+                className="tv-radio-logo"
+                onError={(e) => e.target.style.display = 'none'}
+              />
+            )}
+            <div className="tv-radio-info">
+              <span className="tv-radio-name">{channel.name}</span>
+              {isPlaying && (
+                <div className="tv-radio-waves">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Overlay de carga */}
         {isLoading && !error && (
           <div className="tv-loading-overlay">
             <div className="tv-spinner"></div>
-            <p>Cargando stream...</p>
+            <p>{isAudio ? 'Conectando radio...' : 'Cargando stream...'}</p>
           </div>
         )}
 
@@ -395,11 +490,13 @@ const TVPlayer = ({ channel, onError, playerNumber }) => {
               </svg>
             )}
           </button>
-          <button onClick={handleFullscreen} className="tv-control-btn" title="Pantalla completa">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
-              <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
-            </svg>
-          </button>
+          {!isAudio && (
+            <button onClick={handleFullscreen} className="tv-control-btn" title="Pantalla completa">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+                <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+              </svg>
+            </button>
+          )}
         </div>
       )}
     </div>
