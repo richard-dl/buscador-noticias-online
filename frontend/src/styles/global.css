@@ -1014,10 +1014,10 @@ input, select, textarea {
 .quick-actions {
   margin-top: calc(-1 * var(--spacing-8));
   margin-bottom: var(--spacing-8);
-  max-width: 1200px;
+  max-width: 1280px;
   margin-left: auto;
   margin-right: auto;
-  padding: 0 2rem;
+  padding: 0 var(--spacing-4);
   box-sizing: border-box;
 }
 
