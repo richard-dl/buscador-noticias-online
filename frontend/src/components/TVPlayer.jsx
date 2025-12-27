@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import Hls from 'hls.js';
+import mpegts from 'mpegts.js';
 
 // URL del backend API para el proxy de streaming
 const API_URL = import.meta.env.VITE_API_URL || 'https://buscador-noticias-online.vercel.app/api';
@@ -11,9 +12,20 @@ const getProxyUrl = (originalUrl) => {
   return `${API_URL}/tv/stream?url=${encodeURIComponent(originalUrl)}`;
 };
 
+// Detectar tipo de stream
+const getStreamType = (url) => {
+  if (url.includes('.ts') || url.includes('/live/')) {
+    return 'mpegts';
+  }
+  if (url.includes('.m3u8') || url.includes('/play/')) {
+    return 'hls';
+  }
+  return 'direct';
+};
+
 const TVPlayer = ({ channel, onError }) => {
   const videoRef = useRef(null);
-  const hlsRef = useRef(null);
+  const playerRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -25,24 +37,78 @@ const TVPlayer = ({ channel, onError }) => {
     setIsLoading(true);
     setError(null);
 
-    // Limpiar instancia HLS anterior
-    if (hlsRef.current) {
-      hlsRef.current.destroy();
-      hlsRef.current = null;
+    // Limpiar instancia anterior
+    if (playerRef.current) {
+      if (playerRef.current.destroy) {
+        playerRef.current.destroy();
+      }
+      playerRef.current = null;
     }
 
     const playVideo = async () => {
       try {
-        // Verificar si es un stream HLS o directo
-        const isHlsStream = channel.url.includes('.m3u8') ||
-                           channel.url.includes('/play/') ||
-                           !channel.url.match(/\.(mp4|webm|ogg)$/i);
-
-        // Usar proxy para evitar Mixed Content (HTTPS -> HTTP)
+        const streamType = getStreamType(channel.url);
         const streamUrl = getProxyUrl(channel.url);
+
+        console.log('TVPlayer: Stream type:', streamType);
         console.log('TVPlayer: Using proxy URL:', streamUrl);
 
-        if (isHlsStream && Hls.isSupported()) {
+        if (streamType === 'mpegts' && mpegts.isSupported()) {
+          // MPEG-TS stream con mpegts.js
+          console.log('TVPlayer: Using mpegts.js for MPEG-TS stream');
+
+          const player = mpegts.createPlayer({
+            type: 'mpegts',
+            url: streamUrl,
+            isLive: true,
+          }, {
+            enableWorker: true,
+            enableStashBuffer: false,
+            stashInitialSize: 128,
+            liveBufferLatencyChasing: true,
+            liveBufferLatencyMaxLatency: 1.5,
+            liveBufferLatencyMinRemain: 0.3,
+          });
+
+          playerRef.current = player;
+
+          player.on(mpegts.Events.ERROR, (errorType, errorDetail, errorInfo) => {
+            console.error('MPEGTS Error:', errorType, errorDetail, errorInfo);
+            if (errorType === mpegts.ErrorTypes.NETWORK_ERROR) {
+              setError('Error de red. Verifica tu conexión.');
+            } else if (errorType === mpegts.ErrorTypes.MEDIA_ERROR) {
+              setError('Error de reproducción. Intenta con otra opción.');
+            } else {
+              setError('Error al cargar el stream.');
+            }
+            setIsLoading(false);
+            if (onError) onError({ type: errorType, detail: errorDetail });
+          });
+
+          player.on(mpegts.Events.LOADING_COMPLETE, () => {
+            console.log('MPEGTS: Loading complete');
+          });
+
+          player.on(mpegts.Events.MEDIA_INFO, (mediaInfo) => {
+            console.log('MPEGTS: Media info received', mediaInfo);
+            setIsLoading(false);
+          });
+
+          player.attachMediaElement(video);
+          player.load();
+
+          // Intentar reproducir después de un breve delay
+          setTimeout(() => {
+            video.play().catch((e) => {
+              console.log('MPEGTS: Autoplay blocked:', e.message);
+              setIsPlaying(false);
+            });
+          }, 500);
+
+        } else if (streamType === 'hls' && Hls.isSupported()) {
+          // HLS stream con hls.js
+          console.log('TVPlayer: Using hls.js for HLS stream');
+
           const hls = new Hls({
             enableWorker: true,
             lowLatencyMode: false,
@@ -61,10 +127,10 @@ const TVPlayer = ({ channel, onError }) => {
             }
           });
 
-          hlsRef.current = hls;
+          playerRef.current = hls;
 
           hls.on(Hls.Events.MEDIA_ATTACHED, () => {
-            console.log('HLS: Media attached, loading source via proxy');
+            console.log('HLS: Media attached, loading source');
             hls.loadSource(streamUrl);
           });
 
@@ -75,14 +141,6 @@ const TVPlayer = ({ channel, onError }) => {
               console.log('HLS: Autoplay blocked:', e.message);
               setIsPlaying(false);
             });
-          });
-
-          hls.on(Hls.Events.MANIFEST_LOADING, () => {
-            console.log('HLS: Loading manifest...');
-          });
-
-          hls.on(Hls.Events.MANIFEST_LOADED, (event, data) => {
-            console.log('HLS: Manifest loaded from:', data.url);
           });
 
           hls.on(Hls.Events.ERROR, (event, data) => {
@@ -108,8 +166,10 @@ const TVPlayer = ({ channel, onError }) => {
           });
 
           hls.attachMedia(video);
+
         } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
           // Safari nativo HLS
+          console.log('TVPlayer: Using native HLS support');
           video.src = streamUrl;
           video.addEventListener('loadedmetadata', () => {
             setIsLoading(false);
@@ -117,6 +177,7 @@ const TVPlayer = ({ channel, onError }) => {
           });
         } else {
           // Fallback para otros formatos
+          console.log('TVPlayer: Using direct video source');
           video.src = streamUrl;
           video.addEventListener('loadeddata', () => {
             setIsLoading(false);
@@ -135,7 +196,8 @@ const TVPlayer = ({ channel, onError }) => {
     // Eventos del video
     const handlePlay = () => setIsPlaying(true);
     const handlePause = () => setIsPlaying(false);
-    const handleError = () => {
+    const handleError = (e) => {
+      console.error('Video error:', e);
       setError('Error de reproducción. Intenta con otra opción del canal.');
       setIsLoading(false);
     };
@@ -155,9 +217,11 @@ const TVPlayer = ({ channel, onError }) => {
       video.removeEventListener('waiting', handleWaiting);
       video.removeEventListener('canplay', handleCanPlay);
 
-      if (hlsRef.current) {
-        hlsRef.current.destroy();
-        hlsRef.current = null;
+      if (playerRef.current) {
+        if (playerRef.current.destroy) {
+          playerRef.current.destroy();
+        }
+        playerRef.current = null;
       }
     };
   }, [channel, onError]);
