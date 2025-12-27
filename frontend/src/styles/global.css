@@ -4082,6 +4082,7 @@ input, select, textarea {
 
 .media-carousel-section {
   padding: var(--spacing-8) 0;
+  margin-bottom: var(--spacing-8);
   background: linear-gradient(180deg, var(--color-bg-secondary) 0%, var(--color-bg) 100%);
   overflow: hidden;
 }
