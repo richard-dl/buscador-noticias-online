@@ -164,8 +164,8 @@
 }
 
 .tv-category-btn.active {
-  background: var(--color-accent, #40979A);
-  color: #fff;
+  background: var(--color-accent, #C1FF4D);
+  color: #0A1E3B;
 }
 
 /* Badge de conteo - CORREGIDO: texto oscuro */
@@ -178,8 +178,8 @@
 }
 
 .tv-category-btn.active .tv-category-count {
-  background: rgba(0, 0, 0, 0.25);
-  color: #fff;
+  background: rgba(0, 0, 0, 0.2);
+  color: #0A1E3B;
 }
 
 /* Lista de canales - CORREGIDO */
@@ -595,8 +595,8 @@
   min-width: 20px;
   height: 20px;
   padding: 0 0.35rem;
-  background: var(--color-accent, #40979A);
-  color: #fff;
+  background: var(--color-accent, #C1FF4D);
+  color: #0A1E3B;
   font-size: 0.7rem;
   font-weight: 700;
   border-radius: 4px;
