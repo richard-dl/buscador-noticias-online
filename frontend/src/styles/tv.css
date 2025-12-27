@@ -597,7 +597,7 @@
   height: 20px;
   padding: 0 0.35rem;
   background: var(--color-accent, #C1FF4D);
-  color: #0A1E3B;
+  color: #0A1E3B !important;
   font-size: 0.7rem;
   font-weight: 700;
   border-radius: 4px;
@@ -625,14 +625,14 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.85rem 1.25rem;
-  background: var(--color-accent, #40979A);
-  color: #fff;
+  background: var(--color-accent, #C1FF4D);
+  color: #0A1E3B;
   border: none;
   border-radius: 50px;
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 4px 20px rgba(64, 151, 154, 0.4);
+  box-shadow: 0 4px 20px rgba(193, 255, 77, 0.4);
   z-index: 100;
   transition: all 0.2s;
 }
@@ -728,6 +728,7 @@
 
 .tv-mobile-panel .tv-search-box {
   padding: 0 1rem;
+  margin-top: 1rem;
 }
 
 .tv-mobile-overlay {
