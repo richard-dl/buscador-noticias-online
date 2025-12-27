@@ -12,9 +12,11 @@ const isPublicChannel = (url) => {
   return url.startsWith('https://');
 };
 
-// Detectar si es un stream de audio
-const isAudioStream = (url, isAudioFlag) => {
+// Detectar si es un stream de audio (radio)
+const isAudioStream = (url, isAudioFlag, category) => {
   if (isAudioFlag) return true;
+  // Detectar por categoría de radio
+  if (category && category.toLowerCase().includes('radio')) return true;
   if (!url) return false;
   // Detectar por extensión de archivo
   return url.includes('.mp3') || url.includes('.aac') || url.includes('.ogg') ||
@@ -33,9 +35,11 @@ const getProxyUrl = (originalUrl) => {
 };
 
 // Detectar tipo de stream
-const getStreamType = (url, isAudioFlag) => {
-  // Primero verificar si es audio
-  if (isAudioStream(url, isAudioFlag)) {
+const getStreamType = (url, isAudioFlag, category) => {
+  // Primero verificar si es audio (solo para streams de audio directo, no HLS)
+  const isDirectAudio = url && (url.includes('.mp3') || url.includes('.aac') || url.includes('.ogg') ||
+                                url.includes('livestream-redirect') || url.includes('streamtheworld'));
+  if (isAudioFlag || isDirectAudio) {
     return 'audio';
   }
   // Los canales públicos HLS
@@ -60,6 +64,7 @@ const TVPlayer = ({ channel, onError, playerNumber }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [isAudio, setIsAudio] = useState(false);
+  const [showRadioVisual, setShowRadioVisual] = useState(false);
 
   useEffect(() => {
     // Verificar primero si hay canal y URL
@@ -69,9 +74,14 @@ const TVPlayer = ({ channel, onError, playerNumber }) => {
       return;
     }
 
-    const streamType = getStreamType(channel.url, channel.isAudio);
+    const streamType = getStreamType(channel.url, channel.isAudio, channel.category);
+    // isAudioType determina qué reproductor usar (audio element vs video/HLS)
     const isAudioType = streamType === 'audio';
     setIsAudio(isAudioType);
+
+    // Mostrar visualización de radio si es categoría de radio (independiente del tipo de stream)
+    const isRadioCategory = channel.category && channel.category.toLowerCase().includes('radio');
+    setShowRadioVisual(isRadioCategory || isAudioType);
 
     const mediaElement = isAudioType ? audioRef.current : videoRef.current;
     if (!mediaElement) return;
@@ -392,15 +402,15 @@ const TVPlayer = ({ channel, onError, playerNumber }) => {
       </div>
 
       {/* Video o Audio */}
-      <div className={`tv-video-wrapper ${isAudio ? 'tv-audio-mode' : ''}`}>
-        {/* Elemento de video (oculto cuando es audio) */}
+      <div className={`tv-video-wrapper ${showRadioVisual ? 'tv-audio-mode' : ''}`}>
+        {/* Elemento de video (oculto cuando se muestra radio visual) */}
         <video
           ref={videoRef}
           className="tv-video"
           playsInline
           controls
           poster=""
-          style={{ display: isAudio ? 'none' : 'block' }}
+          style={{ display: showRadioVisual ? 'none' : 'block' }}
         />
 
         {/* Elemento de audio (oculto cuando es video) */}
@@ -409,8 +419,8 @@ const TVPlayer = ({ channel, onError, playerNumber }) => {
           style={{ display: 'none' }}
         />
 
-        {/* Visualización de radio cuando es audio */}
-        {isAudio && channel && !error && (
+        {/* Visualización de radio cuando es categoría de radio o audio */}
+        {showRadioVisual && channel && !error && (
           <div className="tv-radio-visual">
             <div className="tv-radio-icon">
               <svg viewBox="0 0 24 24" fill="currentColor" width="80" height="80">
@@ -444,7 +454,7 @@ const TVPlayer = ({ channel, onError, playerNumber }) => {
         {isLoading && !error && (
           <div className="tv-loading-overlay">
             <div className="tv-spinner"></div>
-            <p>{isAudio ? 'Conectando radio...' : 'Cargando stream...'}</p>
+            <p>{showRadioVisual ? 'Conectando radio...' : 'Cargando stream...'}</p>
           </div>
         )}
 
@@ -497,7 +507,7 @@ const TVPlayer = ({ channel, onError, playerNumber }) => {
               </svg>
             )}
           </button>
-          {!isAudio && (
+          {!showRadioVisual && (
             <button onClick={handleFullscreen} className="tv-control-btn" title="Pantalla completa">
               <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
                 <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
