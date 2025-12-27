@@ -40,7 +40,11 @@ const TVPlayer = ({ channel, onError }) => {
             startLevel: -1, // Auto quality
             fragLoadingTimeOut: 20000,
             manifestLoadingTimeOut: 20000,
-            levelLoadingTimeOut: 20000
+            levelLoadingTimeOut: 20000,
+            // Importante: permitir CORS y redirects
+            xhrSetup: function(xhr, url) {
+              xhr.withCredentials = false;
+            }
           });
 
           hlsRef.current = hls;
