@@ -55,8 +55,6 @@ export const channels = {
     { id: 'radio-mitre', name: 'Radio Mitre AM 790', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/AM790_56.mp3', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Radio_Mitre_logo_2018.svg/1200px-Radio_Mitre_logo_2018.svg.png', isAudio: true },
     { id: 'radio-la-red', name: 'La Red AM 910', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/LA_RED_AM910AAC.aac', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/La_Red_Argentina_logo.svg/1200px-La_Red_Argentina_logo.svg.png', isAudio: true },
     { id: 'radio-rivadavia', name: 'Radio Rivadavia AM 630', url: 'https://27393.live.streamtheworld.com/RIVADAVIAAAC.aac', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Radio_Rivadavia_logo.svg/1200px-Radio_Rivadavia_logo.svg.png', isAudio: true },
-    { id: 'radio-10', name: 'Radio 10 AM 710', url: 'https://radio10.stweb.tv/radio10/live/chunks.m3u8', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Radio_10_Argentina_logo.svg/1200px-Radio_10_Argentina_logo.svg.png' },
-    { id: 'radio-mega', name: 'Mega 98.3 FM', url: 'https://mega.stweb.tv/mega983/live/chunks.m3u8', logo: 'https://cdn.mitvstatic.com/channels/ar_mega-98-3_m.png' },
   ],
 
   // ==================== NOTICIAS ====================
