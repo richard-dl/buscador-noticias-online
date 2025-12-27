@@ -12,6 +12,7 @@ const vipRoutes = require('./routes/vipRoutes');
 const subscriptionRoutes = require('./routes/subscriptionRoutes');
 const paypalRoutes = require('./routes/paypalRoutes');
 const sessionRoutes = require('./routes/sessionRoutes');
+const tvRoutes = require('./routes/tvRoutes');
 
 // Inicializar Firebase Admin
 require('./services/firebaseService');
@@ -57,6 +58,7 @@ app.use('/api/vip', vipRoutes);
 app.use('/api/subscription', subscriptionRoutes);
 app.use('/api/paypal', paypalRoutes);
 app.use('/api/sessions', sessionRoutes);
+app.use('/api/tv', tvRoutes);
 
 // Ruta de salud
 app.get('/api/health', (req, res) => {

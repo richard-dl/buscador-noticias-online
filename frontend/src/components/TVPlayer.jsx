@@ -1,6 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import Hls from 'hls.js';
 
+// URL del backend API para el proxy de streaming
+const API_URL = import.meta.env.VITE_API_URL || 'https://api.bfrfrench.com';
+
+// Función para obtener la URL del proxy
+const getProxyUrl = (originalUrl) => {
+  if (!originalUrl) return null;
+  return `${API_URL}/api/tv/stream?url=${encodeURIComponent(originalUrl)}`;
+};
+
 const TVPlayer = ({ channel, onError }) => {
   const videoRef = useRef(null);
   const hlsRef = useRef(null);
@@ -28,6 +37,10 @@ const TVPlayer = ({ channel, onError }) => {
                            channel.url.includes('/play/') ||
                            !channel.url.match(/\.(mp4|webm|ogg)$/i);
 
+        // Usar proxy para evitar Mixed Content (HTTPS -> HTTP)
+        const streamUrl = getProxyUrl(channel.url);
+        console.log('TVPlayer: Using proxy URL:', streamUrl);
+
         if (isHlsStream && Hls.isSupported()) {
           const hls = new Hls({
             enableWorker: true,
@@ -50,8 +63,8 @@ const TVPlayer = ({ channel, onError }) => {
           hlsRef.current = hls;
 
           hls.on(Hls.Events.MEDIA_ATTACHED, () => {
-            console.log('HLS: Media attached, loading source:', channel.url);
-            hls.loadSource(channel.url);
+            console.log('HLS: Media attached, loading source via proxy');
+            hls.loadSource(streamUrl);
           });
 
           hls.on(Hls.Events.MANIFEST_PARSED, (event, data) => {
@@ -96,14 +109,14 @@ const TVPlayer = ({ channel, onError }) => {
           hls.attachMedia(video);
         } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
           // Safari nativo HLS
-          video.src = channel.url;
+          video.src = streamUrl;
           video.addEventListener('loadedmetadata', () => {
             setIsLoading(false);
             video.play().catch(() => setIsPlaying(false));
           });
         } else {
           // Fallback para otros formatos
-          video.src = channel.url;
+          video.src = streamUrl;
           video.addEventListener('loadeddata', () => {
             setIsLoading(false);
             video.play().catch(() => setIsPlaying(false));
