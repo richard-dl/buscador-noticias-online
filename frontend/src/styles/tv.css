@@ -807,12 +807,12 @@
 
 .tv-category-chip {
   flex-shrink: 0;
-  padding: 0.5rem 0.85rem;
+  padding: 0.6rem 1rem;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid var(--color-border, rgba(255, 255, 255, 0.15));
   border-radius: 20px;
   color: var(--color-text-muted);
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   white-space: nowrap;
   cursor: pointer;
   transition: all 0.2s;
@@ -834,8 +834,16 @@
 }
 
 .tv-mobile-panel .tv-search-box {
-  padding: 0 1rem;
-  margin-top: 1rem;
+  margin: 1rem 1rem 0;
+  padding: 0;
+}
+
+.tv-mobile-panel .tv-search-icon {
+  left: 14px;
+}
+
+.tv-mobile-panel .tv-search-input {
+  padding-left: 2.75rem;
 }
 
 .tv-mobile-overlay {
@@ -953,8 +961,8 @@
   }
 
   .tv-category-chip {
-    padding: 0.45rem 0.75rem;
-    font-size: 0.75rem;
+    padding: 0.55rem 0.9rem;
+    font-size: 0.8rem;
   }
 
   .tv-selector-btn {
