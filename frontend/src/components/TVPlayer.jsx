@@ -55,6 +55,17 @@ const getStreamType = (url, isAudioFlag, category) => {
   return 'direct';
 };
 
+// Helper para determinar si mostrar visual de radio
+const shouldShowRadioVisual = (channel) => {
+  if (!channel) return false;
+  const isRadioCategory = channel.category && channel.category.toLowerCase().includes('radio');
+  if (isRadioCategory) return true;
+  if (channel.isAudio) return true;
+  if (!channel.url) return false;
+  return channel.url.includes('.mp3') || channel.url.includes('.aac') || channel.url.includes('.ogg') ||
+         channel.url.includes('livestream-redirect') || channel.url.includes('streamtheworld');
+};
+
 const TVPlayer = ({ channel, onError, playerNumber }) => {
   const videoRef = useRef(null);
   const audioRef = useRef(null);
@@ -64,7 +75,8 @@ const TVPlayer = ({ channel, onError, playerNumber }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [isAudio, setIsAudio] = useState(false);
-  const [showRadioVisual, setShowRadioVisual] = useState(false);
+  // Calcular valor inicial basado en el canal
+  const [showRadioVisual, setShowRadioVisual] = useState(() => shouldShowRadioVisual(channel));
 
   useEffect(() => {
     // Verificar primero si hay canal y URL
@@ -80,8 +92,7 @@ const TVPlayer = ({ channel, onError, playerNumber }) => {
     setIsAudio(isAudioType);
 
     // Mostrar visualización de radio si es categoría de radio (independiente del tipo de stream)
-    const isRadioCategory = channel.category && channel.category.toLowerCase().includes('radio');
-    setShowRadioVisual(isRadioCategory || isAudioType);
+    setShowRadioVisual(shouldShowRadioVisual(channel));
 
     const mediaElement = isAudioType ? audioRef.current : videoRef.current;
     if (!mediaElement) return;
