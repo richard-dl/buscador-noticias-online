@@ -5,7 +5,7 @@
 /* Página principal */
 .tv-streaming-page {
   min-height: calc(100vh - 64px);
-  background: var(--color-bg-primary, #0a0f1a);
+  background: var(--color-bg);
   padding-top: 1rem;
   padding-bottom: 2rem;
 }
@@ -24,7 +24,7 @@
   gap: 0.75rem;
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--color-text-primary, #fff);
+  color: var(--color-text);
   margin: 0;
 }
 
@@ -35,7 +35,7 @@
 }
 
 .tv-page-subtitle {
-  color: var(--color-text-secondary, rgba(255, 255, 255, 0.6));
+  color: var(--color-text-muted);
   margin: 0.35rem 0 0;
   font-size: 0.9rem;
 }
@@ -73,17 +73,17 @@
 .tv-search-icon {
   position: absolute;
   left: 12px;
-  color: var(--color-text-secondary, rgba(255, 255, 255, 0.5));
+  color: var(--color-text-muted);
   pointer-events: none;
 }
 
 .tv-search-input {
   width: 100%;
   padding: 0.65rem 2.25rem 0.65rem 2.25rem;
-  background: var(--color-bg-secondary, rgba(255, 255, 255, 0.05));
+  background: var(--color-bg-secondary);
   border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
   border-radius: 8px;
-  color: var(--color-text-primary, #fff);
+  color: var(--color-text);
   font-size: 0.9rem;
   transition: all 0.2s;
 }
@@ -91,11 +91,11 @@
 .tv-search-input:focus {
   outline: none;
   border-color: var(--color-accent, #40979A);
-  background: var(--color-bg-secondary, rgba(255, 255, 255, 0.08));
+  background: var(--color-bg-secondary);
 }
 
 .tv-search-input::placeholder {
-  color: var(--color-text-secondary, rgba(255, 255, 255, 0.4));
+  color: var(--color-text-muted);
 }
 
 .tv-search-clear {
@@ -103,7 +103,7 @@
   right: 8px;
   background: none;
   border: none;
-  color: var(--color-text-secondary, rgba(255, 255, 255, 0.5));
+  color: var(--color-text-muted);
   font-size: 1.25rem;
   cursor: pointer;
   padding: 0.25rem 0.5rem;
@@ -112,7 +112,7 @@
 }
 
 .tv-search-clear:hover {
-  color: var(--color-text-primary, #fff);
+  color: var(--color-text);
   background: rgba(255, 255, 255, 0.1);
 }
 
@@ -122,7 +122,7 @@
   flex-direction: column;
   gap: 0.2rem;
   padding: 0.4rem;
-  background: var(--color-bg-secondary, rgba(255, 255, 255, 0.03));
+  background: var(--color-bg-secondary);
   border-radius: 8px;
   border: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
   flex-shrink: 0;
@@ -151,7 +151,7 @@
   background: transparent;
   border: none;
   border-radius: 6px;
-  color: var(--color-text-secondary, rgba(255, 255, 255, 0.7));
+  color: var(--color-text-muted);
   font-size: 0.8rem;
   text-align: left;
   cursor: pointer;
@@ -160,7 +160,7 @@
 
 .tv-category-btn:hover {
   background: rgba(255, 255, 255, 0.08);
-  color: var(--color-text-primary, #fff);
+  color: var(--color-text);
 }
 
 .tv-category-btn.active {
@@ -213,7 +213,7 @@
 
 .tv-search-results-header {
   padding: 0.4rem 0;
-  color: var(--color-text-secondary, rgba(255, 255, 255, 0.6));
+  color: var(--color-text-muted);
   font-size: 0.8rem;
   border-bottom: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
   margin-bottom: 0.4rem;
@@ -225,7 +225,7 @@
   align-items: center;
   gap: 0.6rem;
   padding: 0.5rem 0.6rem;
-  background: var(--color-bg-secondary, rgba(255, 255, 255, 0.03));
+  background: var(--color-bg-secondary);
   border: 1px solid transparent;
   border-radius: 6px;
   cursor: pointer;
@@ -267,7 +267,7 @@
   justify-content: center;
   font-weight: 600;
   font-size: 0.9rem;
-  color: var(--color-text-primary, #fff);
+  color: var(--color-text);
   background: linear-gradient(135deg, var(--color-accent, #40979A), #2a6f71);
 }
 
@@ -280,7 +280,7 @@
 }
 
 .tv-channel-name {
-  color: var(--color-text-primary, #fff);
+  color: var(--color-text);
   font-size: 0.82rem;
   font-weight: 500;
   white-space: nowrap;
@@ -289,14 +289,14 @@
 }
 
 .tv-channel-cat {
-  color: var(--color-text-secondary, rgba(255, 255, 255, 0.5));
+  color: var(--color-text-muted);
   font-size: 0.7rem;
 }
 
 .tv-no-results {
   text-align: center;
   padding: 1.5rem 1rem;
-  color: var(--color-text-secondary, rgba(255, 255, 255, 0.5));
+  color: var(--color-text-muted);
   font-size: 0.85rem;
 }
 
@@ -367,7 +367,7 @@
 
 /* Reproductor */
 .tv-player-container {
-  background: var(--color-bg-secondary, #0d1424);
+  background: var(--color-bg-secondary);
   border-radius: 10px;
   overflow: hidden;
   border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
@@ -399,7 +399,7 @@
   margin: 0;
   font-size: 0.9rem;
   font-weight: 600;
-  color: var(--color-text-primary, #fff);
+  color: var(--color-text);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -407,7 +407,7 @@
 
 .tv-player-category {
   font-size: 0.7rem;
-  color: var(--color-text-secondary, rgba(255, 255, 255, 0.6));
+  color: var(--color-text-muted);
 }
 
 .tv-live-badge {
@@ -452,7 +452,7 @@
   align-items: center;
   justify-content: center;
   background: rgba(0, 0, 0, 0.85);
-  color: var(--color-text-primary, #fff);
+  color: var(--color-text);
   gap: 0.75rem;
 }
 
@@ -472,7 +472,7 @@
 .tv-loading-overlay p,
 .tv-placeholder-overlay p {
   font-size: 0.85rem;
-  color: var(--color-text-secondary, rgba(255, 255, 255, 0.6));
+  color: var(--color-text-muted);
 }
 
 .tv-error-icon {
@@ -510,7 +510,7 @@
 }
 
 .tv-placeholder-icon {
-  color: var(--color-text-secondary, rgba(255, 255, 255, 0.4));
+  color: var(--color-text-muted);
 }
 
 /* Controles adicionales */
@@ -531,7 +531,7 @@
   background: rgba(255, 255, 255, 0.1);
   border: none;
   border-radius: 6px;
-  color: var(--color-text-primary, #fff);
+  color: var(--color-text);
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -552,13 +552,13 @@
   justify-content: center;
   gap: 1rem;
   padding: 0.75rem;
-  background: var(--color-bg-secondary, rgba(255, 255, 255, 0.03));
+  background: var(--color-bg-secondary);
   border-radius: 8px;
   border: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
 }
 
 .tv-selector-label {
-  color: var(--color-text-secondary, rgba(255, 255, 255, 0.6));
+  color: var(--color-text-muted);
   font-size: 0.85rem;
 }
 
@@ -570,7 +570,7 @@
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid transparent;
   border-radius: 6px;
-  color: var(--color-text-secondary, rgba(255, 255, 255, 0.7));
+  color: var(--color-text-muted);
   font-size: 0.85rem;
   cursor: pointer;
   transition: all 0.2s;
@@ -609,7 +609,7 @@
   background: rgba(255, 255, 255, 0.03);
   border-radius: 6px;
   border: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
-  color: var(--color-text-secondary, rgba(255, 255, 255, 0.5));
+  color: var(--color-text-muted);
   font-size: 0.8rem;
   font-style: italic;
   text-align: center;
@@ -648,7 +648,7 @@
   left: 0;
   right: 0;
   max-height: 70vh;
-  background: var(--color-bg-primary, #0a0f1a);
+  background: var(--color-bg);
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   z-index: 200;
@@ -672,13 +672,13 @@
 .tv-mobile-panel-header h3 {
   margin: 0;
   font-size: 1.1rem;
-  color: var(--color-text-primary, #fff);
+  color: var(--color-text);
 }
 
 .tv-mobile-close {
   background: none;
   border: none;
-  color: var(--color-text-secondary, rgba(255, 255, 255, 0.6));
+  color: var(--color-text-muted);
   font-size: 1.75rem;
   cursor: pointer;
   padding: 0 0.5rem;
@@ -703,7 +703,7 @@
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid var(--color-border, rgba(255, 255, 255, 0.15));
   border-radius: 20px;
-  color: var(--color-text-secondary, rgba(255, 255, 255, 0.7));
+  color: var(--color-text-muted);
   font-size: 0.8rem;
   white-space: nowrap;
   cursor: pointer;
@@ -747,7 +747,7 @@
 }
 
 .tv-mobile-player-selector > span {
-  color: var(--color-text-secondary, rgba(255, 255, 255, 0.6));
+  color: var(--color-text-muted);
   font-size: 0.85rem;
   margin-right: 0.25rem;
 }
