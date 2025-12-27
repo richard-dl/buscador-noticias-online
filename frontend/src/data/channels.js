@@ -55,7 +55,6 @@ export const channels = {
     { id: 'radio-mitre', name: 'Radio Mitre AM 790', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/AM790_56.mp3', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Radio_Mitre_logo_2018.svg/1200px-Radio_Mitre_logo_2018.svg.png', isAudio: true },
     { id: 'radio-la-red', name: 'La Red AM 910', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/LA_RED_AM910AAC.aac', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/La_Red_Argentina_logo.svg/1200px-La_Red_Argentina_logo.svg.png', isAudio: true },
     { id: 'radio-rivadavia', name: 'Radio Rivadavia AM 630', url: 'https://27393.live.streamtheworld.com/RIVADAVIAAAC.aac', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Radio_Rivadavia_logo.svg/1200px-Radio_Rivadavia_logo.svg.png', isAudio: true },
-    { id: 'radio-aspen', name: 'Aspen 102.3 FM', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/ASPENAAC', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Aspen_102.3_logo.svg/1200px-Aspen_102.3_logo.svg.png', isAudio: true },
   ],
 
   // ==================== NOTICIAS ====================
