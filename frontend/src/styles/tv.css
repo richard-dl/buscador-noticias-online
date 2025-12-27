@@ -712,9 +712,9 @@
 }
 
 .tv-category-chip.active {
-  background: var(--color-accent, #40979A);
-  border-color: var(--color-accent, #40979A);
-  color: #fff;
+  background: var(--color-accent, #C1FF4D);
+  border-color: var(--color-accent, #C1FF4D);
+  color: #0A1E3B;
 }
 
 .tv-mobile-channel-list {
