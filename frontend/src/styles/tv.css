@@ -822,6 +822,8 @@
   background: var(--color-accent, #C1FF4D);
   border-color: var(--color-accent, #C1FF4D);
   color: #0A1E3B;
+  padding: 0.6rem 1rem;
+  font-size: 0.85rem;
 }
 
 .tv-mobile-channel-list {
@@ -960,7 +962,8 @@
     max-height: 80vh;
   }
 
-  .tv-category-chip {
+  .tv-category-chip,
+  .tv-category-chip.active {
     padding: 0.55rem 0.9rem;
     font-size: 0.8rem;
   }
