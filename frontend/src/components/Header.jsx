@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { FiHome, FiFileText, FiUser, FiLogOut, FiMenu, FiX, FiStar, FiCreditCard, FiUserPlus, FiLogIn } from 'react-icons/fi'
+import { FiHome, FiFileText, FiUser, FiLogOut, FiMenu, FiX, FiStar, FiCreditCard, FiUserPlus, FiLogIn, FiTv } from 'react-icons/fi'
 import { useState } from 'react'
 
 const Header = () => {
@@ -12,6 +12,7 @@ const Header = () => {
   const navItems = [
     { path: '/dashboard', label: 'Inicio', icon: FiHome },
     { path: '/generator', label: 'Generador', icon: FiFileText },
+    { path: '/tv', label: 'TV en Vivo', icon: FiTv, requiresAuth: true },
     { path: '/zona-vip', label: 'Zona VIP', icon: FiStar, isVip: true },
     { path: '/subscription', label: 'Planes', icon: FiCreditCard }
   ]
@@ -19,13 +20,20 @@ const Header = () => {
   const isActive = (path) => location.pathname === path
 
   // Manejar clic en navegación - forzar recarga si ya estamos en la misma ruta
-  const handleNavClick = (e, path, isVip) => {
+  const handleNavClick = (e, path, isVip, requiresAuth) => {
     setMenuOpen(false)
 
     // Redirigir a planes si usuario no autenticado hace clic en Zona VIP
     if (isVip && !isAuthenticated) {
       e.preventDefault()
       navigate('/subscription')
+      return
+    }
+
+    // Redirigir a login si requiere autenticación y no está logueado
+    if (requiresAuth && !isAuthenticated) {
+      e.preventDefault()
+      navigate('/login')
       return
     }
 
@@ -63,12 +71,12 @@ const Header = () => {
         </button>
 
         <nav className={`header-nav ${menuOpen ? 'open' : ''}`}>
-          {navItems.map(({ path, label, icon: Icon, isVip }) => (
+          {navItems.map(({ path, label, icon: Icon, isVip, requiresAuth }) => (
             <Link
               key={path}
               to={path}
               className={`nav-link ${isActive(path) ? 'active' : ''} ${isVip ? 'nav-link-vip' : ''}`}
-              onClick={(e) => handleNavClick(e, path, isVip)}
+              onClick={(e) => handleNavClick(e, path, isVip, requiresAuth)}
               title={label}
             >
               <Icon size={18} />

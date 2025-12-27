@@ -12,6 +12,7 @@ import Expired from './pages/Expired'
 import ZonaVip from './pages/ZonaVip'
 import Subscription from './pages/Subscription'
 import Sessions from './pages/Sessions'
+import TVStreaming from './pages/TVStreaming'
 
 // Components
 import ProtectedRoute from './components/ProtectedRoute'
@@ -63,6 +64,14 @@ function App() {
         element={
           <ProtectedRoute>
             <Sessions />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/tv"
+        element={
+          <ProtectedRoute>
+            <TVStreaming />
           </ProtectedRoute>
         }
       />
