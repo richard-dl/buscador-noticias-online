@@ -1,10 +1,54 @@
 // Canales de TV organizados por categoría
-// Fuente: IPTV con formato TS directo (sin encryption)
-// URL base: http://vionixtv.lat:80/live/atyHcyHAVv/Y6HQ8MW2YR/{stream_id}.ts
+// Fuente primaria: IPTV-ORG (canales públicos HLS sin límite de conexiones)
+// Fuente secundaria: IPTV privado con formato TS (límite 3 conexiones)
 
 const IPTV_BASE = 'http://vionixtv.lat:80/live/atyHcyHAVv/Y6HQ8MW2YR';
 
 export const channels = {
+  // ==================== CANALES PUBLICOS (SIN LIMITE DE CONEXIONES) ====================
+  'Publicos Argentina': [
+    { id: 'pub-canal26', name: 'Canal 26', url: 'https://stream-gtlc.telecentro.net.ar/hls/canal26hls/main.m3u8', logo: 'https://pbs.twimg.com/profile_images/1242114940/LogoCanal26_400x400.jpg' },
+    { id: 'pub-america', name: 'America TV', url: 'https://prepublish.f.qaotic.net/a07/americahls-100056/playlist_720p.m3u8', logo: 'https://static.wikia.nocookie.net/logopedia/images/9/99/Am%C3%A9rica_Canal_2_2005.svg' },
+    { id: 'pub-canal-e', name: 'Canal E', url: 'https://unlimited1-us.dps.live/perfiltv/perfiltv.smil/playlist.m3u8', logo: 'https://i.ibb.co/8rpSC43/ciudad.png' },
+    { id: 'pub-cn247', name: '24/7 Canal de Noticias', url: 'https://panel.host-live.com:19360/cn247tv/cn247tv.m3u8', logo: 'https://cn247.tv/wp-content/uploads/2021/11/neuquen-gobierno-logo.png' },
+    { id: 'pub-argentinisima', name: 'Argentinisima Satelital', url: 'https://stream1.sersat.com/hls/argentinisima.m3u8', logo: 'https://i.ibb.co/GW7gN3g/telefe.png' },
+    { id: 'pub-aire-santa-fe', name: 'Aire de Santa Fe', url: 'https://unlimited1-us.dps.live/airedesantafetv/airedesantafetv.smil/playlist.m3u8', logo: 'https://i.postimg.cc/hjFKtFpc/1.png' },
+    { id: 'pub-13max', name: '13Max Television', url: 'http://coninfo.net:1935/13maxhd/live13maxtvnuevo/playlist.m3u8', logo: 'https://i.ibb.co/qM8Q3qk/el-trece.png' },
+  ],
+
+  'Publicos Peru': [
+    { id: 'pub-pe-atv', name: 'ATV Peru', url: 'https://alba-pe-atv-atv.stream.mediatiquestream.com/index.m3u8', logo: 'http://ceoapps.org/logos/atv.png' },
+    { id: 'pub-pe-atv-plus', name: 'ATV+ Peru', url: 'https://alba-pe-atv-atvmas.stream.mediatiquestream.com/index.m3u8', logo: 'https://i.ibb.co/s9DXfML/ATV.png' },
+    { id: 'pub-pe-latina', name: 'Latina', url: 'https://redirector.rudo.video/hls-video/567ffde3fa319fadf3419efda25619456231dfea/latina/latina.smil/playlist.m3u8', logo: 'https://elcomercio.pe/resizer/lSJS13pKkn0cX2OFSyuZqwRcXFg=/1200x1200/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/OMZVEA5IKFFTJJ3VVN3IP7ZVD4.jpg' },
+    { id: 'pub-pe-tvperu', name: 'TV Peru', url: 'https://cdnhd.iblups.com/hls/777b4d4cc0984575a7d14f6ee57dbcaf7.m3u8', logo: 'http://ceoapps.org/logos/tvperu.png' },
+    { id: 'pub-pe-rpp', name: 'RPP TV', url: 'https://redirector.rudo.video/hls-video/567ffde3fa319fadf3419efda25619456231dfea/rpptv/rpptv.smil/playlist.m3u8', logo: 'https://upload.wikimedia.org/wikipedia/commons/0/04/RPP_TV_-_2017_logo.png' },
+    { id: 'pub-pe-exitosa', name: 'Exitosa', url: 'https://luna-1-video.mediaserver.digital/exitosatv_233b-4b49-a726-5a3cb0e3243c/video.m3u8', logo: 'http://ceoapps.org/logos/exitosape.png' },
+    { id: 'pub-pe-bethel', name: 'Bethel TV', url: 'https://alfa.betheltv.tv/srt/3_abr/playlist.m3u8', logo: 'https://i.ibb.co/WVr4M6g/images-1.jpg' },
+  ],
+
+  'Publicos Chile': [
+    { id: 'pub-cl-atv', name: 'Antofagasta TV', url: 'https://unlimited6-cl.dps.live/atv/atv.smil/playlist.m3u8', logo: 'https://i.postimg.cc/43H2F05s/1.png' },
+    { id: 'pub-cl-tvu', name: 'TVU Concepcion', url: 'https://unlimited1-cl-isp.dps.live/tvu/tvu.smil/playlist.m3u8', logo: 'https://i.postimg.cc/nV3KBk4k/1.png' },
+    { id: 'pub-cl-contivision', name: 'Contivision Noticias', url: 'https://unlimited6-cl.dps.live/cm/cm.smil/playlist.m3u8', logo: 'https://cdn.m3u.cl/logo/790_La_Red.png' },
+    { id: 'pub-cl-atacama', name: 'Atacama Noticias', url: 'https://v2.tustreaming.cl/atacamanoticias/index.m3u8', logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWxWLCvtyoA7kEXrdQGpaRyAa0rueu3Y53xA&s' },
+  ],
+
+  'Publicos Mexico': [
+    { id: 'pub-mx-adn40', name: 'ADN 40', url: 'https://mdstrm.com/live-stream-playlist/60b578b060947317de7b57ac.m3u8', logo: 'https://th.bing.com/th/id/R.d46444904658ce1e4f895c0338ce27c1' },
+    { id: 'pub-mx-azteca-uno', name: 'Azteca Uno', url: 'https://mdstrm.com/live-stream-playlist/609b243156cca108312822a6.m3u8', logo: 'https://astramain.xyz/images/LDN_2LoxNi45aNO9u6WClIggHdenumRsYVXKF6cYDUfCnTeWAj9R3ecDt9NgQOGY.png' },
+    { id: 'pub-mx-azteca-7', name: 'Azteca 7', url: 'https://mdstrm.com/live-stream-playlist/609ad46a7a441137107d7a81.m3u8', logo: 'https://th.bing.com/th/id/R.8d2c63c490282116786291a737250183' },
+    { id: 'pub-mx-azteca-int', name: 'Azteca Internacional', url: 'https://azt-mun.otteravision.com/azt/mun/mun.m3u8', logo: 'http://icomplay.net:80/images/DLu6wPayhmXi4Shb7v3BInGpATQN_fOPiLzdzS4MC6MZv6K0_NJCLbdzQOUhCYsc.png' },
+    { id: 'pub-mx-amx-noticias', name: 'AMX Noticias', url: 'https://5e50264bd6766.streamlock.net/mexiquense2/videomexiquense2/playlist.m3u8', logo: 'http://icomplay.net:80/images/SyQb0CSmjWAheouRMfZPMaLkmcwQBo-vjDBV53hJi8F3wiD5AQU6JM9HP8kDH97Y.png' },
+    { id: 'pub-mx-8ntv', name: '8NTV', url: 'https://60417ddeaf0d9.streamlock.net/ntv/videontv/playlist.m3u8', logo: 'https://i.imgur.com/QDT0gcA.png' },
+    { id: 'pub-mx-canal10-chiapas', name: 'Canal 10 Chiapas', url: 'https://5ca9af4645e15.streamlock.net/chiapas/videochiapas/playlist.m3u8', logo: 'https://i.imgur.com/QDT0gcA.png' },
+  ],
+
+  'Publicos Paraguay': [
+    { id: 'pub-py-4dmas', name: '4DmasNoticias TV', url: 'https://rds3.desdeparaguay.net/4dmasnoticiastv/4dmasnoticiastv/playlist.m3u8', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/NPY_(Noticias_Paraguay).png/1200px-NPY_(Noticias_Paraguay).png' },
+    { id: 'pub-py-causa', name: 'Causa Comun TV', url: 'https://live.enhdtv.com:8081/8172/index.m3u8', logo: 'https://i.ibb.co/zHf8F2r/npy.png' },
+  ],
+
+
   // ==================== NOTICIAS ====================
   'Noticias': [
     { id: 'tn-opc1', name: 'TN (Todo Noticias)', url: `${IPTV_BASE}/573881.ts`, logo: 'https://i.postimg.cc/Bvsx0p1w/Sin-t-tulo-8-removebg-preview.png' },
