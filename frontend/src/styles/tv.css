@@ -329,20 +329,7 @@
 }
 
 .tv-player-wrapper .tv-player-number {
-  position: absolute;
-  top: 0.5rem;
-  left: 0.5rem;
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.7);
-  color: #fff;
-  font-size: 0.75rem;
-  font-weight: 700;
-  border-radius: 4px;
-  z-index: 5;
+  display: none;
 }
 
 .tv-player-wrapper.active-selector {
@@ -380,6 +367,20 @@
   padding: 0.6rem 0.75rem;
   background: rgba(0, 0, 0, 0.3);
   border-bottom: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
+}
+
+.tv-player-number-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--color-text);
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-radius: 4px;
+  flex-shrink: 0;
 }
 
 .tv-player-logo {
