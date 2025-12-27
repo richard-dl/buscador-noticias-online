@@ -173,23 +173,6 @@ const TVStreaming = () => {
 
         {/* Área principal con dos reproductores */}
         <main className="tv-main">
-          {/* Selector de reproductor activo */}
-          <div className="tv-player-selector">
-            <span className="tv-selector-label">Enviar canal a:</span>
-            <button
-              className={`tv-selector-btn ${activePlayer === 1 ? 'active' : ''}`}
-              onClick={() => setActivePlayer(1)}
-            >
-              Pantalla 1
-            </button>
-            <button
-              className={`tv-selector-btn ${activePlayer === 2 ? 'active' : ''}`}
-              onClick={() => setActivePlayer(2)}
-            >
-              Pantalla 2
-            </button>
-          </div>
-
           {/* Grid de reproductores */}
           <div className="tv-players-grid">
             <div
@@ -264,23 +247,6 @@ const TVStreaming = () => {
               ))}
             </div>
           )}
-
-          {/* Selector de reproductor en móvil */}
-          <div className="tv-mobile-player-selector">
-            <span>Enviar a:</span>
-            <button
-              className={`tv-selector-btn ${activePlayer === 1 ? 'active' : ''}`}
-              onClick={() => setActivePlayer(1)}
-            >
-              Pantalla 1
-            </button>
-            <button
-              className={`tv-selector-btn ${activePlayer === 2 ? 'active' : ''}`}
-              onClick={() => setActivePlayer(2)}
-            >
-              Pantalla 2
-            </button>
-          </div>
 
           {/* Lista de canales móvil */}
           <div className="tv-mobile-channel-list">
