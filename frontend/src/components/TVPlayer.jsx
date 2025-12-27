@@ -31,17 +31,17 @@ const TVPlayer = ({ channel, onError }) => {
         if (isHlsStream && Hls.isSupported()) {
           const hls = new Hls({
             enableWorker: true,
-            lowLatencyMode: true,
+            lowLatencyMode: false,
             backBufferLength: 90,
             maxBufferLength: 30,
             maxMaxBufferLength: 600,
             maxBufferSize: 60 * 1000 * 1000,
             maxBufferHole: 0.5,
-            startLevel: -1, // Auto quality
-            fragLoadingTimeOut: 20000,
-            manifestLoadingTimeOut: 20000,
-            levelLoadingTimeOut: 20000,
-            // Importante: permitir CORS y redirects
+            startLevel: -1,
+            fragLoadingTimeOut: 30000,
+            manifestLoadingTimeOut: 30000,
+            levelLoadingTimeOut: 30000,
+            debug: false,
             xhrSetup: function(xhr, url) {
               xhr.withCredentials = false;
             }
@@ -50,29 +50,41 @@ const TVPlayer = ({ channel, onError }) => {
           hlsRef.current = hls;
 
           hls.on(Hls.Events.MEDIA_ATTACHED, () => {
+            console.log('HLS: Media attached, loading source:', channel.url);
             hls.loadSource(channel.url);
           });
 
-          hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          hls.on(Hls.Events.MANIFEST_PARSED, (event, data) => {
+            console.log('HLS: Manifest parsed, levels:', data.levels?.length);
             setIsLoading(false);
-            video.play().catch(() => {
-              // Autoplay bloqueado, el usuario debe hacer clic
+            video.play().catch((e) => {
+              console.log('HLS: Autoplay blocked:', e.message);
               setIsPlaying(false);
             });
           });
 
+          hls.on(Hls.Events.MANIFEST_LOADING, () => {
+            console.log('HLS: Loading manifest...');
+          });
+
+          hls.on(Hls.Events.MANIFEST_LOADED, (event, data) => {
+            console.log('HLS: Manifest loaded from:', data.url);
+          });
+
           hls.on(Hls.Events.ERROR, (event, data) => {
+            console.error('HLS Error:', data.type, data.details, data.fatal);
             if (data.fatal) {
               switch (data.type) {
                 case Hls.ErrorTypes.NETWORK_ERROR:
-                  console.error('Error de red, intentando recuperar...');
-                  hls.startLoad();
+                  console.error('HLS: Network error, retrying...');
+                  setTimeout(() => hls.startLoad(), 1000);
                   break;
                 case Hls.ErrorTypes.MEDIA_ERROR:
-                  console.error('Error de medios, intentando recuperar...');
+                  console.error('HLS: Media error, recovering...');
                   hls.recoverMediaError();
                   break;
                 default:
+                  console.error('HLS: Fatal error, cannot recover');
                   setError('No se puede reproducir este canal. Intenta con otra opción.');
                   setIsLoading(false);
                   if (onError) onError(data);

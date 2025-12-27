@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { channels, getCategories, searchChannels } from '../data/channels';
 import TVPlayer from '../components/TVPlayer';
+import Header from '../components/Header';
 import '../styles/tv.css';
 
 const TVStreaming = () => {
@@ -62,19 +63,21 @@ const TVStreaming = () => {
   };
 
   return (
-    <div className="tv-streaming-page">
-      {/* Header de la página */}
-      <div className="tv-page-header">
-        <h1 className="tv-page-title">
-          <span className="tv-icon">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32">
-              <path d="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 14H3V5h18v12z"/>
-            </svg>
-          </span>
-          TV en Vivo
-        </h1>
-        <p className="tv-page-subtitle">Canales de noticias en streaming</p>
-      </div>
+    <>
+      <Header />
+      <div className="tv-streaming-page">
+        {/* Header de la página */}
+        <div className="tv-page-header">
+          <h1 className="tv-page-title">
+            <span className="tv-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32">
+                <path d="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 14H3V5h18v12z"/>
+              </svg>
+            </span>
+            TV en Vivo
+          </h1>
+          <p className="tv-page-subtitle">Canales de noticias en streaming</p>
+        </div>
 
       <div className="tv-content">
         {/* Panel lateral de canales - Desktop */}
@@ -316,11 +319,12 @@ const TVStreaming = () => {
         </div>
       )}
 
-      {/* Overlay para cerrar panel móvil */}
-      {showMobileChannels && (
-        <div className="tv-mobile-overlay" onClick={() => setShowMobileChannels(false)} />
-      )}
-    </div>
+        {/* Overlay para cerrar panel móvil */}
+        {showMobileChannels && (
+          <div className="tv-mobile-overlay" onClick={() => setShowMobileChannels(false)} />
+        )}
+      </div>
+    </>
   );
 };
 
