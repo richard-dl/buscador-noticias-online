@@ -2,12 +2,13 @@ import { useEffect, useRef, useState } from 'react';
 import Hls from 'hls.js';
 
 // URL del backend API para el proxy de streaming
-const API_URL = import.meta.env.VITE_API_URL || 'https://api.bfrfrench.com';
+const API_URL = import.meta.env.VITE_API_URL || 'https://buscador-noticias-online.vercel.app/api';
 
 // Función para obtener la URL del proxy
 const getProxyUrl = (originalUrl) => {
   if (!originalUrl) return null;
-  return `${API_URL}/api/tv/stream?url=${encodeURIComponent(originalUrl)}`;
+  // VITE_API_URL ya incluye /api, así que solo agregamos /tv/stream
+  return `${API_URL}/tv/stream?url=${encodeURIComponent(originalUrl)}`;
 };
 
 const TVPlayer = ({ channel, onError }) => {
