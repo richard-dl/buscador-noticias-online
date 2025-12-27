@@ -126,7 +126,81 @@ const isAllowedHost = (url) => {
   }
 };
 
-// Proxy para manifest HLS (.m3u8)
+// Función para streaming MPEG-TS en vivo (sin buffering completo)
+const streamLiveTS = (url, res, maxRedirects = 5) => {
+  return new Promise((resolve, reject) => {
+    if (maxRedirects <= 0) {
+      return reject(new Error('Demasiados redirects'));
+    }
+
+    const urlObj = new URL(url);
+    const protocol = urlObj.protocol === 'https:' ? https : http;
+
+    const req = protocol.request(url, {
+      method: 'GET',
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+        'Accept': '*/*',
+        'Connection': 'keep-alive',
+      },
+      timeout: 0 // Sin timeout para streams en vivo
+    }, (proxyRes) => {
+      // Seguir redirects
+      if (proxyRes.statusCode >= 300 && proxyRes.statusCode < 400 && proxyRes.headers.location) {
+        let redirectUrl = proxyRes.headers.location;
+        if (!redirectUrl.startsWith('http')) {
+          redirectUrl = `${urlObj.protocol}//${urlObj.host}${redirectUrl}`;
+        }
+        console.log(`TV Live Stream: Redirect -> ${redirectUrl}`);
+        return streamLiveTS(redirectUrl, res, maxRedirects - 1)
+          .then(resolve)
+          .catch(reject);
+      }
+
+      if (proxyRes.statusCode !== 200) {
+        return reject(new Error(`HTTP ${proxyRes.statusCode}`));
+      }
+
+      // Headers para streaming en vivo
+      res.set({
+        'Content-Type': 'video/mp2t',
+        'Access-Control-Allow-Origin': '*',
+        'Cache-Control': 'no-cache, no-store',
+        'Connection': 'keep-alive',
+        'Transfer-Encoding': 'chunked'
+      });
+
+      // Pipe directo sin buffering
+      proxyRes.pipe(res, { end: true });
+
+      proxyRes.on('end', () => {
+        console.log('TV Live Stream: Stream ended');
+        resolve();
+      });
+
+      proxyRes.on('error', (err) => {
+        console.error('TV Live Stream error:', err.message);
+        reject(err);
+      });
+
+      // Cuando el cliente cierra la conexión
+      res.on('close', () => {
+        console.log('TV Live Stream: Client disconnected');
+        proxyRes.destroy();
+        req.destroy();
+      });
+    });
+
+    req.on('error', (err) => {
+      console.error('TV Live Stream request error:', err.message);
+      reject(err);
+    });
+
+    req.end();
+  });
+};
+
+// Proxy para streams de TV
 router.get('/stream', async (req, res) => {
   const { url } = req.query;
 
@@ -139,10 +213,20 @@ router.get('/stream', async (req, res) => {
   }
 
   try {
-    console.log('TV Proxy: Fetching', url);
+    // Detectar si es un stream MPEG-TS en vivo
+    const isLiveTS = url.includes('.ts') || url.includes('/live/');
+
+    if (isLiveTS) {
+      // Stream MPEG-TS en vivo - usar pipe directo
+      console.log('TV Proxy: Live TS stream ->', url);
+      await streamLiveTS(url, res);
+      return;
+    }
+
+    // Para HLS manifests, usar fetch con buffering
+    console.log('TV Proxy: Fetching manifest ->', url);
     const response = await fetchWithRedirects(url);
 
-    const contentType = response.headers['content-type'] || '';
     const bodyStr = response.body.toString('utf-8');
 
     // Configurar headers de respuesta
@@ -201,7 +285,9 @@ router.get('/stream', async (req, res) => {
 
   } catch (error) {
     console.error('TV Proxy error:', error.message);
-    res.status(502).json({ error: 'Error al conectar con el servidor de streaming: ' + error.message });
+    if (!res.headersSent) {
+      res.status(502).json({ error: 'Error al conectar con el servidor de streaming: ' + error.message });
+    }
   }
 });
 
