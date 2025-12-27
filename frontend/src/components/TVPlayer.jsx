@@ -62,12 +62,28 @@ const TVPlayer = ({ channel, onError }) => {
             url: streamUrl,
             isLive: true,
           }, {
+            // Worker para mejor rendimiento
             enableWorker: true,
-            enableStashBuffer: false,
-            stashInitialSize: 128,
-            liveBufferLatencyChasing: true,
-            liveBufferLatencyMaxLatency: 1.5,
-            liveBufferLatencyMinRemain: 0.3,
+            // Habilitar buffer de stash para acumular datos
+            enableStashBuffer: true,
+            // Buffer inicial de 512KB antes de comenzar
+            stashInitialSize: 512 * 1024,
+            // No perseguir latencia agresivamente (priorizar estabilidad)
+            liveBufferLatencyChasing: false,
+            // Configuración de buffer más conservadora
+            liveBufferLatencyMaxLatency: 5.0,
+            liveBufferLatencyMinRemain: 2.0,
+            // Deshabilitar seeking automático
+            autoCleanupSourceBuffer: true,
+            autoCleanupMaxBackwardDuration: 30,
+            autoCleanupMinBackwardDuration: 20,
+            // Tamaños de buffer más grandes
+            fixAudioTimestampGap: true,
+            accurateSeek: false,
+            seekType: 'range',
+            lazyLoad: false,
+            lazyLoadMaxDuration: 60,
+            lazyLoadRecoverDuration: 30,
           });
 
           playerRef.current = player;
@@ -77,7 +93,14 @@ const TVPlayer = ({ channel, onError }) => {
             if (errorType === mpegts.ErrorTypes.NETWORK_ERROR) {
               setError('Error de red. Verifica tu conexión.');
             } else if (errorType === mpegts.ErrorTypes.MEDIA_ERROR) {
-              setError('Error de reproducción. Intenta con otra opción.');
+              // Intentar recuperar de errores de media
+              console.log('MPEGTS: Attempting to recover from media error');
+              player.unload();
+              setTimeout(() => {
+                player.load();
+                video.play().catch(() => {});
+              }, 1000);
+              return;
             } else {
               setError('Error al cargar el stream.');
             }
@@ -91,19 +114,26 @@ const TVPlayer = ({ channel, onError }) => {
 
           player.on(mpegts.Events.MEDIA_INFO, (mediaInfo) => {
             console.log('MPEGTS: Media info received', mediaInfo);
-            setIsLoading(false);
+          });
+
+          // Evento cuando hay suficientes datos para reproducir
+          player.on(mpegts.Events.STATISTICS_INFO, (stats) => {
+            if (stats.speed > 0 && isLoading) {
+              console.log('MPEGTS: Buffering stats', stats);
+            }
           });
 
           player.attachMediaElement(video);
           player.load();
 
-          // Intentar reproducir después de un breve delay
+          // Esperar más tiempo para que se acumule buffer antes de reproducir
           setTimeout(() => {
+            setIsLoading(false);
             video.play().catch((e) => {
               console.log('MPEGTS: Autoplay blocked:', e.message);
               setIsPlaying(false);
             });
-          }, 500);
+          }, 2000);
 
         } else if (streamType === 'hls' && Hls.isSupported()) {
           // HLS stream con hls.js
