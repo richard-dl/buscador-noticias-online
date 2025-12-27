@@ -14,6 +14,8 @@ export const channels = {
     { id: 'pub-argentinisima', name: 'Argentinisima Satelital', url: 'https://stream1.sersat.com/hls/argentinisima.m3u8', logo: 'https://i.ibb.co/GW7gN3g/telefe.png' },
     { id: 'pub-aire-santa-fe', name: 'Aire de Santa Fe', url: 'https://unlimited1-us.dps.live/airedesantafetv/airedesantafetv.smil/playlist.m3u8', logo: 'https://i.postimg.cc/hjFKtFpc/1.png' },
     { id: 'pub-13max', name: '13Max Television', url: 'http://coninfo.net:1935/13maxhd/live13maxtvnuevo/playlist.m3u8', logo: 'https://i.ibb.co/qM8Q3qk/el-trece.png' },
+    { id: 'pub-net-tv', name: 'Net TV', url: 'https://unlimited1-us.dps.live/nettv/nettv.smil/playlist.m3u8', logo: 'https://canalnet.tv/_templates/mobile/includes/img/_logo-alt.png' },
+    { id: 'pub-tv-universidad', name: 'TV Universidad UNLP', url: 'https://stratus.stream.cespi.unlp.edu.ar/hls/tvunlp.m3u8', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/UNLP_logo.svg/1200px-UNLP_logo.svg.png' },
   ],
 
   'Publicos Peru': [
@@ -46,6 +48,20 @@ export const channels = {
   'Publicos Paraguay': [
     { id: 'pub-py-4dmas', name: '4DmasNoticias TV', url: 'https://rds3.desdeparaguay.net/4dmasnoticiastv/4dmasnoticiastv/playlist.m3u8', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/NPY_(Noticias_Paraguay).png/1200px-NPY_(Noticias_Paraguay).png' },
     { id: 'pub-py-causa', name: 'Causa Comun TV', url: 'https://live.enhdtv.com:8081/8172/index.m3u8', logo: 'https://i.ibb.co/zHf8F2r/npy.png' },
+  ],
+
+  // ==================== RADIOS NOTICIAS (SIN LIMITE) ====================
+  'Radios Argentina': [
+    { id: 'radio-mitre', name: 'Radio Mitre AM 790', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/AM790_56.mp3', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Radio_Mitre_logo_2018.svg/1200px-Radio_Mitre_logo_2018.svg.png', isAudio: true },
+    { id: 'radio-la-red', name: 'La Red AM 910', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/LA_RED_AM910AAC.aac', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/La_Red_Argentina_logo.svg/1200px-La_Red_Argentina_logo.svg.png', isAudio: true },
+    { id: 'radio-rivadavia', name: 'Radio Rivadavia AM 630', url: 'https://27393.live.streamtheworld.com/RIVADAVIAAAC.aac', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Radio_Rivadavia_logo.svg/1200px-Radio_Rivadavia_logo.svg.png', isAudio: true },
+    { id: 'radio-10', name: 'Radio 10 AM 710', url: 'http://s6.stweb.tv/radio10/live/playlist.m3u8', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Radio_10_Argentina_logo.svg/1200px-Radio_10_Argentina_logo.svg.png', isAudio: true },
+    { id: 'radio-metro', name: 'Metro 95.1 FM', url: 'http://mp3.metroaudio1.stream.avstreaming.net:7200/metro', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Metro_95.1_logo.svg/1200px-Metro_95.1_logo.svg.png', isAudio: true },
+    { id: 'radio-nacional', name: 'Radio Nacional AM 870', url: 'http://sa.mp3.icecast.magma.edge-access.net:7200/sc_rad1', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Radio_Nacional_Argentina_Logo.svg/1200px-Radio_Nacional_Argentina_Logo.svg.png', isAudio: true },
+    { id: 'radio-la100', name: 'La 100 FM 99.9', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/LA_100AAC.aac', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/La_100_Argentina_logo.svg/1200px-La_100_Argentina_logo.svg.png', isAudio: true },
+    { id: 'radio-mega', name: 'Mega 98.3 FM', url: 'https://mega.stweb.tv/mega983/live/chunks.m3u8', logo: 'https://cdn.mitvstatic.com/channels/ar_mega-98-3_m.png', isAudio: true },
+    { id: 'radio-pop', name: 'Pop Radio 101.5', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/POP_101AAC.aac', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Pop_Radio_Logo.svg/1200px-Pop_Radio_Logo.svg.png', isAudio: true },
+    { id: 'radio-cadena3', name: 'Cadena 3 Argentina', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/CADENA3_SC', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Cadena_3_Argentina_logo.svg/1200px-Cadena_3_Argentina_logo.svg.png', isAudio: true },
   ],
 
   // ==================== NOTICIAS ====================
