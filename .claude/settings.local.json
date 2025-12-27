@@ -27,7 +27,13 @@
       "Bash(sshpass:*)",
       "Bash(gzip:*)",
       "Bash(wc:*)",
-      "Bash(xargs:*)"
+      "Bash(xargs:*)",
+      "Bash(xxd:*)",
+      "Bash(python3:*)",
+      "Bash(unzip:*)",
+      "Bash(TOKEN=\"eyJhbGciOiJSUzI1NiIsImtpZCI6Ijk4OGQ1YTM3OWI3OGJkZjFlNTBhNDA5MTEzZjJiMGM3NWU0NTJlNDciLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZ29sZC1yb2dlci03YjdiNyIsImF1ZCI6ImdvbGQtcm9nZXItN2I3YjciLCJhdXRoX3RpbWUiOjE3NjY4NDEzNjMsInVzZXJfaWQiOiJkMVNIa0J2a3lXWVI5QVhzYXRXWElWajlkWGwyIiwic3ViIjoiZDFTSGtCdmt5V1lSOUFYc2F0V1hJVmo5ZFhsMiIsImlhdCI6MTc2Njg0MTM2MywiZXhwIjoxNzY2ODQ0OTYzLCJlbWFpbCI6InBydWViYS5kZW1vQG91dGxvb2suY29tIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbInBydWViYS5kZW1vQG91dGxvb2suY29tIl19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.VylHglavoH2aZvR0vR2bqzLQzpIr2_5uiTUbPlfXjy1wUWUTRHqPkx8tdBXafhbVe0MN6XqitOAEYdEFS4-6y7HhDeq0ub9QXVO8eAqDyDxHA2K3e5XK_Z_OB12TqvpNfXhpgZl_5t4S6apUwQpqlS-YCtjdE--LeyaMRwaES_a1vO9CHILokyJLopXJo1bEQk0vVDDsqgVAEQrhjZiblcfLi6rqUCW_ApIBqU7lWCYoBZMhc7cync7sWMORYUTTrDkaAgwgo0FXcQhHpmIkm96QF5A7NZdVpbMGsDnzocl5pCiepUGjTzjvigd6sAUHSPaFW3EKtnorCPNDCVT0SQ\")",
+      "Bash(__NEW_LINE__ curl -s \"https://firestore.googleapis.com/v1/projects/gold-roger-7b7b7/databases/\\(default\\)/documents/app\" )",
+      "Bash(echo \"=== Television \\(primeratv.json\\) ===\" curl -s \"https://tentenpie.neocities.org/primeratv.json\")"
     ]
   }
 }
