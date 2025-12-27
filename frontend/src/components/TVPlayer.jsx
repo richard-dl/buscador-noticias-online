@@ -5,15 +5,30 @@ import mpegts from 'mpegts.js';
 // URL del backend API para el proxy de streaming
 const API_URL = import.meta.env.VITE_API_URL || 'https://buscador-noticias-online.vercel.app/api';
 
-// Función para obtener la URL del proxy
+// Detectar si es un canal público que no necesita proxy
+const isPublicChannel = (url) => {
+  if (!url) return false;
+  // Los canales públicos son HTTPS y no necesitan proxy
+  return url.startsWith('https://') && url.includes('.m3u8');
+};
+
+// Función para obtener la URL del proxy (solo para canales privados)
 const getProxyUrl = (originalUrl) => {
   if (!originalUrl) return null;
+  // Canales públicos HTTPS no necesitan proxy
+  if (isPublicChannel(originalUrl)) {
+    return originalUrl;
+  }
   // VITE_API_URL ya incluye /api, así que solo agregamos /tv/stream
   return `${API_URL}/tv/stream?url=${encodeURIComponent(originalUrl)}`;
 };
 
 // Detectar tipo de stream
 const getStreamType = (url) => {
+  // Los canales públicos siempre son HLS
+  if (isPublicChannel(url)) {
+    return 'hls';
+  }
   if (url.includes('.ts') || url.includes('/live/')) {
     return 'mpegts';
   }
