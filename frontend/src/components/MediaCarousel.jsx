@@ -3,7 +3,7 @@ import { useRef, useEffect, useState } from 'react'
 const mediaLogos = [
   // Principales diarios nacionales (logos locales)
   { name: 'Clarín', logo: '/logos/clarin.jpg', url: 'https://www.clarin.com' },
-  { name: 'La Nación', logo: '/logos/lanacion.png', url: 'https://www.lanacion.com.ar' },
+  { name: 'La Nación', logo: '/logos/lanacion.png', url: 'https://www.lanacion.com.ar/' },
   { name: 'Infobae', logo: '/logos/infobae.png', url: 'https://www.infobae.com' },
   { name: 'Perfil', logo: '/logos/perfil.png', url: 'https://www.perfil.com' },
   { name: 'Ámbito', logo: '/logos/ambito.png', url: 'https://www.ambito.com' },
@@ -12,7 +12,6 @@ const mediaLogos = [
   // Canales de TV
   { name: 'TN', logo: '/logos/tn.jpg', url: 'https://tn.com.ar' },
   { name: 'C5N', logo: '/logos/c5n.jpg', url: 'https://www.c5n.com' },
-  { name: 'LN+', logo: '/logos/lnmas.jpg', url: 'https://www.lanacion.com.ar/ln-mas' },
   // Diarios provinciales
   { name: 'La Voz', logo: '/logos/lavoz.jpg', url: 'https://www.lavoz.com.ar' },
   { name: 'El Día', logo: '/logos/eldia.png', url: 'https://www.eldia.com' },
