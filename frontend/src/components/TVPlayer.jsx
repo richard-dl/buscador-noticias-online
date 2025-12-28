@@ -51,7 +51,7 @@ const getStreamType = (url, isAudioFlag) => {
   return 'direct';
 };
 
-const TVPlayer = ({ channel, onError, playerNumber }) => {
+const TVPlayer = ({ channel, onError, playerNumber, isActive, onActivate }) => {
   const videoRef = useRef(null);
   const audioRef = useRef(null);
   const playerRef = useRef(null);
@@ -60,6 +60,15 @@ const TVPlayer = ({ channel, onError, playerNumber }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true); // Inicia muteado para autoplay
   const [isAudio, setIsAudio] = useState(false);
+
+  // Sincronizar mute con el estado activo
+  useEffect(() => {
+    const media = isAudio ? audioRef.current : videoRef.current;
+    if (media) {
+      media.muted = !isActive;
+      setIsMuted(!isActive);
+    }
+  }, [isActive, isAudio]);
 
   useEffect(() => {
     // Verificar primero si hay canal y URL
@@ -403,11 +412,14 @@ const TVPlayer = ({ channel, onError, playerNumber }) => {
           poster=""
           style={{ display: isAudio ? 'none' : 'block' }}
         />
-        {/* Overlay para bloquear clics en el video excepto en controles */}
+        {/* Overlay para bloquear clics en el video y activar pantalla */}
         {!isAudio && channel && (
           <div
             className="tv-video-click-blocker"
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => {
+              e.stopPropagation();
+              if (onActivate) onActivate();
+            }}
           />
         )}
 
