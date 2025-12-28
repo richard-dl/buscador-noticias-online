@@ -13,15 +13,15 @@ const TVStreaming = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showMobileChannels, setShowMobileChannels] = useState(false);
 
-  // Cargar canales por defecto al iniciar (Canal 26 público y C5N)
+  // Cargar canales por defecto al iniciar (Canal 26 público y TN OPC2)
   useEffect(() => {
     const publicosArg = channels['Publicos Argentina'] || [];
     const canal26 = publicosArg.find(c => c.id === 'pub-canal26');
     const noticiasChannels = channels['Noticias'] || [];
-    const c5n = noticiasChannels.find(c => c.name.includes('C5N'));
+    const tnOpc2 = noticiasChannels.find(c => c.id === 'tn-opc2');
 
     if (canal26) setPlayer1Channel({ ...canal26, category: 'Publicos Argentina' });
-    if (c5n) setPlayer2Channel({ ...c5n, category: 'Noticias' });
+    if (tnOpc2) setPlayer2Channel({ ...tnOpc2, category: 'Noticias' });
   }, []);
 
   const categories = getCategories();
