@@ -51,30 +51,15 @@ const getStreamType = (url, isAudioFlag) => {
   return 'direct';
 };
 
-const TVPlayer = ({ channel, onError, playerNumber, isActive }) => {
+const TVPlayer = ({ channel, onError, playerNumber }) => {
   const videoRef = useRef(null);
   const audioRef = useRef(null);
   const playerRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(!isActive);
+  const [isMuted, setIsMuted] = useState(true); // Inicia muteado para autoplay
   const [isAudio, setIsAudio] = useState(false);
-
-  // Sincronizar mute con el estado activo
-  useEffect(() => {
-    const media = isAudio ? audioRef.current : videoRef.current;
-    if (media) {
-      const shouldMute = !isActive;
-      media.muted = shouldMute;
-      setIsMuted(shouldMute);
-
-      // Si el video estaba reproduciendo, asegurar que siga reproduciendo
-      if (!media.paused || isPlaying) {
-        media.play().catch(() => {});
-      }
-    }
-  }, [isActive, isAudio]);
 
   useEffect(() => {
     // Verificar primero si hay canal y URL
