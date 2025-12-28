@@ -35,7 +35,13 @@
       "Bash(__NEW_LINE__ curl -s \"https://firestore.googleapis.com/v1/projects/gold-roger-7b7b7/databases/\\(default\\)/documents/app\" )",
       "Bash(echo \"=== Television \\(primeratv.json\\) ===\" curl -s \"https://tentenpie.neocities.org/primeratv.json\")",
       "Bash(UA=\"Mozilla/5.0 \\(Windows NT 10.0; Win64; x64\\) AppleWebKit/537.36\")",
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "Bash(pip show:*)",
+      "Bash(cmd /c dir \"c:\\\\Proyectos\\\\buscador-noticias-online\\\\frontend\\\\public\")",
+      "Bash(cmd /c \"dir c:\\\\Proyectos\\\\buscador-noticias-online\\\\frontend\\\\public\")",
+      "Bash(timeout 5 node:*)",
+      "Bash(tar:*)",
+      "Bash(cmd /c dir:*)"
     ]
   }
 }
