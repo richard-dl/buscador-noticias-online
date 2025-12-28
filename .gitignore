@@ -45,3 +45,14 @@ coverage/
 # Misc
 *.pem
 *.key
+
+# APK analysis files
+*.apk
+*_extracted/
+backup_extracted/
+
+# Windows temp files
+nul
+
+# Claude local settings
+.claude/settings.local.json
