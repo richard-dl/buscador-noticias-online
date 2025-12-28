@@ -86,6 +86,9 @@ const Generator = () => {
 
     if (tab === 'profiles') {
       setActiveTab('profiles')
+    } else if (tab === 'breaking') {
+      setActiveTab('breaking')
+      loadBreakingNews()
     }
 
     if (profileId && searchProfiles.length > 0) {
