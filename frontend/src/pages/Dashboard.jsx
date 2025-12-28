@@ -168,12 +168,13 @@ const Dashboard = () => {
             <p>Usa tus perfiles de búsqueda guardados</p>
           </Link>
 
-          <Link to="/generator?tab=breaking" className="action-card">
-            <div className="action-icon">
+          <Link to="/generator?tab=breaking" className="action-card action-card-breaking">
+            <div className="action-icon action-icon-breaking">
               <FiZap size={32} />
             </div>
             <h3>Último Momento</h3>
             <p>Noticias recientes de último momento</p>
+            <span className="breaking-badge">URGENTE</span>
           </Link>
 
           <Link to="/zona-vip" className="action-card action-card-vip">
