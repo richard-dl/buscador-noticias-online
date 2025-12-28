@@ -46,11 +46,6 @@ coverage/
 *.pem
 *.key
 
-# APK analysis files
-*.apk
-*_extracted/
-backup_extracted/
-
 # Windows temp files
 nul
 
