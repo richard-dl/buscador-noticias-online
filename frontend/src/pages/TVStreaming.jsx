@@ -179,13 +179,13 @@ const TVStreaming = () => {
               className={`tv-player-wrapper ${activePlayer === 1 ? 'active-selector' : ''}`}
               onClick={() => setActivePlayer(1)}
             >
-              <TVPlayer channel={player1Channel} playerNumber={1} />
+              <TVPlayer channel={player1Channel} playerNumber={1} isActive={activePlayer === 1} />
             </div>
             <div
               className={`tv-player-wrapper ${activePlayer === 2 ? 'active-selector' : ''}`}
               onClick={() => setActivePlayer(2)}
             >
-              <TVPlayer channel={player2Channel} playerNumber={2} />
+              <TVPlayer channel={player2Channel} playerNumber={2} isActive={activePlayer === 2} />
             </div>
           </div>
 
