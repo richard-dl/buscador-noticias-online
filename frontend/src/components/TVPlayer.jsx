@@ -58,28 +58,17 @@ const TVPlayer = ({ channel, onError, playerNumber, isActive }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(true); // Siempre inicia muteado para permitir autoplay
+  const [isMuted, setIsMuted] = useState(!isActive);
   const [isAudio, setIsAudio] = useState(false);
-  const [userInteracted, setUserInteracted] = useState(false);
 
-  // Detectar primera interacción del usuario para poder activar audio
-  useEffect(() => {
-    const handleInteraction = () => {
-      setUserInteracted(true);
-      document.removeEventListener('click', handleInteraction);
-    };
-    document.addEventListener('click', handleInteraction);
-    return () => document.removeEventListener('click', handleInteraction);
-  }, []);
-
-  // Sincronizar mute con el estado activo del reproductor (solo después de interacción)
+  // Sincronizar mute con el estado activo del reproductor
   useEffect(() => {
     const media = isAudio ? audioRef.current : videoRef.current;
-    if (media && userInteracted) {
+    if (media) {
       media.muted = !isActive;
       setIsMuted(!isActive);
     }
-  }, [isActive, isAudio, userInteracted]);
+  }, [isActive, isAudio]);
 
   useEffect(() => {
     // Verificar primero si hay canal y URL
@@ -419,7 +408,6 @@ const TVPlayer = ({ channel, onError, playerNumber, isActive }) => {
           className="tv-video"
           playsInline
           controls
-          muted
           poster=""
           style={{ display: isAudio ? 'none' : 'block' }}
         />
@@ -427,7 +415,6 @@ const TVPlayer = ({ channel, onError, playerNumber, isActive }) => {
         {/* Elemento de audio (oculto cuando es video) */}
         <audio
           ref={audioRef}
-          muted
           style={{ display: 'none' }}
         />
 
