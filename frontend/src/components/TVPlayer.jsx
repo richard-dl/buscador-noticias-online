@@ -61,14 +61,20 @@ const TVPlayer = ({ channel, onError, playerNumber, isActive }) => {
   const [isMuted, setIsMuted] = useState(!isActive);
   const [isAudio, setIsAudio] = useState(false);
 
-  // Sincronizar mute con el estado activo (solo cuando está reproduciendo)
+  // Sincronizar mute con el estado activo
   useEffect(() => {
     const media = isAudio ? audioRef.current : videoRef.current;
-    if (media && isPlaying) {
-      media.muted = !isActive;
-      setIsMuted(!isActive);
+    if (media) {
+      const shouldMute = !isActive;
+      media.muted = shouldMute;
+      setIsMuted(shouldMute);
+
+      // Si el video estaba reproduciendo, asegurar que siga reproduciendo
+      if (!media.paused || isPlaying) {
+        media.play().catch(() => {});
+      }
     }
-  }, [isActive, isAudio, isPlaying]);
+  }, [isActive, isAudio]);
 
   useEffect(() => {
     // Verificar primero si hay canal y URL
