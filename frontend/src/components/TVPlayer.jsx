@@ -403,6 +403,13 @@ const TVPlayer = ({ channel, onError, playerNumber }) => {
           poster=""
           style={{ display: isAudio ? 'none' : 'block' }}
         />
+        {/* Overlay para bloquear clics en el video excepto en controles */}
+        {!isAudio && channel && (
+          <div
+            className="tv-video-click-blocker"
+            onClick={(e) => e.stopPropagation()}
+          />
+        )}
 
         {/* Elemento de audio (oculto cuando es video) */}
         <audio

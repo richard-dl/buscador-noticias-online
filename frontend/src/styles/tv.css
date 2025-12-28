@@ -442,6 +442,17 @@
   background: #000;
 }
 
+/* Overlay para bloquear clics en video excepto controles */
+.tv-video-click-blocker {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 50px; /* Deja libre la zona de controles nativos */
+  z-index: 1;
+  cursor: default;
+}
+
 /* Modo Audio/Radio */
 .tv-audio-mode {
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
