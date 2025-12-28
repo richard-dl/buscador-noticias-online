@@ -5,7 +5,7 @@ import { newsApi, userApi } from '../services/api'
 import Header from '../components/Header'
 import NewsCard from '../components/NewsCard'
 import LoadingSpinner from '../components/LoadingSpinner'
-import { FiSearch, FiFileText, FiTrendingUp, FiClock, FiGrid, FiStar } from 'react-icons/fi'
+import { FiSearch, FiFileText, FiZap, FiClock, FiGrid, FiStar } from 'react-icons/fi'
 import MediaCarousel from '../components/MediaCarousel'
 
 const Dashboard = () => {
@@ -168,12 +168,12 @@ const Dashboard = () => {
             <p>Usa tus perfiles de búsqueda guardados</p>
           </Link>
 
-          <Link to="/profile" className="action-card">
+          <Link to="/generator?tab=breaking" className="action-card">
             <div className="action-icon">
-              <FiTrendingUp size={32} />
+              <FiZap size={32} />
             </div>
-            <h3>Mi Cuenta</h3>
-            <p>Ver suscripción y configuración</p>
+            <h3>Último Momento</h3>
+            <p>Noticias recientes de último momento</p>
           </Link>
 
           <Link to="/zona-vip" className="action-card action-card-vip">
