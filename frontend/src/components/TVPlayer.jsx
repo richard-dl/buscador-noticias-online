@@ -60,15 +60,22 @@ const TVPlayer = ({ channel, onError, playerNumber, isActive, onActivate }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true); // Inicia muteado para autoplay
   const [isAudio, setIsAudio] = useState(false);
+  const [userHasInteracted, setUserHasInteracted] = useState(false);
 
-  // Sincronizar mute con el estado activo
+  // Sincronizar mute con el estado activo (solo después de interacción)
   useEffect(() => {
     const media = isAudio ? audioRef.current : videoRef.current;
-    if (media) {
+    if (media && userHasInteracted) {
       media.muted = !isActive;
       setIsMuted(!isActive);
     }
-  }, [isActive, isAudio]);
+  }, [isActive, isAudio, userHasInteracted]);
+
+  // Función para manejar activación con interacción
+  const handleActivate = () => {
+    setUserHasInteracted(true);
+    if (onActivate) onActivate();
+  };
 
   useEffect(() => {
     // Verificar primero si hay canal y URL
@@ -418,7 +425,7 @@ const TVPlayer = ({ channel, onError, playerNumber, isActive, onActivate }) => {
             className="tv-video-click-blocker"
             onClick={(e) => {
               e.stopPropagation();
-              if (onActivate) onActivate();
+              handleActivate();
             }}
           />
         )}
