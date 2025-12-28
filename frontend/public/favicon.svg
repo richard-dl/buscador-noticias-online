@@ -1,21 +1,46 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
   <defs>
-    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#1a365d;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#2b6cb0;stop-opacity:1" />
+    <linearGradient id="globeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4a6fa5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2d5a8a;stop-opacity:1" />
     </linearGradient>
   </defs>
-  <!-- Círculo del mundo -->
-  <circle cx="50" cy="50" r="45" fill="url(#grad)" stroke="#e2e8f0" stroke-width="2"/>
-  <!-- Líneas del globo -->
-  <ellipse cx="50" cy="50" rx="45" ry="20" fill="none" stroke="#e2e8f0" stroke-width="1.5" opacity="0.6"/>
-  <ellipse cx="50" cy="50" rx="20" ry="45" fill="none" stroke="#e2e8f0" stroke-width="1.5" opacity="0.6"/>
-  <line x1="5" y1="50" x2="95" y2="50" stroke="#e2e8f0" stroke-width="1.5" opacity="0.6"/>
-  <line x1="50" y1="5" x2="50" y2="95" stroke="#e2e8f0" stroke-width="1.5" opacity="0.6"/>
-  <!-- Lupa -->
-  <circle cx="62" cy="62" r="18" fill="none" stroke="#fff" stroke-width="4"/>
-  <line x1="75" y1="75" x2="90" y2="90" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
-  <!-- Punto de noticias -->
-  <circle cx="35" cy="35" r="8" fill="#48bb78"/>
-  <circle cx="35" cy="35" r="4" fill="#fff"/>
+
+  <!-- Cuadrado decorativo azul oscuro -->
+  <rect x="2" y="72" width="18" height="18" rx="3" fill="#1a365d"/>
+  <!-- Cuadrado pequeño azul claro -->
+  <rect x="14" y="78" width="10" height="10" rx="2" fill="#4a90d9"/>
+
+  <!-- Círculo del globo -->
+  <circle cx="50" cy="45" r="40" fill="url(#globeGrad)" stroke="#a8c5e2" stroke-width="1.5"/>
+
+  <!-- Líneas del globo - horizontales -->
+  <ellipse cx="50" cy="45" rx="40" ry="16" fill="none" stroke="#a8c5e2" stroke-width="1" opacity="0.7"/>
+  <ellipse cx="50" cy="45" rx="40" ry="32" fill="none" stroke="#a8c5e2" stroke-width="1" opacity="0.5"/>
+
+  <!-- Líneas del globo - verticales -->
+  <ellipse cx="50" cy="45" rx="16" ry="40" fill="none" stroke="#a8c5e2" stroke-width="1" opacity="0.7"/>
+  <ellipse cx="50" cy="45" rx="32" ry="40" fill="none" stroke="#a8c5e2" stroke-width="1" opacity="0.5"/>
+
+  <!-- Línea central horizontal -->
+  <line x1="10" y1="45" x2="90" y2="45" stroke="#a8c5e2" stroke-width="1" opacity="0.7"/>
+  <!-- Línea central vertical -->
+  <line x1="50" y1="5" x2="50" y2="85" stroke="#a8c5e2" stroke-width="1" opacity="0.7"/>
+
+  <!-- Punto verde (arriba izquierda) -->
+  <circle cx="32" cy="28" r="7" fill="#48bb78"/>
+  <circle cx="32" cy="28" r="3" fill="#fff"/>
+
+  <!-- Punto naranja (arriba derecha) -->
+  <circle cx="68" cy="24" r="6" fill="#ed8936"/>
+  <circle cx="68" cy="24" r="2.5" fill="#fff"/>
+
+  <!-- Punto azul claro (centro abajo) -->
+  <circle cx="45" cy="55" r="5" fill="#63b3ed"/>
+  <circle cx="45" cy="55" r="2" fill="#fff"/>
+
+  <!-- Lupa - círculo -->
+  <circle cx="68" cy="58" r="16" fill="none" stroke="#2b6cb0" stroke-width="4"/>
+  <!-- Lupa - mango -->
+  <line x1="80" y1="70" x2="92" y2="82" stroke="#2b6cb0" stroke-width="5" stroke-linecap="round"/>
 </svg>
