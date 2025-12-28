@@ -8,12 +8,22 @@ import LoadingSpinner from '../components/LoadingSpinner'
 import { FiSearch, FiFileText, FiZap, FiClock, FiGrid, FiStar } from 'react-icons/fi'
 import MediaCarousel from '../components/MediaCarousel'
 
+// Imágenes de fondo para el hero (selección aleatoria)
+const HERO_BACKGROUNDS = [
+  '/images/newspaper-bg.jpg',
+  '/images/world-connections-bg.jpg',
+  '/images/media-icons-bg.jpg'
+]
+
 const Dashboard = () => {
   const { profile, daysRemaining, isAuthenticated } = useAuth()
   const [recentNews, setRecentNews] = useState([])
   const [searchProfiles, setSearchProfiles] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [heroBg] = useState(() =>
+    HERO_BACKGROUNDS[Math.floor(Math.random() * HERO_BACKGROUNDS.length)]
+  )
   const [gridColumns, setGridColumns] = useState(() => {
     const saved = localStorage.getItem('newsGridColumns')
     return saved ? parseInt(saved, 10) : 3
@@ -93,7 +103,7 @@ const Dashboard = () => {
       <Header />
 
       {/* Hero Section */}
-      <section className="hero">
+      <section className="hero" style={{ '--hero-bg-image': `url(${heroBg})` }}>
         <div className="hero-content">
           <div className="hero-text">
             <h1>Buscador de Noticias Online</h1>
