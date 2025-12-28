@@ -9,18 +9,18 @@ const TVStreaming = () => {
   const [player1Channel, setPlayer1Channel] = useState(null);
   const [player2Channel, setPlayer2Channel] = useState(null);
   const [activePlayer, setActivePlayer] = useState(1); // 1 o 2: indica qué player recibe la selección
-  const [activeCategory, setActiveCategory] = useState('Argentina - Noticias');
+  const [activeCategory, setActiveCategory] = useState('Publicos Argentina');
   const [searchQuery, setSearchQuery] = useState('');
   const [showMobileChannels, setShowMobileChannels] = useState(false);
 
-  // Cargar canales por defecto al iniciar (TN y C5N)
+  // Cargar canales por defecto al iniciar (TN y C5N de Noticias)
   useEffect(() => {
-    const argChannels = channels['Argentina - Noticias'] || [];
-    const tn = argChannels.find(c => c.name.includes('TN'));
-    const c5n = argChannels.find(c => c.name.includes('C5N'));
+    const noticiasChannels = channels['Noticias'] || [];
+    const tn = noticiasChannels.find(c => c.name.includes('TN'));
+    const c5n = noticiasChannels.find(c => c.name.includes('C5N'));
 
-    if (tn) setPlayer1Channel({ ...tn, category: 'Argentina - Noticias' });
-    if (c5n) setPlayer2Channel({ ...c5n, category: 'Argentina - Noticias' });
+    if (tn) setPlayer1Channel({ ...tn, category: 'Noticias' });
+    if (c5n) setPlayer2Channel({ ...c5n, category: 'Noticias' });
   }, []);
 
   const categories = getCategories();
