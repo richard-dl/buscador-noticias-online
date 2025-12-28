@@ -152,16 +152,16 @@ const Dashboard = () => {
       {/* Quick Actions */}
       <section className="quick-actions container">
         <div className="actions-grid">
-          <Link to="/generator" className="action-card">
-            <div className="action-icon">
+          <Link to="/generator" className="action-card action-card-search">
+            <div className="action-icon action-icon-search">
               <FiSearch size={32} />
             </div>
             <h3>Buscar Noticias</h3>
             <p>Busca por temática, provincia o palabras clave</p>
           </Link>
 
-          <Link to="/generator?tab=profiles" className="action-card">
-            <div className="action-icon">
+          <Link to="/generator?tab=profiles" className="action-card action-card-profiles">
+            <div className="action-icon action-icon-profiles">
               <FiFileText size={32} />
             </div>
             <h3>Mis Perfiles</h3>
