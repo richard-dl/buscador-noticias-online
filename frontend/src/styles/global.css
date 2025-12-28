@@ -1125,31 +1125,22 @@ input, select, textarea {
   border: 2px solid #805ad5;
   position: relative;
   overflow: hidden;
+  animation: profiles-glow 3s ease-in-out infinite;
 }
 
-.action-card-profiles::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(128, 90, 213, 0.15), transparent);
-  animation: profiles-shine 3s ease-in-out infinite;
-}
-
-@keyframes profiles-shine {
-  0% {
-    left: -100%;
+@keyframes profiles-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(128, 90, 213, 0.2);
   }
-  50%, 100% {
-    left: 100%;
+  50% {
+    box-shadow: 0 0 12px rgba(128, 90, 213, 0.35);
   }
 }
 
 .action-card-profiles:hover {
   border-color: #b794f4;
   box-shadow: 0 5px 25px rgba(128, 90, 213, 0.4);
+  animation: none;
 }
 
 .action-card-profiles h3 {
@@ -1166,7 +1157,28 @@ input, select, textarea {
   position: relative;
   background: linear-gradient(135deg, #1a0a0a 0%, #2d1515 100%);
   border: 2px solid #e53e3e;
+  overflow: hidden;
   animation: breaking-pulse 2s ease-in-out infinite;
+}
+
+.action-card-breaking::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(229, 62, 62, 0.2), transparent);
+  animation: breaking-shine 2s ease-in-out infinite;
+}
+
+@keyframes breaking-shine {
+  0% {
+    left: -100%;
+  }
+  50%, 100% {
+    left: 100%;
+  }
 }
 
 @keyframes breaking-pulse {
@@ -1182,6 +1194,11 @@ input, select, textarea {
   border-color: #fc8181;
   box-shadow: 0 5px 25px rgba(229, 62, 62, 0.4);
   animation: none;
+}
+
+.action-card-breaking:hover::before {
+  animation: none;
+  opacity: 0;
 }
 
 .action-card-breaking h3 {

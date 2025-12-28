@@ -160,14 +160,6 @@ const Dashboard = () => {
             <p>Busca por temática, provincia o palabras clave</p>
           </Link>
 
-          <Link to="/generator?tab=profiles" className="action-card action-card-profiles">
-            <div className="action-icon action-icon-profiles">
-              <FiFileText size={32} />
-            </div>
-            <h3>Mis Perfiles</h3>
-            <p>Usa tus perfiles de búsqueda guardados</p>
-          </Link>
-
           <Link to="/generator?tab=breaking" className="action-card action-card-breaking">
             <div className="action-icon action-icon-breaking">
               <FiZap size={32} />
@@ -175,6 +167,14 @@ const Dashboard = () => {
             <h3>Último Momento</h3>
             <p>Noticias recientes de último momento</p>
             <span className="breaking-badge">URGENTE</span>
+          </Link>
+
+          <Link to="/generator?tab=profiles" className="action-card action-card-profiles">
+            <div className="action-icon action-icon-profiles">
+              <FiFileText size={32} />
+            </div>
+            <h3>Mis Perfiles</h3>
+            <p>Usa tus perfiles de búsqueda guardados</p>
           </Link>
 
           <Link to="/zona-vip" className="action-card action-card-vip">
