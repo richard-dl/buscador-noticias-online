@@ -54,3 +54,7 @@ nul
 
 # Migration docs (sensitive)
 MIGRACION-DOMINIO.md
+
+# Backup files
+*.zip
+backup-*
