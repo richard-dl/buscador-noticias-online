@@ -618,7 +618,7 @@ ${hashtagsStr}`
             </div>
             <h1>Zona PRENSA</h1>
             <p className="vip-locked-message">
-              {vipStatus?.reason || 'Esta sección requiere una suscripción Prensa activa.'}
+              {vipStatus?.reason?.replace('VIP', 'Prensa') || 'Esta sección requiere una suscripción Prensa activa.'}
             </p>
             {vipStatus?.expiredAt && (
               <p className="vip-expired-date">
