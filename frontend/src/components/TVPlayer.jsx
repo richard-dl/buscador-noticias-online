@@ -62,29 +62,18 @@ const TVPlayer = ({ channel, onError, playerNumber, isActive, onActivate }) => {
   const [isAudio, setIsAudio] = useState(false);
   const [userHasInteracted, setUserHasInteracted] = useState(false);
 
-  // Sincronizar mute con el estado activo (solo después de interacción del usuario)
-  // El player activo tiene sonido, el inactivo está muteado
+  // Sincronizar mute con el estado activo (solo después de interacción)
   useEffect(() => {
     const media = isAudio ? audioRef.current : videoRef.current;
     if (media && userHasInteracted) {
-      const shouldMute = !isActive;
-      media.muted = shouldMute;
-      setIsMuted(shouldMute);
+      media.muted = !isActive;
+      setIsMuted(!isActive);
     }
   }, [isActive, isAudio, userHasInteracted]);
 
-  // Función para manejar activación con interacción del usuario
+  // Función para manejar activación con interacción
   const handleActivate = () => {
-    // Marcar que el usuario interactuó (permite autoplay con sonido)
-    if (!userHasInteracted) {
-      setUserHasInteracted(true);
-    }
-    // Desmutar este player al hacer clic
-    const media = isAudio ? audioRef.current : videoRef.current;
-    if (media) {
-      media.muted = false;
-      setIsMuted(false);
-    }
+    setUserHasInteracted(true);
     if (onActivate) onActivate();
   };
 
@@ -426,7 +415,7 @@ const TVPlayer = ({ channel, onError, playerNumber, isActive, onActivate }) => {
           className="tv-video"
           playsInline
           controls
-          muted={isMuted}
+          muted
           poster=""
           style={{ display: isAudio ? 'none' : 'block' }}
         />
@@ -444,7 +433,7 @@ const TVPlayer = ({ channel, onError, playerNumber, isActive, onActivate }) => {
         {/* Elemento de audio (oculto cuando es video) */}
         <audio
           ref={audioRef}
-          muted={isMuted}
+          muted
           style={{ display: 'none' }}
         />
 
