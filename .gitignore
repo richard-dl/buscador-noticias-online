@@ -51,3 +51,6 @@ nul
 
 # Claude local settings
 .claude/settings.local.json
+
+# Migration docs (sensitive)
+MIGRACION-DOMINIO.md
