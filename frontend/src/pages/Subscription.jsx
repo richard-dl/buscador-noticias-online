@@ -132,8 +132,8 @@ const Subscription = () => {
   const isAdmin = currentRole === 'admin'
   const isGuest = !isAuthenticated
 
-  // Características de Zona VIP
-  const zonaVipFeature = 'Zona VIP: informes en tiempo real de PFA, PSA, GNA, policías provinciales, Ministerio de Seguridad y más'
+  // Características de Zona PRENSA
+  const zonaVipFeature = 'Zona PRENSA: informes en tiempo real de PFA, PSA, GNA, policías provinciales, Ministerio de Seguridad y más'
 
   return (
     <div className="subscription-page">
@@ -215,7 +215,7 @@ const Subscription = () => {
               <li><FiCheck className="check" /> Guardar noticias favoritas</li>
               <li><FiCheck className="check" /> Perfiles de búsqueda</li>
               <li className="limitation"><FiX className="x" /> Sin acceso a herramientas de IA</li>
-              <li className="limitation"><FiX className="x" /> Sin acceso a Zona VIP</li>
+              <li className="limitation"><FiX className="x" /> Sin acceso a Zona PRENSA</li>
               <li className="limitation"><FiX className="x" /> Período limitado a 30 días</li>
             </ul>
 
@@ -250,7 +250,7 @@ const Subscription = () => {
               <li><FiCheck className="check" /> Acceso permanente sin vencimiento</li>
               <li><FiCheck className="check" /> Soporte prioritario</li>
               <li className="limitation"><FiX className="x" /> Sin acceso a herramientas de IA</li>
-              <li className="limitation"><FiX className="x" /> Sin acceso a Zona VIP</li>
+              <li className="limitation"><FiX className="x" /> Sin acceso a Zona PRENSA</li>
             </ul>
 
             <div className="plan-action">
@@ -282,11 +282,11 @@ const Subscription = () => {
             </div>
           </div>
 
-          {/* Plan VIP Trial */}
+          {/* Plan Prensa Trial */}
           <div className={`plan-card ${currentRole === 'vip_trial' ? 'current-plan' : ''}`}>
             <div className="plan-header">
               <span className="plan-icon"><FiZap /></span>
-              <h2>VIP Trial</h2>
+              <h2>Prensa Trial</h2>
               <div className="plan-price">
                 <span className="price">Gratis</span>
                 <span className="period">30 días</span>
@@ -317,14 +317,14 @@ const Subscription = () => {
                   ) : (
                     <>
                       <FiZap size={18} />
-                      Probar VIP gratis
+                      Probar Prensa gratis
                     </>
                   )}
                 </button>
               ) : currentRole === 'vip_trial' ? (
                 <span className="current-label">Plan actual</span>
               ) : currentRole === 'vip' ? (
-                <span className="current-label">Ya eres VIP</span>
+                <span className="current-label">Ya eres Prensa</span>
               ) : currentRole === 'suscriptor' && !subscriptionStatus?.canActivateVipTrial ? (
                 <span className="not-available">Ya usaste tu prueba</span>
               ) : isAdmin ? (
@@ -335,12 +335,12 @@ const Subscription = () => {
             </div>
           </div>
 
-          {/* Plan VIP Anual */}
+          {/* Plan Prensa Anual */}
           <div className={`plan-card plan-premium ${currentRole === 'vip' ? 'current-plan' : ''}`}>
             <div className="plan-badge premium">Premium</div>
             <div className="plan-header">
               <span className="plan-icon"><FiTrendingUp /></span>
-              <h2>VIP Anual</h2>
+              <h2>Prensa Anual</h2>
               <div className="plan-price">
                 <span className="price">$90</span>
                 <span className="period">por año</span>
@@ -363,7 +363,7 @@ const Subscription = () => {
                   onClick={() => handlePayment('vip')}
                 >
                   <FiAward size={18} />
-                  Activar VIP $90/año
+                  Activar Prensa $90/año
                 </button>
               ) : (currentRole === 'suscriptor' || currentRole === 'vip_trial') ? (
                 <button
@@ -371,7 +371,7 @@ const Subscription = () => {
                   onClick={() => handlePayment('vip')}
                 >
                   <FiAward size={18} />
-                  Activar VIP $90/año
+                  Activar Prensa $90/año
                 </button>
               ) : currentRole === 'vip' ? (
                 <>
@@ -408,21 +408,21 @@ const Subscription = () => {
             <div className="faq-item">
               <h4>¿Qué son las herramientas de IA?</h4>
               <p>
-                Los usuarios VIP tienen acceso a resúmenes automáticos de noticias,
+                Los usuarios Zona Prensa tienen acceso a resúmenes automáticos de noticias,
                 análisis de contenido y contenido exclusivo generado con inteligencia artificial.
               </p>
             </div>
 
             <div className="faq-item">
-              <h4>¿Puedo probar el plan VIP antes de pagar?</h4>
+              <h4>¿Puedo probar el plan Zona Prensa antes de pagar?</h4>
               <p>
                 Sí. Los suscriptores pueden activar una prueba gratuita de 30 días
-                del plan VIP para probar todas las funciones de IA.
+                del plan Prensa para probar todas las funciones de IA.
               </p>
             </div>
 
             <div className="faq-item">
-              <h4>¿Qué pasa si no renuevo el VIP anual?</h4>
+              <h4>¿Qué pasa si no renuevo Prensa Anual?</h4>
               <p>
                 Si no renuevas, mantienes tu acceso como Suscriptor vitalicio,
                 pero pierdes las herramientas de IA hasta que renueves.
@@ -430,9 +430,9 @@ const Subscription = () => {
             </div>
 
             <div className="faq-item">
-              <h4>¿Qué es la Zona VIP?</h4>
+              <h4>¿Qué es la Zona PRENSA?</h4>
               <p>
-                En la Zona VIP se publican en tiempo real informes directos de instituciones
+                En la Zona PRENSA se publican en tiempo real informes directos de instituciones
                 como Policía Federal (PFA), Policía de Seguridad Aeroportuaria (PSA),
                 Gendarmería Nacional (GNA), policías provinciales, Ministerio de Seguridad,
                 Policía de la Ciudad de Buenos Aires, municipios y otras fuentes oficiales.
@@ -462,8 +462,8 @@ const Subscription = () => {
             <div className="payment-modal-header">
               <h2>
                 {showPayment === 'suscriptor' && 'Plan Suscriptor'}
-                {showPayment === 'vip' && 'Plan VIP Anual'}
-                {showPayment === 'vip_renew' && 'Renovar VIP'}
+                {showPayment === 'vip' && 'Plan Prensa Anual'}
+                {showPayment === 'vip_renew' && 'Renovar Prensa'}
               </h2>
               <p className="payment-modal-price">
                 {showPayment === 'suscriptor' && '$39 USD - Pago único vitalicio'}
@@ -494,7 +494,7 @@ const Subscription = () => {
                 <ul>
                   <li><FiCheck /> Todo lo incluido en Suscriptor</li>
                   <li><FiCheck /> Herramientas de IA completas</li>
-                  <li><FiCheck /> Acceso a Zona VIP</li>
+                  <li><FiCheck /> Acceso a Zona PRENSA</li>
                   <li><FiCheck /> Resúmenes automáticos</li>
                   <li><FiCheck /> Soporte premium 24/7</li>
                 </ul>

@@ -13,7 +13,7 @@ const Header = () => {
     { path: '/dashboard', label: 'Inicio', icon: FiHome },
     { path: '/generator', label: 'Generador', icon: FiFileText },
     { path: '/tv', label: 'TV en Vivo', icon: FiTv, requiresAuth: true },
-    { path: '/zona-vip', label: 'Zona VIP', icon: FiStar, isVip: true },
+    { path: '/zona-vip', label: 'Zona PRENSA', icon: FiStar, isVip: true },
     { path: '/subscription', label: 'Planes', icon: FiCreditCard }
   ]
 

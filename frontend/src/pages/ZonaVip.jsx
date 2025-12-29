@@ -55,10 +55,10 @@ const ZonaVip = () => {
         // Mostrar alertas según días restantes (solo para vip_trial y vip)
         const { daysRemaining, isTrial } = response.data
         if (daysRemaining !== null && daysRemaining !== undefined) {
-          const tipoSuscripcion = isTrial ? 'prueba VIP' : 'VIP'
+          const tipoSuscripcion = isTrial ? 'prueba Prensa' : 'Prensa'
 
           if (daysRemaining === 0) {
-            toast.error(`Hoy es tu último día de ${tipoSuscripcion}. Activa VIP anual para mantener acceso.`, {
+            toast.error(`Hoy es tu último día de ${tipoSuscripcion}. Activa Prensa anual para mantener acceso.`, {
               autoClose: 10000
             })
           } else if (daysRemaining <= 3) {
@@ -600,7 +600,7 @@ ${hashtagsStr}`
       <div className="zona-vip-page">
         <Header />
         <div className="zona-vip-container">
-          <LoadingSpinner message="Verificando acceso VIP..." />
+          <LoadingSpinner message="Verificando acceso Zona PRENSA..." />
         </div>
       </div>
     )
@@ -616,17 +616,17 @@ ${hashtagsStr}`
             <div className="vip-locked-icon">
               <FiLock size={64} />
             </div>
-            <h1>Zona VIP</h1>
+            <h1>Zona PRENSA</h1>
             <p className="vip-locked-message">
-              {vipStatus?.reason || 'Esta sección requiere una suscripción VIP activa.'}
+              {vipStatus?.reason || 'Esta sección requiere una suscripción Prensa activa.'}
             </p>
             {vipStatus?.expiredAt && (
               <p className="vip-expired-date">
-                Tu suscripción VIP expiró el {formatDate(vipStatus.expiredAt)}
+                Tu suscripción Prensa expiró el {formatDate(vipStatus.expiredAt)}
               </p>
             )}
             <div className="vip-benefits">
-              <h3>Beneficios de la Zona VIP:</h3>
+              <h3>Beneficios de la Zona PRENSA:</h3>
               <ul>
                 <li><FiStar /> Acceso exclusivo a información privilegiada</li>
                 <li><FiStar /> Noticias antes que nadie</li>
@@ -635,7 +635,7 @@ ${hashtagsStr}`
               </ul>
             </div>
             <button className="btn-upgrade-vip" onClick={() => navigate('/subscription')}>
-              Obtener Suscripción VIP
+              Obtener Suscripción Prensa
             </button>
           </div>
         </div>
@@ -653,7 +653,7 @@ ${hashtagsStr}`
           <div className="vip-expiration-bar">
             <FiClock />
             <span>
-              Tu suscripción VIP vence el <strong>{formatExpirationDate(vipStatus.expiresAt)}</strong>
+              Tu suscripción Prensa vence el <strong>{formatExpirationDate(vipStatus.expiresAt)}</strong>
               {vipStatus.daysRemaining && ` (${vipStatus.daysRemaining} días restantes)`}
             </span>
           </div>
@@ -662,10 +662,10 @@ ${hashtagsStr}`
         <div className="vip-header">
           <div className="vip-header-title">
             <FiStar className="vip-star" />
-            <h1>Zona VIP</h1>
+            <h1>Zona PRENSA</h1>
             <FiStar className="vip-star" />
           </div>
-          <p className="vip-subtitle">Contenido exclusivo para suscriptores VIP</p>
+          <p className="vip-subtitle">Contenido exclusivo para suscriptores ZP</p>
 
           {/* Botón actualizar centrado arriba */}
           <button
@@ -734,7 +734,7 @@ ${hashtagsStr}`
         ) : content.length === 0 ? (
           <div className="vip-empty">
             <FiImage size={48} />
-            <p>No hay contenido VIP disponible en este momento.</p>
+            <p>No hay contenido disponible en este momento.</p>
             <p className="vip-empty-hint">El contenido nuevo aparecerá aquí automáticamente.</p>
           </div>
         ) : (

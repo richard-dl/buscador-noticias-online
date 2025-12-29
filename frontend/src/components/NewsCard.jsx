@@ -428,8 +428,8 @@ ${hashtagsStr}`
         {!isVipContent && !isSaved && !hasVipAccess && (
           <button
             className="btn-ai btn-ai-locked"
-            onClick={() => toast.info('Actualiza a VIP para usar herramientas de IA')}
-            title="RESUMEN IA (VIP)"
+            onClick={() => toast.info('Actualiza a Prensa para usar herramientas de IA')}
+            title="RESUMEN IA (Prensa)"
           >
             <FiLock size={16} />
             <span>IA</span>
