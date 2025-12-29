@@ -191,9 +191,9 @@ const Dashboard = () => {
             <div className="action-icon action-icon-vip">
               <FiStar size={32} />
             </div>
-            <h3>Zona VIP</h3>
-            <p>Contenido exclusivo para suscriptores VIP</p>
-            <span className="vip-badge-small">VIP</span>
+            <h3>Zona PRENSA</h3>
+            <p>Contenido exclusivo para suscriptores ZP</p>
+            <span className="vip-badge-small">ZP</span>
           </Link>
         </div>
       </section>

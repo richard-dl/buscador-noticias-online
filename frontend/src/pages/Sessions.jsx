@@ -156,8 +156,8 @@ const Sessions = () => {
   const getRoleLabel = (role) => {
     const labels = {
       admin: 'Admin',
-      vip: 'VIP',
-      vip_trial: 'VIP Trial',
+      vip: 'Prensa',
+      vip_trial: 'Prensa Trial',
       suscriptor: 'Suscriptor',
       trial: 'Trial'
     }
@@ -411,7 +411,7 @@ const Sessions = () => {
           <ul>
             <li>Las sesiones expiran automáticamente después de 30 días de inactividad</li>
             <li>El modo "sesión única" cierra las sesiones anteriores al iniciar una nueva</li>
-            <li>Usuarios trial: máximo 2 dispositivos / Suscriptor y VIP: máximo 3 / Admin: máximo 10</li>
+            <li>Usuarios trial: máximo 2 dispositivos / Suscriptor y Prensa: máximo 3 / Admin: máximo 10</li>
             <li>Al cerrar una sesión, el usuario deberá iniciar sesión nuevamente en ese dispositivo</li>
           </ul>
         </section>

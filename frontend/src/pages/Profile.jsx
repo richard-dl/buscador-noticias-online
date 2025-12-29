@@ -216,7 +216,7 @@ const Profile = () => {
   }
 
   const getSessionRoleLabel = (role) => {
-    const labels = { admin: 'Admin', vip: 'VIP', vip_trial: 'VIP Trial', suscriptor: 'Suscriptor', trial: 'Trial' }
+    const labels = { admin: 'Admin', vip: 'Prensa', vip_trial: 'Prensa Trial', suscriptor: 'Suscriptor', trial: 'Trial' }
     return labels[role] || role
   }
 
@@ -262,8 +262,8 @@ const Profile = () => {
     const badges = {
       trial: { text: 'Prueba Gratuita', class: 'badge-trial' },
       suscriptor: { text: 'Suscriptor Vitalicio', class: 'badge-active' },
-      vip_trial: { text: 'VIP Trial', class: 'badge-vip-trial' },
-      vip: { text: 'VIP Anual', class: 'badge-vip' },
+      vip_trial: { text: 'Prensa Trial', class: 'badge-vip-trial' },
+      vip: { text: 'Prensa Anual', class: 'badge-vip' },
       admin: { text: 'Administrador', class: 'badge-admin' },
       active: { text: 'Activo', class: 'badge-active' },
       expired: { text: 'Expirado', class: 'badge-expired' }
@@ -275,8 +275,8 @@ const Profile = () => {
     const badges = {
       trial: { text: 'Trial', class: 'badge-trial' },
       suscriptor: { text: 'Suscriptor', class: 'badge-active' },
-      vip_trial: { text: 'VIP Trial', class: 'badge-vip-trial' },
-      vip: { text: 'VIP', class: 'badge-vip' },
+      vip_trial: { text: 'Prensa Trial', class: 'badge-vip-trial' },
+      vip: { text: 'Prensa', class: 'badge-vip' },
       admin: { text: 'Admin', class: 'badge-admin' }
     }
     return badges[role] || badges.trial
@@ -286,8 +286,8 @@ const Profile = () => {
     const role = profile?.role
     if (role === 'admin') return null
     if (role === 'suscriptor') return 'Suscripción vitalicia - sin fecha de vencimiento'
-    if (role === 'vip_trial') return 'Período de prueba VIP con acceso a IA'
-    if (role === 'vip') return 'Suscripción VIP anual con acceso a IA'
+    if (role === 'vip_trial') return 'Período de prueba Prensa con acceso a IA'
+    if (role === 'vip') return 'Suscripción Prensa anual con acceso a IA'
     return 'Período de prueba gratuito'
   }
 
@@ -447,16 +447,16 @@ const Profile = () => {
                     </>
                   ) : profile?.role === 'vip_trial' ? (
                     <>
-                      <p>Tu prueba VIP está por vencer. Activa VIP anual para mantener acceso a IA.</p>
+                      <p>Tu prueba Prensa está por vencer. Activa Prensa anual para mantener acceso a IA.</p>
                       <a href="/subscription" className="btn btn-primary">
-                        Activar VIP
+                        Activar Prensa
                       </a>
                     </>
                   ) : profile?.role === 'vip' ? (
                     <>
-                      <p>Tu suscripción VIP está por vencer. Renueva para mantener acceso a IA.</p>
+                      <p>Tu suscripción Prensa está por vencer. Renueva para mantener acceso a IA.</p>
                       <a href="/subscription" className="btn btn-primary">
-                        Renovar VIP
+                        Renovar Prensa
                       </a>
                     </>
                   ) : null}
@@ -543,13 +543,13 @@ const Profile = () => {
             )}
           </section>
 
-          {/* Sección de Zona VIP - Solo Admin */}
+          {/* Sección de Zona PRENSA - Solo Admin */}
           {profile?.role === 'admin' && (
             <section className="profile-card vip-admin-card">
               <div className="card-header">
                 <h2>
                   <FiStar size={24} />
-                  Administración Zona VIP
+                  Administración Zona PRENSA
                 </h2>
                 <button
                   className="btn btn-text"
@@ -933,7 +933,7 @@ const Profile = () => {
               )}
 
               <div className="sessions-info-mini">
-                <p><strong>Info:</strong> Trial: 2 dispositivos | Suscriptor/VIP: 3 | Admin: 10</p>
+                <p><strong>Info:</strong> Trial: 2 dispositivos | Suscriptor/Prensa: 3 | Admin: 10</p>
               </div>
             </section>
           )}

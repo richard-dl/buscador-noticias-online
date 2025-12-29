@@ -47,11 +47,11 @@ export const AuthProvider = ({ children }) => {
           autoClose: 8000
         })
       } else if (subscriptionType === 'vip_trial') {
-        toast.warning('Tu prueba VIP ha terminado. Activa VIP anual para mantener acceso a IA.', {
+        toast.warning('Tu prueba Prensa ha terminado. Activa Prensa anual para mantener acceso a IA.', {
           autoClose: 8000
         })
       } else if (subscriptionType === 'vip') {
-        toast.warning('Tu suscripción VIP ha vencido. Renueva para mantener acceso a IA.', {
+        toast.warning('Tu suscripción Prensa ha vencido. Renueva para mantener acceso a IA.', {
           autoClose: 8000
         })
       }
@@ -67,11 +67,11 @@ export const AuthProvider = ({ children }) => {
             autoClose: 10000
           })
         } else if (subscriptionType === 'vip_trial') {
-          toast.error('Hoy termina tu prueba VIP. Activa VIP anual para no perder acceso.', {
+          toast.error('Hoy termina tu prueba Prensa. Activa Prensa anual para no perder acceso.', {
             autoClose: 10000
           })
         } else if (subscriptionType === 'vip') {
-          toast.error('Tu VIP vence hoy. Renueva ahora para mantener el acceso.', {
+          toast.error('Tu Prensa vence hoy. Renueva ahora para mantener el acceso.', {
             autoClose: 10000
           })
         }
@@ -82,11 +82,11 @@ export const AuthProvider = ({ children }) => {
             autoClose: 7000
           })
         } else if (subscriptionType === 'vip_trial') {
-          toast.warning(`Tu prueba VIP vence en ${daysRemaining} día${daysRemaining > 1 ? 's' : ''}. Considera activar VIP.`, {
+          toast.warning(`Tu prueba Prensa vence en ${daysRemaining} día${daysRemaining > 1 ? 's' : ''}. Considera activar Prensa.`, {
             autoClose: 7000
           })
         } else if (subscriptionType === 'vip') {
-          toast.warning(`Tu VIP vence en ${daysRemaining} día${daysRemaining > 1 ? 's' : ''}. Renueva pronto.`, {
+          toast.warning(`Tu Prensa vence en ${daysRemaining} día${daysRemaining > 1 ? 's' : ''}. Renueva pronto.`, {
             autoClose: 7000
           })
         }
@@ -95,9 +95,9 @@ export const AuthProvider = ({ children }) => {
         if (subscriptionType === 'trial') {
           toast.info(`Te quedan ${daysRemaining} días de prueba.`, { autoClose: 5000 })
         } else if (subscriptionType === 'vip_trial') {
-          toast.info(`Te quedan ${daysRemaining} días de prueba VIP.`, { autoClose: 5000 })
+          toast.info(`Te quedan ${daysRemaining} días de prueba Prensa.`, { autoClose: 5000 })
         } else if (subscriptionType === 'vip') {
-          toast.info(`Tu VIP vence en ${daysRemaining} días.`, { autoClose: 5000 })
+          toast.info(`Tu Prensa vence en ${daysRemaining} días.`, { autoClose: 5000 })
         }
       }
     }
