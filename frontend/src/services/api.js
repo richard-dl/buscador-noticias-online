@@ -85,7 +85,11 @@ export const userApi = {
   // Saved News
   getSavedNews: () => api.get('/user/saved-news'),
   saveNews: (data) => api.post('/user/saved-news', data),
-  deleteSavedNews: (id) => api.delete(`/user/saved-news/${id}`)
+  deleteSavedNews: (id) => api.delete(`/user/saved-news/${id}`),
+
+  // TV Preferences
+  getTvPreferences: () => api.get('/user/tv-preferences'),
+  saveTvPreferences: (preferences) => api.put('/user/tv-preferences', preferences)
 }
 
 // ============ NEWS ============

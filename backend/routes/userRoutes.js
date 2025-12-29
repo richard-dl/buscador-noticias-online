@@ -11,6 +11,8 @@ const {
   getSavedNews,
   saveNews,
   deleteSavedNews,
+  getTvPreferences,
+  saveTvPreferences,
   db
 } = require('../services/firebaseService');
 
@@ -359,6 +361,78 @@ router.delete('/saved-news/:id', authenticate, async (req, res) => {
     res.status(500).json({
       success: false,
       error: 'Error al eliminar noticia guardada'
+    });
+  }
+});
+
+// ============ TV PREFERENCES ============
+
+/**
+ * GET /api/user/tv-preferences
+ * Obtener preferencias de canales de TV favoritos
+ */
+router.get('/tv-preferences', authenticate, async (req, res) => {
+  try {
+    const preferences = await getTvPreferences(req.user.uid);
+
+    res.json({
+      success: true,
+      data: preferences
+    });
+  } catch (error) {
+    console.error('Error obteniendo preferencias de TV:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Error al obtener preferencias de TV'
+    });
+  }
+});
+
+/**
+ * PUT /api/user/tv-preferences
+ * Guardar preferencias de canales de TV favoritos
+ * Body: { channel1: { id, category }, channel2: { id, category } }
+ */
+router.put('/tv-preferences', authenticate, async (req, res) => {
+  try {
+    const { channel1, channel2 } = req.body;
+
+    // Validar que al menos un canal sea proporcionado
+    if (!channel1 && !channel2) {
+      return res.status(400).json({
+        success: false,
+        error: 'Debe proporcionar al menos un canal favorito'
+      });
+    }
+
+    // Validar estructura de los canales
+    const validateChannel = (ch) => {
+      if (!ch) return true; // null es válido
+      return ch.id && typeof ch.id === 'string';
+    };
+
+    if (!validateChannel(channel1) || !validateChannel(channel2)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Formato de canal inválido. Debe incluir al menos { id: string }'
+      });
+    }
+
+    const preferences = await saveTvPreferences(req.user.uid, {
+      channel1: channel1 || null,
+      channel2: channel2 || null
+    });
+
+    res.json({
+      success: true,
+      message: 'Preferencias de TV guardadas correctamente',
+      data: preferences
+    });
+  } catch (error) {
+    console.error('Error guardando preferencias de TV:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Error al guardar preferencias de TV'
     });
   }
 });

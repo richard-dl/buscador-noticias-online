@@ -11,16 +11,21 @@
 }
 
 .tv-page-header {
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 0.75rem 1.5rem 1rem;
   border-bottom: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
   margin-bottom: 1rem;
 }
 
+.tv-page-header-left {
+  text-align: left;
+}
+
 .tv-page-title {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 0.75rem;
   font-size: 1.5rem;
   font-weight: 700;
@@ -990,4 +995,279 @@
     padding: 0.4rem 0.75rem;
     font-size: 0.8rem;
   }
+
+  .tv-favorites-btn-text {
+    display: none;
+  }
+
+  .tv-favorites-btn {
+    padding: 0.5rem;
+  }
+}
+
+/* =============================================
+   FAVORITOS - BOTON Y MODAL
+   ============================================= */
+
+.tv-favorites-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.15));
+  border-radius: 8px;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tv-favorites-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: var(--color-accent, #C1FF4D);
+  color: var(--color-text);
+}
+
+.tv-favorites-btn.has-favorites {
+  color: var(--color-accent, #C1FF4D);
+  border-color: rgba(193, 255, 77, 0.3);
+}
+
+.tv-favorites-btn.has-favorites svg {
+  fill: var(--color-accent, #C1FF4D);
+}
+
+/* Modal Overlay */
+.tv-favorites-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 300;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Modal */
+.tv-favorites-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 420px;
+  background: var(--color-bg-secondary, #1a2332);
+  border-radius: 16px;
+  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+  z-index: 301;
+  overflow: hidden;
+  animation: modalSlideIn 0.25s ease-out;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.tv-favorites-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
+}
+
+.tv-favorites-modal-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-text);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tv-favorites-modal-close {
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  transition: all 0.2s;
+  line-height: 1;
+}
+
+.tv-favorites-modal-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-text);
+}
+
+.tv-favorites-modal-body {
+  padding: 1.25rem;
+}
+
+/* Prompt de login */
+.tv-favorites-login-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1rem 0;
+  gap: 0.75rem;
+}
+
+.tv-favorites-login-prompt svg {
+  color: var(--color-text-muted);
+  opacity: 0.6;
+}
+
+.tv-favorites-login-prompt p {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 0.95rem;
+}
+
+.tv-favorites-login-subtext {
+  color: var(--color-text-muted) !important;
+  font-size: 0.85rem !important;
+  max-width: 280px;
+}
+
+/* Descripcion */
+.tv-favorites-description {
+  margin: 0 0 1rem;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Lista de canales favoritos */
+.tv-favorites-channels {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.tv-favorites-channel-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
+  border-radius: 10px;
+}
+
+.tv-favorites-channel-label {
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  font-weight: 500;
+  min-width: 75px;
+}
+
+.tv-favorites-channel-info {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.tv-favorites-channel-logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  object-fit: contain;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.tv-favorites-channel-name {
+  color: var(--color-text);
+  font-size: 0.9rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tv-favorites-channel-empty {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+.tv-favorites-current-note {
+  margin: 1rem 0 0;
+  padding: 0.6rem 0.75rem;
+  background: rgba(255, 193, 7, 0.1);
+  border: 1px solid rgba(255, 193, 7, 0.2);
+  border-radius: 6px;
+  color: #ffc107;
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+/* Footer del modal */
+.tv-favorites-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: rgba(0, 0, 0, 0.15);
+  border-top: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
+}
+
+.tv-favorites-cancel-btn {
+  padding: 0.6rem 1.25rem;
+  background: transparent;
+  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.2));
+  border-radius: 8px;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tv-favorites-cancel-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: var(--color-text);
+}
+
+.tv-favorites-save-btn {
+  padding: 0.6rem 1.25rem;
+  background: var(--color-accent, #C1FF4D);
+  border: none;
+  border-radius: 8px;
+  color: #0A1E3B;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tv-favorites-save-btn:hover:not(:disabled) {
+  background: #d4ff7a;
+  transform: translateY(-1px);
+}
+
+.tv-favorites-save-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }

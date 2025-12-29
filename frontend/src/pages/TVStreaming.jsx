@@ -1,10 +1,15 @@
 import { useState, useMemo, useEffect } from 'react';
-import { channels, getCategories, searchChannels } from '../data/channels';
+import { toast } from 'react-toastify';
+import { channels, getCategories, searchChannels, getChannelById } from '../data/channels';
+import { useAuth } from '../context/AuthContext';
+import { userApi } from '../services/api';
 import TVPlayer from '../components/TVPlayer';
 import Header from '../components/Header';
 import '../styles/tv.css';
 
 const TVStreaming = () => {
+  const { user, isAuthenticated } = useAuth();
+
   // Estado para dos reproductores independientes
   const [player1Channel, setPlayer1Channel] = useState(null);
   const [player2Channel, setPlayer2Channel] = useState(null);
@@ -13,16 +18,101 @@ const TVStreaming = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showMobileChannels, setShowMobileChannels] = useState(false);
 
-  // Cargar canales por defecto al iniciar (Canal 26 público y TN OPC2)
-  useEffect(() => {
-    const publicosArg = channels['Publicos Argentina'] || [];
-    const canal26 = publicosArg.find(c => c.id === 'pub-canal26');
-    const noticiasChannels = channels['Noticias'] || [];
-    const tnOpc2 = noticiasChannels.find(c => c.id === 'tn-opc2');
+  // Estado para el modal de favoritos
+  const [showFavoritesModal, setShowFavoritesModal] = useState(false);
+  const [savingFavorites, setSavingFavorites] = useState(false);
+  const [hasFavorites, setHasFavorites] = useState(false);
 
-    if (canal26) setPlayer1Channel({ ...canal26, category: 'Publicos Argentina' });
-    if (tnOpc2) setPlayer2Channel({ ...tnOpc2, category: 'Noticias' });
-  }, []);
+  // Cargar canales por defecto o favoritos del usuario
+  useEffect(() => {
+    const loadChannels = async () => {
+      // Canales por defecto
+      const loadDefaults = () => {
+        const publicosArg = channels['Publicos Argentina'] || [];
+        const canal26 = publicosArg.find(c => c.id === 'pub-canal26');
+        const noticiasChannels = channels['Noticias'] || [];
+        const tnOpc2 = noticiasChannels.find(c => c.id === 'tn-opc2');
+
+        if (canal26) setPlayer1Channel({ ...canal26, category: 'Publicos Argentina' });
+        if (tnOpc2) setPlayer2Channel({ ...tnOpc2, category: 'Noticias' });
+      };
+
+      // Si usuario autenticado, intentar cargar favoritos
+      if (isAuthenticated && user) {
+        try {
+          const response = await userApi.getTvPreferences();
+          const prefs = response.data;
+
+          if (prefs) {
+            let loaded1 = false;
+            let loaded2 = false;
+
+            if (prefs.favoriteChannel1?.id) {
+              const ch1 = getChannelById(prefs.favoriteChannel1.id);
+              if (ch1) {
+                setPlayer1Channel(ch1);
+                loaded1 = true;
+              }
+            }
+
+            if (prefs.favoriteChannel2?.id) {
+              const ch2 = getChannelById(prefs.favoriteChannel2.id);
+              if (ch2) {
+                setPlayer2Channel(ch2);
+                loaded2 = true;
+              }
+            }
+
+            if (loaded1 || loaded2) {
+              setHasFavorites(true);
+              // Si solo cargo uno, cargar el default del otro
+              if (!loaded1) {
+                const canal26 = channels['Publicos Argentina']?.find(c => c.id === 'pub-canal26');
+                if (canal26) setPlayer1Channel({ ...canal26, category: 'Publicos Argentina' });
+              }
+              if (!loaded2) {
+                const tnOpc2 = channels['Noticias']?.find(c => c.id === 'tn-opc2');
+                if (tnOpc2) setPlayer2Channel({ ...tnOpc2, category: 'Noticias' });
+              }
+              return;
+            }
+          }
+        } catch (error) {
+          console.log('Sin favoritos guardados, usando defaults');
+        }
+      }
+
+      // Fallback: usar canales por defecto
+      loadDefaults();
+    };
+
+    loadChannels();
+  }, [isAuthenticated, user]);
+
+  // Guardar canales actuales como favoritos
+  const saveFavorites = async () => {
+    if (!isAuthenticated) {
+      toast.info('Inicia sesion para guardar tus canales favoritos');
+      return;
+    }
+
+    setSavingFavorites(true);
+    try {
+      await userApi.saveTvPreferences({
+        channel1: player1Channel ? { id: player1Channel.id, category: player1Channel.category } : null,
+        channel2: player2Channel ? { id: player2Channel.id, category: player2Channel.category } : null
+      });
+
+      setHasFavorites(true);
+      toast.success('Canales favoritos guardados');
+      setShowFavoritesModal(false);
+    } catch (error) {
+      console.error('Error guardando favoritos:', error);
+      toast.error('Error al guardar favoritos');
+    } finally {
+      setSavingFavorites(false);
+    }
+  };
 
   const categories = getCategories();
 
@@ -69,15 +159,27 @@ const TVStreaming = () => {
       <div className="tv-streaming-page">
         {/* Header de la página */}
         <div className="tv-page-header">
-          <h1 className="tv-page-title">
-            <span className="tv-icon">
-              <svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32">
-                <path d="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 14H3V5h18v12z"/>
-              </svg>
-            </span>
-            TV en Vivo
-          </h1>
-          <p className="tv-page-subtitle">Canales de noticias en streaming</p>
+          <div className="tv-page-header-left">
+            <h1 className="tv-page-title">
+              <span className="tv-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32">
+                  <path d="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 14H3V5h18v12z"/>
+                </svg>
+              </span>
+              TV en Vivo
+            </h1>
+            <p className="tv-page-subtitle">Canales de noticias en streaming</p>
+          </div>
+          <button
+            className={`tv-favorites-btn ${hasFavorites ? 'has-favorites' : ''}`}
+            onClick={() => setShowFavoritesModal(true)}
+            title="Configurar canales favoritos"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+            </svg>
+            <span className="tv-favorites-btn-text">Favoritos</span>
+          </button>
         </div>
 
       <div className="tv-content">
@@ -295,6 +397,110 @@ const TVStreaming = () => {
         {/* Overlay para cerrar panel móvil */}
         {showMobileChannels && (
           <div className="tv-mobile-overlay" onClick={() => setShowMobileChannels(false)} />
+        )}
+
+        {/* Modal de favoritos */}
+        {showFavoritesModal && (
+          <>
+            <div className="tv-favorites-modal-overlay" onClick={() => setShowFavoritesModal(false)} />
+            <div className="tv-favorites-modal">
+              <div className="tv-favorites-modal-header">
+                <h3>Canales Favoritos</h3>
+                <button
+                  className="tv-favorites-modal-close"
+                  onClick={() => setShowFavoritesModal(false)}
+                >
+                  ×
+                </button>
+              </div>
+
+              <div className="tv-favorites-modal-body">
+                {!isAuthenticated ? (
+                  <div className="tv-favorites-login-prompt">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="48" height="48">
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                    </svg>
+                    <p>Inicia sesion para guardar tus canales favoritos</p>
+                    <p className="tv-favorites-login-subtext">Tus canales favoritos se cargaran automaticamente cada vez que entres a TV en Vivo</p>
+                  </div>
+                ) : (
+                  <>
+                    <p className="tv-favorites-description">
+                      Guarda los canales actuales como favoritos. Se cargaran automaticamente cuando inicies sesion.
+                    </p>
+
+                    <div className="tv-favorites-channels">
+                      <div className="tv-favorites-channel-item">
+                        <span className="tv-favorites-channel-label">Pantalla 1:</span>
+                        <div className="tv-favorites-channel-info">
+                          {player1Channel ? (
+                            <>
+                              {player1Channel.logo && (
+                                <img
+                                  src={player1Channel.logo}
+                                  alt={player1Channel.name}
+                                  className="tv-favorites-channel-logo"
+                                  onError={(e) => e.target.style.display = 'none'}
+                                />
+                              )}
+                              <span className="tv-favorites-channel-name">{player1Channel.name}</span>
+                            </>
+                          ) : (
+                            <span className="tv-favorites-channel-empty">Sin canal seleccionado</span>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="tv-favorites-channel-item">
+                        <span className="tv-favorites-channel-label">Pantalla 2:</span>
+                        <div className="tv-favorites-channel-info">
+                          {player2Channel ? (
+                            <>
+                              {player2Channel.logo && (
+                                <img
+                                  src={player2Channel.logo}
+                                  alt={player2Channel.name}
+                                  className="tv-favorites-channel-logo"
+                                  onError={(e) => e.target.style.display = 'none'}
+                                />
+                              )}
+                              <span className="tv-favorites-channel-name">{player2Channel.name}</span>
+                            </>
+                          ) : (
+                            <span className="tv-favorites-channel-empty">Sin canal seleccionado</span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    {hasFavorites && (
+                      <p className="tv-favorites-current-note">
+                        Ya tienes favoritos guardados. Al guardar, se reemplazaran.
+                      </p>
+                    )}
+                  </>
+                )}
+              </div>
+
+              <div className="tv-favorites-modal-footer">
+                <button
+                  className="tv-favorites-cancel-btn"
+                  onClick={() => setShowFavoritesModal(false)}
+                >
+                  Cancelar
+                </button>
+                {isAuthenticated && (
+                  <button
+                    className="tv-favorites-save-btn"
+                    onClick={saveFavorites}
+                    disabled={savingFavorites || (!player1Channel && !player2Channel)}
+                  >
+                    {savingFavorites ? 'Guardando...' : 'Guardar como favoritos'}
+                  </button>
+                )}
+              </div>
+            </div>
+          </>
         )}
       </div>
     </>
