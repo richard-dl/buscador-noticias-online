@@ -1365,6 +1365,34 @@ const adminUpdateUserSessionSettings = async (targetUid, settings) => {
   };
 };
 
+// ============ PREFERENCIAS DE TV ============
+
+/**
+ * Obtener preferencias de TV del usuario
+ */
+const getTvPreferences = async (uid) => {
+  const user = await getUserFromFirestore(uid);
+  return user?.tvPreferences || null;
+};
+
+/**
+ * Guardar preferencias de TV del usuario
+ * @param {string} uid - ID del usuario
+ * @param {object} preferences - { channel1: { id, category }, channel2: { id, category } }
+ */
+const saveTvPreferences = async (uid, preferences) => {
+  const updateData = {
+    tvPreferences: {
+      favoriteChannel1: preferences.channel1 || null,
+      favoriteChannel2: preferences.channel2 || null,
+      updatedAt: admin.firestore.FieldValue.serverTimestamp()
+    }
+  };
+
+  await db.collection('users').doc(uid).update(updateData);
+  return updateData.tvPreferences;
+};
+
 module.exports = {
   admin,
   db,
@@ -1416,5 +1444,8 @@ module.exports = {
   getAllUsersWithSessions,
   adminRevokeSession,
   adminRevokeAllUserSessions,
-  adminUpdateUserSessionSettings
+  adminUpdateUserSessionSettings,
+  // Funciones de preferencias de TV
+  getTvPreferences,
+  saveTvPreferences
 };
