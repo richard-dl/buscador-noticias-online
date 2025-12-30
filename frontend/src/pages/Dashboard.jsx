@@ -170,13 +170,13 @@ const Dashboard = () => {
             <p>Busca por temática, provincia o palabras clave</p>
           </Link>
 
-          <Link to="/generator?tab=breaking" className="action-card action-card-breaking">
+          <Link to={isAuthenticated ? "/generator?tab=breaking" : "/planes"} className="action-card action-card-breaking">
             <div className="action-icon action-icon-breaking">
               <FiZap size={32} />
             </div>
             <h3>Último Momento</h3>
-            <p>Noticias recientes de último momento</p>
-            <span className="breaking-badge">URGENTE</span>
+            <p>{isAuthenticated ? "Noticias recientes de último momento" : "Suscríbete para acceder"}</p>
+            <span className="breaking-badge">{isAuthenticated ? "URGENTE" : "PREMIUM"}</span>
           </Link>
 
           <Link to="/generator?tab=profiles" className="action-card action-card-profiles">
@@ -187,12 +187,12 @@ const Dashboard = () => {
             <p>Usa tus perfiles de búsqueda guardados</p>
           </Link>
 
-          <Link to="/zona-vip" className="action-card action-card-vip">
+          <Link to={isAuthenticated ? "/zona-vip" : "/planes"} className="action-card action-card-vip">
             <div className="action-icon action-icon-vip">
               <FiStar size={32} />
             </div>
             <h3>Zona PRENSA</h3>
-            <p>Contenido exclusivo para suscriptores ZP</p>
+            <p>{isAuthenticated ? "Contenido exclusivo para suscriptores ZP" : "Suscríbete para acceder"}</p>
             <span className="vip-badge-small">ZP</span>
           </Link>
         </div>
