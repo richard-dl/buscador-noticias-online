@@ -170,7 +170,7 @@ const Dashboard = () => {
             <p>Busca por temática, provincia o palabras clave</p>
           </Link>
 
-          <Link to={isAuthenticated ? "/generator?tab=breaking" : "/planes"} className="action-card action-card-breaking">
+          <Link to={isAuthenticated ? "/generator?tab=breaking" : "/subscription"} className="action-card action-card-breaking">
             <div className="action-icon action-icon-breaking">
               <FiZap size={32} />
             </div>
@@ -187,7 +187,7 @@ const Dashboard = () => {
             <p>Usa tus perfiles de búsqueda guardados</p>
           </Link>
 
-          <Link to={isAuthenticated ? "/zona-vip" : "/planes"} className="action-card action-card-vip">
+          <Link to={isAuthenticated ? "/zona-vip" : "/subscription"} className="action-card action-card-vip">
             <div className="action-icon action-icon-vip">
               <FiStar size={32} />
             </div>

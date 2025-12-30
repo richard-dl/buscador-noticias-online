@@ -44,7 +44,8 @@
       "Bash(cmd /c dir:*)",
       "Bash(identify:*)",
       "Bash(magick:*)",
-      "Bash(convert:*)"
+      "Bash(convert:*)",
+      "Bash(ls:*)"
     ]
   }
 }
