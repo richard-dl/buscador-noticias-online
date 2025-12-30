@@ -1,0 +1,140 @@
+.install-prompt-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(135deg, #1a365d 0%, #2d4a7c 100%);
+  color: white;
+  padding: 12px 16px;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.install-prompt-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.install-prompt-icon {
+  flex-shrink: 0;
+}
+
+.install-prompt-icon img {
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.install-prompt-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.install-prompt-text strong {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+
+.install-prompt-text p {
+  margin: 0;
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.ios-share-icon {
+  display: inline-block;
+  font-size: 16px;
+  vertical-align: middle;
+  margin: 0 2px;
+}
+
+.install-prompt-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.install-btn {
+  background: #48bb78;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.install-btn:hover {
+  background: #38a169;
+}
+
+.install-btn:active {
+  transform: scale(0.98);
+}
+
+.dismiss-btn {
+  background: transparent;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.dismiss-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+@media (max-width: 480px) {
+  .install-prompt-banner {
+    padding: 10px 12px;
+  }
+
+  .install-prompt-content {
+    gap: 10px;
+  }
+
+  .install-prompt-icon img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .install-prompt-text strong {
+    font-size: 13px;
+  }
+
+  .install-prompt-text p {
+    font-size: 11px;
+  }
+
+  .install-prompt-actions {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .install-btn,
+  .dismiss-btn {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+}
