@@ -52,17 +52,17 @@ export const channels = {
 
   // ==================== RADIOS NOTICIAS (SIN LIMITE) ====================
   'Radios Argentina': [
-    { id: 'radio-mitre', name: 'Radio Mitre AM 790', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/AM790_56.mp3', logo: '/logos/radios/radio-mitre.svg', isAudio: true },
-    { id: 'radio-la-red', name: 'La Red AM 910', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/LA_RED_AM910AAC.aac', logo: '/logos/radios/la-red.svg', isAudio: true },
-    { id: 'radio-rivadavia', name: 'Radio Rivadavia AM 630', url: 'https://27393.live.streamtheworld.com/RIVADAVIAAAC.aac', logo: '/logos/radios/rivadavia.svg', isAudio: true },
-    { id: 'radio-am750', name: 'AM 750', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/AM750AAC.aac', logo: '/logos/radios/am750.svg', isAudio: true },
-    { id: 'radio-la990', name: 'La 990 AM', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/AM990AAC.aac', logo: '/logos/radios/la990.svg', isAudio: true },
-    { id: 'radio-metro', name: 'Metro 95.1 FM', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/METROAAC.aac', logo: '/logos/radios/metro951.svg', isAudio: true },
-    { id: 'radio-rockandpop', name: 'Rock & Pop 95.9 FM', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/ROCKANDPOP.mp3', logo: '/logos/radios/rockandpop.svg', isAudio: true },
-    { id: 'radio-la100', name: 'La 100 FM 99.9', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/FM999_56AAC.aac', logo: '/logos/radios/la100.svg', isAudio: true },
-    { id: 'radio-blue', name: 'Blue FM 100.7', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/BLUE_FM_100_7AAC.aac', logo: '/logos/radios/bluefm.svg', isAudio: true },
-    { id: 'radio-uno', name: 'Radio Uno 103.1 FM', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/UNOAAC.aac', logo: '/logos/radios/radiouno.svg', isAudio: true },
-    { id: 'radio-cadena3', name: 'Cadena 3', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/RADIO3.mp3', logo: '/logos/radios/cadena3.svg', isAudio: true },
+    { id: 'radio-mitre', name: 'Radio Mitre AM 790', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/AM790_56.mp3', logo: '/logos/radios/radio-mitre.png', isAudio: true },
+    { id: 'radio-la-red', name: 'La Red AM 910', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/LA_RED_AM910AAC.aac', logo: '/logos/radios/la-red.png', isAudio: true },
+    { id: 'radio-rivadavia', name: 'Radio Rivadavia AM 630', url: 'https://27393.live.streamtheworld.com/RIVADAVIAAAC.aac', logo: '/logos/radios/rivadavia.png', isAudio: true },
+    { id: 'radio-am750', name: 'AM 750', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/AM750AAC.aac', logo: '/logos/radios/am750.png', isAudio: true },
+    { id: 'radio-la990', name: 'La 990 AM', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/AM990AAC.aac', logo: '/logos/radios/la990.png', isAudio: true },
+    { id: 'radio-metro', name: 'Metro 95.1 FM', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/METROAAC.aac', logo: '/logos/radios/metro951.png', isAudio: true },
+    { id: 'radio-rockandpop', name: 'Rock & Pop 95.9 FM', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/ROCKANDPOP.mp3', logo: '/logos/radios/rockandpop.png', isAudio: true },
+    { id: 'radio-la100', name: 'La 100 FM 99.9', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/FM999_56AAC.aac', logo: '/logos/radios/la100.png', isAudio: true },
+    { id: 'radio-blue', name: 'Blue FM 100.7', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/BLUE_FM_100_7AAC.aac', logo: '/logos/radios/bluefm.png', isAudio: true },
+    { id: 'radio-uno', name: 'Radio Uno 103.1 FM', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/UNOAAC.aac', logo: '/logos/radios/radiouno.png', isAudio: true },
+    { id: 'radio-cadena3', name: 'Cadena 3', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/RADIO3.mp3', logo: '/logos/radios/cadena3.png', isAudio: true },
   ],
 
   // ==================== NOTICIAS ====================
