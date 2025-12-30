@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <rect width="100" height="100" fill="#2e7d32"/>
+  <text x="50" y="30" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">RADIO</text>
+  <text x="50" y="55" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#c8e6c9" text-anchor="middle">UNO</text>
+  <text x="50" y="75" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">103.1 FM</text>
+</svg>

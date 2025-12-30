@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <rect width="100" height="100" fill="#1565c0"/>
+  <text x="50" y="35" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">BLUE</text>
+  <text x="50" y="55" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#90caf9" text-anchor="middle">FM</text>
+  <text x="50" y="75" font-family="Arial, sans-serif" font-size="12" fill="white" text-anchor="middle">100.7</text>
+</svg>

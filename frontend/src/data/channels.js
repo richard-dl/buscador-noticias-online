@@ -52,17 +52,17 @@ export const channels = {
 
   // ==================== RADIOS NOTICIAS (SIN LIMITE) ====================
   'Radios Argentina': [
-    { id: 'radio-mitre', name: 'Radio Mitre AM 790', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/AM790_56.mp3', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Radio_Mitre_logo_2018.svg/1200px-Radio_Mitre_logo_2018.svg.png', isAudio: true },
-    { id: 'radio-la-red', name: 'La Red AM 910', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/LA_RED_AM910AAC.aac', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/La_Red_Argentina_logo.svg/1200px-La_Red_Argentina_logo.svg.png', isAudio: true },
-    { id: 'radio-rivadavia', name: 'Radio Rivadavia AM 630', url: 'https://27393.live.streamtheworld.com/RIVADAVIAAAC.aac', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Radio_Rivadavia_logo.svg/1200px-Radio_Rivadavia_logo.svg.png', isAudio: true },
-    { id: 'radio-am750', name: 'AM 750', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/AM750AAC.aac', logo: 'https://pbs.twimg.com/profile_images/1145000820650618880/8Cn8BVXS_400x400.png', isAudio: true },
-    { id: 'radio-la990', name: 'La 990 AM', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/AM990AAC.aac', logo: 'https://cdn.radiocut.fm/static/images/web/logo-radiocut.svg', isAudio: true },
-    { id: 'radio-metro', name: 'Metro 95.1 FM', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/METROAAC.aac', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Metro_95.1_logo.svg/1200px-Metro_95.1_logo.svg.png', isAudio: true },
-    { id: 'radio-rockandpop', name: 'Rock & Pop 95.9 FM', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/ROCKANDPOP.mp3', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Rock_%26_Pop_logo.svg/1200px-Rock_%26_Pop_logo.svg.png', isAudio: true },
-    { id: 'radio-la100', name: 'La 100 FM 99.9', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/FM999_56AAC.aac', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/La_100_logo.svg/1200px-La_100_logo.svg.png', isAudio: true },
-    { id: 'radio-blue', name: 'Blue FM 100.7', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/BLUE_FM_100_7AAC.aac', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Blue_100.7_logo.svg/1200px-Blue_100.7_logo.svg.png', isAudio: true },
-    { id: 'radio-uno', name: 'Radio Uno 103.1 FM', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/UNOAAC.aac', logo: 'https://pbs.twimg.com/profile_images/1006986693135581184/q9aCT5GW_400x400.jpg', isAudio: true },
-    { id: 'radio-cadena3', name: 'Cadena 3', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/RADIO3.mp3', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Cadena_3_Argentina_logo.svg/1200px-Cadena_3_Argentina_logo.svg.png', isAudio: true },
+    { id: 'radio-mitre', name: 'Radio Mitre AM 790', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/AM790_56.mp3', logo: '/logos/radios/radio-mitre.svg', isAudio: true },
+    { id: 'radio-la-red', name: 'La Red AM 910', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/LA_RED_AM910AAC.aac', logo: '/logos/radios/la-red.svg', isAudio: true },
+    { id: 'radio-rivadavia', name: 'Radio Rivadavia AM 630', url: 'https://27393.live.streamtheworld.com/RIVADAVIAAAC.aac', logo: '/logos/radios/rivadavia.svg', isAudio: true },
+    { id: 'radio-am750', name: 'AM 750', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/AM750AAC.aac', logo: '/logos/radios/am750.svg', isAudio: true },
+    { id: 'radio-la990', name: 'La 990 AM', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/AM990AAC.aac', logo: '/logos/radios/la990.svg', isAudio: true },
+    { id: 'radio-metro', name: 'Metro 95.1 FM', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/METROAAC.aac', logo: '/logos/radios/metro951.svg', isAudio: true },
+    { id: 'radio-rockandpop', name: 'Rock & Pop 95.9 FM', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/ROCKANDPOP.mp3', logo: '/logos/radios/rockandpop.svg', isAudio: true },
+    { id: 'radio-la100', name: 'La 100 FM 99.9', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/FM999_56AAC.aac', logo: '/logos/radios/la100.svg', isAudio: true },
+    { id: 'radio-blue', name: 'Blue FM 100.7', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/BLUE_FM_100_7AAC.aac', logo: '/logos/radios/bluefm.svg', isAudio: true },
+    { id: 'radio-uno', name: 'Radio Uno 103.1 FM', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/UNOAAC.aac', logo: '/logos/radios/radiouno.svg', isAudio: true },
+    { id: 'radio-cadena3', name: 'Cadena 3', url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/RADIO3.mp3', logo: '/logos/radios/cadena3.svg', isAudio: true },
   ],
 
   // ==================== NOTICIAS ====================
@@ -279,8 +279,8 @@ export const channels = {
     { id: 'py-sur-tv', name: 'Sur TV', url: `${IPTV_BASE}/571340.ts`, logo: 'https://i.ibb.co/zN4WTqb/sur.png' },
   ],
 
-  // ==================== ESPANA ====================
-  'Espana': [
+  // ==================== ESPAÑA ====================
+  'España': [
     { id: 'es-antena3', name: 'Antena 3 Internacional', url: `${IPTV_BASE}/300166.ts`, logo: 'https://imagenes.atresplayer.com/atp/clipping/cmsimages02/2018/02/22/6339206B-7A24-4601-B30D-501750FDFF7B//720x540.jpg' },
     { id: 'es-la1-opc1', name: 'La 1', url: `${IPTV_BASE}/582925.ts`, logo: 'https://image.roku.com/developer_channels/prod/526bd32045567521e38a5c1d33e776a55a60e0552ec3c22e79d064cc153a102f.png' },
     { id: 'es-la1-opc2', name: 'La 1 OPC2', url: `${IPTV_BASE}/582924.ts`, logo: 'https://image.roku.com/developer_channels/prod/526bd32045567521e38a5c1d33e776a55a60e0552ec3c22e79d064cc153a102f.png' },
