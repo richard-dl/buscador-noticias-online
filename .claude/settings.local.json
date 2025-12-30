@@ -41,7 +41,10 @@
       "Bash(cmd /c \"dir c:\\\\Proyectos\\\\buscador-noticias-online\\\\frontend\\\\public\")",
       "Bash(timeout 5 node:*)",
       "Bash(tar:*)",
-      "Bash(cmd /c dir:*)"
+      "Bash(cmd /c dir:*)",
+      "Bash(identify:*)",
+      "Bash(magick:*)",
+      "Bash(convert:*)"
     ]
   }
 }
