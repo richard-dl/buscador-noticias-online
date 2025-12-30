@@ -18,6 +18,7 @@ import TVStreaming from './pages/TVStreaming'
 import ProtectedRoute from './components/ProtectedRoute'
 import LoadingSpinner from './components/LoadingSpinner'
 import ScrollToTop from './components/ScrollToTop'
+import InstallPrompt from './components/InstallPrompt'
 
 function App() {
   const { loading } = useAuth()
@@ -83,6 +84,7 @@ function App() {
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
     <ScrollToTop />
+    <InstallPrompt />
     </>
   )
 }

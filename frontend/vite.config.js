@@ -18,16 +18,20 @@ export default defineConfig({
         scope: '/',
         start_url: '/',
         orientation: 'portrait',
+        lang: 'es',
+        prefer_related_applications: false,
         icons: [
           {
             src: '/icon-192x192.png',
             sizes: '192x192',
-            type: 'image/png'
+            type: 'image/png',
+            purpose: 'any'
           },
           {
             src: '/image-splash.png',
             sizes: '512x512',
-            type: 'image/png'
+            type: 'image/png',
+            purpose: 'any'
           },
           {
             src: '/image-splash.png',
