@@ -9,48 +9,6 @@ import 'react-toastify/dist/ReactToastify.css'
 import './styles/global.css'
 import './styles/subscription.css'
 
-// PWA Install Debug - capturar evento lo más temprano posible
-window.__pwaInstallEvent = null
-window.addEventListener('beforeinstallprompt', (e) => {
-  console.log('[PWA Main] beforeinstallprompt capturado en main.jsx!')
-  window.__pwaInstallEvent = e
-})
-
-// Función de debug accesible desde consola
-window.checkPWA = async () => {
-  console.log('=== PWA Debug Info ===')
-  console.log('beforeinstallprompt event:', window.__pwaInstallEvent ? 'CAPTURADO' : 'NO DISPONIBLE')
-  console.log('Service Worker:', 'serviceWorker' in navigator ? 'Soportado' : 'No soportado')
-
-  if ('serviceWorker' in navigator) {
-    const regs = await navigator.serviceWorker.getRegistrations()
-    console.log('SW Registrations:', regs.length)
-    regs.forEach((reg, i) => {
-      console.log(`  SW ${i}:`, reg.scope, reg.active ? 'ACTIVO' : 'inactivo')
-    })
-  }
-
-  // Verificar manifest
-  const manifestLink = document.querySelector('link[rel="manifest"]')
-  console.log('Manifest link:', manifestLink ? manifestLink.href : 'NO ENCONTRADO')
-
-  // Verificar display mode
-  const isStandalone = window.matchMedia('(display-mode: standalone)').matches
-  console.log('Display mode standalone:', isStandalone)
-
-  // Info del navegador
-  console.log('User Agent:', navigator.userAgent)
-  console.log('======================')
-
-  return {
-    installEvent: !!window.__pwaInstallEvent,
-    swSupported: 'serviceWorker' in navigator,
-    standalone: isStandalone
-  }
-}
-
-console.log('[PWA] Para debug, ejecuta: checkPWA()')
-
 // Registrar Service Worker para PWA
 registerSW({
   onNeedRefresh() {
