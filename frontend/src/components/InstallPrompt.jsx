@@ -1,20 +1,54 @@
 import { useState, useEffect } from 'react'
 import './InstallPrompt.css'
 
+// Variable global para capturar el evento antes de que React se monte
+let deferredPromptGlobal = null
+
+// Capturar el evento inmediatamente cuando se carga el script
+if (typeof window !== 'undefined') {
+  window.addEventListener('beforeinstallprompt', (e) => {
+    console.log('[PWA] beforeinstallprompt capturado globalmente')
+    e.preventDefault()
+    deferredPromptGlobal = e
+  })
+}
+
 function InstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState(null)
   const [showInstallBanner, setShowInstallBanner] = useState(false)
   const [isIOS, setIsIOS] = useState(false)
+  const [debugInfo, setDebugInfo] = useState('')
 
   useEffect(() => {
-    // Detectar iOS
+    // Debug info
     const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
     const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone
+    const isAndroid = /Android/.test(navigator.userAgent)
+    const isChrome = /Chrome/.test(navigator.userAgent) && !/Edge|Edg/.test(navigator.userAgent)
+
+    console.log('[PWA Debug] iOS:', isIOSDevice)
+    console.log('[PWA Debug] Android:', isAndroid)
+    console.log('[PWA Debug] Chrome:', isChrome)
+    console.log('[PWA Debug] Standalone:', isInStandaloneMode)
+    console.log('[PWA Debug] deferredPromptGlobal:', deferredPromptGlobal ? 'EXISTE' : 'NULL')
+    console.log('[PWA Debug] User Agent:', navigator.userAgent)
 
     setIsIOS(isIOSDevice)
 
     // Si ya está instalada, no mostrar nada
     if (isInStandaloneMode) {
+      console.log('[PWA] App ya instalada, no mostrando banner')
+      return
+    }
+
+    // Si ya capturamos el evento globalmente, usarlo
+    if (deferredPromptGlobal) {
+      console.log('[PWA] Usando evento capturado globalmente')
+      setDeferredPrompt(deferredPromptGlobal)
+      const installPromptDismissed = localStorage.getItem('installPromptDismissed')
+      if (!installPromptDismissed) {
+        setShowInstallBanner(true)
+      }
       return
     }
 
@@ -29,11 +63,10 @@ function InstallPrompt() {
 
     // Para Android/Chrome - escuchar beforeinstallprompt
     const handleBeforeInstallPrompt = (e) => {
-      // Prevenir que Chrome muestre el mini-infobar automático
+      console.log('[PWA] beforeinstallprompt disparado!')
       e.preventDefault()
-      // Guardar el evento para usarlo después
       setDeferredPrompt(e)
-      // Verificar si el usuario ya descartó el banner antes
+      deferredPromptGlobal = e
       const installPromptDismissed = localStorage.getItem('installPromptDismissed')
       if (!installPromptDismissed) {
         setShowInstallBanner(true)
@@ -41,14 +74,27 @@ function InstallPrompt() {
     }
 
     const handleAppInstalled = () => {
-      // Limpiar cuando se instala la app
+      console.log('[PWA] App instalada!')
       setDeferredPrompt(null)
+      deferredPromptGlobal = null
       setShowInstallBanner(false)
       localStorage.setItem('appInstalled', 'true')
     }
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
     window.addEventListener('appinstalled', handleAppInstalled)
+
+    // Verificar criterios de instalación después de un tiempo
+    setTimeout(() => {
+      if (!deferredPromptGlobal) {
+        console.log('[PWA] Después de 5s, beforeinstallprompt NO se disparó')
+        console.log('[PWA] Posibles razones:')
+        console.log('  - La app ya está instalada')
+        console.log('  - El manifest tiene errores')
+        console.log('  - No hay suficiente engagement (30s)')
+        console.log('  - Problema con Service Worker')
+      }
+    }, 5000)
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
