@@ -1,7 +1,11 @@
 const Anthropic = require('@anthropic-ai/sdk');
+const { trackClaudeUsage } = require('./claudeUsageService');
 
 // Inicializar cliente de Claude
 let client = null;
+
+// Contexto de la solicitud actual (se establece desde el middleware)
+let currentRequestContext = null;
 
 const initClaude = () => {
   if (!client && process.env.ANTHROPIC_API_KEY) {
@@ -10,6 +14,27 @@ const initClaude = () => {
     });
   }
   return client;
+};
+
+/**
+ * Establecer contexto de la solicitud actual (llamar desde el middleware/route)
+ * @param {Object} context - { userId, userEmail, endpoint, ip, userAgent }
+ */
+const setRequestContext = (context) => {
+  currentRequestContext = context;
+};
+
+/**
+ * Obtener contexto actual
+ */
+const getRequestContext = () => currentRequestContext;
+
+/**
+ * Estimar tokens (aproximación simple: 1 token ~ 4 caracteres)
+ */
+const estimateTokens = (text) => {
+  if (!text) return 0;
+  return Math.ceil(text.length / 4);
 };
 
 // Categorías disponibles para clasificación
@@ -178,6 +203,9 @@ ${newsText}
 
 Responde SOLO con JSON array: [{"index": 0, "category": "cat", "confidence": 0.95, "mediaType": "text"}, ...]`;
 
+  const context = getRequestContext() || {};
+  const tokensInput = estimateTokens(prompt);
+
   try {
     const response = await client.messages.create({
       model: 'claude-3-haiku-20240307',
@@ -186,6 +214,19 @@ Responde SOLO con JSON array: [{"index": 0, "category": "cat", "confidence": 0.9
     });
 
     const text = response.content[0].text.trim();
+    const tokensOutput = estimateTokens(text);
+
+    // Trackear uso exitoso
+    trackClaudeUsage({
+      ...context,
+      operation: 'classifyBatch',
+      tokensInput,
+      tokensOutput,
+      model: 'claude-3-haiku-20240307',
+      success: true,
+      newsCount: batch.length
+    });
+
     const jsonMatch = text.match(/\[[\s\S]*\]/);
 
     if (jsonMatch) {
@@ -209,6 +250,17 @@ Responde SOLO con JSON array: [{"index": 0, "category": "cat", "confidence": 0.9
 
     return null;
   } catch (error) {
+    // Trackear error
+    trackClaudeUsage({
+      ...context,
+      operation: 'classifyBatch',
+      tokensInput,
+      tokensOutput: 0,
+      model: 'claude-3-haiku-20240307',
+      success: false,
+      errorMessage: error.message,
+      newsCount: batch.length
+    });
     console.error('Error en clasificación batch con Claude:', error.message);
     return null;
   }
@@ -360,6 +412,9 @@ IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON válido, sin texto adicional
   "hashtags": ["palabra1", "palabra2", "palabra3"]
 }`;
 
+  const context = getRequestContext() || {};
+  const tokensInput = estimateTokens(prompt);
+
   try {
     const response = await client.messages.create({
       model: 'claude-3-haiku-20240307',
@@ -368,6 +423,19 @@ IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON válido, sin texto adicional
     });
 
     const text = response.content[0].text.trim();
+    const tokensOutput = estimateTokens(text);
+
+    // Trackear uso exitoso
+    trackClaudeUsage({
+      ...context,
+      operation: 'processNews',
+      tokensInput,
+      tokensOutput,
+      model: 'claude-3-haiku-20240307',
+      success: true,
+      newsCount: 1
+    });
+
     console.log(`[Claude] Respuesta (${text.length} chars), stop: ${response.stop_reason}`);
 
     // Detectar si la respuesta fue truncada
@@ -468,6 +536,18 @@ IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON válido, sin texto adicional
 
     return null;
   } catch (error) {
+    // Trackear error
+    trackClaudeUsage({
+      ...context,
+      operation: 'processNews',
+      tokensInput,
+      tokensOutput: 0,
+      model: 'claude-3-haiku-20240307',
+      success: false,
+      errorMessage: error.message,
+      newsCount: 1
+    });
+
     console.error('Error procesando noticia con Claude:', error.message);
     console.error('Detalles del error:', {
       status: error.status,
@@ -517,5 +597,6 @@ module.exports = {
   generateSummary,
   processNewsWithAI,
   isClaudeAvailable,
+  setRequestContext,
   CATEGORIAS_DISPONIBLES
 };

@@ -207,6 +207,22 @@ export const paypalApi = {
   getOrderDetails: (orderId) => api.get(`/paypal/order/${orderId}`)
 }
 
+// ============ ADMIN ============
+
+export const adminApi = {
+  // Estadísticas de uso de Claude
+  getClaudeStats: () => api.get('/admin/claude-stats'),
+
+  // Top usuarios consumidores de Claude
+  getClaudeTopUsers: (limit = 20) => api.get(`/admin/claude-stats/top-users?limit=${limit}`),
+
+  // Historial diario de uso de Claude
+  getClaudeDailyHistory: (days = 30) => api.get(`/admin/claude-stats/daily?days=${days}`),
+
+  // Llamadas recientes a Claude
+  getClaudeRecentCalls: (limit = 50) => api.get(`/admin/claude-stats/recent?limit=${limit}`)
+}
+
 // ============ SESSIONS ============
 
 export const sessionsApi = {
