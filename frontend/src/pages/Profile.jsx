@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
-import { userApi, authApi, vipApi, sessionsApi } from '../services/api'
+import { userApi, authApi, vipApi, sessionsApi, adminApi } from '../services/api'
 import Header from '../components/Header'
 import LoadingSpinner from '../components/LoadingSpinner'
 import NewsCard from '../components/NewsCard'
@@ -9,7 +9,8 @@ import {
   FiUser, FiMail, FiCalendar, FiClock, FiEdit2, FiSave, FiX, FiUsers, FiBookmark,
   FiStar, FiTrash2, FiRefreshCw, FiDatabase, FiImage, FiVideo, FiFileText, FiLayers,
   FiMonitor, FiSmartphone, FiTablet, FiMapPin, FiLogOut, FiSettings, FiShield,
-  FiChevronDown, FiChevronUp
+  FiChevronDown, FiChevronUp, FiCpu, FiActivity, FiDollarSign, FiTrendingUp,
+  FiAlertTriangle, FiCheckCircle, FiBarChart2
 } from 'react-icons/fi'
 
 const Profile = () => {
@@ -33,15 +34,22 @@ const Profile = () => {
   const [sessionActionLoading, setSessionActionLoading] = useState(null)
   const [expandedUsers, setExpandedUsers] = useState({})
   const [sessionFilter, setSessionFilter] = useState('all')
+  // Estados para estadísticas de Claude (admin)
+  const [claudeStats, setClaudeStats] = useState(null)
+  const [claudeTopUsers, setClaudeTopUsers] = useState([])
+  const [claudeDailyHistory, setClaudeDailyHistory] = useState([])
+  const [loadingClaudeStats, setLoadingClaudeStats] = useState(false)
+  const [claudeStatsTab, setClaudeStatsTab] = useState('overview')
 
   useEffect(() => {
     if (profile) {
       setDisplayName(profile.displayName || '')
-      // Cargar usuarios, stats VIP y sesiones solo si es admin
+      // Cargar usuarios, stats VIP, sesiones y estadísticas de Claude solo si es admin
       if (profile.role === 'admin') {
         loadUsers()
         loadVipStats()
         loadSessionUsers()
+        loadClaudeStats()
       }
     }
     loadSearchProfiles()
@@ -104,6 +112,42 @@ const Profile = () => {
     } finally {
       setLoadingVipStats(false)
     }
+  }
+
+  // ========== Funciones de Claude Stats (Admin) ==========
+  const loadClaudeStats = async () => {
+    try {
+      setLoadingClaudeStats(true)
+      const [statsRes, topUsersRes, dailyRes] = await Promise.all([
+        adminApi.getClaudeStats(),
+        adminApi.getClaudeTopUsers(10),
+        adminApi.getClaudeDailyHistory(14)
+      ])
+
+      if (statsRes.success) {
+        setClaudeStats(statsRes.data)
+      }
+      if (topUsersRes.success) {
+        setClaudeTopUsers(topUsersRes.data)
+      }
+      if (dailyRes.success) {
+        setClaudeDailyHistory(dailyRes.data)
+      }
+    } catch (error) {
+      console.error('Error cargando estadísticas de Claude:', error)
+    } finally {
+      setLoadingClaudeStats(false)
+    }
+  }
+
+  const formatTokens = (tokens) => {
+    if (tokens >= 1000000) {
+      return `${(tokens / 1000000).toFixed(2)}M`
+    }
+    if (tokens >= 1000) {
+      return `${(tokens / 1000).toFixed(1)}K`
+    }
+    return tokens.toString()
   }
 
   const handleVipCleanup = async () => {
@@ -935,6 +979,242 @@ const Profile = () => {
               <div className="sessions-info-mini">
                 <p><strong>Info:</strong> Trial: 2 dispositivos | Suscriptor/Prensa: 3 | Admin: 10</p>
               </div>
+            </section>
+          )}
+
+          {/* Sección de Estadísticas de Claude - Solo Admin */}
+          {profile?.role === 'admin' && (
+            <section className="profile-card claude-stats-card">
+              <div className="card-header">
+                <h2>
+                  <FiCpu size={24} />
+                  Uso de Claude IA
+                </h2>
+                <button
+                  className="btn btn-text"
+                  onClick={loadClaudeStats}
+                  disabled={loadingClaudeStats}
+                  title="Actualizar estadísticas"
+                >
+                  <FiRefreshCw size={16} className={loadingClaudeStats ? 'spinning' : ''} />
+                </button>
+              </div>
+
+              {loadingClaudeStats && !claudeStats ? (
+                <LoadingSpinner size="small" text="Cargando estadísticas de Claude..." />
+              ) : claudeStats ? (
+                <>
+                  {/* Tabs de navegación */}
+                  <div className="claude-stats-tabs">
+                    <button
+                      className={`claude-tab ${claudeStatsTab === 'overview' ? 'active' : ''}`}
+                      onClick={() => setClaudeStatsTab('overview')}
+                    >
+                      Resumen
+                    </button>
+                    <button
+                      className={`claude-tab ${claudeStatsTab === 'users' ? 'active' : ''}`}
+                      onClick={() => setClaudeStatsTab('users')}
+                    >
+                      Top Usuarios
+                    </button>
+                    <button
+                      className={`claude-tab ${claudeStatsTab === 'daily' ? 'active' : ''}`}
+                      onClick={() => setClaudeStatsTab('daily')}
+                    >
+                      Historial
+                    </button>
+                  </div>
+
+                  {/* Tab: Resumen General */}
+                  {claudeStatsTab === 'overview' && (
+                    <div className="claude-overview">
+                      {/* Métricas principales */}
+                      <div className="claude-metrics-grid">
+                        <div className="claude-metric-card">
+                          <div className="metric-icon metric-today">
+                            <FiActivity size={20} />
+                          </div>
+                          <div className="metric-content">
+                            <span className="metric-value">{claudeStats.today?.totalCalls || 0}</span>
+                            <span className="metric-label">Llamadas hoy</span>
+                          </div>
+                        </div>
+
+                        <div className="claude-metric-card">
+                          <div className="metric-icon metric-month">
+                            <FiBarChart2 size={20} />
+                          </div>
+                          <div className="metric-content">
+                            <span className="metric-value">{claudeStats.currentMonth?.totalCalls || 0}</span>
+                            <span className="metric-label">Este mes</span>
+                          </div>
+                        </div>
+
+                        <div className="claude-metric-card">
+                          <div className="metric-icon metric-tokens">
+                            <FiDatabase size={20} />
+                          </div>
+                          <div className="metric-content">
+                            <span className="metric-value">{formatTokens(claudeStats.last30Days?.totalTokens || 0)}</span>
+                            <span className="metric-label">Tokens (30 días)</span>
+                          </div>
+                        </div>
+
+                        <div className="claude-metric-card">
+                          <div className="metric-icon metric-cost">
+                            <FiDollarSign size={20} />
+                          </div>
+                          <div className="metric-content">
+                            <span className="metric-value">${claudeStats.last30Days?.estimatedCost || '0.00'}</span>
+                            <span className="metric-label">Costo estimado</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Tasa de éxito */}
+                      <div className="claude-success-rate">
+                        <div className="success-rate-header">
+                          <span>Tasa de éxito (últimos 30 días)</span>
+                          <span className={`success-badge ${parseFloat(claudeStats.last30Days?.successRate || 0) >= 95 ? 'success-high' : parseFloat(claudeStats.last30Days?.successRate || 0) >= 80 ? 'success-medium' : 'success-low'}`}>
+                            {claudeStats.last30Days?.successRate || 0}%
+                          </span>
+                        </div>
+                        <div className="success-rate-bar">
+                          <div
+                            className="success-rate-fill"
+                            style={{ width: `${claudeStats.last30Days?.successRate || 0}%` }}
+                          />
+                        </div>
+                        <div className="success-rate-details">
+                          <span className="success-count">
+                            <FiCheckCircle size={14} /> {claudeStats.last30Days?.successCount || 0} exitosas
+                          </span>
+                          <span className="error-count">
+                            <FiAlertTriangle size={14} /> {claudeStats.last30Days?.errorCount || 0} errores
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Estadísticas históricas */}
+                      <div className="claude-all-time">
+                        <h4>Acumulado total</h4>
+                        <div className="all-time-stats">
+                          <div className="all-time-stat">
+                            <span className="stat-value">{claudeStats.allTime?.totalCalls || 0}</span>
+                            <span className="stat-label">Total llamadas</span>
+                          </div>
+                          <div className="all-time-stat">
+                            <span className="stat-value">{formatTokens(claudeStats.allTime?.totalTokens || 0)}</span>
+                            <span className="stat-label">Total tokens</span>
+                          </div>
+                          <div className="all-time-stat">
+                            <span className="stat-value">${claudeStats.allTime?.estimatedCost || '0.00'}</span>
+                            <span className="stat-label">Costo total</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Tab: Top Usuarios */}
+                  {claudeStatsTab === 'users' && (
+                    <div className="claude-top-users">
+                      {claudeTopUsers.length === 0 ? (
+                        <p className="empty-message">No hay datos de usuarios todavía</p>
+                      ) : (
+                        <div className="top-users-list">
+                          {claudeTopUsers.map((user, index) => (
+                            <div key={user.userId} className="top-user-item">
+                              <div className="user-rank">#{index + 1}</div>
+                              <div className="user-info">
+                                <span className="user-email">{user.email}</span>
+                                <span className="user-last-used">
+                                  Último uso: {user.lastUsed ? new Date(user.lastUsed).toLocaleDateString('es-AR') : 'N/A'}
+                                </span>
+                              </div>
+                              <div className="user-usage">
+                                <span className="usage-calls">{user.totalCalls} llamadas</span>
+                                <span className="usage-tokens">{formatTokens(user.totalTokens)} tokens</span>
+                                <span className="usage-cost">${user.estimatedCost}</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Tab: Historial Diario */}
+                  {claudeStatsTab === 'daily' && (
+                    <div className="claude-daily-history">
+                      {claudeDailyHistory.length === 0 ? (
+                        <p className="empty-message">No hay datos de historial todavía</p>
+                      ) : (
+                        <>
+                          <div className="daily-chart">
+                            <div className="chart-bars">
+                              {claudeDailyHistory.map((day) => {
+                                const maxCalls = Math.max(...claudeDailyHistory.map(d => d.calls), 1)
+                                const heightPercent = (day.calls / maxCalls) * 100
+                                return (
+                                  <div key={day.date} className="chart-bar-container">
+                                    <div
+                                      className={`chart-bar ${day.errors > 0 ? 'has-errors' : ''}`}
+                                      style={{ height: `${Math.max(heightPercent, 2)}%` }}
+                                      title={`${day.date}: ${day.calls} llamadas, ${formatTokens(day.tokens)} tokens${day.errors > 0 ? `, ${day.errors} errores` : ''}`}
+                                    >
+                                      {day.errors > 0 && (
+                                        <div
+                                          className="error-portion"
+                                          style={{ height: `${(day.errors / day.calls) * 100}%` }}
+                                        />
+                                      )}
+                                    </div>
+                                    <span className="chart-label">
+                                      {new Date(day.date).toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit' })}
+                                    </span>
+                                  </div>
+                                )
+                              })}
+                            </div>
+                            <div className="chart-legend">
+                              <span><span className="legend-dot success"></span> Exitosas</span>
+                              <span><span className="legend-dot error"></span> Errores</span>
+                            </div>
+                          </div>
+
+                          {/* Tabla de datos */}
+                          <div className="daily-table">
+                            <table>
+                              <thead>
+                                <tr>
+                                  <th>Fecha</th>
+                                  <th>Llamadas</th>
+                                  <th>Tokens</th>
+                                  <th>Errores</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {claudeDailyHistory.slice().reverse().slice(0, 7).map(day => (
+                                  <tr key={day.date}>
+                                    <td>{new Date(day.date).toLocaleDateString('es-AR')}</td>
+                                    <td>{day.calls}</td>
+                                    <td>{formatTokens(day.tokens)}</td>
+                                    <td className={day.errors > 0 ? 'has-errors' : ''}>{day.errors}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  )}
+                </>
+              ) : (
+                <p className="empty-message">No se pudieron cargar las estadísticas de Claude</p>
+              )}
             </section>
           )}
         </div>

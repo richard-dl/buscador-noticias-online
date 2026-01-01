@@ -26,8 +26,8 @@ const RSS_FEEDS = {
     { name: 'Clarín', url: 'https://www.clarin.com/rss/lo-ultimo/', category: 'general' },
     { name: 'La Nación', url: 'https://www.lanacion.com.ar/arc/outboundfeeds/rss/', category: 'general' },
     { name: 'Perfil', url: 'https://www.perfil.com/feed', category: 'general' },
-    { name: 'Infobae', url: 'https://www.infobae.com/feeds/rss/', category: 'general' },
-    { name: 'Página/12', url: 'https://www.pagina12.com.ar/rss/portada', category: 'general' },
+    { name: 'Infobae', url: 'https://www.infobae.com/arc/outboundfeeds/rss/', category: 'general' },
+    { name: 'Página/12', url: 'https://www.pagina12.com.ar/arc/outboundfeeds/rss/', category: 'general' },
     { name: 'Ámbito', url: 'https://www.ambito.com/rss/pages/home.xml', category: 'economia' }
   ],
 
@@ -43,8 +43,8 @@ const RSS_FEEDS = {
   // Política
   politica: [
     { name: 'Clarín Política', url: 'https://www.clarin.com/rss/politica/', category: 'politica' },
-    { name: 'La Nación Política', url: 'https://www.lanacion.com.ar/politica/rss/', category: 'politica' },
-    { name: 'Infobae Política', url: 'https://www.infobae.com/politica/feed/', category: 'politica' },
+    { name: 'La Nación Política', url: 'https://www.lanacion.com.ar/arc/outboundfeeds/rss/category/politica/', category: 'politica' },
+    { name: 'Infobae Política', url: 'https://www.infobae.com/arc/outboundfeeds/rss/category/argentina/politica/', category: 'politica' },
     { name: 'Rioja Política', url: 'https://riojapolitica.com.ar/feed/', category: 'politica', provincia: 'La Rioja' },
     { name: 'El Tribuno Salta Política', url: 'https://www.eltribuno.com/rss-new/salta/politica.rss', category: 'politica', provincia: 'Salta' }
   ],
@@ -67,9 +67,14 @@ const RSS_FEEDS = {
     { name: 'Clarín Tecnología', url: 'https://www.clarin.com/rss/tecnologia/', category: 'tecnologia' }
   ],
 
-  // Internacionales
+  // Internacionales (incluye medios globales en español)
   internacionales: [
-    { name: 'Clarín Mundo', url: 'https://www.clarin.com/rss/mundo/', category: 'internacionales' }
+    { name: 'Clarín Mundo', url: 'https://www.clarin.com/rss/mundo/', category: 'internacionales' },
+    { name: 'BBC Mundo', url: 'https://feeds.bbci.co.uk/mundo/rss.xml', category: 'internacionales' },
+    { name: 'France 24 Español', url: 'https://www.france24.com/es/rss', category: 'internacionales' },
+    { name: 'El Mundo (España)', url: 'https://e00-elmundo.uecdn.es/elmundo/rss/portada.xml', category: 'internacionales' },
+    { name: 'Deutsche Welle Español', url: 'https://rss.dw.com/xml/rss-sp-all', category: 'internacionales' },
+    { name: 'Reuters (Inglés)', url: 'https://www.reutersagency.com/feed/', category: 'internacionales' }
   ],
 
   // Policiales

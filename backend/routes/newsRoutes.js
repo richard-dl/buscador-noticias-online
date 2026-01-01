@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { authenticateAndRequireSubscription, authenticateAndRequireVip } = require('../middleware/authMiddleware');
+const { authenticateAndRequireSubscription, authenticateAndRequireVip, authenticate } = require('../middleware/authMiddleware');
 const { getNewsFromFeeds, searchNews, getAvailableFeeds, getCategories } = require('../services/rssService');
 const { searchGoogleNews, searchWithFilters, searchByProvincia, searchByTematica, extractRealUrl, classifyNewsCategory } = require('../services/googleNewsService');
 const { findImageByTitle: findImageByTitleBing } = require('../services/bingNewsService');
@@ -12,97 +12,61 @@ const { shortenUrl } = require('../services/shortenerService');
 const { generateNewsEmojis, emojisToString } = require('../utils/emojiGenerator');
 const { summarize, formatForSocialMedia } = require('../utils/summarizer');
 const { saveSearchHistory } = require('../services/firebaseService');
-const { classifyBatchWithAI, processNewsWithAI, isClaudeAvailable } = require('../services/claudeService');
+const { processNewsWithAI, isClaudeAvailable, setRequestContext } = require('../services/claudeService');
+const { checkRateLimit } = require('../services/claudeUsageService');
 
 /**
- * Clasificar noticias usando IA (si está disponible) o fallback a keywords
- * @param {Array} news - Array de noticias a clasificar
- * @returns {Promise<Array>} - Noticias con categoría asignada
+ * Middleware para establecer contexto de Claude y aplicar rate limiting
+ * @param {string} endpoint - Nombre del endpoint
+ * @param {boolean} requireAuth - Si requiere autenticación
  */
-const classifyNewsWithAIOrFallback = async (news) => {
-  // Si Claude está disponible, usar clasificación IA en batch
-  if (isClaudeAvailable() && news.length > 0) {
-    try {
-      console.log(`Clasificando ${news.length} noticias con Claude IA...`);
+const claudeContextMiddleware = (endpoint, requireAuth = false) => {
+  return (req, res, next) => {
+    // Obtener IP del cliente
+    const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() ||
+               req.connection?.remoteAddress ||
+               req.ip ||
+               'unknown';
 
-      // Procesar en batches de 10 para optimizar
-      const batchSize = 10;
-      const results = [];
-
-      for (let i = 0; i < news.length; i += batchSize) {
-        const batch = news.slice(i, i + batchSize);
-        const batchResults = await classifyBatchWithAI(batch);
-
-        if (batchResults) {
-          // Aplicar resultados de IA
-          batch.forEach((item, idx) => {
-            if (batchResults[idx]) {
-              item.category = batchResults[idx].category;
-              item.aiConfidence = batchResults[idx].confidence;
-              item.mediaType = batchResults[idx].mediaType || 'text';
-              item.classifiedBy = 'claude';
-            } else {
-              // Fallback a keywords si IA no pudo clasificar este item
-              item.category = classifyNewsCategory(item.title || '', item.description || '', []);
-              item.mediaType = 'text';
-              item.classifiedBy = 'keywords';
-            }
-            results.push(item);
-          });
-        } else {
-          // Fallback completo a keywords para este batch
-          batch.forEach(item => {
-            item.category = classifyNewsCategory(item.title || '', item.description || '', []);
-            item.mediaType = 'text';
-            item.classifiedBy = 'keywords';
-            results.push(item);
-          });
-        }
-      }
-
-      const aiClassified = results.filter(r => r.classifiedBy === 'claude').length;
-      console.log(`Clasificación completada: ${aiClassified}/${results.length} con IA`);
-      return results;
-    } catch (error) {
-      console.error('Error en clasificación IA, usando fallback:', error.message);
+    // Aplicar rate limiting (2 llamadas por minuto para endpoints con IA)
+    const rateLimit = checkRateLimit(ip, 2, 60000);
+    if (!rateLimit.allowed) {
+      return res.status(429).json({
+        success: false,
+        error: rateLimit.message,
+        retryAfter: Math.ceil(rateLimit.resetIn / 1000)
+      });
     }
-  }
 
-  // Fallback: clasificación por keywords
-  console.log('Usando clasificación por keywords (Claude no disponible o error)');
+    // Establecer contexto para tracking
+    setRequestContext({
+      userId: req.user?.uid || null,
+      userEmail: req.user?.email || null,
+      endpoint: `/api/news${endpoint}`,
+      ip,
+      userAgent: req.headers['user-agent'] || null
+    });
+
+    // Agregar headers de rate limit a la respuesta
+    res.setHeader('X-RateLimit-Remaining', rateLimit.remaining);
+    res.setHeader('X-RateLimit-Reset', Math.ceil(rateLimit.resetIn / 1000));
+
+    next();
+  };
+};
+
+/**
+ * Clasificar noticias usando SOLO keywords (sin Claude para ahorrar costos)
+ * Claude se reserva exclusivamente para resúmenes IA solicitados por el usuario
+ * @param {Array} news - Array de noticias a clasificar
+ * @returns {Array} - Noticias con categoría asignada
+ */
+const classifyNewsWithKeywords = (news) => {
   return news.map(item => ({
     ...item,
     category: classifyNewsCategory(item.title || '', item.description || '', []),
     classifiedBy: 'keywords'
   }));
-};
-
-/**
- * Generar resúmenes con IA para noticias (opcional, más costoso)
- * @param {Object} item - Noticia a resumir
- * @returns {Promise<Object>} - Noticia con resumen IA
- */
-const enhanceWithAISummary = async (item) => {
-  if (!isClaudeAvailable()) {
-    return item;
-  }
-
-  try {
-    const aiResult = await processNewsWithAI({
-      title: item.title,
-      description: item.description,
-      source: item.source
-    });
-
-    if (aiResult) {
-      item.aiSummary = aiResult.summary;
-      item.keyPoints = aiResult.keyPoints;
-    }
-  } catch (error) {
-    console.warn('Error generando resumen IA:', error.message);
-  }
-
-  return item;
 };
 
 /**
@@ -133,22 +97,31 @@ router.get('/feeds', (req, res) => {
 /**
  * GET /api/news/recent
  * Obtener noticias recientes para el dashboard (público, sin autenticación)
- * Limitado a 6 noticias nacionales para preview
+ * Incluye noticias nacionales e internacionales
+ * SIN rate limit - usa fallback a keywords cuando Claude no está disponible
  */
 router.get('/recent', async (req, res) => {
   try {
     const maxItems = Math.min(parseInt(req.query.maxItems) || 6, 10); // Máximo 10 para público
 
-    // Obtener noticias nacionales recientes
-    let news = await getNewsFromFeeds(['nacionales'], {
-      maxItems,
+    // Obtener noticias nacionales e internacionales recientes
+    // Pedimos más items internamente para que el algoritmo de intercalado funcione bien
+    let news = await getNewsFromFeeds(['nacionales', 'internacionales'], {
+      maxItems: maxItems * 3, // Pedir más para tener variedad de fuentes
       hoursAgo: 48,
       keywords: [],
       excludeTerms: []
     });
 
-    // Clasificar con IA o fallback
-    news = await classifyNewsWithAIOrFallback(news);
+    // Log para debug: ver qué fuentes llegaron
+    const sourcesReceived = [...new Set(news.map(n => n.source))];
+    console.log(`/recent - Fuentes recibidas (${news.length} noticias): ${sourcesReceived.join(', ')}`);
+
+    // Limitar al número solicitado después de intercalar
+    news = news.slice(0, maxItems);
+
+    // Clasificar por keywords (Claude reservado solo para resúmenes)
+    news = classifyNewsWithKeywords(news);
 
     // Procesar cada noticia (versión simplificada para público)
     news = await Promise.all(news.map(async (item) => {
@@ -188,6 +161,7 @@ router.get('/recent', async (req, res) => {
 /**
  * GET /api/news/rss
  * Obtener noticias de feeds RSS
+ * Sin rate limit - clasificación por keywords (Claude solo para resúmenes)
  */
 router.get('/rss', authenticateAndRequireSubscription, async (req, res) => {
   try {
@@ -217,8 +191,8 @@ router.get('/rss', authenticateAndRequireSubscription, async (req, res) => {
       excludeTerms: excludeList
     });
 
-    // Aplicar clasificación automática con IA (o fallback a keywords)
-    news = await classifyNewsWithAIOrFallback(news);
+    // Clasificar por keywords (Claude reservado solo para resúmenes)
+    news = classifyNewsWithKeywords(news);
 
     // Procesar cada noticia
     news = await Promise.all(news.map(async (item) => {
@@ -271,6 +245,7 @@ router.get('/rss', authenticateAndRequireSubscription, async (req, res) => {
 /**
  * GET /api/news/search
  * Buscar noticias con filtros avanzados
+ * Sin rate limit - clasificación por keywords (Claude solo para resúmenes)
  */
 router.get('/search', authenticateAndRequireSubscription, async (req, res) => {
   try {
@@ -288,8 +263,7 @@ router.get('/search', authenticateAndRequireSubscription, async (req, res) => {
       translate = 'false',
       shorten = 'true',
       generateEmojis = 'true',
-      contentType = 'all', // with-image, with-video, text-only, all
-      aiSummary = 'false' // Generar resúmenes con IA (más costoso, mejor calidad)
+      contentType = 'all' // with-image, with-video, text-only, all
     } = req.query;
 
     let allNews = [];
@@ -388,10 +362,10 @@ router.get('/search', authenticateAndRequireSubscription, async (req, res) => {
       if (rssCategories.length === 0) {
         if (keywordsList.length > 0 || provinciaKey) {
           // Con keywords o provincia: buscar en categorías generales para mayor cobertura
-          rssCategories = ['nacionales', 'deportes', 'politica', 'economia', 'policiales'];
+          rssCategories = ['nacionales', 'deportes', 'politica', 'economia', 'policiales', 'internacionales'];
         } else {
-          // Sin nada: solo nacionales
-          rssCategories = ['nacionales'];
+          // Sin nada: nacionales + internacionales
+          rssCategories = ['nacionales', 'internacionales'];
         }
       }
 
@@ -472,27 +446,13 @@ router.get('/search', authenticateAndRequireSubscription, async (req, res) => {
     // Limitar resultados antes de clasificar (para optimizar llamadas a Claude)
     allNews = allNews.slice(0, parseInt(maxItems) * 2); // Tomamos el doble para tener margen tras filtrar
 
-    // Clasificar todas las noticias con IA (incluye detección de mediaType)
-    allNews = await classifyNewsWithAIOrFallback(allNews);
+    // Clasificar por keywords (Claude reservado solo para resúmenes)
+    allNews = classifyNewsWithKeywords(allNews);
 
-    // Filtrar por tipo de contenido (usa mediaType detectado por Claude)
+    // Filtrar por tipo de contenido (detección básica)
     if (contentType && contentType !== 'all') {
       allNews = allNews.filter(news => {
-        // Usar detección de Claude si está disponible
-        if (news.mediaType) {
-          switch (contentType) {
-            case 'with-image':
-              return news.mediaType === 'image';
-            case 'with-video':
-              return news.mediaType === 'video';
-            case 'text-only':
-              return news.mediaType === 'text';
-            default:
-              return true;
-          }
-        }
-
-        // Fallback a detección básica si no hay mediaType de Claude
+        // Detección básica de tipo de contenido
         const hasImage = news.image && news.image.length > 0;
         const hasVideo = news.link && (
           news.link.includes('youtube.com') ||
@@ -524,13 +484,8 @@ router.get('/search', authenticateAndRequireSubscription, async (req, res) => {
         item = await translateNews(item);
       }
 
-      // Generar resumen básico
+      // Generar resumen básico (Claude se usa solo en /ai-summary)
       item.summary = summarize(item.description, { maxSentences: 2 });
-
-      // Generar resumen con IA si está habilitado
-      if (aiSummary === 'true') {
-        item = await enhanceWithAISummary(item);
-      }
 
       // Acortar URL
       if (shorten === 'true' && item.link) {
@@ -1139,8 +1094,9 @@ router.get('/proxy-image', async (req, res) => {
  * Generar resumen IA de una noticia para republicación
  * Devuelve: resumen, puntos clave, categoría y texto formateado listo para copiar
  * REQUIERE: Acceso VIP (vip_trial, vip, admin)
+ * Rate limit: 2 llamadas por minuto por IP
  */
-router.post('/ai-summary', authenticateAndRequireVip, async (req, res) => {
+router.post('/ai-summary', authenticateAndRequireVip, claudeContextMiddleware('/ai-summary'), async (req, res) => {
   try {
     const { title, description, source, link } = req.body;
 

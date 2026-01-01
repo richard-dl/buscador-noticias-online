@@ -13,6 +13,7 @@ const subscriptionRoutes = require('./routes/subscriptionRoutes');
 const paypalRoutes = require('./routes/paypalRoutes');
 const sessionRoutes = require('./routes/sessionRoutes');
 const tvRoutes = require('./routes/tvRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
 // Inicializar Firebase Admin
 require('./services/firebaseService');
@@ -59,6 +60,7 @@ app.use('/api/subscription', subscriptionRoutes);
 app.use('/api/paypal', paypalRoutes);
 app.use('/api/sessions', sessionRoutes);
 app.use('/api/tv', tvRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Ruta de salud
 app.get('/api/health', (req, res) => {
