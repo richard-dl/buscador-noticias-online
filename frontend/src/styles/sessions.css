@@ -449,7 +449,7 @@
   background: var(--color-bg-tertiary);
   border-radius: var(--radius-lg);
   border: 1px solid transparent;
-  overflow: hidden;
+  overflow: visible;
   transition: var(--transition-fast);
 }
 
