@@ -48,7 +48,9 @@
       "Bash(ls:*)",
       "Bash(cmd /c mkdir \"c:\\\\Proyectos\\\\buscador-noticias-online\\\\frontend\\\\public\\\\logos\\\\radios\")",
       "Bash(cmd /c \"if not exist c:\\\\Proyectos\\\\buscador-noticias-online\\\\frontend\\\\public\\\\logos\\\\radios mkdir c:\\\\Proyectos\\\\buscador-noticias-online\\\\frontend\\\\public\\\\logos\\\\radios\")",
-      "Bash(cmd /c \"del c:\\\\Proyectos\\\\buscador-noticias-online\\\\frontend\\\\public\\\\logos\\\\radios\\\\*.svg\")"
+      "Bash(cmd /c \"del c:\\\\Proyectos\\\\buscador-noticias-online\\\\frontend\\\\public\\\\logos\\\\radios\\\\*.svg\")",
+      "Bash(cmd /c \"cd /d c:\\\\Proyectos\\\\buscador-noticias-online\\\\backend && node server.js\")",
+      "Bash(timeout /t:*)"
     ]
   }
 }

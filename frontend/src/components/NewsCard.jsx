@@ -130,14 +130,30 @@ const NewsCard = ({ news, isSaved = false, onDelete = null, savedNewsId = null }
     // Verificar que la fecha es válida
     if (isNaN(d.getTime())) return ''
 
-    // Formato: HH:mm - DD/MM/YYYY
-    const hours = d.getHours().toString().padStart(2, '0')
-    const minutes = d.getMinutes().toString().padStart(2, '0')
+    // Calcular tiempo relativo
+    const now = new Date()
+    const diffMs = now - d
+    const diffMinutes = Math.floor(diffMs / (1000 * 60))
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60))
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+
+    // Formato relativo para tiempos recientes
+    if (diffMinutes < 1) {
+      return 'Hace un momento'
+    } else if (diffMinutes < 60) {
+      return `Hace ${diffMinutes} ${diffMinutes === 1 ? 'minuto' : 'minutos'}`
+    } else if (diffHours < 24) {
+      return `Hace ${diffHours} ${diffHours === 1 ? 'hora' : 'horas'}`
+    } else if (diffDays < 7) {
+      return `Hace ${diffDays} ${diffDays === 1 ? 'día' : 'días'}`
+    }
+
+    // Para fechas más antiguas, mostrar formato tradicional
     const day = d.getDate().toString().padStart(2, '0')
     const month = (d.getMonth() + 1).toString().padStart(2, '0')
     const year = d.getFullYear()
 
-    return `${hours}:${minutes} - ${day}/${month}/${year}`
+    return `${day}/${month}/${year}`
   }
 
   const copyToClipboard = async () => {
