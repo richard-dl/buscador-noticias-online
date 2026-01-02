@@ -4241,7 +4241,6 @@ input, select, textarea {
 .session-user-card {
   background: var(--color-bg-tertiary);
   border-radius: var(--radius-md);
-  overflow: hidden;
 }
 
 .session-user-header {
