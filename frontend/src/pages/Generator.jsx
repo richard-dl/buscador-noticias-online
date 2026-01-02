@@ -9,7 +9,7 @@ import NewsCard from '../components/NewsCard'
 import LoadingSpinner from '../components/LoadingSpinner'
 import {
   FiSearch, FiCopy, FiCheck, FiRefreshCw, FiSave, FiTrash2, FiX, FiZap,
-  FiGrid, FiPlus, FiAlertCircle
+  FiGrid, FiPlus
 } from 'react-icons/fi'
 
 const Generator = () => {
@@ -36,9 +36,10 @@ const Generator = () => {
   const [searchCount, setSearchCount] = useState(10)
   const [breakingNews, setBreakingNews] = useState([])
   const [loadingBreaking, setLoadingBreaking] = useState(false)
-  const [breakingLoadCount, setBreakingLoadCount] = useState(0) // Contador de cargas (máx 8 - todos los grupos)
-  const [breakingOffset, setBreakingOffset] = useState(0) // Offset para paginación
-  const [loadingMoreBreaking, setLoadingMoreBreaking] = useState(false) // Loading para "cargar más"
+  const [loadingMoreBreaking, setLoadingMoreBreaking] = useState(false)
+  const [breakingTab, setBreakingTab] = useState('nacionales') // nacionales, provinciales, internacionales
+  const [breakingLoadCount, setBreakingLoadCount] = useState(1) // Contador de cargas (máx 6)
+  const [breakingHoursAgo, setBreakingHoursAgo] = useState(6) // Horas para buscar (incrementa)
   const [selectedProfileId, setSelectedProfileId] = useState('')
   const [filtersCollapsed, setFiltersCollapsed] = useState(false)  // Para colapsar filtros en móvil
   const [gridColumns, setGridColumns] = useState(() => {
@@ -330,41 +331,33 @@ const Generator = () => {
     localStorage.setItem('newsGridColumns', cols.toString())
   }
 
-  // Grupos de categorías para cargas incrementales en ÚLTIMO MOMENTO
-  // Incluye todas las temáticas RSS y todas las provincias argentinas
-  const categoryGroups = [
-    // Grupo 1: Principales nacionales
-    ['nacionales', 'politica', 'economia'],
-    // Grupo 2: Entretenimiento y tech
-    ['deportes', 'espectaculos', 'tecnologia'],
-    // Grupo 3: Policiales e internacionales
-    ['policiales', 'internacionales'],
-    // Grupo 4: Provincias principales (más población)
-    ['buenosaires', 'cordoba', 'santafe', 'mendoza'],
-    // Grupo 5: NOA (Noroeste)
-    ['tucuman', 'salta', 'jujuy', 'catamarca', 'santiago'],
-    // Grupo 6: NEA (Noreste)
-    ['chaco', 'corrientes', 'misiones', 'formosa', 'entrerios'],
-    // Grupo 7: Cuyo
-    ['sanjuan', 'sanluis', 'larioja', 'lapampa'],
-    // Grupo 8: Patagonia
-    ['neuquen', 'rionegro', 'chubut', 'santacruz', 'tierradelfuego']
-  ]
+  // Categorías para cada tab de ÚLTIMO MOMENTO
+  const breakingCategories = {
+    nacionales: ['nacionales', 'politica', 'economia', 'deportes', 'espectaculos', 'tecnologia', 'policiales'],
+    provinciales: [
+      'buenosaires', 'catamarca', 'chaco', 'chubut', 'cordoba', 'corrientes',
+      'entrerios', 'formosa', 'jujuy', 'lapampa', 'larioja', 'mendoza', 'misiones',
+      'neuquen', 'rionegro', 'salta', 'sanjuan', 'sanluis', 'santacruz', 'santafe',
+      'santiago', 'tierradelfuego', 'tucuman'
+    ],
+    internacionales: ['internacionales']
+  }
 
-  const loadBreakingNews = async (isRefresh = true) => {
+  const loadBreakingNews = async (tab = breakingTab, isRefresh = true) => {
     try {
+      setLoadingBreaking(true)
       if (isRefresh) {
-        setLoadingBreaking(true)
         setBreakingNews([])
         setBreakingLoadCount(1)
-        setBreakingOffset(0)
+        setBreakingHoursAgo(6)
       }
 
-      // Primera carga: categorías principales
+      const categories = breakingCategories[tab] || breakingCategories.nacionales
+
       const response = await newsApi.getRssNews({
-        categories: categoryGroups[0].join(','),
-        maxItems: 20,
-        hoursAgo: 72,
+        categories: categories.join(','),
+        maxItems: 30,
+        hoursAgo: 6, // Primera carga: últimas 6 horas
         translate: 'true',
         shorten: 'true',
         generateEmojis: 'true'
@@ -378,6 +371,10 @@ const Generator = () => {
           return dateB - dateA
         })
         setBreakingNews(sortedNews)
+
+        if (sortedNews.length === 0) {
+          toast.info('No hay noticias de las últimas 6 horas en esta categoría')
+        }
       }
     } catch (error) {
       console.error('Error cargando último momento:', error)
@@ -388,19 +385,21 @@ const Generator = () => {
   }
 
   const loadMoreBreakingNews = async () => {
-    if (breakingLoadCount >= 8) return
+    if (breakingLoadCount >= 6) return
 
     try {
       setLoadingMoreBreaking(true)
 
-      // Usar el siguiente grupo de categorías
-      const nextGroupIndex = breakingLoadCount
-      const categories = categoryGroups[nextGroupIndex] || categoryGroups[0]
+      // Incrementar el rango de horas (6h -> 12h -> 24h -> 48h -> 72h -> 96h)
+      const hoursIncrement = [6, 12, 24, 48, 72, 96]
+      const newHoursAgo = hoursIncrement[breakingLoadCount] || 96
+
+      const categories = breakingCategories[breakingTab] || breakingCategories.nacionales
 
       const response = await newsApi.getRssNews({
         categories: categories.join(','),
-        maxItems: 20,
-        hoursAgo: 72,
+        maxItems: 30,
+        hoursAgo: newHoursAgo,
         translate: 'true',
         shorten: 'true',
         generateEmojis: 'true'
@@ -420,12 +419,13 @@ const Generator = () => {
 
         if (sortedNew.length > 0) {
           setBreakingNews(prev => [...prev, ...sortedNew])
-          toast.success(`${sortedNew.length} noticias nuevas cargadas`)
+          toast.success(`${sortedNew.length} noticias adicionales cargadas`)
         } else {
-          toast.info('No hay más noticias nuevas en esta categoría')
+          toast.info('No hay más noticias nuevas disponibles')
         }
 
         setBreakingLoadCount(prev => prev + 1)
+        setBreakingHoursAgo(newHoursAgo)
       } else {
         toast.info('No hay más noticias disponibles')
         setBreakingLoadCount(prev => prev + 1)
@@ -438,11 +438,9 @@ const Generator = () => {
     }
   }
 
-  const resetBreakingNews = () => {
-    setBreakingNews([])
-    setBreakingLoadCount(0)
-    setBreakingOffset(0)
-    loadBreakingNews(true)
+  const handleBreakingTabChange = (tab) => {
+    setBreakingTab(tab)
+    loadBreakingNews(tab, true)
   }
 
   return (
@@ -651,15 +649,40 @@ const Generator = () => {
             /* Tab de ÚLTIMO MOMENTO */
             <div className="breaking-section">
               <div className="breaking-header">
-                <h2><FiZap /> ÚLTIMO MOMENTO - Noticias Recientes</h2>
-                <p>Las noticias más importantes de las últimas horas</p>
+                <h2><FiZap /> ÚLTIMO MOMENTO</h2>
+                <p>Noticias de las últimas 6 horas</p>
                 <button
                   className="btn btn-primary btn-sm"
-                  onClick={() => loadBreakingNews(true)}
+                  onClick={() => loadBreakingNews(breakingTab)}
                   disabled={loadingBreaking}
                 >
                   <FiRefreshCw className={loadingBreaking ? 'spinning' : ''} />
                   Actualizar
+                </button>
+              </div>
+
+              {/* Sub-tabs para categorías */}
+              <div className="breaking-tabs">
+                <button
+                  className={`breaking-tab ${breakingTab === 'nacionales' ? 'active' : ''}`}
+                  onClick={() => handleBreakingTabChange('nacionales')}
+                  disabled={loadingBreaking}
+                >
+                  Nacionales
+                </button>
+                <button
+                  className={`breaking-tab ${breakingTab === 'provinciales' ? 'active' : ''}`}
+                  onClick={() => handleBreakingTabChange('provinciales')}
+                  disabled={loadingBreaking}
+                >
+                  Provinciales
+                </button>
+                <button
+                  className={`breaking-tab ${breakingTab === 'internacionales' ? 'active' : ''}`}
+                  onClick={() => handleBreakingTabChange('internacionales')}
+                  disabled={loadingBreaking}
+                >
+                  Internacionales
                 </button>
               </div>
 
@@ -668,13 +691,13 @@ const Generator = () => {
               ) : breakingNews.length === 0 ? (
                 <div className="empty-state">
                   <FiZap size={48} />
-                  <h3>No hay noticias recientes</h3>
-                  <p>Intenta actualizar en unos minutos</p>
+                  <h3>No hay noticias de las últimas 6 horas</h3>
+                  <p>Intenta con otra categoría o actualiza en unos minutos</p>
                 </div>
               ) : (
                 <>
                   <div className="results-header">
-                    <span>{breakingNews.length} noticias recientes (carga {breakingLoadCount}/8)</span>
+                    <span>{breakingNews.length} noticias (últimas {breakingHoursAgo}h) - Carga {breakingLoadCount}/6</span>
                     <div className="column-selector">
                       {[2, 3, 4, 5].filter(cols => cols <= maxColumns).map(cols => (
                         <button
@@ -695,9 +718,9 @@ const Generator = () => {
                     ))}
                   </div>
 
-                  {/* Botón Cargar Más o Mensaje de Límite */}
-                  <div className="load-more-section">
-                    {breakingLoadCount < 8 ? (
+                  {/* Botón Cargar Más */}
+                  {breakingLoadCount < 6 && (
+                    <div className="load-more-section">
                       <button
                         className="btn btn-load-more"
                         onClick={loadMoreBreakingNews}
@@ -715,23 +738,8 @@ const Generator = () => {
                           </>
                         )}
                       </button>
-                    ) : (
-                      <div className="limit-reached">
-                        <FiAlertCircle size={24} />
-                        <div className="limit-message">
-                          <strong>Límite de cargas alcanzado</strong>
-                          <p>Has cargado {breakingNews.length} noticias. Para ver más noticias nuevas, limpia los resultados y vuelve a buscar.</p>
-                        </div>
-                        <button
-                          className="btn btn-primary"
-                          onClick={resetBreakingNews}
-                        >
-                          <FiRefreshCw size={18} />
-                          Reiniciar búsqueda
-                        </button>
-                      </div>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </>
               )}
             </div>

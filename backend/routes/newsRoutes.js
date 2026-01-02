@@ -104,11 +104,16 @@ router.get('/recent', async (req, res) => {
   try {
     const maxItems = Math.min(parseInt(req.query.maxItems) || 6, 10); // Máximo 10 para público
 
-    // Obtener noticias nacionales e internacionales recientes
+    // Obtener noticias de todas las categorías (nacionales, provinciales e internacionales)
     // Pedimos más items internamente para que el algoritmo de intercalado funcione bien
-    let news = await getNewsFromFeeds(['nacionales', 'internacionales'], {
-      maxItems: maxItems * 3, // Pedir más para tener variedad de fuentes
-      hoursAgo: 48,
+    const allCategories = [
+      'nacionales', 'politica', 'economia', 'deportes', 'espectaculos', 'tecnologia', 'policiales',
+      'internacionales',
+      'buenosaires', 'cordoba', 'santafe', 'mendoza', 'tucuman', 'salta'
+    ];
+    let news = await getNewsFromFeeds(allCategories, {
+      maxItems: maxItems * 4, // Pedir más para tener variedad de fuentes
+      hoursAgo: 12, // Últimas 12 horas para el dashboard
       keywords: [],
       excludeTerms: []
     });
@@ -117,7 +122,27 @@ router.get('/recent', async (req, res) => {
     const sourcesReceived = [...new Set(news.map(n => n.source))];
     console.log(`/recent - Fuentes recibidas (${news.length} noticias): ${sourcesReceived.join(', ')}`);
 
-    // Limitar al número solicitado después de intercalar
+    // Eliminar duplicados por título similar O por link similar
+    const seenTitles = new Set();
+    const seenLinks = new Set();
+    news = news.filter(item => {
+      // Normalizar título (primeros 50 caracteres, sin espacios extra)
+      const normalizedTitle = item.title.toLowerCase().substring(0, 50).replace(/\s+/g, ' ').trim();
+
+      // Normalizar link (quitar parámetros de tracking)
+      const normalizedLink = item.link ? item.link.split('?')[0].split('#')[0] : '';
+
+      // Si ya vimos este título O este link, es duplicado
+      if (seenTitles.has(normalizedTitle) || (normalizedLink && seenLinks.has(normalizedLink))) {
+        return false;
+      }
+
+      seenTitles.add(normalizedTitle);
+      if (normalizedLink) seenLinks.add(normalizedLink);
+      return true;
+    });
+
+    // Limitar al número solicitado después de filtrar duplicados
     news = news.slice(0, maxItems);
 
     // Clasificar por keywords (Claude reservado solo para resúmenes)
@@ -183,13 +208,36 @@ router.get('/rss', authenticateAndRequireSubscription, async (req, res) => {
     const keywordList = keywords ? keywords.split(',').map(k => k.trim()) : [];
     const excludeList = excludeTerms ? excludeTerms.split(',').map(e => e.trim()) : [];
 
-    // Obtener noticias de RSS
+    // Obtener noticias de RSS (pedir más para filtrar duplicados)
     let news = await getNewsFromFeeds(categoryList, {
-      maxItems: parseInt(maxItems),
+      maxItems: parseInt(maxItems) * 2,
       hoursAgo: parseInt(hoursAgo),
       keywords: keywordList,
       excludeTerms: excludeList
     });
+
+    // Eliminar duplicados por título similar O por link similar
+    const seenTitles = new Set();
+    const seenLinks = new Set();
+    news = news.filter(item => {
+      // Normalizar título (primeros 50 caracteres, sin espacios extra)
+      const normalizedTitle = item.title.toLowerCase().substring(0, 50).replace(/\s+/g, ' ').trim();
+
+      // Normalizar link (quitar parámetros de tracking)
+      const normalizedLink = item.link ? item.link.split('?')[0].split('#')[0] : '';
+
+      // Si ya vimos este título O este link, es duplicado
+      if (seenTitles.has(normalizedTitle) || (normalizedLink && seenLinks.has(normalizedLink))) {
+        return false;
+      }
+
+      seenTitles.add(normalizedTitle);
+      if (normalizedLink) seenLinks.add(normalizedLink);
+      return true;
+    });
+
+    // Limitar al número solicitado
+    news = news.slice(0, parseInt(maxItems));
 
     // Clasificar por keywords (Claude reservado solo para resúmenes)
     news = classifyNewsWithKeywords(news);

@@ -5,7 +5,7 @@ import { newsApi, userApi } from '../services/api'
 import Header from '../components/Header'
 import NewsCard from '../components/NewsCard'
 import LoadingSpinner from '../components/LoadingSpinner'
-import { FiSearch, FiFileText, FiZap, FiClock, FiGrid, FiStar } from 'react-icons/fi'
+import { FiSearch, FiFileText, FiZap, FiClock, FiGrid, FiStar, FiArrowRight, FiTrendingUp } from 'react-icons/fi'
 import MediaCarousel from '../components/MediaCarousel'
 
 // Imágenes de fondo para el hero (selección aleatoria)
@@ -74,7 +74,7 @@ const Dashboard = () => {
       // Noticias siempre se cargan (endpoint público)
       // Perfiles solo si está autenticado
       const promises = [
-        newsApi.getRecentNews(6)
+        newsApi.getRecentNews(8)
       ]
 
       if (isAuthenticated) {
@@ -242,6 +242,25 @@ const Dashboard = () => {
               {recentNews.map((news, index) => (
                 <NewsCard key={index} news={news} />
               ))}
+              {/* Card promocional "Ver más" */}
+              <Link to="/generator" className="news-card promo-card">
+                <div className="promo-card-content">
+                  <div className="promo-icon">
+                    <FiTrendingUp size={48} />
+                  </div>
+                  <h3>Descubre más noticias</h3>
+                  <p>Accede a cientos de fuentes de medios argentinos e internacionales</p>
+                  <div className="promo-features">
+                    <span>Filtros avanzados</span>
+                    <span>Traducción automática</span>
+                    <span>Formato para redes</span>
+                  </div>
+                  <div className="promo-cta">
+                    <span>Explorar ahora</span>
+                    <FiArrowRight size={20} />
+                  </div>
+                </div>
+              </Link>
             </div>
           </>
         )}

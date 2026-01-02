@@ -1720,6 +1720,103 @@ input, select, textarea {
 }
 
 /* ============================================
+   PROMO CARD (Dashboard)
+   ============================================ */
+.promo-card {
+  background: linear-gradient(135deg, #1a365d 0%, #2b4c7e 50%, #40979a 100%);
+  border: 2px solid var(--color-teal);
+  text-decoration: none;
+  cursor: pointer;
+  min-height: 320px;
+}
+
+.promo-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(64, 151, 154, 0.3);
+  border-color: #5fb3b6;
+}
+
+.promo-card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--spacing-6);
+  height: 100%;
+  gap: var(--spacing-4);
+}
+
+.promo-icon {
+  width: 80px;
+  height: 80px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-teal);
+  margin-bottom: var(--spacing-2);
+}
+
+.promo-card h3 {
+  color: white;
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  margin: 0;
+}
+
+.promo-card p {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: var(--font-size-sm);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.promo-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+  justify-content: center;
+}
+
+.promo-features span {
+  background: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.9);
+  padding: var(--spacing-1) var(--spacing-3);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+}
+
+.promo-cta {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  background: var(--color-teal);
+  color: white;
+  padding: var(--spacing-3) var(--spacing-5);
+  border-radius: var(--radius-lg);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  transition: all 0.3s ease;
+  margin-top: var(--spacing-2);
+}
+
+.promo-card:hover .promo-cta {
+  background: #5fb3b6;
+  transform: translateX(4px);
+}
+
+.promo-cta svg {
+  transition: transform 0.3s ease;
+}
+
+.promo-card:hover .promo-cta svg {
+  transform: translateX(4px);
+}
+
+/* ============================================
    GENERATOR PAGE
    ============================================ */
 .generator-page {
@@ -2688,6 +2785,60 @@ input, select, textarea {
 
 .breaking-header .btn {
   margin-top: var(--spacing-2);
+}
+
+/* Breaking Sub-tabs (Nacionales | Provinciales | Internacionales) */
+.breaking-tabs {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-6);
+  background: var(--bg-secondary);
+  padding: var(--spacing-2);
+  border-radius: var(--radius-lg);
+}
+
+.breaking-tab {
+  flex: 1;
+  max-width: 180px;
+  padding: var(--spacing-3) var(--spacing-4);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: transparent;
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.breaking-tab:hover:not(:disabled) {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.breaking-tab.active {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  color: white;
+  border-color: #dc2626;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+}
+
+.breaking-tab:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .breaking-tabs {
+    gap: var(--spacing-1);
+    padding: var(--spacing-1);
+  }
+
+  .breaking-tab {
+    padding: var(--spacing-2) var(--spacing-2);
+    font-size: var(--font-size-xs);
+  }
 }
 
 .spinning {
