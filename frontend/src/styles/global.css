@@ -4236,6 +4236,26 @@ input, select, textarea {
   gap: var(--spacing-2);
   max-height: 500px;
   overflow-y: auto;
+  padding-right: var(--spacing-2);
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-primary-light) transparent;
+}
+
+.sessions-users-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sessions-users-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sessions-users-list::-webkit-scrollbar-thumb {
+  background-color: var(--color-primary-light);
+  border-radius: 3px;
+}
+
+.sessions-users-list::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-primary);
 }
 
 .session-user-card {
